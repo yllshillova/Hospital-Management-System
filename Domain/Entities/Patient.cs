@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    internal class Patient
+    public class Patient
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
