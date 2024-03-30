@@ -10,6 +10,7 @@ namespace Infrastructure
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Staff> Staff { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
