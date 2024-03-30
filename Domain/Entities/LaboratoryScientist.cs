@@ -2,6 +2,6 @@
 {
     public class LaboratoryScientist
     {
-        
+        public Guid Id { get; set; }
     }
 }
