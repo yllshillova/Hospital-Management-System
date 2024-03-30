@@ -11,6 +11,8 @@ namespace Infrastructure
         public DbSet<User> Users { get; set; }
         public DbSet<Patient> Patients { get; set; }
 
+        public DbSet<MedicalHistory> MedicalHistories { get; set; }
+
         public DbSet<Department> Departments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
