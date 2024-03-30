@@ -12,6 +12,7 @@ namespace Infrastructure
         public DbSet<Nurse>Nurses { get; set; }
 
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Staff> Staff { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<LaboratoryScientist>LaboratoryScientists { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
