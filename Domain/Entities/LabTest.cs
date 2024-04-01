@@ -10,5 +10,7 @@ namespace Domain.Entities
         public string Notes { get; set; }
         public Guid LaboratorScientistId { get; set; }
         public LaboratoryScientist laboratoryScientist { get; set; }
+        public Guid PrescriptionId { get; set; }
+        public Prescription Prescription { get; set; }
     }
 }
