@@ -4,6 +4,7 @@ namespace Domain.Entities
 {
     public class Appointment : BaseEntity
     {
+        public Guid Id { get; set; }
         public DateTime Calendar { get; set; }
         public string Status { get; set; }
         public string Reason { get; set; }

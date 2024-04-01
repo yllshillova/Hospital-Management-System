@@ -4,6 +4,7 @@ namespace Domain.Entities
 {
     public class LabTest : BaseEntity
     {
+        public Guid Id { get; set; }
         public string Type { get; set; }
         public string Results { get; set; }
         public string Notes { get; set; }
