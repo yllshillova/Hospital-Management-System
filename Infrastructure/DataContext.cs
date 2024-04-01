@@ -17,6 +17,7 @@ namespace Infrastructure
         public DbSet<MedicalHistory> MedicalHistories { get; set; }
 
         public DbSet<Nurse> Nurses { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<LaboratoryScientist>LaboratoryScientists { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
