@@ -1,6 +1,8 @@
-﻿namespace Domain.Entities
+﻿using Domain.Base;
+
+namespace Domain.Entities
 {
-    public class MedicalHistory
+    public class MedicalHistory : BaseEntity
     {
         public Guid Id { get; set; }
         public string AppointmentDate { get; set; }

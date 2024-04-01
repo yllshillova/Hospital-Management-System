@@ -1,9 +1,10 @@
-﻿namespace Domain.Entities
+﻿using Domain.Base;
+
+namespace Domain.Entities
 {
-    public class LaboratoryScientist
+    public class LaboratoryScientist : BaseEntity
     {
         public Guid Id { get; set; }
-        public Guid DepartmentId { get; set; }
-        public Department Department { get; set; }
+
     }
 }

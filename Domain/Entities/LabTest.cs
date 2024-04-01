@@ -1,6 +1,8 @@
-﻿namespace Domain.Entities
+﻿using Domain.Base;
+
+namespace Domain.Entities
 {
-    public class LabTest
+    public class LabTest : BaseEntity
     {
         public Guid Id { get; set; }
         public string Type { get; set; }

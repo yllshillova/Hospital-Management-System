@@ -1,6 +1,8 @@
-﻿namespace Domain.Entities
+﻿using Domain.Base;
+
+namespace Domain.Entities
 {
-    public class EmergencyContact
+    public class EmergencyContact : BaseEntity
     {
         public Guid Id { get; set; }
         public string ContactName {  get; set; }

@@ -1,7 +1,8 @@
-﻿
+﻿using Domain.Base;
+
 namespace Domain.Entities
 {
-    public class Appointment
+    public class Appointment : BaseEntity, IEntity
     {
         public Guid Id { get; set; }
         public DateTime Calendar { get; set; }

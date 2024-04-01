@@ -1,6 +1,8 @@
-﻿namespace Domain.Entities
+﻿using Domain.Base;
+
+namespace Domain.Entities
 {
-    public class Room
+    public class Room : BaseEntity
     {
         public Guid Id { get; set; }
         public string Type { get; set; }
