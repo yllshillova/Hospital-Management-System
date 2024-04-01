@@ -3,9 +3,9 @@ using System.Linq.Expressions;
 
 namespace Infrastructure.Base
 {
-    internal class EntityBaseRepository<T> : IEntityBaseRepository<T> where T : BaseEntity, new()
+    internal abstract class EntityBaseRepository<T>(DataContext context) : IEntityBaseRepository<T> where T : BaseEntity, new()
     {
-         public Task<IEnumerable<T>> GetAllAsync()
+        public Task<IEnumerable<T>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
