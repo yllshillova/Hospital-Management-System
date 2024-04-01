@@ -30,6 +30,7 @@ namespace Infrastructure
 
         public DbSet<Room> Rooms { get; set; }
 
+        public DbSet<Staff> Staff { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
