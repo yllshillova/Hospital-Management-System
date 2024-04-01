@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
+using Domain.Base;
 
-namespace Domain.Base
+namespace Domain.Contracts
 {
     public interface IEntityBaseRepository<T> where T : BaseEntity, new()
     {

@@ -1,33 +1,45 @@
 ﻿using Domain.Base;
+using Domain.Contracts;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
 
 namespace Infrastructure.Base
 {
-    internal abstract class EntityBaseRepository<T>(DataContext context) : IEntityBaseRepository<T> where T : BaseEntity, new()
+    internal abstract class EntityBaseRepository<T>(DataContext _context) : IEntityBaseRepository<T> where T : BaseEntity, new()
     {
-        public Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var entities = await _context.Set<T>().AsNoTracking().ToListAsync();
+            return entities;
         }
-        public Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
+        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = _context.Set<T>();
+            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+            var entities = await query.AsNoTracking().ToListAsync();
+            return entities;
         }
-        public Task<T> GetByIdAsync(Guid Id)
+        public async Task<T> GetByIdAsync(Guid Id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
+            return entity;
         }
-        public Task CreateAsync(T entity)
+        public async Task CreateAsync(T entity)
         {
-            throw new NotImplementedException();
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
-        public Task UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity)
         {
-            throw new NotImplementedException();
+            EntityEntry entityEntry = _context.Entry(entity);
+            entityEntry.State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
-        public Task DeleteAsync(T entity)
+        public async Task DeleteAsync(T entity)
         {
-            throw new NotImplementedException();
+            _context.Remove(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }
