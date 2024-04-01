@@ -4,7 +4,7 @@ using Infrastructure.Base;
 
 namespace Infrastructure.Repositories
 {
-    internal class DoctorRepository : EntityBaseRepository<Doctor>, IDoctorRepository
+    internal sealed class DoctorRepository : EntityBaseRepository<Doctor>, IDoctorRepository
     {
         public DoctorRepository(DataContext context) : base(context)
         {
