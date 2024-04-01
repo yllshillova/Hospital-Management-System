@@ -8,18 +8,15 @@ namespace Infrastructure
         public DataContext(DbContextOptions options) : base(options)
         {
         }
-        public DbSet<User> Users { get; set; }
         public DbSet<Nurse>Nurses { get; set; }
-
         public DbSet<Department> Departments { get; set; }
-        public DbSet<Staff> Staff { get; set; }
         public DbSet<Patient> Patients { get; set; }
-
         public DbSet<MedicalHistory> MedicalHistories { get; set; }
-
         public DbSet<LaboratoryScientist>LaboratoryScientists { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<EmergencyContact> Patient { get; set; }
+        public DbSet<Staff> Staff { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<EmergencyContact> EmergencyContacts { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
