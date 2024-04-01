@@ -4,7 +4,6 @@ namespace Domain.Entities
 {
     public class Room : BaseEntity
     {
-        public Guid Id { get; set; }
         public string Type { get; set; }
         public bool IsFree { get; set; }
         public Guid PatientId { get; set; }

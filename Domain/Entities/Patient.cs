@@ -4,7 +4,6 @@ namespace Domain.Entities
 {
     public class Patient : BaseEntity
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Residence { get; set; }
         public int Age { get; set; }

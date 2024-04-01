@@ -4,7 +4,6 @@ namespace Domain.Entities
 {
     public class Doctor : BaseEntity
     {
-        public Guid Id { get; set; }
         public string Specialization { get; set; }
         public string Qualifications { get; set; }
         public Guid StaffId { get; set; }
