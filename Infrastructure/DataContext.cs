@@ -9,9 +9,12 @@ namespace Infrastructure
         {
         }
         public DbSet<User> Users { get; set; }
-        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Nurse>Nurses { get; set; }
 
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Patient> Patients { get; set; }
+        public DbSet<LaboratoryScientist>LaboratoryScientists { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
