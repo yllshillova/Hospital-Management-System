@@ -13,17 +13,8 @@ namespace Infrastructure
         public DbSet<Patient> Patients { get; set; }
         public DbSet<MedicalHistory> MedicalHistories { get; set; }
         public DbSet<LaboratoryScientist>LaboratoryScientists { get; set; }
-
-
-
-
-
-
-
-
-
+        public DbSet<LabTest> LabTests { get; set; }
         public DbSet<Room> Rooms { get; set; }
-
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Staff> Staff { get; set; }
         public DbSet<Prescription> Prescriptions { get; set; }
