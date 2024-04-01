@@ -15,6 +15,7 @@ namespace Infrastructure
         public DbSet<Patient> Patients { get; set; }
         public DbSet<LaboratoryScientist>LaboratoryScientists { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<EmergencyContact> Patient { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

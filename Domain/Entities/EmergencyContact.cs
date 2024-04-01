@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    internal class EmergencyContact
+    public class EmergencyContact
     {
         public Guid ContactId { get; set; }
         public string ContactName {  get; set; }
