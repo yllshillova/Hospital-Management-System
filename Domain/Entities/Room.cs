@@ -1,6 +1,4 @@
-﻿
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class Room
     {
@@ -9,6 +7,5 @@ namespace Domain.Entities
         public bool IsFree { get; set; }
         public Guid PatientId { get; set; }
         public Patient Patient { get; set; }
-
     }
 }

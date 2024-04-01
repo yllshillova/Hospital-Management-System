@@ -15,6 +15,5 @@
         public string PhoneNumber { get; set; }
         public Department Department { get; set; }
         public Guid DepartmentId { get; set; }
-
     }
 }

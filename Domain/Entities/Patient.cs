@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class Patient
     {
@@ -19,8 +13,5 @@ namespace Domain.Entities
         //public string Habit { get; set; }
         //public string ChronicDisaesest { get; set; }
         //public string Allergies { get; set; }
-
-
-
     }
 }

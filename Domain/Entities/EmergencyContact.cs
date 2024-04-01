@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class EmergencyContact
     {
@@ -10,6 +8,5 @@ namespace Domain.Entities
         public string PhoneNumber { get; set; }
         public Guid PatientId { get; set; }
         public Patient Patient { get; set; }
-        
     }
 }
