@@ -4,7 +4,7 @@ using Infrastructure.Base;
 
 namespace Infrastructure.Repositories
 {
-    internal class MedicalHistoryRepository : EntityBaseRepository<MedicalHistory>, IMedicalHistoryRepository
+    internal sealed class MedicalHistoryRepository : EntityBaseRepository<MedicalHistory>, IMedicalHistoryRepository
     {
         public MedicalHistoryRepository(DataContext context) : base(context)
         {

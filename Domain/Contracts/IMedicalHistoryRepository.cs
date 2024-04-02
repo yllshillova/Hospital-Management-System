@@ -1,9 +1,8 @@
-﻿using Domain.Base;
-using Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Domain.Contracts
 {
-    public interface IMedicalHistoryRepository : IEntityBaseRepository<MedicalHistoryRepository>
+    public interface IMedicalHistoryRepository : IEntityBaseRepository<MedicalHistory>
     {
     }
 }
