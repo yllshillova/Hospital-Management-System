@@ -4,7 +4,7 @@ using Infrastructure.Base;
 
 namespace Infrastructure.Repositories
 {
-    internal class RoomRepository : EntityBaseRepository<Room>, IRoomRepository
+    internal sealed class RoomRepository : EntityBaseRepository<Room>, IRoomRepository
     {
         public RoomRepository(DataContext context) : base(context)
         {
