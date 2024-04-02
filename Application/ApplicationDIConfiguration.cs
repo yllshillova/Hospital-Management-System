@@ -12,6 +12,9 @@ namespace Application
         {
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddScoped<IValidator<DoctorDto>, DoctorValidator>();
+            services.AddScoped<IValidator<RoomDto>, RoomValidator>();
+            services.AddScoped<IValidator<MedicalHistoryDto>, MedicalHistoryValidator>();
+            services.AddScoped<IValidator<PatientDto>, PatientValidator>();
         }
     }
 }
