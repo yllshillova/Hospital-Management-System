@@ -17,11 +17,10 @@ namespace Infrastructure
             });
 
             services.AddScoped<IDoctorRepository, DoctorRepository>();
-            services.AddScoped<IRoomRepository, RoomRepository>();
-            services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
-            services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IStaffRepository, StaffRepository>();
-            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+            services.AddScoped<ILabTestRepository, LabTestRepository>();
+            services.AddScoped<ILaboratoryScientistRepository, LaboratoryScientistRepository>();
         }
     }
 }
