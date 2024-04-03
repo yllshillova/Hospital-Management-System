@@ -1,10 +1,9 @@
 ﻿using Application.Core;
-using Application.DTOs;
 using Application.Validators;
 using FluentValidation;
 using MediatR;
 
-namespace Application.Commands
+namespace Application.Doctors
 {
     public record CreateDoctorCommand(DoctorDto Doctor) : IRequest<Result<Unit>>
     {

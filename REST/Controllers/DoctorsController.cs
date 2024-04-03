@@ -1,6 +1,4 @@
-﻿using Application.Commands;
-using Application.DTOs;
-using Application.Queries;
+﻿using Application.Doctors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

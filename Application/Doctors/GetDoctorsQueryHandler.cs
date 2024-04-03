@@ -1,11 +1,9 @@
 ﻿using Application.Core;
-using Application.DTOs;
-using Application.Queries;
 using AutoMapper;
 using Domain.Contracts;
 using MediatR;
 
-namespace Application.Handlers
+namespace Application.Doctors
 {
     public class GetDoctorsQueryHandler(IDoctorRepository _doctorRepository, IMapper _mapper) : IRequestHandler<GetDoctorsQuery, Result<IEnumerable<DoctorDto>>>
     {
@@ -16,7 +14,7 @@ namespace Application.Handlers
 
             var doctorDtos = _mapper.Map<IEnumerable<DoctorDto>>(doctors);
             if (doctorDtos is null) return Result<IEnumerable<DoctorDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
-           
+
             return Result<IEnumerable<DoctorDto>>.Success(doctorDtos);
         }
     }

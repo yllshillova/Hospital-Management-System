@@ -1,6 +1,6 @@
 ﻿using Application.Core;
+using Application.Doctors;
 using Application.DTOs;
-using Application.Handlers;
 using Application.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
