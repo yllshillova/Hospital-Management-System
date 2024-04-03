@@ -4,7 +4,7 @@ using Infrastructure.Base;
 
 namespace Infrastructure.Repositories
 {
-    internal class StaffRepository : EntityBaseRepository<Staff>, IStaffRepository
+    internal sealed class StaffRepository : EntityBaseRepository<Staff>, IStaffRepository
     {
         public StaffRepository(DataContext context) : base(context)
         {
