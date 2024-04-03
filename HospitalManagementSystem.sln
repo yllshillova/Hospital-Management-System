@@ -3,21 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REST", "REST\REST.csproj", "{6347D8CF-F283-4529-82AE-C5939D6C16EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "REST\API.csproj", "{6347D8CF-F283-4529-82AE-C5939D6C16EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{BD1DC8DA-D350-4FC9-ADBB-8655B9E9647D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{BD1DC8DA-D350-4FC9-ADBB-8655B9E9647D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{98DEA383-DD69-4BB6-8214-BE82A864B4A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{98DEA383-DD69-4BB6-8214-BE82A864B4A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{A593CD58-8E29-427B-BC5A-D343209C3EC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{A593CD58-8E29-427B-BC5A-D343209C3EC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6347D8CF-F283-4529-82AE-C5939D6C16EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -36,5 +33,11 @@ Global
 		{A593CD58-8E29-427B-BC5A-D343209C3EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A593CD58-8E29-427B-BC5A-D343209C3EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A593CD58-8E29-427B-BC5A-D343209C3EC8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59606FA7-342E-4263-976C-B4B4354DEF29}
 	EndGlobalSection
 EndGlobal
