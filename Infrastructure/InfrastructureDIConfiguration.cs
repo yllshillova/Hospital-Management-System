@@ -1,4 +1,5 @@
 ﻿using Domain.Contracts;
+using Domain.Entities;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +17,7 @@ namespace Infrastructure
             });
 
             services.AddScoped<IDoctorRepository, DoctorRepository>();
-            services.AddScoped<ILabTestRepository, LabTestRepository>();
+            services.AddScoped<ILaboratoryScientistRepository, LaboratoryScientistRepository>();
         }
     }
 }
