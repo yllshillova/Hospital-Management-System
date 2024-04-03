@@ -1,6 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Compile Remove="Commands\**" />
+    <Compile Remove="Handlers\**" />
+    <Compile Remove="Queries\**" />
+    <EmbeddedResource Remove="Commands\**" />
+    <EmbeddedResource Remove="Handlers\**" />
+    <EmbeddedResource Remove="Queries\**" />
+    <None Remove="Commands\**" />
+    <None Remove="Handlers\**" />
+    <None Remove="Queries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
@@ -9,12 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands\" />
-    <Folder Include="Handlers\" />
-    <Folder Include="Queries\" />
   </ItemGroup>
 
   <PropertyGroup>
