@@ -1,7 +1,7 @@
 ﻿using Application;
 using Infrastructure;
 
-namespace REST.Extensions
+namespace API.Extensions
 {
     public static class ApplicationServiceExtensions
     {

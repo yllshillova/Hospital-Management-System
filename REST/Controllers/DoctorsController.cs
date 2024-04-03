@@ -3,7 +3,7 @@ using Application.DTOs;
 using Application.Queries;
 using Microsoft.AspNetCore.Mvc;
 
-namespace REST.Controllers
+namespace API.Controllers
 {
     public class DoctorsController : BaseApiController
     {
