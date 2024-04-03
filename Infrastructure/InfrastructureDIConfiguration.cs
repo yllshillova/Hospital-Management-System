@@ -20,7 +20,7 @@ namespace Infrastructure
             services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IStaffRepository, StaffRepository>();
-
+            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Application.Core
         {
             CreateMap<Doctor, DoctorDto>().ReverseMap();
             CreateMap<Staff, StaffDto>().ReverseMap();
+            CreateMap<Appointment, AppointmentDto>().ReverseMap();
         }
     }
 }
