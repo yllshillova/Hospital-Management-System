@@ -1,8 +1,8 @@
 ﻿using Application.Base;
 
-namespace Application.DTOs
+namespace Application.Doctors
 {
-    public class DoctorDto : BaseEntityDto  
+    public class DoctorDto : BaseEntityDto
     {
         public string Specialization { get; set; }
         public string Qualifications { get; set; }
