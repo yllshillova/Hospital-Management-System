@@ -8,7 +8,6 @@ namespace Application.Core
     {
         public MappingProfiles() {
             CreateMap<Doctor,DoctorDto>().ReverseMap();
-            CreateMap<Appointment,AppointmentDto>().ReverseMap();
         }
     }
 }
