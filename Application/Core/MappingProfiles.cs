@@ -6,12 +6,10 @@ namespace Application.Core
 {
     public class MappingProfiles : Profile
     {
-        public MappingProfiles() {
-            CreateMap<Doctor,DoctorDto>().ReverseMap();
-            CreateMap<Department,DepartmentDto>().ReverseMap();
-            CreateMap<Patient,PatientDto>().ReverseMap();
-            CreateMap<MedicalHistory,MedicalHistoryDto>().ReverseMap();
-            CreateMap<Room,RoomDto>().ReverseMap();
+        public MappingProfiles()
+        {
+            CreateMap<Doctor, DoctorDto>().ReverseMap();
+            CreateMap<Staff, StaffDto>().ReverseMap();
         }
     }
 }
