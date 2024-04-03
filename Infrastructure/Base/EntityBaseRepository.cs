@@ -25,21 +25,24 @@ namespace Infrastructure.Base
             var entity = await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
             return entity;
         }
-        public async Task CreateAsync(T entity)
+        public async Task<bool> CreateAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync() > 0;
+            return result;
         }
-        public async Task UpdateAsync(T entity)
+        public async Task<bool> UpdateAsync(T entity)
         {
             EntityEntry entityEntry = _context.Entry(entity);
             entityEntry.State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync() > 0;
+            return result;
         }
-        public async Task DeleteAsync(T entity)
+        public async Task<bool> DeleteAsync(T entity)
         {
             _context.Remove(entity);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync() > 0;
+            return result;
         }
     }
 }
