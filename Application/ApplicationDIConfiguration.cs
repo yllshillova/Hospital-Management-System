@@ -3,6 +3,7 @@ using Application.DTOs;
 using Application.Handlers;
 using Application.Validators;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -13,7 +14,9 @@ namespace Application
         {
             services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(GetDoctorsQueryHandler).Assembly));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-            services.AddScoped<IValidator<DoctorDto>, DoctorValidator>();
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<DoctorValidator>();
         }
     }
 }
