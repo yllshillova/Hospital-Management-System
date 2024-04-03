@@ -12,6 +12,8 @@ namespace Application.Validators
                 .MinimumLength(2).WithMessage("The medicine name should be at minimum 2 characters!");
             RuleFor(d => d.Dosage).NotEmpty().WithMessage("The dosage of the medicine is required!")
                 .MinimumLength(6).WithMessage("The dosage should be at minimum 6 characters.");
+            RuleFor(d => d.Duration).NotEmpty().WithMessage("The duration of the medicine is required!")
+               .MinimumLength(6).WithMessage("The dosage should be at minimum 6 characters.");
             RuleFor(d => d.Frequency).NotEmpty().WithMessage("The frequency of the medicine is required.")
                 .MinimumLength(6).WithMessage("The frequency should be at minimum 6 characters.");
             RuleFor(d => d.Route).NotEmpty().WithMessage("The route form of the medicine is required.")
@@ -24,9 +26,9 @@ namespace Application.Validators
             RuleFor(d => d.DoctorId).NotEmpty().WithMessage("DoctorId field is required.");
 
         }
-        private bool HaveAtLeastOneItem(List<string> list)
+        private bool HaveAtLeastOneItem(IEnumerable<string> list)
         {
-            return list != null && list.Count > 0;
+            return list != null && !list.Any();
         }
     }
 }

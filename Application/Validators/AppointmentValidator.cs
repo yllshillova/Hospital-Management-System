@@ -32,10 +32,12 @@ namespace Application.Validators
         {
             return date > DateTime.Now;
         }
-        private bool BeAfterCheckInDate(DateTime checkOutDate, AppointmentDto appointmentDto)
-        {
-            return checkOutDate > appointmentDto.CheckInDate;
-        }
+
+        //TODO: implement this 
+        //private bool BeAfterCheckInDate(DateTime checkOutDate, AppointmentDto appointmentDto)
+        //{
+        //    return checkOutDate > appointmentDto.CheckInDate;
+        //}
         private bool BeAfterCheckInDate(DateTime time)
         {
             throw new NotImplementedException();
