@@ -16,7 +16,9 @@ namespace Infrastructure
             });
 
             services.AddScoped<IDoctorRepository, DoctorRepository>();
-
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
+            services.AddScoped<IPatientRepository, PatientRepository>();
         }
     }
 }
