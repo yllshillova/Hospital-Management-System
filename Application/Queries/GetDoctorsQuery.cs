@@ -1,9 +1,10 @@
-﻿using Application.DTOs;
+﻿using Application.Core;
+using Application.DTOs;
 using MediatR;
 
 namespace Application.Queries
 {
-    public class GetDoctorsQuery : IRequest<IEnumerable<DoctorDto>>
+    public record GetDoctorsQuery : IRequest<Result<IEnumerable<DoctorDto>>>
     {
     }
 }
