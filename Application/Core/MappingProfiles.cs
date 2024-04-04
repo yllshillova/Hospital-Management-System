@@ -2,6 +2,7 @@
 using Application.Doctors;
 using Application.DTOs;
 using Application.Employers;
+using Application.Prescriptions;
 using AutoMapper;
 using Domain.Entities;
 
