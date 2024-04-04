@@ -2,9 +2,11 @@
 
 namespace Domain.Entities
 {
-    public class LaboratoryScientist : BaseEntity
+    public class LaboratoryScientist :BaseEntity
     {
         public Guid StaffId { get; set; }
         public Staff Staff { get; set; }
+        //public DateTime CreatedAt { get; set; }
+        //public DateTime UpdatedAt { get; set; }
     }
 }

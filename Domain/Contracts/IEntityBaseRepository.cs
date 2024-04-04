@@ -3,7 +3,7 @@ using Domain.Base;
 
 namespace Domain.Contracts
 {
-    public interface IEntityBaseRepository<T> where T : BaseEntity, new()
+    public interface IEntityBaseRepository<T> where T : class, new()
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);

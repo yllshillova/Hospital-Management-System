@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Infrastructure.Base
 {
-    internal abstract class EntityBaseRepository<T>(DataContext _context) : IEntityBaseRepository<T> where T : BaseEntity, new()
+    internal abstract class EntityBaseRepository<T>(DataContext _context) : IEntityBaseRepository<T> where T : class, new()
     {
         public async Task<IEnumerable<T>> GetAllAsync()
         {
@@ -22,7 +22,7 @@ namespace Infrastructure.Base
         }
         public async Task<T> GetByIdAsync(Guid Id)
         {
-            var entity = await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
+            var entity = await _context.Set<T>().FindAsync(Id);
             return entity;
         }
         public async Task<bool> CreateAsync(T entity)
