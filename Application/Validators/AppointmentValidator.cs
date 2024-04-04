@@ -7,7 +7,6 @@ namespace Application.Validators
     {
         public AppointmentValidator()
         {
-            RuleFor(d => d.Id).NotEmpty().WithMessage("Id is required.");
             RuleFor(d => d.CheckInDate)
             .NotEmpty().WithMessage("Check-in date is required.")
             .Must(BeAValidDate).WithMessage("Invalid check-in date format.")

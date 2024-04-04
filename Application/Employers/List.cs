@@ -3,7 +3,7 @@ using AutoMapper;
 using Domain.Contracts;
 using MediatR;
 
-namespace Application.Staff
+namespace Application.Employers
 {
     public class List
     {

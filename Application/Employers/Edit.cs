@@ -5,7 +5,7 @@ using Domain.Contracts;
 using FluentValidation;
 using MediatR;
 
-namespace Application.Staff
+namespace Application.Employers
 {
     public class Edit
     {

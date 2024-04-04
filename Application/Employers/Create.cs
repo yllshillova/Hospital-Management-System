@@ -1,13 +1,11 @@
 ﻿using Application.Core;
-using Application.Staff;
 using Application.Validators;
 using AutoMapper;
 using Domain.Contracts;
-using Domain.Entities;
 using FluentValidation;
 using MediatR;
 
-namespace Application.Staff
+namespace Application.Employers
 {
     public class Create
     {

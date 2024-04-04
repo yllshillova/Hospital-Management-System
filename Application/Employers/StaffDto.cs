@@ -1,6 +1,6 @@
 ﻿using Application.Base;
 
-namespace Application.Staff
+namespace Application.Employers
 {
     public class StaffDto : BaseEntityDto
     {

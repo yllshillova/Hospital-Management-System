@@ -1,15 +1,15 @@
-﻿using Application.Staff;
+﻿using Application.Employers;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using static Application.Staff.Create;
-using static Application.Staff.Delete;
-using static Application.Staff.Details;
-using static Application.Staff.Edit;
-using static Application.Staff.List;
+using static Application.Employers.Create;
+using static Application.Employers.Delete;
+using static Application.Employers.Details;
+using static Application.Employers.Edit;
+using static Application.Employers.List;
 
 namespace API.Controllers
 {
-    public class Staffontroller : BaseApiController
+    public class StaffController : BaseApiController
     {
         [HttpGet]
         public async Task<IActionResult> GetStaff()

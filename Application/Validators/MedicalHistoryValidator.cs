@@ -7,7 +7,6 @@ namespace Application.Validators
     {
         public MedicalHistoryValidator()
         {
-            RuleFor(d => d.Id).NotEmpty().WithMessage("Id is required.");
             RuleFor(d => d.AppointmentDate).NotEmpty().MaximumLength(10).WithMessage("AppointmentDate field is required.")
                 .Matches(@"^\d{2}/\d{2}$").WithMessage("AppointmentDate must be in the format MM/DD");
             RuleFor(d => d.Medications).NotEmpty().WithMessage("Medications field is required.")
