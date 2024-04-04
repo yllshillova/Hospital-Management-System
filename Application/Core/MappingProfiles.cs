@@ -1,4 +1,5 @@
-﻿using Application.Doctors;
+﻿using Application.Departments;
+using Application.Doctors;
 using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
