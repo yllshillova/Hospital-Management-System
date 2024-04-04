@@ -12,7 +12,7 @@ namespace Application
     {
         public static void Configure(IServiceCollection services)
         {
-            services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Create).Assembly));
+            services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Staff.Create).Assembly));
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
