@@ -1,5 +1,4 @@
 ﻿using Domain.Contracts;
-using Domain.Entities;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

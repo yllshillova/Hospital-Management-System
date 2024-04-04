@@ -1,8 +1,10 @@
 ﻿using Application.Departments;
 using Application.Doctors;
 using Application.DTOs;
+using Application.Staff;
 using AutoMapper;
 using Domain.Entities;
+
 
 namespace Application.Core
 {
@@ -14,6 +16,7 @@ namespace Application.Core
             CreateMap<Patient,PatientDto>().ReverseMap();
             CreateMap<MedicalHistory,MedicalHistoryDto>().ReverseMap();
             CreateMap<Room,RoomDto>().ReverseMap();
+            CreateMap<Staff,StaffDto>().ReverseMap();
         }
     }
 }
