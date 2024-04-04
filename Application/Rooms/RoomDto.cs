@@ -1,6 +1,6 @@
 ﻿using Application.Base;
 
-namespace Application.DTOs
+namespace Application.Rooms
 {
     public class RoomDto : BaseEntityDto
     {
