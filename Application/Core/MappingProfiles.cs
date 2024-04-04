@@ -1,5 +1,6 @@
 ﻿using Application.Doctors;
 using Application.DTOs;
+using Application.Patients;
 using AutoMapper;
 using Domain.Entities;
 
