@@ -8,10 +8,10 @@ namespace Infrastructure.Configuration
     {
         public void Configure(EntityTypeBuilder<Doctor> builder)
         {
-            builder.HasOne<Staff>(x => x.Staff)
+            builder.HasOne(x => x.Staff)
                    .WithMany()
                    .HasForeignKey(x => x.StaffId)
-                   .OnDelete(DeleteBehavior.Restrict);
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
