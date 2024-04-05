@@ -38,6 +38,18 @@ namespace Infrastructure
                 .HasForeignKey(d => d.DoctorId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Prescription>()
+               .HasOne(x => x.Patient)
+               .WithMany()
+               .HasForeignKey(x => x.PatientId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Prescription>()
+                .HasOne(x => x.Doctor)
+                .WithMany()
+                .HasForeignKey(d => d.DoctorId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<Doctor>()
                 .HasOne(x => x.Staff)
                 .WithMany()

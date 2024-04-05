@@ -18,6 +18,7 @@ namespace Application.Core
             CreateMap<MedicalHistory,MedicalHistoryDto>().ReverseMap();
             CreateMap<Room,RoomDto>().ReverseMap();
             CreateMap<Staff,StaffDto>().ReverseMap();
+            CreateMap<Prescription, PrescriptionDto>().ReverseMap();
         }
     }
 }
