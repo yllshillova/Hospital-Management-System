@@ -3,6 +3,7 @@ using Application.Doctors;
 using Application.DTOs;
 using Application.Employers;
 using Application.Prescriptions;
+using Application.Patients;
 using AutoMapper;
 using Domain.Entities;
 
