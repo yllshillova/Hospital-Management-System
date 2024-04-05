@@ -26,7 +26,7 @@ namespace Infrastructure
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new DoctorEntityConfiguration());
-
+            modelBuilder.ApplyConfiguration(new NurseEntityConfiguration());
         }
 
     }
