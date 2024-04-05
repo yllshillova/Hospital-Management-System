@@ -38,7 +38,7 @@ namespace API.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteDepartment(Guid Id)
         {
-            return HandleResult(await Mediator.Send(new DeleteDepartmentCommand(Id));
+            return HandleResult(await Mediator.Send(new DeleteDepartmentCommand(Id)));
         }
     }
 }
