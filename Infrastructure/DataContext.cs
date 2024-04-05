@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
@@ -23,6 +24,8 @@ namespace Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new DoctorEntityConfiguration());
 
         }
 
