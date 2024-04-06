@@ -7,7 +7,6 @@ namespace Application.Validators
     {
         public LaboratoryScientistValidator()
         {
-            RuleFor(d => d.Id).NotEmpty().WithMessage("Id is required.");
             /*RuleFor(d => d.Gender).NotEmpty().WithMessage("Gender field is required.");
             RuleFor(d => d.DateOfBirth).NotEmpty().WithMessage("Date of birth is required.")
             .Must(BeAValidDate).WithMessage("Invalid date of birth format.");

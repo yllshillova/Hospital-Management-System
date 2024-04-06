@@ -7,5 +7,7 @@ namespace Domain.Entities
     {
         public Guid StaffId { get; set; }
         public Staff Staff { get; set; }
+        //public DateTime CreatedAt { get; set; }
+        //public DateTime UpdatedAt { get; set; }
     }
 }

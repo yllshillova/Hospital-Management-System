@@ -1,6 +1,6 @@
 ﻿using Application.Base;
 
-namespace Application.DTOs
+namespace Application.Prescriptions
 {
     public class PrescriptionDto : BaseEntityDto
     {

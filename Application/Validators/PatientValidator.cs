@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.Patients;
 using FluentValidation;
 
 namespace Application.Validators
@@ -7,7 +7,6 @@ namespace Application.Validators
     {
         public PatientValidator()
         {
-            RuleFor(d => d.Id).NotEmpty().WithMessage("Id is required.");
             RuleFor(d => d.Name).NotEmpty().Length(3, 8).WithMessage("Name field is required.");
             RuleFor(d => d.Residence).NotEmpty().Length(10).WithMessage("Residence field is required.");
             RuleFor(d => d.Age).NotEmpty().GreaterThan(0).WithMessage("Age field is required.");

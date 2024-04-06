@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.Prescriptions;
 using FluentValidation;
 
 namespace Application.Validators
@@ -7,7 +7,6 @@ namespace Application.Validators
     {
         public PrescriptionValidator()
         {
-            RuleFor(d => d.Id).NotEmpty().WithMessage("The Id of the prescription is required!");
             RuleFor(d => d.Medicine).NotEmpty().WithMessage("The name of the medicine is required!")
                 .MinimumLength(2).WithMessage("The medicine name should be at minimum 2 characters!");
             RuleFor(d => d.Dosage).NotEmpty().WithMessage("The dosage of the medicine is required!")

@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class Doctor : BaseEntity
+    public class Doctor :BaseEntity
     {
         public string Specialization { get; set; }
         public string Qualifications { get; set; }

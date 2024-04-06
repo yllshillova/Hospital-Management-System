@@ -16,6 +16,18 @@ namespace Infrastructure
                 opt.UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddIdentityCore<Staff>(opt =>
+            {
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<DataContext>();
+            services.AddIdentityCore<Patient>(opt =>
+            {
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<DataContext>();
+
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
