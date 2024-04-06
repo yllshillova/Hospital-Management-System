@@ -16,7 +16,7 @@ namespace Application.Doctors
                 var doctor = await _doctorRepository.GetByIdAsync(request.Id);
                 if (doctor is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
-                var result = await _doctorRepository.DeleteAsync(doctor);
+                var result = await _doctorRepository.SoftDeleteAsync(doctor);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest,"Failed to delete the doctor! Try again.");
                 return Result<Unit>.Success(Unit.Value);
 

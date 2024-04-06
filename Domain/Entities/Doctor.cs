@@ -8,5 +8,6 @@ namespace Domain.Entities
         public string Qualifications { get; set; }
         public Guid StaffId { get; set; }
         public Staff Staff { get; set; }
+
     }
 }

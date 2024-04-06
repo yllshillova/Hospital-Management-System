@@ -44,5 +44,16 @@ namespace Infrastructure.Base
             var result = await _context.SaveChangesAsync() > 0;
             return result;
         }
+        public async Task<bool> SoftDeleteAsync(T entity)
+        {
+            var entityToBeDeleted = await GetByIdAsync(entity.Id);
+            if (entityToBeDeleted != null)
+            {
+                entityToBeDeleted.IsDeleted = true;
+                _context.Update(entityToBeDeleted);
+            }
+            var result = await _context.SaveChangesAsync() > 0;
+            return result;
+        }
     }
 }

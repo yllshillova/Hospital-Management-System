@@ -11,5 +11,6 @@ namespace Domain.Contracts
         Task<bool> CreateAsync(T entity);
         Task<bool> UpdateAsync(T entity);
         Task<bool> DeleteAsync(T entity);
+        Task<bool> SoftDeleteAsync(T entity);
     }
 }

@@ -61,7 +61,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Department", b =>
@@ -87,7 +87,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Doctor", b =>
@@ -115,7 +115,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.EmergencyContact", b =>
@@ -146,7 +146,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("EmergencyContacts");
+                    b.ToTable("EmergencyContacts", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.LabTest", b =>
@@ -185,7 +185,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PrescriptionId");
 
-                    b.ToTable("LabTests");
+                    b.ToTable("LabTests", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.LaboratoryScientist", b =>
@@ -207,7 +207,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("LaboratoryScientists");
+                    b.ToTable("LaboratoryScientists", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.MedicalHistory", b =>
@@ -241,7 +241,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("MedicalHistories");
+                    b.ToTable("MedicalHistories", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Nurse", b =>
@@ -263,7 +263,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("Nurses");
+                    b.ToTable("Nurses", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Patient", b =>
@@ -295,7 +295,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Prescription", b =>
@@ -343,7 +343,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Prescriptions");
+                    b.ToTable("Prescriptions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>
@@ -371,7 +371,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Staff", b =>
@@ -417,7 +417,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Staff");
+                    b.ToTable("Staff", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Appointment", b =>
