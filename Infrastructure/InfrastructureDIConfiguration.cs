@@ -33,6 +33,7 @@ namespace Infrastructure
             services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
             services.AddScoped<ILabTestRepository, LabTestRepository>();
             services.AddScoped<ILaboratoryScientistRepository, LaboratoryScientistRepository>();
+            services.AddScoped<IPatientRepository, PatientRepository>();
         }
     }
 }

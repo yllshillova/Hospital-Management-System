@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain.Contracts;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Doctors
 {
@@ -15,12 +16,12 @@ namespace Application.Doctors
             {
                 var doctor = await _doctorRepository.GetByIdAsync(request.Id);
                 if (doctor is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
-
-                var result = await _doctorRepository.SoftDeleteAsync(doctor);
+                doctor.IsDeleted = true;
+                var result = await _doctorRepository.UpdateAsync(doctor);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest,"Failed to delete the doctor! Try again.");
                 return Result<Unit>.Success(Unit.Value);
-
             }
+          
         }
     }
 }

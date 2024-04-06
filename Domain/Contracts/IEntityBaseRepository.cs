@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Domain.Base;
+using Domain.Interfaces;
 
 namespace Domain.Contracts
 {
@@ -11,6 +12,5 @@ namespace Domain.Contracts
         Task<bool> CreateAsync(T entity);
         Task<bool> UpdateAsync(T entity);
         Task<bool> DeleteAsync(T entity);
-        Task<bool> SoftDeleteAsync(T entity);
     }
 }

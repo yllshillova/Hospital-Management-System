@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities
 {
-    public class Staff : IdentityUser<Guid>
+    public class Staff : IdentityUser<Guid>, IsSoftDeletable
     {
         public string Name { get; set; }
         public string LastName { get; set; }
@@ -16,5 +17,7 @@ namespace Domain.Entities
         public Guid DepartmentId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; }
+
     }
 }

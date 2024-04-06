@@ -1,5 +1,6 @@
 ﻿using Domain.Base;
 using Domain.Contracts;
+using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
@@ -41,17 +42,6 @@ namespace Infrastructure.Base
         public async Task<bool> DeleteAsync(T entity)
         {
             _context.Remove(entity);
-            var result = await _context.SaveChangesAsync() > 0;
-            return result;
-        }
-        public async Task<bool> SoftDeleteAsync(T entity)
-        {
-            var entityToBeDeleted = await GetByIdAsync(entity.Id);
-            if (entityToBeDeleted != null)
-            {
-                entityToBeDeleted.IsDeleted = true;
-                _context.Update(entityToBeDeleted);
-            }
             var result = await _context.SaveChangesAsync() > 0;
             return result;
         }

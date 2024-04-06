@@ -1,12 +1,13 @@
 ﻿using Domain.Base;
+using Domain.Interfaces;
 
 namespace Domain.Entities
 {
-    public class LaboratoryScientist :BaseEntity
+    public class LaboratoryScientist :BaseEntity, IsSoftDeletable
     {
         public Guid StaffId { get; set; }
         public Staff Staff { get; set; }
-        //public DateTime CreatedAt { get; set; }
-        //public DateTime UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; }
+
     }
 }
