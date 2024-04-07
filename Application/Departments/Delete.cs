@@ -15,7 +15,9 @@ namespace Application.Departments
                 var department = await _departmentRepository.GetByIdAsync(request.Id);
                 if (department is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found.");
 
-                var result = await _departmentRepository.DeleteAsync(department);
+                department.IsDeleted = true;
+                var result = await _departmentRepository.UpdateAsync(department); 
+                
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the department. Try again!");
                 return Result<Unit>.Success(Unit.Value);
             }

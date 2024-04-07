@@ -1,11 +1,9 @@
-﻿using Application.Departments;
-using Application.Doctors;
+﻿using Application.Doctors;
 using Application.DTOs;
-using Application.Employers;
-using Application.Prescriptions;
 using Application.Patients;
 using AutoMapper;
 using Domain.Entities;
+using Application.Visits;
 
 
 namespace Application.Core
@@ -14,12 +12,9 @@ namespace Application.Core
     {
         public MappingProfiles() {
             CreateMap<Doctor,DoctorDto>().ReverseMap();
-            CreateMap<Department,DepartmentDto>().ReverseMap();
             CreateMap<Patient,PatientDto>().ReverseMap();
-            CreateMap<MedicalHistory,MedicalHistoryDto>().ReverseMap();
             CreateMap<Room,RoomDto>().ReverseMap();
-            CreateMap<Staff,StaffDto>().ReverseMap();
-            CreateMap<Prescription, PrescriptionDto>().ReverseMap();
+            CreateMap<Visit, VisitDto>().ReverseMap();
         }
     }
 }

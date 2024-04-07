@@ -1,6 +1,7 @@
 ﻿using Application.Core;
 using AutoMapper;
 using Domain.Contracts;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.Patients
@@ -16,7 +17,9 @@ namespace Application.Patients
                 var patient = await _patientRepository.GetByIdAsync(request.Id);
                 if (patient is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
-                var result = await _patientRepository.DeleteAsync(patient);
+                patient.IsDeleted = true;
+                var result = await _patientRepository.UpdateAsync(patient);
+                
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the patient! Try again.");
                 return Result<Unit>.Success(Unit.Value);
 

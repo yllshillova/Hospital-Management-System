@@ -1,5 +1,4 @@
 ﻿using Domain.Base;
-using Domain.Contracts;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
