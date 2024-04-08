@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Application.BaseValidators;
+using FluentValidation;
 
 namespace Application.Doctors
 {
@@ -6,9 +7,9 @@ namespace Application.Doctors
     {
         public DoctorValidator()
         {
-            //RuleFor(d => d.Qualifications).NotEmpty().Length(10, 250).WithMessage("Qualifications field is required.");
-            RuleFor(d => d.Specialization).NotEmpty().Length(10, 250).WithMessage("Specialization field is required.");
-            //RuleFor(d => d.StaffId).NotEmpty().WithMessage("StaffId field is required.");
+            RuleFor(d => d.Specialization).SetValidator(new NotNullValidator<DoctorDto,string>())
+                                          .SetValidator(new ValidLengthValidator<DoctorDto,string>(4,100));
+            RuleFor(d => d.DepartmentId).SetValidator(new NotNullValidator<DoctorDto, Guid>());
         }
     }
 }
