@@ -28,7 +28,7 @@ namespace Application.Doctors
                 
                 var doctor = _mapper.Map<Doctor>(request.Doctor);
                 if (doctor is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
-
+                doctor.CreatedAt = DateTime.UtcNow;
                 var result = await _doctorRepository.CreateAsync(doctor);
                 if(!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the doctor! Try again.");
 
