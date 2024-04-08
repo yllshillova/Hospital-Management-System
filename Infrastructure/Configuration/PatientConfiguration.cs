@@ -10,6 +10,13 @@ namespace Infrastructure.Configuration
         {
             builder.HasMany(x => x.Appointments)
                    .WithOne(x => x.Patient);
+
+            builder.ToTable("Patients", builder => builder.IsTemporal(x =>
+            {
+                x.HasPeriodEnd("ValidTo");
+                x.HasPeriodStart("ValidFrom");
+                x.UseHistoryTable("PatientHistoricalData");
+            }));
         }
     }
 }

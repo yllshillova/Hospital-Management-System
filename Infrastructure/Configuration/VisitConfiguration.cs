@@ -16,6 +16,12 @@ namespace Infrastructure.Configuration
                    .WithMany()
                    .HasForeignKey(a => a.DoctorId)
                    .OnDelete(DeleteBehavior.NoAction);
+            builder.ToTable("Visit", builder => builder.IsTemporal(x =>
+            {
+                x.HasPeriodEnd("ValidTo");
+                x.HasPeriodStart("ValidFrom");
+                x.UseHistoryTable("VisitHistoricalData");
+            }));
         }
     }
 }
