@@ -1,7 +1,7 @@
 ﻿using Application.Appointment;
 using FluentValidation;
 
-namespace Application.Validators
+namespace Application.BaseValidators
 {
     public class AppointmentValidator : AbstractValidator<AppointmentDto>
     {
