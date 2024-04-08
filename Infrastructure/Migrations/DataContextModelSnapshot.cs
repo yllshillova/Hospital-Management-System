@@ -61,7 +61,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Department", b =>
@@ -84,7 +84,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Department");
+                    b.ToTable("Department", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.EmergencyContact", b =>
@@ -115,7 +115,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("EmergencyContacts");
+                    b.ToTable("EmergencyContacts", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Patient", b =>
@@ -174,7 +174,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>
@@ -202,7 +202,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Visit", b =>
@@ -250,7 +250,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Visits");
+                    b.ToTable("Visits", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>

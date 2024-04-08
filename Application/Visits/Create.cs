@@ -29,6 +29,8 @@ namespace Application.Visits
                 var visit = _mapper.Map<Visit>(request.Visit);
                 if (visit is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
 
+                if (visit.Doctor.IsDeleted == true) return Result<Unit>.Failure(ErrorType.BadRequest, "The doctor is not available for the moment! Select another doctor.");
+
                 var result = await _visitRepository.CreateAsync(visit);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the visit report! Try again.");
 

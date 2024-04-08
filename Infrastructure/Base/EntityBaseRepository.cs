@@ -20,9 +20,9 @@ namespace Infrastructure.Base
             var entities = await query.AsNoTracking().ToListAsync();
             return entities;
         }
-        public async Task<T> GetByIdAsync(Guid Id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
-            var entity = await _context.Set<T>().FindAsync(Id);
+            var entity = await _context.Set<T>().FindAsync(id);
             return entity;
         }
         public async Task<bool> CreateAsync(T entity)

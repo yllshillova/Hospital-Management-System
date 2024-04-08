@@ -12,7 +12,7 @@ namespace Domain.Entities
         public string? Address { get; set; }
         public string? Gender { get; set; }
         //public string Department { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? Birthday { get; set; }
