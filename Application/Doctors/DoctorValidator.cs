@@ -9,6 +9,7 @@ namespace Application.Doctors
         {
             RuleFor(d => d.Specialization).SetValidator(new NotNullValidator<DoctorDto,string>())
                                           .SetValidator(new ValidLengthValidator<DoctorDto,string>(4,100));
+            RuleFor(d => d.DepartmentId).SetValidator(new NotNullValidator<DoctorDto, Guid>());
         }
     }
 }
