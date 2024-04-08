@@ -12,6 +12,7 @@ namespace Infrastructure.Configuration
 
             builder.HasMany(x => x.Appointments)
                    .WithOne(d => d.Doctor);
+
         }
     }
 }

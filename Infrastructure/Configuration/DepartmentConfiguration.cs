@@ -8,7 +8,12 @@ namespace Infrastructure.Configuration
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
-           
+            builder.ToTable("Departments", builder => builder.IsTemporal(x =>
+            {
+                x.HasPeriodEnd("ValidTo");
+                x.HasPeriodStart("ValidFrom");
+                x.UseHistoryTable("DepartmentHistoricalData");
+            }));
         }
     }
 }
