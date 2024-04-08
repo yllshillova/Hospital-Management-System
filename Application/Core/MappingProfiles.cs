@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using Application.Visits;
 using Application.Departments;
+using Application.EmergencyContacts;
 
 
 namespace Application.Core
@@ -17,6 +18,7 @@ namespace Application.Core
             CreateMap<Room,RoomDto>().ReverseMap();
             CreateMap<Visit, VisitDto>().ReverseMap();
             CreateMap<Department, DepartmentDto>().ReverseMap();
+            CreateMap<EmergencyContact, EmergencyContactDto>().ReverseMap();
         }
     }
 }
