@@ -12,6 +12,6 @@ namespace Application.Doctors
         public string Specialization { get; set; }
         public DateTime? Birthday { get; set; }
         public Guid DepartmentId { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
     }
 }

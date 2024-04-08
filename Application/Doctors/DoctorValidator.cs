@@ -1,6 +1,5 @@
-﻿using Application.Base;
+﻿using Application.BaseValidators;
 using FluentValidation;
-using Infrastructure.Base.AppUserValidator;
 
 namespace Application.Doctors
 {
@@ -8,14 +7,9 @@ namespace Application.Doctors
     {
         public DoctorValidator()
         {
-            ValidateCommonProperties();
-         
-            RuleFor(d => d.Specialization).NotEmpty().Length(2, 20).WithMessage("Specialization field is required.");
-           
-        }
-        private bool BeAValidDate(DateTime? date)
-        {
-            return date.HasValue && date.Value.Date <= DateTime.UtcNow.Date;
+            RuleFor(d => d.Specialization).SetValidator(new NotNullValidator<DoctorDto,string>())
+                                          .SetValidator(new ValidLengthValidator<DoctorDto,string>(4,100));
+            RuleFor(d => d.DepartmentId).SetValidator(new NotNullValidator<DoctorDto, Guid>());
         }
     }
 }

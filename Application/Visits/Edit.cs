@@ -1,5 +1,5 @@
 ﻿using Application.Core;
-using Application.Validators;
+using Application.BaseValidators;
 using Application.Visits;
 using AutoMapper;
 using Domain.Contracts;

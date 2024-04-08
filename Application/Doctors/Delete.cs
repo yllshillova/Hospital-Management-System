@@ -1,8 +1,6 @@
 ﻿using Application.Core;
-using AutoMapper;
 using Domain.Contracts;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Doctors
 {
@@ -22,6 +20,7 @@ namespace Application.Doctors
                 if (visits is null || !visits.Any())
                 {
                     doctor.IsDeleted = true;
+                    doctor.UpdatedAt = DateTime.UtcNow;
                     var result = await _doctorRepository.UpdateAsync(doctor);
                     if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the doctor! Try again.");
                     return Result<Unit>.Success(Unit.Value);
