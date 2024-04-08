@@ -1,11 +1,6 @@
-﻿
-using Domain.Base;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
-    public class Nurse : BaseEntity
+    public class Nurse : AppUser
     {
-        public Guid StaffId { get; set; }
-        public Staff Staff { get; set; }
     }
 }

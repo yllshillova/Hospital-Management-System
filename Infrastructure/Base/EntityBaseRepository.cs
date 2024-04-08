@@ -1,12 +1,12 @@
 ﻿using Domain.Base;
-using Domain.Contracts;
+using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
 
 namespace Infrastructure.Base
 {
-    internal abstract class EntityBaseRepository<T>(DataContext _context) : IEntityBaseRepository<T> where T : BaseEntity, new()
+    internal abstract class EntityBaseRepository<T>(DataContext _context) : IEntityBaseRepository<T> where T : class, new()
     {
         public async Task<IEnumerable<T>> GetAllAsync()
         {
@@ -20,9 +20,9 @@ namespace Infrastructure.Base
             var entities = await query.AsNoTracking().ToListAsync();
             return entities;
         }
-        public async Task<T> GetByIdAsync(Guid Id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
-            var entity = await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
+            var entity = await _context.Set<T>().FindAsync(id);
             return entity;
         }
         public async Task<bool> CreateAsync(T entity)
