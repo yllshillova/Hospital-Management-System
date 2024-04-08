@@ -18,6 +18,7 @@ namespace Application.Patients
                 if (patient is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
                 patient.IsDeleted = true;
+                patient.UpdatedAt = DateTime.UtcNow;
                 var result = await _patientRepository.UpdateAsync(patient);
                 
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the patient! Try again.");
