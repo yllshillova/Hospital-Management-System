@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
@@ -24,6 +25,8 @@ namespace Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfiguration(new DoctorEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new NurseEntityConfiguration());
         }
 
     }

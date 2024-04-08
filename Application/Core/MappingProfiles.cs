@@ -1,4 +1,6 @@
-﻿using Application.DTOs;
+﻿using Application.Doctors;
+using Application.DTOs;
+using Application.Nurses;
 using AutoMapper;
 using Domain.Entities;
 
@@ -8,6 +10,10 @@ namespace Application.Core
     {
         public MappingProfiles() {
             CreateMap<Doctor,DoctorDto>().ReverseMap();
+            CreateMap<Department,DepartmentDto>().ReverseMap();
+            CreateMap<Patient,PatientDto>().ReverseMap();
+            CreateMap<MedicalHistory,MedicalHistoryDto>().ReverseMap();
+            CreateMap<Room,RoomDto>().ReverseMap();
             CreateMap<Nurse,NurseDto>().ReverseMap();
         }
     }

@@ -1,8 +1,8 @@
-﻿using Domain.Base;
+﻿using Application.Base;
 
-namespace Domain.Entities
+namespace Application.DTOs
 {
-    public class Prescription : BaseEntity
+    public class PrescriptionDto : BaseEntityDto
     {
         public string Medicine { get; set; }
         public string Dosage { get; set; }
@@ -10,10 +10,8 @@ namespace Domain.Entities
         public string Duration { get; set; }
         public string Route { get; set; }
         public string FoodRelation { get; set; }
-        public IEnumerable<string> DoDont { get; set; }
-        public Patient Patient { get; set; }
+        public List<string> DoDont { get; set; }
         public Guid PatientId { get; set; }
-        public Doctor Doctor { get; set; }
         public Guid DoctorId { get; set; }
     }
 }

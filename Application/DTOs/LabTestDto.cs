@@ -8,7 +8,6 @@ namespace Application.DTOs
         public string Type { get; set; }
         public string Results { get; set; }
         public string Notes { get; set; }
-        public Prescription Prescription { get; set; }
         public Guid PrescriptionId { get; set; }
     }
 }

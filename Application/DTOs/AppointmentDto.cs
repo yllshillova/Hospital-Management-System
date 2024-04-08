@@ -1,8 +1,9 @@
-﻿using Domain.Base;
+﻿using Application.Base;
+using Domain.Entities;
 
-namespace Domain.Entities
+namespace Application.DTOs
 {
-    public class Appointment : BaseEntity
+    public class AppointmentDto : BaseEntityDto
     {
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
@@ -10,8 +11,6 @@ namespace Domain.Entities
         public string Reason { get; set; }
         public string Notes { get; set; }
         public Guid DoctorId { get; set; }
-        public Doctor Doctor { get; set; }
         public Guid PatientId { get; set; }
-        public Patient Patient { get; set; }
     }
 }
