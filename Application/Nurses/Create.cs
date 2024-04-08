@@ -28,7 +28,8 @@ namespace Application.Nurses
 
                 var nurse = _mapper.Map<Nurse>(request.Nurse);
                 if (nurse is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
-
+                nurse.CreatedAt = DateTime.UtcNow;
+                nurse.UpdatedAt = nurse.CreatedAt;
                 var result = await _nurseRepository.CreateAsync(nurse);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the nurse! Try again.");
 
