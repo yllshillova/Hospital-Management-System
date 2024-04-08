@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.BaseValidators
 {
-    public class NotNullValidator<T, TProperty> : PropertyValidator<T, TProperty>
+    internal class NotNullValidator<T, TProperty> : PropertyValidator<T, TProperty>
     {
 
         public override string Name => "NotNullValidator";

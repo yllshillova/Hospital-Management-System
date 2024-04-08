@@ -7,6 +7,7 @@ using Domain.Entities;
 using Application.Visits;
 using Application.Departments;
 using Application.Nurses;
+using Application.EmergencyContacts;
 
 
 namespace Application.Core
@@ -21,6 +22,7 @@ namespace Application.Core
             CreateMap<Department, DepartmentDto>().ReverseMap();
             CreateMap<Nurse, NurseDto>().ReverseMap();
 
+            CreateMap<EmergencyContact, EmergencyContactDto>().ReverseMap();
         }
     }
 }
