@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Application.BaseValidators;
+using FluentValidation;
 
 namespace Application.Appointments
 {
@@ -6,19 +7,21 @@ namespace Application.Appointments
     {
         public AppointmentValidator()
         {
-            RuleFor(d => d.CheckInDate).NotEmpty().WithMessage("Check-in date is required.")
+            RuleFor(d => d.CheckInDate).SetValidator(new NotNullValidator<AppointmentDto, DateTime>())
                 .Must(BeAValidDate).WithMessage("Invalid check-in date format.")
                     .Must(BeInFuture).WithMessage("Check-in date must be in the future.");
-            RuleFor(x => x.CheckOutDate).NotEmpty().WithMessage("Check-out date is required.")
+            RuleFor(x => x.CheckOutDate).SetValidator(new NotNullValidator<AppointmentDto, DateTime>())
                 .Must((dto, checkOutDate) => BeAfterCheckInDate(checkOutDate, dto))
                 .WithMessage("Check-out date must be after check-in date.");
 
-
-            RuleFor(d => d.Status).NotEmpty().Length(5, 30).WithMessage("Status field is required.");
-            RuleFor(d => d.Reason).NotEmpty().Length(5, 30).WithMessage("Reason field is required.");
-            RuleFor(d => d.Notes).NotEmpty().Length(5, 30).WithMessage("Notes field is required.");
-            RuleFor(d => d.DoctorId).NotEmpty().WithMessage("DoctorId field is required.");
-            RuleFor(d => d.PatientId).NotEmpty().WithMessage("PatientId field is required.");
+            RuleFor(d => d.Status).SetValidator(new NotNullValidator<AppointmentDto, string>())
+                .SetValidator(new ValidLengthValidator<AppointmentDto, string>(5, 100));
+            RuleFor(d => d.Reason).SetValidator(new NotNullValidator<AppointmentDto, string>())
+                .SetValidator(new ValidLengthValidator<AppointmentDto, string>(5, 100));
+            RuleFor(d => d.Notes).SetValidator(new NotNullValidator<AppointmentDto, string>())
+                .SetValidator(new ValidLengthValidator<AppointmentDto, string>(5, 100));
+            RuleFor(d => d.DoctorId).SetValidator(new NotNullValidator<AppointmentDto, Guid>());
+            RuleFor(d => d.PatientId).SetValidator(new NotNullValidator<AppointmentDto, Guid>());
         }
 
         private bool BeAValidDate(DateTime date)
