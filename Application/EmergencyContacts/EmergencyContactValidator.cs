@@ -1,7 +1,7 @@
-﻿using Application.EmergencyContacts;
+﻿using Application.BaseValidators;
 using FluentValidation;
 
-namespace Application.BaseValidators
+namespace Application.EmergencyContacts
 {
     public class EmergencyContactValidator : AbstractValidator<EmergencyContactDto>
     {

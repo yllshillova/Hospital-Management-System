@@ -1,7 +1,7 @@
-﻿using Application.Nurses;
+﻿using Application.BaseValidators;
 using FluentValidation;
 
-namespace Application.BaseValidators
+namespace Application.Nurses
 {
     public class NurseValidator : AbstractValidator<NurseDto>
     {

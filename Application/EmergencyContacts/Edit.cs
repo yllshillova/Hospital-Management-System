@@ -1,8 +1,6 @@
 ﻿using Application.Core;
-using Application.Validators;
 using AutoMapper;
 using Domain.Contracts;
-using Domain.Entities;
 using FluentValidation;
 using MediatR;
 

@@ -1,7 +1,7 @@
-﻿using Application.Rooms;
+﻿using Application.BaseValidators;
 using FluentValidation;
 
-namespace Application.BaseValidators
+namespace Application.Rooms
 {
     public class RoomValidator : AbstractValidator<RoomDto>
     {

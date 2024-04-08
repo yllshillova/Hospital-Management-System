@@ -1,5 +1,4 @@
 ﻿using Application.Core;
-using Application.Validators;
 using AutoMapper;
 using Domain.Contracts;
 using FluentValidation;
