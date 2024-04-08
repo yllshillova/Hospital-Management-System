@@ -1,7 +1,7 @@
 ﻿using Application.Base;
 using Domain.Entities;
 
-namespace Application.DTOs
+namespace Application.Appointment
 {
     public class AppointmentDto : BaseEntityDto
     {
