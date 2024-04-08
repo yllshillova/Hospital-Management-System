@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Base;
+using Domain.Entities;
 
 namespace Domain.Contracts
 {

@@ -5,7 +5,7 @@ namespace Application.Doctors
     public class DoctorDto : BaseEntityDto
     {
         public string Specialization { get; set; }
-        public string Qualifications { get; set; }
-        public Guid StaffId { get; set; }
+        public Guid DepartmentId { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
