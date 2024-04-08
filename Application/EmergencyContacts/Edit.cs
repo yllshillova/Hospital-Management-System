@@ -28,6 +28,7 @@ namespace Application.EmergencyContacts
                 if (emergencyContact is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
                 _mapper.Map(request.EmergencyContact, emergencyContact);
+                emergencyContact.UpdatedAt = DateTime.UtcNow;
                 var result = await _emergencyContactRepository.UpdateAsync(emergencyContact);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the emergency contact report! Try again.");
 

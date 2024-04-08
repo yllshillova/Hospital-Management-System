@@ -28,7 +28,8 @@ namespace Application.EmergencyContacts
 
                 var emergencyContact = _mapper.Map<EmergencyContact>(request.EmergencyContact);
                 if (emergencyContact is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
-
+                emergencyContact.CreatedAt = DateTime.UtcNow;
+                emergencyContact.UpdatedAt = emergencyContact.CreatedAt;
                 var result = await _emergencyContactRepository.CreateAsync(emergencyContact);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the emergencyContact! Try again.");
 
