@@ -4,6 +4,14 @@ namespace Application.Nurses
 {
     public class NurseDto :  BaseEntityDto
     {
-        public Guid StaffId { get; set; }
+        public string Name { get; set; }
+        public string LastName { get; set; }
+        public string? Residence { get; set; }
+        public string? Address { get; set; }
+        public string? Gender { get; set; }
+        public bool IsDeleted { get; set; } = false;
+       
+        public DateTime? Birthday { get; set; }
+        public Guid DepartmentId { get; set; }
     }
 }
