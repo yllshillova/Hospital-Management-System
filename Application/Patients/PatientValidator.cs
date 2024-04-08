@@ -9,29 +9,29 @@ namespace Application.Patients
         public PatientValidator()
         {
             RuleFor(d => d.Name).SetValidator(new NotNullValidator<PatientDto, string>())
-           .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.LastName).SetValidator(new NotNullValidator<PatientDto, string>())
-           .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                    .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.ParentName).SetValidator(new NotNullValidator<PatientDto, string>())
-           .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                      .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.PersonalNumber).SetValidator(new NotNullValidator<PatientDto, string>())
-           .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                          .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Residence).SetValidator(new NotNullValidator<PatientDto, string>())
-           .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                     .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Birthday).NotNull().WithMessage("Birthday field is required.")
-           .Must(BeAValidDate).WithMessage("Birthday field is not valid.");
+                                    .Must(BeAValidDate).WithMessage("Birthday field is not valid.");
             RuleFor(d => d.BloodGroup).SetValidator(new NotNullValidator<PatientDto, string>())
-           .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                      .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Gender).SetValidator(new NotNullValidator<PatientDto, string>())
-           .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                  .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Email).SetValidator(new NotNullValidator<PatientDto, string>())
-           .Matches(IsValidEmail());
+                                 .Matches(IsValidEmail());
             RuleFor(d => d.PhoneNumber).SetValidator(new NotNullValidator<PatientDto, string>())
-           .Must(BeValidPhoneNumber).WithMessage("Invalid phone number. It should contain exactly 9 digits.");
+                                       .Must(BeValidPhoneNumber).WithMessage("Invalid phone number. It should contain exactly 9 digits.");
             RuleFor(d => d.Occupation).SetValidator(new NotNullValidator<PatientDto, string>())
-           .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                      .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Allergies).SetValidator(new NotNullValidator<PatientDto, string>())
-           .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                     .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
 
 
 

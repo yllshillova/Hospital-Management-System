@@ -29,6 +29,8 @@ namespace Application.Visits
                 if (visit is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
                 _mapper.Map(request.Visit, visit);
+                visit.UpdatedAt = DateTime.Now;
+
                 var result = await _visitRepository.UpdateAsync(visit);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the visit report! Try again.");
 

@@ -1,6 +1,4 @@
-﻿using Application.Doctors;
-using Application.DTOs;
-using Application.EmergencyContacts;
+﻿using Application.EmergencyContacts;
 using FluentValidation;
 
 namespace Application.BaseValidators
