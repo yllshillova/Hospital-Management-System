@@ -25,6 +25,7 @@ namespace Application.Rooms
                 if (room == null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found.");
 
                 _mapper.Map(request.Room, room);
+                room.UpdatedAt = DateTime.UtcNow;
                 var result = await _roomRepository.UpdateAsync(room);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the room. Try again!");
 
