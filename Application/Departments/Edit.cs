@@ -27,6 +27,8 @@ namespace Application.Departments
                 if (department is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found.");
 
                 _mapper.Map(request.Department, department);
+                department.UpdatedAt = DateTime.Now;
+
                 var result = await _departmentRepository.UpdateAsync(department);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the department. Try again!");
 
