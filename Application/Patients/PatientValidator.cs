@@ -1,6 +1,5 @@
 ﻿using Application.BaseValidators;
 using FluentValidation;
-using System.Text.RegularExpressions;
 
 namespace Application.Patients
 {
@@ -9,29 +8,31 @@ namespace Application.Patients
         public PatientValidator()
         {
             RuleFor(d => d.Name).SetValidator(new NotNullValidator<PatientDto, string>())
-                                .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                 .SetValidator(new ValidLengthValidator<PatientDto, string>(2, 100));
             RuleFor(d => d.LastName).SetValidator(new NotNullValidator<PatientDto, string>())
                                     .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.ParentName).SetValidator(new NotNullValidator<PatientDto, string>())
-                                      .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                      .SetValidator(new ValidLengthValidator<PatientDto, string>(2, 100));
             RuleFor(d => d.PersonalNumber).SetValidator(new NotNullValidator<PatientDto, string>())
-                                          .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                          .Must(personalNumber => BeValidNumber(personalNumber, 10))
+                                          .WithMessage("Invalid personal number. It should contain exactly 10 digits.");
+            RuleFor(d => d.Address).SetValidator(new NotNullValidator<PatientDto, string>())
+                                     .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Residence).SetValidator(new NotNullValidator<PatientDto, string>())
                                      .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
-            RuleFor(d => d.Birthday).NotNull().WithMessage("Birthday field is required.")
-                                    .Must(BeAValidDate).WithMessage("Birthday field is not valid.");
+            RuleFor(d => d.Birthday).Must(BeAValidDate).WithMessage("Birthday field is not valid.");
             RuleFor(d => d.BloodGroup).SetValidator(new NotNullValidator<PatientDto, string>())
-                                      .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+                                      .Must(BeValidBloodGroup).WithMessage("Invalid blood group."); ;
             RuleFor(d => d.Gender).SetValidator(new NotNullValidator<PatientDto, string>())
                                   .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Email).SetValidator(new NotNullValidator<PatientDto, string>())
                                  .Matches(IsValidEmail());
             RuleFor(d => d.PhoneNumber).SetValidator(new NotNullValidator<PatientDto, string>())
-                                       .Must(BeValidPhoneNumber).WithMessage("Invalid phone number. It should contain exactly 9 digits.");
+                                       .Must(phoneNumber => BeValidNumber(phoneNumber, 9))
+                                       .WithMessage("Invalid phone number. It should contain exactly 9 digits.");
             RuleFor(d => d.Occupation).SetValidator(new NotNullValidator<PatientDto, string>())
                                       .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
-            RuleFor(d => d.Allergies).SetValidator(new NotNullValidator<PatientDto, string>())
-                                     .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
+            RuleFor(d => d.Allergies).SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
 
 
 
@@ -40,15 +41,19 @@ namespace Application.Patients
         {
             return date.HasValue && date.Value.Date <= DateTime.UtcNow.Date;
         }
-        private bool BeValidPhoneNumber(string phoneNumber)
+        private bool BeValidNumber(string number, int expectedLength)
         {
-            // Check if the phone number contains exactly 9 digits
-            return phoneNumber != null && phoneNumber.Length == 9 && phoneNumber.All(char.IsDigit);
+            return number != null && number.Length == expectedLength && number.All(char.IsDigit);
         }
         private string IsValidEmail()
         {
             string pattern = @"^(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-                return pattern;
+            return pattern;
+        }
+        private bool BeValidBloodGroup(string bloodGroup)
+        {
+            string[] validBloodGroups = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"];
+            return !string.IsNullOrEmpty(bloodGroup) && validBloodGroups.Contains(bloodGroup.ToUpper());
         }
     }
 }

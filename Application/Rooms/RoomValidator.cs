@@ -7,10 +7,10 @@ namespace Application.Rooms
     {
         public RoomValidator()
         {
-            RuleFor(d => d.Type).SetValidator(new NotNullValidator<RoomDto, string>())
-                                            .SetValidator(new ValidLengthValidator<RoomDto, string>(4, 100));
             RuleFor(d => d.IsFree).SetValidator(new NotNullValidator<RoomDto, bool>());
             RuleFor(d => d.PatientId).SetValidator(new NotNullValidator<RoomDto, Guid>());
+            RuleFor(d => d.Capacity).SetValidator(new NotNullValidator<RoomDto, int>())
+                                    .LessThanOrEqualTo(10).WithMessage("Capacity must be at most 10");
         }
     }
 }

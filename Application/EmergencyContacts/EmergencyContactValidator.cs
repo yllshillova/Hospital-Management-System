@@ -8,12 +8,17 @@ namespace Application.EmergencyContacts
         public EmergencyContactValidator()
         {
             RuleFor(d => d.ContactName).SetValidator(new NotNullValidator<EmergencyContactDto, string>())
-                                         .SetValidator(new ValidLengthValidator<EmergencyContactDto, string>(4, 100));
+                                         .SetValidator(new ValidLengthValidator<EmergencyContactDto, string>(2, 100));
             RuleFor(d => d.Relation).SetValidator(new NotNullValidator<EmergencyContactDto, string>())
                                          .SetValidator(new ValidLengthValidator<EmergencyContactDto, string>(4, 100));
             RuleFor(d => d.PhoneNumber).SetValidator(new NotNullValidator<EmergencyContactDto, string>())
                                          .SetValidator(new ValidLengthValidator<EmergencyContactDto, string>(4, 100));
             RuleFor(d => d.PatientId).SetValidator(new NotNullValidator<EmergencyContactDto, Guid>());
+        }
+
+        private bool BeValidNumber(string number)
+        {
+            return number != null && number.Length == 9 && number.All(char.IsDigit);
         }
     }
 }
