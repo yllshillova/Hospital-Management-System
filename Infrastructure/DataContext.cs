@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Infrastructure.Configuration;
+using Infrastructure.EntityConfiguration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -31,44 +31,6 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new RoomConfiguration());
             modelBuilder.ApplyConfiguration(new VisitConfiguration());
 
-
-            //modelBuilder.Entity<Appointment>()
-            //    .HasOne(x => x.Patient)
-            //    .WithMany()
-            //    .HasForeignKey(x => x.PatientId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-            //modelBuilder.Entity<Appointment>()
-            //    .HasOne(x => x.Doctor)
-            //    .WithMany()
-            //    .HasForeignKey(d => d.DoctorId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-            //modelBuilder.Entity<Visit>()
-            //   .HasOne(x => x.Patient)
-            //   .WithMany()
-            //   .HasForeignKey(x => x.PatientId)
-            //   .OnDelete(DeleteBehavior.NoAction);
-
-            //modelBuilder.Entity<Visit>()
-            //    .HasOne(x => x.Doctor)
-            //    .WithMany()
-            //    .HasForeignKey(d => d.DoctorId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-            //modelBuilder.Entity<Doctor>()
-            //    .HasOne(x => x.Staff)
-            //    .WithMany()
-            //    .HasForeignKey(d => d.StaffId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-            //modelBuilder.Entity<Nurse>()
-            //    .HasOne(x => x.Staff)
-            //    .WithMany()
-            //    .HasForeignKey(n => n.StaffId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-         
         }
 
     }

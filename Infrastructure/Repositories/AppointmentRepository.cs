@@ -14,14 +14,36 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointmentsByPatientId(Guid PatientId)
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByPatientId(Guid patientId)
         {
             var appointments = await _context.Appointments
-                .Where(x => x.PatientId == PatientId)
+                .Where(x => x.PatientId == patientId)
                 .AsNoTracking()
                 .ToListAsync();
 
             return appointments;
+        }
+        public async Task<IEnumerable<Appointment>> GetAppointmentsByDoctorId(Guid doctorId)
+        {
+            var appointments = await _context.Appointments
+                .Where(x => x.DoctorId == doctorId)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return appointments;
+        }
+                                            //ekzistus     parameter  ekzistus    parameter
+                                                 //9         //10     //11          //12   
+        public async Task<bool> IsValidAppointment(DateTime checkInDate,DateTime checkOutDate,Guid doctorId)
+        {
+            var appointments = await GetAppointmentsByDoctorId(doctorId);
+
+            var unavailableAppointment = appointments.FirstOrDefault(appointment =>
+                (checkInDate >= appointment.CheckInDate && checkInDate < appointment.CheckOutDate)
+                || (checkOutDate > appointment.CheckInDate && checkOutDate <= appointment.CheckOutDate)
+                );
+            if (unavailableAppointment is null) return true;
+            return false;
         }
 
     }

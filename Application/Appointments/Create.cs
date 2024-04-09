@@ -26,7 +26,12 @@ namespace Application.Appointments
             {
                 if (request.Appointment is null) return Result<Unit>.Failure(ErrorType.BadRequest, "Couldn't complete the action. Try again.");
 
+                var isValidAppointment = await _appointmentRepository.IsValidAppointment(request.Appointment.CheckInDate, request.Appointment.CheckOutDate, request.Appointment.DoctorId);
+                if (!isValidAppointment) return Result<Unit>.Failure(ErrorType.BadRequest, "The doctor is not available for the selected time. Please select another convenience!");
+
                 var appointment = _mapper.Map<Appointment>(request.Appointment);
+
+
                 if (appointment is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
 
                 appointment.CreatedAt = DateTime.Now;

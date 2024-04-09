@@ -20,7 +20,7 @@ namespace Application.Doctors
                 if (visits is null || !visits.Any())
                 {
                     doctor.IsDeleted = true;
-                    doctor.UpdatedAt = DateTime.UtcNow;
+                    doctor.UpdatedAt = DateTime.Now;
                     var result = await _doctorRepository.UpdateAsync(doctor);
                     if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the doctor! Try again.");
                     return Result<Unit>.Success(Unit.Value);

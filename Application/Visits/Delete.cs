@@ -16,7 +16,7 @@ namespace Application.Visits
                 if (visit is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
                 var result = await _visitRepository.DeleteAsync(visit);
-                if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the prescription! Try again.");
+                if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the visit! Try again.");
                 return Result<Unit>.Success(Unit.Value);
 
             }
