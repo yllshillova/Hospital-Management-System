@@ -22,7 +22,15 @@ namespace Infrastructure.Repositories
 
             return visits;
         }
+        public async Task<IEnumerable<Visit>> GetVisitsByPatientIdAsync(Guid patientId)
+        {
+            var visits = await _context.Visits
+                .Where(x => x.PatientId == patientId)
+                .AsNoTracking()
+                .ToListAsync();
 
+            return visits;
+        }
 
     }
 
