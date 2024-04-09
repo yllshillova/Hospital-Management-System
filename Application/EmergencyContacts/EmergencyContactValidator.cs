@@ -12,7 +12,7 @@ namespace Application.EmergencyContacts
             RuleFor(d => d.Relation).SetValidator(new NotNullValidator<EmergencyContactDto, string>())
                                          .SetValidator(new ValidLengthValidator<EmergencyContactDto, string>(4, 100));
             RuleFor(d => d.PhoneNumber).SetValidator(new NotNullValidator<EmergencyContactDto, string>())
-                                         .SetValidator(new ValidLengthValidator<EmergencyContactDto, string>(4, 100));
+                                         .Must(BeValidNumber).WithMessage("Invalid phone number. It should contain exactly 9 digits.");
             RuleFor(d => d.PatientId).SetValidator(new NotNullValidator<EmergencyContactDto, Guid>());
         }
 
