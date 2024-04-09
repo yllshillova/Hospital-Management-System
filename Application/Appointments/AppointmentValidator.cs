@@ -13,7 +13,6 @@ namespace Application.Appointments
             RuleFor(x => x.CheckOutDate).SetValidator(new NotNullValidator<AppointmentDto, DateTime>())
                 .Must((dto, checkOutDate) => BeAfterCheckInDate(checkOutDate, dto))
                 .WithMessage("Check-out date must be after check-in date.");
-
             RuleFor(d => d.Status).SetValidator(new NotNullValidator<AppointmentDto, string>())
                 .SetValidator(new ValidLengthValidator<AppointmentDto, string>(5, 100));
             RuleFor(d => d.Reason).SetValidator(new NotNullValidator<AppointmentDto, string>())

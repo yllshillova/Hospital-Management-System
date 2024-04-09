@@ -33,9 +33,6 @@ namespace Application.Patients
             RuleFor(d => d.Occupation).SetValidator(new NotNullValidator<PatientDto, string>())
                                       .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Allergies).SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
-
-
-
         }
         private bool BeAValidDate(DateTime? date)
         {

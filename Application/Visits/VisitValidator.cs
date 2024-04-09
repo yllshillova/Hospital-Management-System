@@ -14,8 +14,8 @@ namespace Application.Visits
             RuleFor(d => d.RequiredAnalysis).SetValidator(new NotNullValidator<VisitDto, string>()).SetValidator(new ValidLengthValidator<VisitDto, string>(4, 500));
             RuleFor(d => d.Advice).SetValidator(new NotNullValidator<VisitDto, string>()).SetValidator(new ValidLengthValidator<VisitDto, string>(4, 700));
             RuleFor(d => d.Remarks).SetValidator(new NotNullValidator<VisitDto, string>()).SetValidator(new ValidLengthValidator<VisitDto, string>(4, 600));
-            RuleFor(d => d.DoctorId).NotEmpty().WithMessage("DoctorId field is required.");
-            RuleFor(d => d.PatientId).NotEmpty().WithMessage("PatientId field is required.");
+            RuleFor(d => d.DoctorId).SetValidator(new NotNullValidator<VisitDto, Guid>());
+            RuleFor(d => d.PatientId).SetValidator(new NotNullValidator<VisitDto, Guid>());
         }
     }
 }
