@@ -31,6 +31,7 @@ namespace Application.Visits
 
                 visit.CreatedAt = DateTime.Now;
                 visit.UpdatedAt = visit.CreatedAt;
+                
                 var result = await _visitRepository.CreateAsync(visit);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the visit report! Try again.");
 

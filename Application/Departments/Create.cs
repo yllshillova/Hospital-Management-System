@@ -29,6 +29,9 @@ namespace Application.Departments
                 var department = _mapper.Map<Department>(request.Department);
                 if (department is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto.");
 
+                department.CreatedAt = DateTime.Now;
+                department.UpdatedAt = department.CreatedAt;
+
                 var result = await _departmentRepository.CreateAsync(department);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the department! Try again!");
 

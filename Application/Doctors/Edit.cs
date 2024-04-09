@@ -26,7 +26,7 @@ namespace Application.Doctors
                 if (doctor is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
                 
                 _mapper.Map(request.Doctor, doctor);
-                doctor.UpdatedAt = DateTime.UtcNow;
+                doctor.UpdatedAt = DateTime.Now;
                 
                 var result = await _doctorRepository.UpdateAsync(doctor);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the doctor! Try again.");
