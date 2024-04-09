@@ -1,6 +1,5 @@
 ﻿using Application.Core;
 using Application.Doctors;
-using Application.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
