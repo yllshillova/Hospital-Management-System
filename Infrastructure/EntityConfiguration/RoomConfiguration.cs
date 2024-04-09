@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Configuration
+namespace Infrastructure.EntityConfiguration
 {
-    internal sealed class EmergencyContactConfiguration : IEntityTypeConfiguration<EmergencyContact>
+    internal sealed class RoomConfiguration : IEntityTypeConfiguration<Room>
     {
-        public void Configure(EntityTypeBuilder<EmergencyContact> builder)
+        public void Configure(EntityTypeBuilder<Room> builder)
         {
             builder.HasOne(x => x.Patient)
                 .WithMany()

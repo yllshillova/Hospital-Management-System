@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Configuration
+namespace Infrastructure.EntityConfiguration
 {
     internal sealed class DoctorConfiguration : IEntityTypeConfiguration<Doctor>
     {
