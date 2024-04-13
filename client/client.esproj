@@ -12,5 +12,6 @@
     <Folder Include="public\" />
     <Folder Include="src\Assets\" />
     <Folder Include="src\Pages\Patient\" />
+    <Folder Include="src\Storage\Redux\" />
   </ItemGroup>
 </Project>
