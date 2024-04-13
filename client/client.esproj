@@ -11,6 +11,6 @@
   <ItemGroup>
     <Folder Include="public\" />
     <Folder Include="src\Assets\" />
-    <Folder Include="src\Components\DashLayout\" />
+    <Folder Include="src\Pages\Patient\" />
   </ItemGroup>
 </Project>

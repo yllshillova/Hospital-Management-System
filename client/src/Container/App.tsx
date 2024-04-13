@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { Dashboard } from "../Pages";
+import { Dashboard, PatientList, PatientUpsert } from '../Pages';
 
 function App() {
 
@@ -8,6 +8,10 @@ function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<Dashboard />}></Route>
+                    <Route path="/PatientList" element={<PatientList />}></Route>
+                    <Route path="/PatientUpsert" element={<PatientUpsert />}></Route>
+
+
                 </Routes>
             </div>
         </div>
