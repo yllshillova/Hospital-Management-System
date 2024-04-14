@@ -6,12 +6,12 @@ import { faCog, faSignOutAlt, faHospitalUser, faUserDoctor, faBookMedical, faBed
 //    emptyUserState,
 //    setLoggedInUser,
 //} from "../../Storage/Redux/userAuthSlice";
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function SidePanel() {
 
     //const dispatch = useDispatch();
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
     //const handleLogout = () => {
     //    localStorage.removeItem("authToken");
@@ -23,9 +23,9 @@ function SidePanel() {
     //    navigate('/');
     //}
 
-    //const handlePL = () => {
-    //    navigate('/ProductsList');
-    //}
+    const handlePatientList = () => {
+        navigate('/PatientList');
+    }
 
     //const handleAllOrders = () => {
     //    navigate('/AllOrders');
@@ -46,7 +46,7 @@ function SidePanel() {
 
     const menuItems = [
         { icon: faUserDoctor, label: 'Users' },
-        { icon: faHospitalUser, label: 'Patients' },
+        { icon: faHospitalUser, label: 'Patients', onClick: handlePatientList },
         { icon: faFolderTree, label: 'Departments' },
         { icon: faCalendarDays, label: 'Appointments' },
         { icon: faBookMedical, label: 'Visits' },
@@ -59,8 +59,8 @@ function SidePanel() {
     return (
         <SidePanelContainer>
             {menuItems.map((item, index) => (
-                //<SidebarItem key={index} onClick={item.onClick}>
-                <SidebarItem key={index}>
+                <SidebarItem key={index} onClick={item.onClick}>
+                
                     <IconWrapper>
                         <FontAwesomeIcon icon={item.icon} size="lg" />
                     </IconWrapper>
