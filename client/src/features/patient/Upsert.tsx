@@ -1,18 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-    useCreatePatientMutation,
-    useGetPatientByIdQuery,
-    useUpdatePatientMutation,
-} from "../../APIs/patientApi";
 import { useState } from "react";
 import { useEffect } from "react";
-import inputHelper from "../../Helpers/inputHelper";
-import toastNotify from "../../Helpers/toastNotify";
-import MainLoader from "../../Common/MainLoader";
-import { SD_Bloodgroups } from "../../Utility/SD";
-import { Header, SidePanel } from "../../Components/Layout/Dashboard";
+import inputHelper from "../../app/helpers/inputHelper";
+import toastNotify from "../../app/helpers/toastNotify";
+import MainLoader from "../../app/common/MainLoader";
+import { SD_Bloodgroups } from "../../app/utility/SD";
+import { Header, SidePanel } from "../../app/layout";
+import { useCreatePatientMutation, useGetPatientByIdQuery, useUpdatePatientMutation } from "../../app/APIs/patientApi";
 
 const bloodgroup = [
     SD_Bloodgroups.O_Positive,
@@ -42,7 +38,7 @@ const patientData = {
     occupation: "",
     allergies: "",
 };
- function PatientUpsert() {
+function PatientUpsert() {
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -88,60 +84,61 @@ const patientData = {
         setPatientInputs(tempData);
     };
 
-     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-         e.preventDefault();
-         setLoading(true);
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true);
 
 
-         //construct the form data
-         const formData = new FormData();
+        //construct the form data
+        const formData = new FormData();
 
-         formData.append("Name", patientInputs.name);
-         formData.append("Lastname", patientInputs.lastname);
-         formData.append("ParentName", patientInputs.parentName);
-         formData.append("PersonalNumber", patientInputs.personalNumber);
-         formData.append("Address", patientInputs.address);
-         formData.append("Residence", patientInputs.residence);
-         formData.append("Birthday", patientInputs.birthday);
-         formData.append("BloodGroup", patientInputs.bloodgroup);
-         formData.append("Gender", patientInputs.gender);
-         formData.append("Email", patientInputs.email);
-         formData.append("PhoneNumber", patientInputs.phonenumber);
-         formData.append("CreatedAt", patientInputs.createdAt);
-         formData.append("UpdatedAt", patientInputs.updatedAt);
-         formData.append("IsDeleted", patientInputs.isDeleted);
-         formData.append("Occupation", patientInputs.occupation);
-         formData.append("Allergies", patientInputs.allergies);
+        formData.append("Name", patientInputs.name);
+        formData.append("Lastname", patientInputs.lastname);
+        formData.append("ParentName", patientInputs.parentName);
+        formData.append("PersonalNumber", patientInputs.personalNumber);
+        formData.append("Address", patientInputs.address);
+        formData.append("Residence", patientInputs.residence);
+        formData.append("Birthday", patientInputs.birthday);
+        formData.append("BloodGroup", patientInputs.bloodgroup);
+        formData.append("Gender", patientInputs.gender);
+        formData.append("Email", patientInputs.email);
+        formData.append("PhoneNumber", patientInputs.phonenumber);
+        formData.append("CreatedAt", patientInputs.createdAt);
+        formData.append("UpdatedAt", patientInputs.updatedAt);
+        formData.append("IsDeleted", patientInputs.isDeleted);
+        formData.append("Occupation", patientInputs.occupation);
+        formData.append("Allergies", patientInputs.allergies);
 
-         let response;
+        let response;
 
-         if (id) {
-             formData.append("Id", id);
-             console.log(
-                 "Update Patient Data:",
-                 Object.fromEntries(formData.entries())
-             ); // Log the data before the update
-             response = await updatePatient({ data: formData, id });
-             console.log("Update Patient Response:", response); // Log the response after the update
-             //console.log(response);
-             toastNotify("Patient updated successfully", "success");
-         } else {
-             console.log(
-                 "Create Product Data:",
-                 Object.fromEntries(formData.entries())
-             ); // Log the data before the creation
-             response = await createPatient(formData);
-             console.log("Create Patient Response:", response); // Log the response after the creation
-             toastNotify("Patient created successfully", "success");
-         }
+        if (id) {
+            formData.append("Id", id);
+            console.log(
+                "Update Patient Data:",
+                Object.fromEntries(formData.entries())
+            ); // Log the data before the update
+            response = await updatePatient({ data: formData, id });
+            console.log("Update Patient Response:", response); // Log the response after the update
+            //console.log(response);
+            toastNotify("Patient updated successfully", "success");
+        } else {
+            console.log(
+                "Create Product Data:",
+                Object.fromEntries(formData.entries())
+            ); // Log the data before the creation
+            response = await createPatient(formData);
+            console.log("Create Patient Response:", response); // Log the response after the creation
+            toastNotify("Patient created successfully", "success");
+        }
 
-         if (response) {
-             setLoading(false);
-             navigate("/patientsList");
-         }
+        if (response) {
+            setLoading(false);
+            navigate("/patientsList");
+        }
 
-         setLoading(false);
-     };
+        setLoading(false);
+    };
+
     return (
         <>
             <Header />
@@ -398,7 +395,7 @@ const Input = styled.input`
 `;
 
 const Select = styled.select`
- width: 100%;
+  width: 100%;
   max-width: 100%;
   padding: 15px;
   font-size: 16px;

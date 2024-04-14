@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
-import Dashboard from '../Pages/Dashboard';
-import PatientList from '../Pages/Patient/PatientList';
-import PatientUpsert from '../Pages/Patient/PatientUpsert';
+import PatientList from '../../features/patient/List';
+import PatientUpsert from '../../features/patient/Upsert';
+import Dashboard from '../../features/dashboard/Dashboard';
 
 function App() {
 
