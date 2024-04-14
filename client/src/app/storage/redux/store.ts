@@ -1,13 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
+import patientApi from "../../APIs/patientApi";
 
 const store = configureStore({
     reducer: {
-
+        [patientApi.reducerPath]: patientApi.reducer
     },
 
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
-        .concat( .middleware)
+            .concat(patientApi.middleware)
 });
 
 //exporting the root state

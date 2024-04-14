@@ -9,9 +9,11 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="src\Assets\**" />
+    <TypeScriptConfiguration Remove="src\Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="public\" />
-    <Folder Include="src\Assets\" />
-    <Folder Include="src\Pages\Patient\" />
-    <Folder Include="src\Storage\Redux\" />
+    <Folder Include="src\app\APIs\" />
   </ItemGroup>
 </Project>
