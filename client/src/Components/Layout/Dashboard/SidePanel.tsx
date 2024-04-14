@@ -24,7 +24,7 @@ function SidePanel() {
     //}
 
     const handlePatientList = () => {
-        navigate('/PatientList');
+        navigate('/patientList');
     }
 
     //const handleAllOrders = () => {

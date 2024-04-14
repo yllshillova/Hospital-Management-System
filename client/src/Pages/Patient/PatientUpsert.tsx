@@ -88,59 +88,60 @@ const patientData = {
         setPatientInputs(tempData);
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setLoading(true);
-    }
+     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+         e.preventDefault();
+         setLoading(true);
 
-    //construct the form data
-    const formData = new FormData();
 
-    formData.append("Name", patientInputs.name);
-    formData.append("Lastname", patientInputs.lastname);
-    formData.append("ParentName", patientInputs.parentName);
-    formData.append("PersonalNumber", patientInputs.personalNumber);
-    formData.append("Address", patientInputs.address);
-    formData.append("Residence", patientInputs.residence);
-    formData.append("Birthday", patientInputs.birthday);
-    formData.append("BloodGroup", patientInputs.bloodgroup);
-    formData.append("Gender", patientInputs.gender);
-    formData.append("Email", patientInputs.email);
-    formData.append("PhoneNumber", patientInputs.phonenumber);
-    formData.append("CreatedAt", patientInputs.createdAt);
-    formData.append("UpdatedAt", patientInputs.updatedAt);
-    formData.append("IsDeleted", patientInputs.isDeleted);
-    formData.append("Occupation", patientInputs.occupation);
-    formData.append("Allergies", patientInputs.allergies);
+         //construct the form data
+         const formData = new FormData();
 
-    let response;
+         formData.append("Name", patientInputs.name);
+         formData.append("Lastname", patientInputs.lastname);
+         formData.append("ParentName", patientInputs.parentName);
+         formData.append("PersonalNumber", patientInputs.personalNumber);
+         formData.append("Address", patientInputs.address);
+         formData.append("Residence", patientInputs.residence);
+         formData.append("Birthday", patientInputs.birthday);
+         formData.append("BloodGroup", patientInputs.bloodgroup);
+         formData.append("Gender", patientInputs.gender);
+         formData.append("Email", patientInputs.email);
+         formData.append("PhoneNumber", patientInputs.phonenumber);
+         formData.append("CreatedAt", patientInputs.createdAt);
+         formData.append("UpdatedAt", patientInputs.updatedAt);
+         formData.append("IsDeleted", patientInputs.isDeleted);
+         formData.append("Occupation", patientInputs.occupation);
+         formData.append("Allergies", patientInputs.allergies);
 
-    if (id) {
-        formData.append("Id", id);
-        console.log(
-            "Update Patient Data:",
-            Object.fromEntries(formData.entries())
-        ); // Log the data before the update
-        response =  updatePatient({ data: formData, id });
-        console.log("Update Patient Response:", response); // Log the response after the update
-        //console.log(response);
-        toastNotify("Patient updated successfully", "success");
-    } else {
-        console.log(
-            "Create Product Data:",
-            Object.fromEntries(formData.entries())
-        ); // Log the data before the creation
-        response =  createPatient(formData);
-        console.log("Create Patient Response:", response); // Log the response after the creation
-        toastNotify("Patient created successfully", "success");
-    }
+         let response;
 
-    if (response) {
-        setLoading(false);
-        navigate("/patientsList");
-    }
+         if (id) {
+             formData.append("Id", id);
+             console.log(
+                 "Update Patient Data:",
+                 Object.fromEntries(formData.entries())
+             ); // Log the data before the update
+             response = await updatePatient({ data: formData, id });
+             console.log("Update Patient Response:", response); // Log the response after the update
+             //console.log(response);
+             toastNotify("Patient updated successfully", "success");
+         } else {
+             console.log(
+                 "Create Product Data:",
+                 Object.fromEntries(formData.entries())
+             ); // Log the data before the creation
+             response = await createPatient(formData);
+             console.log("Create Patient Response:", response); // Log the response after the creation
+             toastNotify("Patient created successfully", "success");
+         }
 
-    setLoading(false);
+         if (response) {
+             setLoading(false);
+             navigate("/patientsList");
+         }
+
+         setLoading(false);
+     };
     return (
         <>
             <Header />
@@ -396,15 +397,15 @@ const Input = styled.input`
   box-sizing: border-box;
 `;
 
-//const Select = styled.select`
-//  width: 100%;
-//  max-width: 100%;
-//  padding: 15px;
-//  font-size: 16px;
-//  border: 1px solid #ddd;
-//  border-radius: 8px;
-//  box-sizing: border-box;
-//`;
+const Select = styled.select`
+ width: 100%;
+  max-width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+`;
 
 const SubmitButton = styled.button`
   width: 30%;

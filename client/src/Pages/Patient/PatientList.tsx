@@ -9,11 +9,12 @@ import { Header, SidePanel } from "../../Components/Layout/Dashboard";
 import { useNavigate } from "react-router-dom";
 import Patient from "../../Models/Patient";
 import { toast } from "react-toastify";
+import MainLoader from "../../Common/MainLoader";
 
 function PatientList() {
 
     const [deletePatient] = useDeletePatientMutation();
-    const { data } = useGetPatientsQuery(null);
+    const { isLoading, data } = useGetPatientsQuery(null);
     const navigate = useNavigate();
 
     //delete a patient method
@@ -31,9 +32,10 @@ function PatientList() {
     };
     return (
         <>
+            {isLoading && <MainLoader />}
             <Header />
             <SidePanel />
-            
+            {!isLoading && (
                 <OrdersTable>
                     <TableNav>
                         <TableHeader>Patient List</TableHeader>
@@ -45,63 +47,64 @@ function PatientList() {
                     <Table>
                         <thead>
                             <TableRow>
-                            <TableHeaderCell>Id</TableHeaderCell>
-                            <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>LastName</TableHeaderCell>
-                            <TableHeaderCell>ParentName</TableHeaderCell>
-                            <TableHeaderCell>PersonalNumber</TableHeaderCell>
-                            <TableHeaderCell>Address</TableHeaderCell>
-                            <TableHeaderCell>Residence</TableHeaderCell>
-                            <TableHeaderCell>Birthday</TableHeaderCell>
-                            <TableHeaderCell>BloodGroup</TableHeaderCell>
-                            <TableHeaderCell>Gender</TableHeaderCell>
-                            <TableHeaderCell>Email</TableHeaderCell>
-                            <TableHeaderCell>PhoneNumber</TableHeaderCell>
-                            <TableHeaderCell>CreatedAt</TableHeaderCell>
-                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
-                            <TableHeaderCell>IsDeleted</TableHeaderCell>
-                            <TableHeaderCell>Occupation</TableHeaderCell>
-                            <TableHeaderCell>Allergies</TableHeaderCell>
+                                <TableHeaderCell>Id</TableHeaderCell>
+                                <TableHeaderCell>Name</TableHeaderCell>
+                                <TableHeaderCell>LastName</TableHeaderCell>
+                                <TableHeaderCell>ParentName</TableHeaderCell>
+                                <TableHeaderCell>PersonalNumber</TableHeaderCell>
+                                <TableHeaderCell>Address</TableHeaderCell>
+                                <TableHeaderCell>Residence</TableHeaderCell>
+                                <TableHeaderCell>Birthday</TableHeaderCell>
+                                <TableHeaderCell>BloodGroup</TableHeaderCell>
+                                <TableHeaderCell>Gender</TableHeaderCell>
+                                <TableHeaderCell>Email</TableHeaderCell>
+                                <TableHeaderCell>PhoneNumber</TableHeaderCell>
+                                <TableHeaderCell>CreatedAt</TableHeaderCell>
+                                <TableHeaderCell>UpdatedAt</TableHeaderCell>
+                                <TableHeaderCell>IsDeleted</TableHeaderCell>
+                                <TableHeaderCell>Occupation</TableHeaderCell>
+                                <TableHeaderCell>Allergies</TableHeaderCell>
 
                                 <TableHeaderCell>Action</TableHeaderCell>
                             </TableRow>
-                    </thead>
-                    {data.result.map((patient: Patient) => {
-                    return(
-                        <tbody key={patient.id}>
-                            <TableRow >
-                                <TableCell>{patient.id}</TableCell>
-                                <TableCell>{patient.name}</TableCell>
-                                <TableCell>{patient.lastName}</TableCell>
-                                <TableCell>{patient.parentName}</TableCell>
-                                <TableCell>{patient.personalNumber}</TableCell>
-                                <TableCell>{patient.address}</TableCell>
-                                <TableCell>{patient.residence}</TableCell>
-                                <TableCell>{patient.birthday}</TableCell>
-                                <TableCell>{patient.bloodgroup}</TableCell>
-                                <TableCell>{patient.gender}</TableCell>
-                                <TableCell>{patient.email}</TableCell>
-                                <TableCell>{patient.phonenumber}</TableCell>
-                                <TableCell>{new Date(patient.createdAt).toLocaleDateString()}</TableCell>
-                                <TableCell>{new Date(patient.updatedAt).toLocaleDateString()}</TableCell>
-                                <TableCell>{patient.isDeleted}</TableCell>
-                                <TableCell>{patient.occupation}</TableCell>
-                                <TableCell>{patient.allergies}</TableCell>
+                        </thead>
+                        {data.result.map((patient: Patient) => {
+                            return (
+                                <tbody key={patient.id}>
+                                    <TableRow >
+                                        <TableCell>{patient.id}</TableCell>
+                                        <TableCell>{patient.name}</TableCell>
+                                        <TableCell>{patient.lastName}</TableCell>
+                                        <TableCell>{patient.parentName}</TableCell>
+                                        <TableCell>{patient.personalNumber}</TableCell>
+                                        <TableCell>{patient.address}</TableCell>
+                                        <TableCell>{patient.residence}</TableCell>
+                                        <TableCell>{patient.birthday}</TableCell>
+                                        <TableCell>{patient.bloodgroup}</TableCell>
+                                        <TableCell>{patient.gender}</TableCell>
+                                        <TableCell>{patient.email}</TableCell>
+                                        <TableCell>{patient.phonenumber}</TableCell>
+                                        <TableCell>{new Date(patient.createdAt).toLocaleDateString()}</TableCell>
+                                        <TableCell>{new Date(patient.updatedAt).toLocaleDateString()}</TableCell>
+                                        <TableCell>{patient.isDeleted}</TableCell>
+                                        <TableCell>{patient.occupation}</TableCell>
+                                        <TableCell>{patient.allergies}</TableCell>
 
-                            <ActionButton style={{ backgroundColor: "orange" }}  >
-                                <FontAwesomeIcon icon={faEdit} />
-                            </ActionButton>
-                                <ActionButton style={{ backgroundColor: "red" }}
-                                    onClick={() => handlePatientDelete(patient.id)}                                >
-                                <FontAwesomeIcon icon={faTrashAlt} />
-                            </ActionButton>
-                        </TableRow>
-                    </tbody>
+                                        <ActionButton style={{ backgroundColor: "orange" }}  >
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </ActionButton>
+                                        <ActionButton style={{ backgroundColor: "red" }}
+                                            onClick={() => handlePatientDelete(patient.id)}                                >
+                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                        </ActionButton>
+                                    </TableRow>
+                                </tbody>
 
-                        );
-                    })}
+                            );
+                        })}
                     </Table>
                 </OrdersTable>
+            )}
         </>
         );
 }
