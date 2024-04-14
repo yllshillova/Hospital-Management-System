@@ -10,7 +10,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="public\" />
+    <Folder Include="src\APIs\" />
     <Folder Include="src\Assets\" />
+    <Folder Include="src\Common\" />
     <Folder Include="src\Pages\Patient\" />
     <Folder Include="src\Storage\Redux\" />
   </ItemGroup>

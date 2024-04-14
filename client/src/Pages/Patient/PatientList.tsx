@@ -1,13 +1,34 @@
-import styled from "styled-components";
+﻿import styled from "styled-components";
+import {
+    useDeletePatientMutation,
+    useGetPatientsQuery,
+} from "../../APIs/patientApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Header, SidePanel } from "../../Components/Layout/Dashboard";
 import { useNavigate } from "react-router-dom";
+import Patient from "../../Models/Patient";
+import { toast } from "react-toastify";
 
 function PatientList() {
 
+    const [deletePatient] = useDeletePatientMutation();
+    const { data } = useGetPatientsQuery(null);
     const navigate = useNavigate();
 
+    //delete a patient method
+    const handlePatientDelete = async (id: number) => {
+        toast.promise(deletePatient(id),
+            {
+                pending: "Processing your request...",
+                success: "Patient Deleted Successfully 👌",
+                error: "Error encountered 🤯",
+            },
+            {
+                theme: "dark",
+            }
+        );
+    };
     return (
         <>
             <Header />
@@ -16,7 +37,7 @@ function PatientList() {
                 <OrdersTable>
                     <TableNav>
                         <TableHeader>Patient List</TableHeader>
-                        <AddButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/PatientUpsert")} >
+                        <AddButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/patientUpsert")} >
                             <FontAwesomeIcon icon={faAdd} />
                         </AddButton>
                     </TableNav>
@@ -24,40 +45,65 @@ function PatientList() {
                     <Table>
                         <thead>
                             <TableRow>
-                                <TableHeaderCell>Title</TableHeaderCell>
-                                <TableHeaderCell>Title</TableHeaderCell>
-                                <TableHeaderCell>Title</TableHeaderCell>
-                                <TableHeaderCell>Title</TableHeaderCell>
-                                <TableHeaderCell>Title</TableHeaderCell>
-                                <TableHeaderCell>Title</TableHeaderCell>
-                                <TableHeaderCell>Title</TableHeaderCell>
+                            <TableHeaderCell>Id</TableHeaderCell>
+                            <TableHeaderCell>Name</TableHeaderCell>
+                            <TableHeaderCell>LastName</TableHeaderCell>
+                            <TableHeaderCell>ParentName</TableHeaderCell>
+                            <TableHeaderCell>PersonalNumber</TableHeaderCell>
+                            <TableHeaderCell>Address</TableHeaderCell>
+                            <TableHeaderCell>Residence</TableHeaderCell>
+                            <TableHeaderCell>Birthday</TableHeaderCell>
+                            <TableHeaderCell>BloodGroup</TableHeaderCell>
+                            <TableHeaderCell>Gender</TableHeaderCell>
+                            <TableHeaderCell>Email</TableHeaderCell>
+                            <TableHeaderCell>PhoneNumber</TableHeaderCell>
+                            <TableHeaderCell>CreatedAt</TableHeaderCell>
+                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
+                            <TableHeaderCell>IsDeleted</TableHeaderCell>
+                            <TableHeaderCell>Occupation</TableHeaderCell>
+                            <TableHeaderCell>Allergies</TableHeaderCell>
 
                                 <TableHeaderCell>Action</TableHeaderCell>
                             </TableRow>
-                        </thead>
+                    </thead>
+                    {data.result.map((patient: Patient) => {
+                    return(
+                        <tbody key={patient.id}>
+                            <TableRow >
+                                <TableCell>{patient.id}</TableCell>
+                                <TableCell>{patient.name}</TableCell>
+                                <TableCell>{patient.lastName}</TableCell>
+                                <TableCell>{patient.parentName}</TableCell>
+                                <TableCell>{patient.personalNumber}</TableCell>
+                                <TableCell>{patient.address}</TableCell>
+                                <TableCell>{patient.residence}</TableCell>
+                                <TableCell>{patient.birthday}</TableCell>
+                                <TableCell>{patient.bloodgroup}</TableCell>
+                                <TableCell>{patient.gender}</TableCell>
+                                <TableCell>{patient.email}</TableCell>
+                                <TableCell>{patient.phonenumber}</TableCell>
+                                <TableCell>{new Date(patient.createdAt).toLocaleDateString()}</TableCell>
+                                <TableCell>{new Date(patient.updatedAt).toLocaleDateString()}</TableCell>
+                                <TableCell>{patient.isDeleted}</TableCell>
+                                <TableCell>{patient.occupation}</TableCell>
+                                <TableCell>{patient.allergies}</TableCell>
 
-                                <tbody>
-                                    <TableRow >
-                                        <TableCell>Data</TableCell>
-                                        <TableCell>Data</TableCell>
-                                        <TableCell>Data</TableCell>
-                                        <TableCell>Data</TableCell>
-                                        <TableCell>Data</TableCell>
-                                        <TableCell>Data</TableCell>
-                                        <TableCell>Data</TableCell>
+                            <ActionButton style={{ backgroundColor: "orange" }}  >
+                                <FontAwesomeIcon icon={faEdit} />
+                            </ActionButton>
+                                <ActionButton style={{ backgroundColor: "red" }}
+                                    onClick={() => handlePatientDelete(patient.id)}                                >
+                                <FontAwesomeIcon icon={faTrashAlt} />
+                            </ActionButton>
+                        </TableRow>
+                    </tbody>
 
-                                        <ActionButton style={{ backgroundColor: "orange" }}  >
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </ActionButton>
-                                        <ActionButton style={{ backgroundColor: "red" }}>
-                                            <FontAwesomeIcon icon={faTrashAlt} />
-                                        </ActionButton>
-                                    </TableRow>
-                                </tbody>
+                        );
+                    })}
                     </Table>
                 </OrdersTable>
         </>
-    );
+        );
 }
 
 const OrdersTable = styled.div`
