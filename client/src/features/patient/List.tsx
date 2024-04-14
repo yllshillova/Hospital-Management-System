@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Patient from "../../app/models/Patient";
 import { toast } from "react-toastify";
 import { useDeletePatientMutation, useGetPatientsQuery } from "../../app/APIs/patientApi";
+import MainLoader from "../../app/common/MainLoader";
 
 function PatientList() {
 
