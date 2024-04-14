@@ -1,5 +1,5 @@
 //import styled from "styled-components";
-import { Header, SidePanel } from "../Components/Layout/Dashboard";
+import { Header, SidePanel } from "../../app/layout";
 
 function Dashboard() {
     return (

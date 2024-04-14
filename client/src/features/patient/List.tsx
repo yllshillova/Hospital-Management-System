@@ -1,14 +1,11 @@
 ﻿import styled from "styled-components";
-import {
-    useDeletePatientMutation,
-    useGetPatientsQuery,
-} from "../../APIs/patientApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAdd, faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { Header, SidePanel } from "../../Components/Layout/Dashboard";
+import { Header, SidePanel } from "../../app/layout";
 import { useNavigate } from "react-router-dom";
-import Patient from "../../Models/Patient";
+import Patient from "../../app/models/Patient";
 import { toast } from "react-toastify";
+import { useDeletePatientMutation, useGetPatientsQuery } from "../../app/APIs/patientApi";
 
 function PatientList() {
 
