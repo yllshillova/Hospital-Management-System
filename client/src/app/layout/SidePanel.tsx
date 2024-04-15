@@ -27,6 +27,10 @@ function SidePanel() {
         navigate('/PatientList');
     }
 
+    const handleDepartmentsList = () => {
+        navigate('/departments');
+    }
+
     //const handleAllOrders = () => {
     //    navigate('/AllOrders');
     //}
@@ -47,7 +51,7 @@ function SidePanel() {
     const menuItems = [
         { icon: faUserDoctor, label: 'Users' },
         { icon: faHospitalUser, label: 'Patients', onClick: handlePatientList },
-        { icon: faFolderTree, label: 'Departments' },
+        { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
         { icon: faCalendarDays, label: 'Appointments' },
         { icon: faBookMedical, label: 'Visits' },
         { icon: faBedPulse, label: 'Rooms' },
