@@ -25,10 +25,10 @@ function DepartmentList() {
                 <tbody key={department.id}>
                     <TableRow>
                         <TableCell>{department.name}</TableCell>
-                        <TableCell>{department.isDeleted}</TableCell>
+                        <TableCell>{department.isDeleted ? "Active" : "Passive"}</TableCell>
                         <TableCell>{new Date(department.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(department.updatedAt).toLocaleDateString()}</TableCell>
-                        <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/department/details/" + department.id)} >
+                        <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/department/" + department.id)} >
                             <FontAwesomeIcon icon={faCircle} />
                         </ActionButton>
                         <ActionButton style={{ backgroundColor: "orange" }}>
@@ -59,7 +59,7 @@ function DepartmentList() {
                     <thead>
                         <TableRow>
                             <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>IsDeleted</TableHeaderCell>
+                            <TableHeaderCell>Status</TableHeaderCell>
                             <TableHeaderCell>CreatedAt</TableHeaderCell>
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
                         </TableRow>

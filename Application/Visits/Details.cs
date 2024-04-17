@@ -13,13 +13,17 @@ namespace Application.Visits
         {
             public async Task<Result<VisitDto>> Handle(GetVisitByIdQuery request, CancellationToken cancellationToken)
             {
-                var visit = await _visitRepository.GetByIdAsync(request.Id);
-                if (visit is null) return Result<VisitDto>.Failure(ErrorType.NotFound, "No records could be found!");
+                if (request.Id != Guid.Empty)
+                {
+                    var visit = await _visitRepository.GetByIdAsync(request.Id);
+                    if (visit is null) return Result<VisitDto>.Failure(ErrorType.NotFound, "No records could be found!");
 
-                var visitDto = _mapper.Map<VisitDto>(visit);
-                if (visitDto is null) return Result<VisitDto>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
+                    var visitDto = _mapper.Map<VisitDto>(visit);
+                    if (visitDto is null) return Result<VisitDto>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
 
-                return Result<VisitDto>.Success(visitDto);
+                    return Result<VisitDto>.Success(visitDto);
+                }
+                return Result<VisitDto>.Failure(ErrorType.BadRequest, "Something went wrong, the request couldn't be processed");
             }
         }
     }
