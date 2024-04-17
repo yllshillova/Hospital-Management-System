@@ -3,7 +3,7 @@ const patientApi = createApi({
     reducerPath: "patientApi",
     baseQuery: fetchBaseQuery({
         //defined the endpoint to apend the menu item here
-        baseUrl: "https://localhost:3000/api/", //to navigate to the endpoint ,
+        baseUrl: "http://localhost:5000/api/", //to navigate to the endpoint ,
 
         // logic when making API request , we have to send a token back to the request
         //prepareHeaders: (headers: Headers, api) => {
