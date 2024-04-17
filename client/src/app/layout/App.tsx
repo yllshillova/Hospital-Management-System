@@ -2,8 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import PatientList from '../../features/patient/List';
 import PatientUpsert from '../../features/patient/Upsert';
 import Dashboard from '../../features/dashboard/Dashboard';
-import DepartmentList from '../../features/department/List';
-import DepartmentDetails from '../../features/department/Details';
+import DepartmentList from '../../features/department/DepartmentList';
+import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/department/NotFound';
 
 function App() {
