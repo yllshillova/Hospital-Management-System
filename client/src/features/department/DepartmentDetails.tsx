@@ -33,13 +33,14 @@ function DepartmentDetails() {
 
     if (data) {
         const department = data;
+        console.log(department.isDeleted);
         return (
             <>
                 <div>
                     <h2>Department Details</h2>
                     <p>Id: {department.id}</p>
                     <p>Name: {department.name}</p>
-                    <p>Status: {department.isDeleted ? "Active" : "Passive"}</p>
+                    <p>IsDeleted: {department.isDeleted}</p>
                     <p>Created At: {new Date(department.createdAt).toLocaleDateString()}</p>
                     <p>Updated At: {new Date(department.updatedAt).toLocaleDateString()}</p>
                 </div>
