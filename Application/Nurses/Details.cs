@@ -13,13 +13,17 @@ namespace Application.Nurses
         {
             public async Task<Result<NurseDto>> Handle(GetNurseByIdQuery request, CancellationToken cancellationToken)
             {
-                var nurse = await _nurseRepository.GetByIdAsync(request.Id);
-                if (nurse is null) return Result<NurseDto>.Failure(ErrorType.NotFound, "No records could be found!");
+                if (request.Id != Guid.Empty)
+                {
+                    var nurse = await _nurseRepository.GetByIdAsync(request.Id);
+                    if (nurse is null) return Result<NurseDto>.Failure(ErrorType.NotFound, "No records could be found!");
 
-                var nurseDto = _mapper.Map<NurseDto>(nurse);
-                if (nurseDto is null) return Result<NurseDto>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
+                    var nurseDto = _mapper.Map<NurseDto>(nurse);
+                    if (nurseDto is null) return Result<NurseDto>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
 
-                return Result<NurseDto>.Success(nurseDto);
+                    return Result<NurseDto>.Success(nurseDto);
+                }
+                return Result<NurseDto>.Failure(ErrorType.BadRequest, "Something went wrong, the request couldn't be processed");
             }
         }
     }
