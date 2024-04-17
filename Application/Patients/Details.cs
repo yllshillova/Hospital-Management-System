@@ -13,7 +13,7 @@ namespace Application.Patients
         {
             public async Task<Result<PatientDto>> Handle(GetPatientByIdQuery request, CancellationToken cancellationToken)
             {
-                if (request.Id == Guid.Empty)
+                if (request.Id != Guid.Empty)
                 {
                     var patient = await _patientRepository.GetByIdAsync(request.Id);
                     if (patient is null) return Result<PatientDto>.Failure(ErrorType.NotFound, "No records could be found!");

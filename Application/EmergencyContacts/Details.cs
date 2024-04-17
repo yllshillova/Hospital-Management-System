@@ -13,7 +13,7 @@ namespace Application.EmergencyContacts
         {
             public async Task<Result<EmergencyContactDto>> Handle(GetEmergencyContactByIdQuery request, CancellationToken cancellationToken)
             {
-                if (request.Id == Guid.Empty)
+                if (request.Id != Guid.Empty)
                 {
                     var emergencyContact = await _emergencyContactRepository.GetByIdAsync(request.Id);
                     if (emergencyContact is null) return Result<EmergencyContactDto>.Failure(ErrorType.NotFound, "No records could be found!");

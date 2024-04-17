@@ -10,7 +10,7 @@
      bloodgroup: string;
      gender: string;
      email: string;
-     phonenumber: string;
+     phoneNumber: string;
      createdAt: Date;
      updatedAt: Date;
      isDeleted: boolean;
