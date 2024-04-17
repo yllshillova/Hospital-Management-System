@@ -5,6 +5,7 @@ import Dashboard from '../../features/dashboard/Dashboard';
 import DepartmentList from '../../features/department/DepartmentList';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
+import DepartmentUpsert from '../../features/department/DepartmentUpsert';
 
 function App() {
 
@@ -17,6 +18,8 @@ function App() {
                     <Route path="/patientUpsert" element={<PatientUpsert />}></Route>
                     <Route path="/departments" element={<DepartmentList />}></Route>
                     <Route path="/department/:id" element={<DepartmentDetails />}></Route>
+                    <Route path="/departmentUpsert" element={<DepartmentUpsert />}></Route>
+                    <Route path="/departmentUpsert/:id" element={<DepartmentUpsert />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>
