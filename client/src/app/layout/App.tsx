@@ -2,10 +2,9 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import PatientList from '../../features/patient/List';
 import PatientUpsert from '../../features/patient/Upsert';
 import Dashboard from '../../features/dashboard/Dashboard';
-import DepartmentList from '../../features/department/List';
-import DepartmentDetails from '../../features/department/Details';
-import NotFound from '../../features/department/NotFound';
-import PatientDetails from '../../features/patient/Details';
+import DepartmentList from '../../features/department/DepartmentList';
+import DepartmentDetails from '../../features/department/DepartmentDetails';
+import NotFound from '../../features/errors/NotFound';
 
 function App() {
 
@@ -20,7 +19,7 @@ function App() {
                     <Route path="/departments" element={<DepartmentList />}></Route>
                     <Route path="/department/:id" element={<DepartmentDetails />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>
             </div>
         </div>
