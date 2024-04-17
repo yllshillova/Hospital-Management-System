@@ -1,4 +1,4 @@
-export default interface Patient {
+export default interface Department {
     id: number;
     name: string;
     createdAt: Date;
