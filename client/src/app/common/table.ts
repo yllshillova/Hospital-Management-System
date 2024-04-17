@@ -24,6 +24,9 @@ background-color:white;
 
 export const TableRow = styled.tr`
 border-bottom: 1.0px solid #d3d3d3;
+&:hover {
+    background-color: #f5f5f5; 
+  }
 `;
 
 export const TableHeaderCell = styled.th`
