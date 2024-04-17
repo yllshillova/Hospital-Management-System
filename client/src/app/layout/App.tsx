@@ -5,6 +5,8 @@ import Dashboard from '../../features/dashboard/Dashboard';
 import DepartmentList from '../../features/department/DepartmentList';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
+import PatientDetails from '../../features/patient/Details';
+
 
 function App() {
 
