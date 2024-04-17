@@ -5,6 +5,7 @@ import Dashboard from '../../features/dashboard/Dashboard';
 import DepartmentList from '../../features/department/List';
 import DepartmentDetails from '../../features/department/Details';
 import NotFound from '../../features/department/NotFound';
+import PatientDetails from '../../features/patient/Details';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
                     <Route path="/" element={<Dashboard />}></Route>
                     <Route path="/patientList" element={<PatientList />}></Route>
                     <Route path="/patientUpsert" element={<PatientUpsert />}></Route>
+                    <Route path="/patient/:id" element={<PatientDetails />}></Route>
                     <Route path="/departments" element={<DepartmentList />}></Route>
                     <Route path="/department/:id" element={<DepartmentDetails />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
