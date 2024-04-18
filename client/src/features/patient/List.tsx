@@ -2,7 +2,7 @@
 import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 import MainLoader from "../../app/common/MainLoader";
 import Patient from "../../app/models/Patient";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell } from "../../app/common/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -27,19 +27,9 @@ function PatientList() {
                         <TableCell>{patient.name}</TableCell>
                         <TableCell>{patient.lastName}</TableCell>
                         <TableCell>{patient.parentName}</TableCell>
-                        {/*<TableCell>{patient.personalNumber}</TableCell>*/}
-                        {/*<TableCell>{patient.address}</TableCell>*/}
-                        {/*<TableCell>{patient.residence}</TableCell>*/}
-                        {/*<TableCell>{patient.birthday}</TableCell>*/}
-                        {/*<TableCell>{patient.bloodgroup}</TableCell>*/}
-                        {/*<TableCell>{patient.gender}</TableCell>*/}
-                        {/*<TableCell>{patient.email}</TableCell>*/}
-                        {/*<TableCell>{patient.phonenumber}</TableCell>*/}
+                        <TableCell>{patient.phoneNumber}</TableCell>
                         <TableCell>{new Date(patient.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(patient.updatedAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{patient.isDeleted ? "Active" : "Passive"}</TableCell>
-                        {/*<TableCell>{patient.occupation}</TableCell>*/}
-                        {/*<TableCell>{patient.allergies}</TableCell>*/}
                         <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/patient/" + patient.id)} >
                             <FontAwesomeIcon icon={faCircle} />
                         </ActionButton>
@@ -70,19 +60,11 @@ function PatientList() {
                     <thead>
                         <TableRow>
                             <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>LastName</TableHeaderCell>
-                            <TableHeaderCell>ParentName</TableHeaderCell>
-                            {/*<TableHeaderCell>PersonalNumber</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Address</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Residence</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Birthday</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>BloodGroup</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Gender</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Email</TableHeaderCell>*/}
-                            <TableHeaderCell>PhoneNumber</TableHeaderCell>
-                            <TableHeaderCell>CreatedAt</TableHeaderCell>
-                            {/*<TableHeaderCell>Occupation</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Allergies</TableHeaderCell>*/}
+                            <TableHeaderCell>Last Name</TableHeaderCell>
+                            <TableHeaderCell>Parent Name</TableHeaderCell>
+                            <TableHeaderCell>Phone Number</TableHeaderCell>
+                            <TableHeaderCell>Created At</TableHeaderCell>
+                            <TableHeaderCell>Updated At</TableHeaderCell>
                         </TableRow>
                     </thead>
                     {content}

@@ -15,7 +15,7 @@ const patientApi = createApi({
     endpoints: (builder) => ({
         getPatients: builder.query({
             query: () => ({
-                url: "patient",
+                url: "patients",
             }),
             providesTags: ["Patients"],
         }),
