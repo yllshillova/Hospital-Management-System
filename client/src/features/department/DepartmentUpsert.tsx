@@ -29,7 +29,7 @@ function DepartmentUpsert() {
         }
     }, [data]);
 
-    const handleDepartmentInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleDepartmentInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const tempData = inputHelper(e, departmentInputs);
         setDepartmentInputs(tempData);
     }
