@@ -23,13 +23,13 @@ function DepartmentUpsert() {
         if (data) {
             const tempData = {
                 name: data.name,
-                isDeleted: data.isDeleted,
+                isDeleted: data.isDeleted.toLowerCase() === "true",
             };
             setDepartmentInputs(tempData);
         }
     }, [data]);
 
-    const handleDepartmentInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleDepartmentInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const tempData = inputHelper(e, departmentInputs);
         setDepartmentInputs(tempData);
     }
@@ -69,6 +69,12 @@ function DepartmentUpsert() {
         setLoading(false);
     }
 
+    const toggleIsDeleted = () => {
+        setDepartmentInputs((prevInputs) => ({
+            ...prevInputs,
+            isDeleted: !prevInputs.isDeleted,
+        }));
+    };
 
 
     return (
@@ -99,13 +105,16 @@ function DepartmentUpsert() {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>isDeleted:</Label>
-                                <Input
-                                    type="checkbox"
-                                    name="isDeleted"
-                                    checked={departmentInputs.isDeleted }
-                                    onChange={(e) => setDepartmentInputs({ ...departmentInputs, isDeleted: e.target.checked })}
-                                />
+                                <Label>
+                                    Is Deleted{" "}
+                                    <input
+                                        type="checkbox"
+                                        name="isDeleted"
+                                        checked={departmentInputs.isDeleted}
+                                        onChange={toggleIsDeleted}
+                                    />
+                                    
+                                </Label>
                             </FormGroup>
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
