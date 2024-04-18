@@ -30,14 +30,14 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new CreateAppointmentCommand(Appointment)));
         }
 
-        [HttpPut]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> EditAppointment(Guid Id, AppointmentDto Appointment)
         {
             Appointment.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateAppointmentCommand(Appointment)));
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppointment(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeleteAppointmentCommand(Id)));

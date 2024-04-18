@@ -35,7 +35,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new UpdateDepartmentCommand(Department)));
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDepartment(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeleteDepartmentCommand(Id)));

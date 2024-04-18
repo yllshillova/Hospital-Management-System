@@ -27,13 +27,13 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new CreateDoctorCommand(Doctor)));
         }
-        [HttpPut]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> EditDoctor(Guid Id,DoctorDto Doctor)
         {
             Doctor.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateDoctorCommand(Doctor)));
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDoctor(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeleteDoctorCommand(Id)));
