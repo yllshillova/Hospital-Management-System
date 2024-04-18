@@ -7,6 +7,9 @@ import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
 import DepartmentUpsert from '../../features/department/DepartmentUpsert';
 import PatientDetails from '../../features/patient/Details';
+import RoomList from '../../features/rooms/RoomList';
+import RoomDetails from '../../features/rooms/RoomDetails';
+import RoomUpsert from '../../features/rooms/RoomUpsert';
 
 
 function App() {
@@ -23,6 +26,10 @@ function App() {
                     <Route path="/department/:id" element={<DepartmentDetails />}></Route>
                     <Route path="/departmentUpsert" element={<DepartmentUpsert />}></Route>
                     <Route path="/departmentUpsert/:id" element={<DepartmentUpsert />}></Route>
+                    <Route path="/rooms" element={<RoomList />}></Route>
+                    <Route path="/room/:id" element={<RoomDetails />}></Route>
+                    <Route path="/roomUpsert" element={<RoomUpsert />}></Route>
+                    <Route path="/roomUpsert/:id" element={<RoomUpsert />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>
