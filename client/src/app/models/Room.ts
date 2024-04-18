@@ -6,6 +6,7 @@ export default interface Room {
     isFree: boolean;
     patientId: number;
     patient: Patient;
+    patientName: string;
     createdAt: Date;
     updatedAt: Date;
 }

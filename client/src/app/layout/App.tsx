@@ -7,7 +7,7 @@ import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
 import DepartmentUpsert from '../../features/department/DepartmentUpsert';
 import PatientDetails from '../../features/patient/Details';
-import RoomList from '../../features/rooms/RoomList';
+import RoomList from "../../features/rooms/RoomList";
 import RoomDetails from '../../features/rooms/RoomDetails';
 import RoomUpsert from '../../features/rooms/RoomUpsert';
 

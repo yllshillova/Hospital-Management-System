@@ -9,24 +9,42 @@ import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import { useNavigate } from "react-router-dom";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 function RoomList() {
-    const { data, isLoading, error } = useGetRoomsQuery(null);
+    //const { data, isLoading, error } = useGetRoomsQuery(null);
+    const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomsQuery(null);
+    const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); 
     const navigate = useNavigate();
+    const [rooms, setRooms] = useState<Room[]>([]);
+
+
+    useEffect(() => {
+        if (roomsData && patientsData) {
+            const roomsWithPatients = roomsData.map((room: Room) => ({
+                ...room,
+                patientName: patientsData.find((patient: { id: number; }) => patient.id === room.patientId)?.name || 'Unknown', // Use patient's name or 'Unknown' if not found
+            }));
+            setRooms(roomsWithPatients);
+        }
+    }, [roomsData, patientsData]);
+
+
     let content;
 
-    if (isLoading) {
+    if (roomsLoading || patientsLoading) {
         content = <MainLoader />;
-    } else if (error) {
-        content = <div>Error loading rooms.</div>;
-    }
+    } else if (roomsError || patientsError) {
+        content = <div>Error loading data.</div>;
+    } 
     else {
-        content = data.map((room: Room) => {
+        content = rooms.map((room: Room) => {
             return (
                 <tbody key={room.id}>
                     <TableRow>
                         <TableCell>{room.capacity}</TableCell>
-                        <TableCell>{room.isFree}</TableCell>
-                        <TableCell>{room.patientId}</TableCell>
+                        <TableCell>{room.isFree === false ? "Occupied" : "Free"}</TableCell>
+                        <TableCell>{room.patientName}</TableCell>
                         <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(room.updatedAt).toLocaleDateString()}</TableCell>
                         <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/room/" + room.id)} >
@@ -61,7 +79,7 @@ function RoomList() {
                         <TableRow>
                             <TableHeaderCell>Capacity</TableHeaderCell>
                             <TableHeaderCell>IsFree</TableHeaderCell>
-                            <TableHeaderCell>PatientId</TableHeaderCell>
+                            <TableHeaderCell>PatientName</TableHeaderCell>
                             <TableHeaderCell>CreatedAt</TableHeaderCell>
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
                         </TableRow>
