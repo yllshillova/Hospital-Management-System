@@ -23,13 +23,13 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDepartment(DepartmentDto Department)
+        public async Task<IActionResult> CreateDepartment([FromForm]DepartmentDto Department)
         {
             return HandleResult(await Mediator.Send(new CreateDepartmentCommand(Department)));
         }
 
         [HttpPut]
-        public async Task<IActionResult> EditDepartment(Guid Id, DepartmentDto Department)
+        public async Task<IActionResult> EditDepartment([FromForm]Guid Id, DepartmentDto Department)
         {
             Department.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateDepartmentCommand(Department)));
