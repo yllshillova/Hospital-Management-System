@@ -28,14 +28,14 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new CreateRoomCommand(Room)));
         }
 
-        [HttpPut]
+        [HttpPut("{Id}")]
         public async Task<IActionResult> EditRoom(Guid Id, RoomDto Room)
         {
             Room.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateRoomCommand(Room)));
         }
 
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteRoom(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeleteRoomCommand(Id)));
