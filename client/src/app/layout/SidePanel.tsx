@@ -31,6 +31,11 @@ function SidePanel() {
         navigate('/departments');
     }
 
+    const handleRoomsList = () => {
+        navigate('/rooms');
+    }
+
+
     //const handleAllOrders = () => {
     //    navigate('/AllOrders');
     //}
@@ -54,7 +59,7 @@ function SidePanel() {
         { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
         { icon: faCalendarDays, label: 'Appointments' },
         { icon: faBookMedical, label: 'Visits' },
-        { icon: faBedPulse, label: 'Rooms' },
+        { icon: faBedPulse, label: 'Rooms', onClick: handleRoomsList },
         { icon: faCog, label: 'Settings' },
         { icon: faSignOutAlt, label: 'Logout' },
 
