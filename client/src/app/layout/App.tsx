@@ -15,13 +15,13 @@ function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<Dashboard />}></Route>
-                    <Route path="/patientList" element={<PatientList />}></Route>
-                    <Route path="/patientUpsert" element={<PatientUpsert />}></Route>
+                    <Route path="/patients" element={<PatientList />}></Route>
+                    <Route path="/patient/insert" element={<PatientUpsert />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>
                     <Route path="/departments" element={<DepartmentList />}></Route>
                     <Route path="/department/:id" element={<DepartmentDetails />}></Route>
-                    <Route path="/departmentUpsert" element={<DepartmentUpsert />}></Route>
-                    <Route path="/departmentUpsert/:id" element={<DepartmentUpsert />}></Route>
+                    <Route path="/department/insert" element={<DepartmentUpsert />}></Route>
+                    <Route path="/department/update/:id" element={<DepartmentUpsert />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>
