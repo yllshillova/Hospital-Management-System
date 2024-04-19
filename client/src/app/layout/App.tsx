@@ -24,8 +24,6 @@ function App() {
                     <Route path="/department/:id" element={<DepartmentDetails />}></Route>
                     <Route path="/department/insert" element={<DepartmentUpsert />}></Route>
                     <Route path="/department/update/:id" element={<DepartmentUpsert />}></Route>
-                    <Route path="/departmentUpsert" element={<DepartmentUpsert />}></Route>
-                    <Route path="/departmentUpsert/:id" element={<DepartmentUpsert />}></Route>
                     <Route path="/login" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
