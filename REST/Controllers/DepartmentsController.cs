@@ -16,7 +16,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetDepartmentsQuery()));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{Id}")]
         public async Task<IActionResult> GetDepartmentById(Guid id)
         {
             return HandleResult(await Mediator.Send(new GetDepartmentByIdQuery(id)));
@@ -28,14 +28,14 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new CreateDepartmentCommand(Department)));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{Id}")]
         public async Task<IActionResult> EditDepartment(Guid Id, [FromForm] DepartmentDto Department)
         {
             Department.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateDepartmentCommand(Department)));
         }
 
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteDepartment(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeleteDepartmentCommand(Id)));

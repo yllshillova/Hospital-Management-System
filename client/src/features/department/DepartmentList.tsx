@@ -1,5 +1,6 @@
+﻿/* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
+import { useDeleteDepartmentMutation, useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import Department from "../../app/models/Department";
 import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
@@ -9,10 +10,38 @@ import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import { useNavigate } from "react-router-dom";
 import {  faInfo } from "@fortawesome/free-solid-svg-icons";
+import { useLocation, useNavigate } from "react-router-dom";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import toastNotify from "../../app/helpers/toastNotify";
+import useErrorHandler from "../../app/helpers/useErrorHandler";
 function DepartmentList() {
     const { data, isLoading, error } = useGetDepartmentsQuery(null);
+    const [deleteDepartment] = useDeleteDepartmentMutation();
     const navigate = useNavigate();
+    const location = useLocation();
     let content;
+
+
+
+    const handleDepartmetDelete = async (id: number,) => {
+        const result = await deleteDepartment(id);
+
+        if ('data' in result) {
+            toastNotify("Department Deleted Successfully", "success");
+        }
+        else if ('error' in result) {
+            const error = result.error as FetchBaseQueryError;
+            const { status } = error;
+
+            if (status) {
+                useErrorHandler(error, navigate, location.pathname);
+            }
+        }
+
+    };
+
+
 
     if (isLoading) {
         content = <MainLoader />;
@@ -35,7 +64,7 @@ function DepartmentList() {
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
                         {/*TODO: add handler for delete*/}
-                        <ActionButton style={{ backgroundColor: "red" }}>
+                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleDepartmetDelete(department.id) }>
                             <FontAwesomeIcon icon={faTrashAlt} />
                         </ActionButton>
                     </TableRow>

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useGetPatientByIdQuery } from "../../app/APIs/patientApi";
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -9,14 +9,14 @@ function PatientDetails() {
     const { id } = useParams();
     const { data, isLoading, error, isError } = useGetPatientByIdQuery(id);
     const navigate = useNavigate();
-
+    const location = useLocation();
 
     if (isLoading) return <MainLoader />;
 
     const fbError = error as FetchBaseQueryError;
 
     if (isError) {
-        useErrorHandler(fbError, navigate);
+        useErrorHandler(fbError, navigate, location.pathname);
     }
 
 
