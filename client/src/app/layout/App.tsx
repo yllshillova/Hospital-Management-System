@@ -30,12 +30,12 @@ function App() {
                     <Route path="/department/update/:id" element={<DepartmentUpsert />}></Route>
                     <Route path="/login" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
-                    <Route path="/departmentUpsert" element={<DepartmentUpsert />}></Route>
-                    <Route path="/departmentUpsert/:id" element={<DepartmentUpsert />}></Route>
+                    {/*<Route path="/departmentUpsert" element={<DepartmentUpsert />}></Route>*/}
+                    {/*<Route path="/departmentUpsert/:id" element={<DepartmentUpsert />}></Route>*/}
                     <Route path="/rooms" element={<RoomList />}></Route>
                     <Route path="/room/:id" element={<RoomDetails />}></Route>
-                    <Route path="/roomUpsert" element={<RoomUpsert />}></Route>
-                    <Route path="/roomUpsert/:id" element={<RoomUpsert />}></Route>
+                    <Route path="/room/insert" element={<RoomUpsert />}></Route>
+                    <Route path="/room/update/:id" element={<RoomUpsert />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>
