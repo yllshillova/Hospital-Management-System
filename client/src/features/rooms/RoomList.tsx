@@ -59,7 +59,7 @@ function RoomList() {
                     <TableRow>
                         <TableCell>{room.capacity}</TableCell>
                         <TableCell>{room.isFree === false ? "Occupied" : "Free"}</TableCell>
-                        <TableCell>{room.patientName}</TableCell>
+                       
                         <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(room.updatedAt).toLocaleDateString()}</TableCell>
                         <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/room/" + room.id)} >
@@ -93,8 +93,8 @@ function RoomList() {
                     <thead>
                         <TableRow>
                             <TableHeaderCell>Capacity</TableHeaderCell>
-                            <TableHeaderCell>IsFree</TableHeaderCell>
-                            <TableHeaderCell>PatientName</TableHeaderCell>
+                            <TableHeaderCell>Status</TableHeaderCell>
+                          
                             <TableHeaderCell>CreatedAt</TableHeaderCell>
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
                         </TableRow>

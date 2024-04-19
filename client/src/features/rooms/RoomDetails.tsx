@@ -21,10 +21,10 @@ function RoomDetails() {
         navigate('/not-found');
         return;
     }
-   // const fbError = error as FetchBaseQueryError;
+    //const fbError = error as FetchBaseQueryError;
 
     //if (isError) {
-      //  useErrorHandler(fbError, navigate); spe njeh useErrorHandler
+    //    useErrorHandler(fbError, navigate); 
     //}
 
 
@@ -41,7 +41,7 @@ function RoomDetails() {
                     <h2>Room Details</h2>
                     <p>Id: {room.id}</p>
                     <p>Capacity: {room.capacity}</p>
-                    <p>IsFree: {room.isFree === false ? "Occupied" : "Free"}</p>
+                    <p>Status: {room.isFree === false ? "Occupied" : "Free"}</p>
                     <p>Patient Name: {patientName}</p> {/* Shfaq emrin e pacientit */}
                     <p>Created At: {new Date(room.createdAt).toLocaleDateString()}</p>
                     <p>Updated At: {new Date(room.updatedAt).toLocaleDateString()}</p>
