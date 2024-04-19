@@ -24,7 +24,7 @@ function SidePanel() {
     //}
 
     const handlePatientList = () => {
-        navigate('/patientList');
+        navigate('/patients');
     }
 
     const handleDepartmentsList = () => {

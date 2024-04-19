@@ -7,6 +7,8 @@ import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
 import DepartmentUpsert from '../../features/department/DepartmentUpsert';
 import PatientDetails from '../../features/patient/Details';
+import Login from '../../features/account/Login';
+import Register from '../../features/account/Register';
 import RoomList from "../../features/rooms/RoomList";
 import RoomDetails from '../../features/rooms/RoomDetails';
 import RoomUpsert from '../../features/rooms/RoomUpsert';
@@ -19,11 +21,15 @@ function App() {
             <div>
                 <Routes>
                     <Route path="/" element={<Dashboard />}></Route>
-                    <Route path="/patientList" element={<PatientList />}></Route>
-                    <Route path="/patientUpsert" element={<PatientUpsert />}></Route>
+                    <Route path="/patients" element={<PatientList />}></Route>
+                    <Route path="/patient/insert" element={<PatientUpsert />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>
                     <Route path="/departments" element={<DepartmentList />}></Route>
                     <Route path="/department/:id" element={<DepartmentDetails />}></Route>
+                    <Route path="/department/insert" element={<DepartmentUpsert />}></Route>
+                    <Route path="/department/update/:id" element={<DepartmentUpsert />}></Route>
+                    <Route path="/login" element={<Login/>}></Route>
+                    <Route path="/register" element={<Register />}></Route>
                     <Route path="/departmentUpsert" element={<DepartmentUpsert />}></Route>
                     <Route path="/departmentUpsert/:id" element={<DepartmentUpsert />}></Route>
                     <Route path="/rooms" element={<RoomList />}></Route>
