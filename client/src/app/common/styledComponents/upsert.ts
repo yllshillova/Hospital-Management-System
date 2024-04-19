@@ -25,7 +25,7 @@ export const FormContainer = styled.div`
 `;
 
 export const Title = styled.h3`
-  color: teal;
+  color: #1a252e;
   margin-bottom: 20px;
   text-align: center;
   font-weight: 750;
@@ -68,7 +68,7 @@ export const Select = styled.select`
 export const SubmitButton = styled.button`
   width: 30%;
   padding: 8px;
-  background-color: teal;
+  background-color: #1a252e;
   color: white;
   border: none;
   border-radius: 5px;
@@ -78,10 +78,7 @@ export const SubmitButton = styled.button`
   margin-right: 5px;
   font-weight: 600;
   transition: ease 0.3s;
-
   &:hover {
-    background-color: teal;
-    color: white;
     transform: scale(1.1);
   }
 `;

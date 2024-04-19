@@ -8,7 +8,7 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import { useNavigate } from "react-router-dom";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfo } from "@fortawesome/free-solid-svg-icons";
 function PatientList() {
     const { data, isLoading, error } = useGetPatientsQuery(null);
     const navigate = useNavigate();
@@ -30,8 +30,8 @@ function PatientList() {
                         <TableCell>{patient.phoneNumber}</TableCell>
                         <TableCell>{new Date(patient.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(patient.updatedAt).toLocaleDateString()}</TableCell>
-                        <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/patient/" + patient.id)} >
-                            <FontAwesomeIcon icon={faCircle} />
+                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/patient/" + patient.id)} >
+                            <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
                         <ActionButton style={{ backgroundColor: "orange" }}>
                             <FontAwesomeIcon icon={faEdit} />
@@ -52,7 +52,7 @@ function PatientList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Patients List</TableHeader>
-                    <AddButton style={{ backgroundColor: "teal" }}>
+                    <AddButton style={{ backgroundColor: "#1a252e" }}>
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>

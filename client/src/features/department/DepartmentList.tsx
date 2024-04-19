@@ -2,13 +2,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import Department from "../../app/models/Department";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import { useNavigate } from "react-router-dom";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import {  faInfo } from "@fortawesome/free-solid-svg-icons";
 function DepartmentList() {
     const { data, isLoading, error } = useGetDepartmentsQuery(null);
     const navigate = useNavigate();
@@ -28,8 +28,8 @@ function DepartmentList() {
                         <TableCell>{department.isDeleted} </TableCell>
                         <TableCell>{new Date(department.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(department.updatedAt).toLocaleDateString()}</TableCell>
-                        <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/department/" + department.id)} >
-                            <FontAwesomeIcon icon={faCircle} />
+                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/department/" + department.id)} >
+                            <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
                         <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/departmentUpsert/" + department.id)} >
                             <FontAwesomeIcon icon={faEdit} />
@@ -51,18 +51,18 @@ function DepartmentList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Departments List</TableHeader>
-                    <AddButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/departmentUpsert")}  >
+                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/departmentUpsert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
                 <Table>
                     <thead>
-                        <TableRow>
+                        <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>IsDeleted</TableHeaderCell>
                             <TableHeaderCell>CreatedAt</TableHeaderCell>
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
-                        </TableRow>
+                        </TableHead>
                     </thead>
                     {content}
                 </Table>
