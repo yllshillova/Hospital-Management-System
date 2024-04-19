@@ -1,9 +1,10 @@
-import { useNavigate, useParams } from "react-router-dom";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useLocation,useNavigate, useParams } from "react-router-dom";
 import { useGetPatientByIdQuery } from "../../app/APIs/patientApi"; // Importimi i query për të marrë të dhëna të pacientit
 import MainLoader from "../../app/common/MainLoader";
-//import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useGetRoomByIdQuery } from "../../app/APIs/roomApi";
-//import useErrorHandler from "../../app/helpers/useErrorHandler";
+import useErrorHandler from "../../app/helpers/useErrorHandler";
 
 
 function isValidGuid(guid: string): boolean {
@@ -13,19 +14,20 @@ function isValidGuid(guid: string): boolean {
 
 function RoomDetails() {
     const { id } = useParams();
-    const { data, isLoading } = useGetRoomByIdQuery(id);
+    const { data, isLoading ,isError ,error} = useGetRoomByIdQuery(id);
     const { data: patientData, isLoading: patientLoading } = useGetPatientByIdQuery(data?.patientId); // Marrja e të dhënave të pacientit nga ID-ja e pacientit në departament
     const navigate = useNavigate();
+    const location = useLocation();
 
     if (!isValidGuid(id as string)) {
         navigate('/not-found');
         return;
     }
-    //const fbError = error as FetchBaseQueryError;
+    const fbError = error as FetchBaseQueryError;
 
-    //if (isError) {
-    //    useErrorHandler(fbError, navigate); 
-    //}
+    if (isError) {
+        useErrorHandler(fbError, navigate, location.pathname);
+    }
 
 
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteRoomMutation, useGetRoomsQuery } from "../../app/APIs/roomApi";
 import MainLoader from "../../app/common/MainLoader";
@@ -7,16 +8,19 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useGetPatientsQuery } from "../../app/APIs/patientApi";
-import { toast } from "react-toastify";
+import toastNotify from "../../app/helpers/toastNotify";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import useErrorHandler from "../../app/helpers/useErrorHandler";
 function RoomList() {
     //const { data, isLoading, error } = useGetRoomsQuery(null);
     const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomsQuery(null);
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); 
     const navigate = useNavigate();
+    const location = useLocation();
     const [rooms, setRooms] = useState<Room[]>([]);
     const [deleteRoom] = useDeleteRoomMutation();
 
@@ -35,15 +39,32 @@ function RoomList() {
     let content;
 
 
-    const handleRoomDelete = async (id: number) => {
-        toast.promise(
-            deleteRoom(id),
-            {
-                pending: "Processing your request...",
-                success: "Room Deleted Successfully ??",
-                error: "Error displaying",
+    //const handleRoomDelete = async (id: number) => {
+    //    toast.promise(
+    //        deleteRoom(id),
+    //        {
+    //            pending: "Processing your request...",
+    //            success: "Room Deleted Successfully ??",
+    //            error: "Error displaying",
+    //        }
+    //    );
+    //};
+
+    const handleRoomDelete = async (id: number,) => {
+        const result = await deleteRoom(id);
+
+        if ('data' in result) {
+            toastNotify("Department Deleted Successfully", "success");
+        }
+        else if ('error' in result) {
+            const error = result.error as FetchBaseQueryError;
+            const { status } = error;
+
+            if (status) {
+                useErrorHandler(error, navigate, location.pathname);
             }
-        );
+        }
+
     };
  
 
