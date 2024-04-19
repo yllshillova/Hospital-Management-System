@@ -25,7 +25,7 @@ function DepartmentList() {
                 <tbody key={department.id}>
                     <TableRow>
                         <TableCell>{department.name}</TableCell>
-                        <TableCell>{department.isDeleted}</TableCell>
+                        <TableCell>{department.isDeleted} </TableCell>
                         <TableCell>{new Date(department.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(department.updatedAt).toLocaleDateString()}</TableCell>
                         <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/department/" + department.id)} >
