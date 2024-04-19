@@ -1,8 +1,6 @@
 ﻿/* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useDeleteDepartmentMutation, useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MainLoader from "../../app/common/MainLoader";
-import Department from "../../app/models/Department";
 import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
@@ -13,20 +11,22 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import toastNotify from "../../app/helpers/toastNotify";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
-function DepartmentList() {
-    const { data, isLoading, error } = useGetDepartmentsQuery(null);
-    const [deleteDepartment] = useDeleteDepartmentMutation();
+import { useDeleteDoctorMutation, useGetDoctorsQuery } from "../../app/APIs/doctorApi";
+import Doctor from "../../app/models/Doctor";
+function DoctorList() {
+    const { data, isLoading, error } = useGetDoctorsQuery(null);
+    const [deleteDoctor] = useDeleteDoctorMutation();
     const navigate = useNavigate();
     const location = useLocation();
     let content;
 
 
 
-    const handleDepartmentDelete = async (id: number,) => {
-        const result = await deleteDepartment(id);
+    const handleDoctorDelete = async (id: number,) => {
+        const result = await deleteDoctor(id);
 
         if ('data' in result) {
-            toastNotify("Department Deleted Successfully", "success");
+            toastNotify("Doctor Deleted Successfully", "success");
         }
         else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
@@ -36,7 +36,6 @@ function DepartmentList() {
                 useErrorHandler(error, navigate, location.pathname);
             }
         }
-
     };
 
 
@@ -44,25 +43,32 @@ function DepartmentList() {
     if (isLoading) {
         content = <MainLoader />;
     } else if (error) {
-        content = <div>Error loading departments.</div>;
+        content = <div>Error loading doctors.</div>;
     }
     else {
-        content = data.map((department: Department) => {
+        content = data.map((doctor: Doctor) => {
             return (
-                <tbody key={department.id}>
+                <tbody key={doctor.id}>
                     <TableRow>
-                        <TableCell>{department.name}</TableCell>
-                        <TableCell>{department.isDeleted} </TableCell>
-                        <TableCell>{new Date(department.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(department.updatedAt).toLocaleDateString()}</TableCell>
-                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/department/" + department.id)} >
+                        <TableCell>{doctor.name}</TableCell>
+                        <TableCell>{doctor.lastName} </TableCell>
+                        <TableCell>{doctor.residence} </TableCell>
+                        <TableCell>{doctor.address} </TableCell>
+                        <TableCell>{doctor.gender} </TableCell>
+                        <TableCell>{new Date(doctor.birthday).toLocaleDateString()}</TableCell>
+                        <TableCell>{doctor.departmentId} </TableCell>
+                        <TableCell>{new Date(doctor.createdAt).toLocaleDateString()}</TableCell>
+                        <TableCell>{new Date(doctor.updatedAt).toLocaleDateString()}</TableCell>
+                        <TableCell>{doctor.isDeleted} </TableCell>
+
+                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/doctor/" + doctor.id)} >
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/department/update/" + department.id)} >
+                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/doctor/update/" + doctor.id)} >
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
                         {/*TODO: add handler for delete*/}
-                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleDepartmentDelete(department.id) }>
+                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleDoctorDelete(doctor.id) }>
                             <FontAwesomeIcon icon={faTrashAlt} />
                         </ActionButton>
                     </TableRow>
@@ -77,8 +83,8 @@ function DepartmentList() {
             <SidePanel />
             <OrdersTable>
                 <TableNav>
-                    <TableHeader>Departments List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/department/insert")}  >
+                    <TableHeader>Doctors List</TableHeader>
+                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/doctor/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
@@ -86,9 +92,15 @@ function DepartmentList() {
                     <thead>
                         <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>IsDeleted</TableHeaderCell>
+                            <TableHeaderCell>Last Name</TableHeaderCell>
+                            <TableHeaderCell>Residence</TableHeaderCell>
+                            <TableHeaderCell>Address</TableHeaderCell>
+                            <TableHeaderCell>Gender</TableHeaderCell>
+                            <TableHeaderCell>Birthday</TableHeaderCell>
+                            <TableHeaderCell>DepartmentId</TableHeaderCell>
                             <TableHeaderCell>CreatedAt</TableHeaderCell>
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
+                            <TableHeaderCell>IsDeleted</TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}
@@ -98,4 +110,4 @@ function DepartmentList() {
     );
 }
 
-export default DepartmentList;
+export default DoctorList;
