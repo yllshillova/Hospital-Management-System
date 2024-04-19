@@ -16,7 +16,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetEmergencyContactsQuery()));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{Id}")]
         public async Task<IActionResult> GetEmergencyContactById(Guid id)
         {
             return HandleResult(await Mediator.Send(new GetEmergencyContactByIdQuery(id)));

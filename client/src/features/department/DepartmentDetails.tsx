@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useGetDepartmentByIdQuery } from "../../app/APIs/departmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -14,6 +14,7 @@ function DepartmentDetails() {
     const { id } = useParams();
     const { data, isLoading, error, isError } = useGetDepartmentByIdQuery(id);
     const navigate = useNavigate();
+    const location = useLocation();
 
     if (!isValidGuid(id as string)) {
         navigate('/not-found');
@@ -22,7 +23,7 @@ function DepartmentDetails() {
     const fbError = error as FetchBaseQueryError;
 
     if (isError) {
-        useErrorHandler(fbError, navigate);
+        useErrorHandler(fbError, navigate, location.pathname);
     }
 
     if (isLoading) return <MainLoader />;
