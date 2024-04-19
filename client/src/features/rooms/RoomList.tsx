@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useGetRoomsQuery } from "../../app/APIs/roomApi";
+import { useDeleteRoomMutation, useGetRoomsQuery } from "../../app/APIs/roomApi";
 import MainLoader from "../../app/common/MainLoader";
 import Room from "../../app/models/Room";
 import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell } from "../../app/common/styledComponents/table";
@@ -11,12 +11,14 @@ import { useNavigate } from "react-router-dom";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useGetPatientsQuery } from "../../app/APIs/patientApi";
+import { toast } from "react-toastify";
 function RoomList() {
     //const { data, isLoading, error } = useGetRoomsQuery(null);
     const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomsQuery(null);
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); 
     const navigate = useNavigate();
     const [rooms, setRooms] = useState<Room[]>([]);
+    const [deleteRoom] = useDeleteRoomMutation();
 
 
     useEffect(() => {
@@ -31,6 +33,19 @@ function RoomList() {
 
 
     let content;
+
+
+    const handleRoomDelete = async (id: number) => {
+        toast.promise(
+            deleteRoom(id),
+            {
+                pending: "Processing your request...",
+                success: "Room Deleted Successfully ??",
+                error: "Error displaying",
+            }
+        );
+    };
+ 
 
     if (roomsLoading || patientsLoading) {
         content = <MainLoader />;
@@ -54,7 +69,7 @@ function RoomList() {
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
                         {/*TODO: add handler for delete*/}
-                        <ActionButton style={{ backgroundColor: "red" }}>
+                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleRoomDelete(room.id)}>
                             <FontAwesomeIcon icon={faTrashAlt} />
                         </ActionButton>
                     </TableRow>

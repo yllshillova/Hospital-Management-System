@@ -72,6 +72,12 @@ function RoomUpsert() {
         setLoading(false);
     }
 
+    //const toggleIsFree = () => {
+    //    setRoomInputs((prevInputs) => ({
+    //        ...prevInputs,
+    //        isFree: !prevInputs.isFree,
+    //    }));
+    //};
 
 
     return (
@@ -103,13 +109,23 @@ function RoomUpsert() {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label>isFree:</Label>
+                             <Label>isFree:</Label>
                                 <Input
-                                    type="checkbox"
-                                    name="isFree"
-                                    checked={roomInputs.isFree}
-                                    onChange={(e) => setRoomInputs({ ...roomInputs, isFree: e.target.checked })}
+                                   type="checkbox"
+                                   name="isFree"
+                                   checked={roomInputs.isFree}
+                                   onChange={(e) => setRoomInputs({ ...roomInputs, isFree: e.target.checked })}
                                 />
+                                {/*<Label>*/}
+                                {/*    Is Free{" "}*/}
+                                {/*    <input*/}
+                                {/*        type="checkbox"*/}
+                                {/*        name="isDeleted"*/}
+                                {/*        checked={roomInputs.isFree}*/}
+                                {/*        onChange={toggleIsFree}*/}
+                                {/*    />*/}
+
+                                {/*</Label>*/}
                             </FormGroup>
 
                             <FormGroup>

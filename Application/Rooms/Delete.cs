@@ -15,6 +15,7 @@ namespace Application.Rooms
                 var room = await _roomRepository.GetByIdAsync(request.Id);
                 if (room is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
+                room.IsFree = true;
                 var result = await _roomRepository.DeleteAsync(room);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the room! Try again.");
                 return Result<Unit>.Success(Unit.Value);
