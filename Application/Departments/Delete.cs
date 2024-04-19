@@ -15,6 +15,9 @@ namespace Application.Departments
                 var department = await _departmentRepository.GetByIdAsync(request.Id);
                 if (department is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found.");
 
+                if (department.IsDeleted == true) return Result<Unit>.Failure(ErrorType.BadRequest, "Cannot delete the deactivated department!");
+
+
                 department.IsDeleted = true;
                 var result = await _departmentRepository.UpdateAsync(department); 
                 
