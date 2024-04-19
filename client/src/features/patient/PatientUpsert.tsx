@@ -5,7 +5,7 @@ import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { Header, SidePanel } from "../../app/layout";
-import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
+import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, Select, FormGroup, Input, Label, OuterContainer, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { SD_Bloodgroups } from "../../app/utility/SD";
 
 const bloodgroup = [
@@ -77,7 +77,6 @@ function PatientUpsert() {
         e.preventDefault();
         setLoading(true);
         const formData = new FormData();
-
         formData.append("Name", patientInputs.name);
         formData.append("Lastname", patientInputs.lastName);
         formData.append("ParentName", patientInputs.parentName);
@@ -100,7 +99,7 @@ function PatientUpsert() {
 
         if (id) {
             formData.append("Id", id);
-            console.log("Update patient data :", Object.fromEntries(formData.entries()));
+            console.log("Update department data :", Object.fromEntries(formData.entries()));
 
             response = await updatePatient({ data: formData, id });
 
@@ -319,8 +318,8 @@ function PatientUpsert() {
                                 <SubmitButton type="submit">
                                     Submit
                                 </SubmitButton>
-                                <BackToProductsButton onClick={() => navigate("/patients")}>
-                                    Back to patients
+                                <BackToProductsButton onClick={() => navigate("/departments")}>
+                                    Back to departments
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>
