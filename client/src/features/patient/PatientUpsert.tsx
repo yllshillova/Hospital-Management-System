@@ -1,14 +1,12 @@
-import React from "react";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useCreatePatientMutation, useGetPatientByIdQuery, useUpdatePatientMutation } from "../../app/APIs/patientApi";
 import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
-import { SD_Bloodgroups } from "../../app/utility/SD";
 import { Header, SidePanel } from "../../app/layout";
-import { useCreatePatientMutation, useGetPatientByIdQuery, useUpdatePatientMutation } from "../../app/APIs/patientApi";
+import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
+import { SD_Bloodgroups } from "../../app/utility/SD";
 
 const bloodgroup = [
     SD_Bloodgroups.O_Positive,
@@ -22,7 +20,7 @@ const bloodgroup = [
 ];
 const patientData = {
     name: "",
-    lastname: "",
+    lastName: "",
     parentName: "",
     personalNumber: "",
     address: "",
@@ -31,31 +29,26 @@ const patientData = {
     bloodgroup: "",
     gender: "",
     email: "",
-    phonenumber: "",
+    phoneNumber: "",
     createdAt: "",
     updatedAt: "",
-    isDeleted: "",
+    isDeleted: false,
     occupation: "",
-    allergies: "",
+    allergies: ""
 };
 function PatientUpsert() {
-
     const { id } = useParams();
-    const navigate = useNavigate();
     const [patientInputs, setPatientInputs] = useState(patientData);
-    const [loading, setLoading] = useState(false);
     const [createPatient] = useCreatePatientMutation();
     const [updatePatient] = useUpdatePatientMutation();
     const { data } = useGetPatientByIdQuery(id);
-
-    //function useParams(): { id: any; } {
-    //    throw new Error("Function not implemented.");
-    //} 
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
-        if (data && data.result) {
+        if (data) {
             const tempData = {
                 name: data.result.name,
-                lastname: data.result.lastname,
+                lastName: data.result.lastName,
                 parentName: data.result.parentName,
                 personalNumber: data.result.personalNumber,
                 address: data.result.address,
@@ -64,10 +57,10 @@ function PatientUpsert() {
                 bloodgroup: data.result.bloodgroup,
                 gender: data.result.gender,
                 email: data.result.email,
-                phonenumber: data.result.phonenumber,
+                phoneNumber: data.result.phoneNumber,
                 createdAt: data.result.createdAt,
                 updatedAt: data.result.updatedAt,
-                isDeleted: data.result.isDeleted,
+                isDeleted: data.isDeleted.toLowerCase() === "true",
                 occupation: data.result.occupation,
                 allergies: data.result.allergies,
             };
@@ -75,25 +68,18 @@ function PatientUpsert() {
         }
     }, [data]);
 
-    const handlePatientInput = (
-        e: React.ChangeEvent<
-            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-        >
-    ) => {
+    const handlePatientInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const tempData = inputHelper(e, patientInputs);
         setPatientInputs(tempData);
-    };
+    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
-
-
-        //construct the form data
         const formData = new FormData();
 
         formData.append("Name", patientInputs.name);
-        formData.append("Lastname", patientInputs.lastname);
+        formData.append("Lastname", patientInputs.lastName);
         formData.append("ParentName", patientInputs.parentName);
         formData.append("PersonalNumber", patientInputs.personalNumber);
         formData.append("Address", patientInputs.address);
@@ -102,42 +88,47 @@ function PatientUpsert() {
         formData.append("BloodGroup", patientInputs.bloodgroup);
         formData.append("Gender", patientInputs.gender);
         formData.append("Email", patientInputs.email);
-        formData.append("PhoneNumber", patientInputs.phonenumber);
+        formData.append("PhoneNumber", patientInputs.phoneNumber);
         formData.append("CreatedAt", patientInputs.createdAt);
         formData.append("UpdatedAt", patientInputs.updatedAt);
-        formData.append("IsDeleted", patientInputs.isDeleted);
+        formData.append("IsDeleted", patientInputs.isDeleted.toString());
         formData.append("Occupation", patientInputs.occupation);
         formData.append("Allergies", patientInputs.allergies);
 
         let response;
 
+
         if (id) {
             formData.append("Id", id);
-            console.log(
-                "Update Patient Data:",
-                Object.fromEntries(formData.entries())
-            ); // Log the data before the update
+            console.log("Update patient data :", Object.fromEntries(formData.entries()));
+
             response = await updatePatient({ data: formData, id });
-            console.log("Update Patient Response:", response); // Log the response after the update
-            //console.log(response);
+
+            console.log("Update patient Response: ", response);
+
             toastNotify("Patient updated successfully", "success");
         } else {
-            console.log(
-                "Create Product Data:",
-                Object.fromEntries(formData.entries())
-            ); // Log the data before the creation
+            console.log("Create Patient Data:", Object.fromEntries(formData.entries()));
             response = await createPatient(formData);
-            console.log("Create Patient Response:", response); // Log the response after the creation
+            console.log("Create Patient response : ", response);
             toastNotify("Patient created successfully", "success");
         }
 
         if (response) {
             setLoading(false);
-            navigate("/patientsList");
+            navigate('/patients');
         }
 
         setLoading(false);
+    }
+
+    const toggleIsDeleted = () => {
+        setPatientInputs((prevInputs) => ({
+            ...prevInputs,
+            isDeleted: !prevInputs.isDeleted,
+        }));
     };
+
 
     return (
         <>
@@ -171,8 +162,8 @@ function PatientUpsert() {
                                 <Input
                                     type="text"
                                     required
-                                    name="lastname"
-                                    value={patientInputs.lastname}
+                                    name="lastName"
+                                    value={patientInputs.lastName}
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
@@ -220,7 +211,7 @@ function PatientUpsert() {
                             <FormGroup>
                                 <Label>Birthday:</Label>
                                 <Input
-                                    type="text"
+                                    type="date"
                                     required
                                     name="birthday"
                                     value={patientInputs.birthday}
@@ -263,12 +254,12 @@ function PatientUpsert() {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Phonenumber:</Label>
+                                <Label>Phone Number:</Label>
                                 <Input
                                     type="text"
                                     required
-                                    name="phonenumber"
-                                    value={patientInputs.phonenumber}
+                                    name="phoneNumber"
+                                    value={patientInputs.phoneNumber}
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
@@ -293,14 +284,16 @@ function PatientUpsert() {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>isDeleted:</Label>
-                                <Input
-                                    type="checkbox"
-                                    required
-                                    name="isDeleted"
-                                    value={patientInputs.isDeleted}
-                                    onChange={handlePatientInput}
-                                />
+                                <Label>
+                                    Is Deleted{" "}
+                                    <input
+                                        type="checkbox"
+                                        name="isDeleted"
+                                        checked={patientInputs.isDeleted}
+                                        onChange={toggleIsDeleted}
+                                    />
+
+                                </Label>
                             </FormGroup>
                             <FormGroup>
                                 <Label>Occupation:</Label>
@@ -322,12 +315,11 @@ function PatientUpsert() {
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
-
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit
                                 </SubmitButton>
-                                <BackToProductsButton onClick={() => navigate("/patientList")}>
+                                <BackToProductsButton onClick={() => navigate("/patients")}>
                                     Back to patients
                                 </BackToProductsButton>
                             </ButtonsContainer>
@@ -339,116 +331,5 @@ function PatientUpsert() {
     );
 }
 
-const OuterContainer = styled.div`
-  margin-left: 200px;
-
-  background-color: #f5f5f5;
-  padding: 20px;
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #ddd;
-  max-width: 600px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
-  background-color: white;
-  margin-top: 50px;
-  margin-left: auto;
-  margin-right: auto;
-`;
-
-const FormContainer = styled.div`
-  padding: 30px; 
-`;
-
-const Title = styled.h3`
-  color: teal;
-  margin-bottom: 20px;
-  text-align: center;
-  font-weight: 750;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 20px;
-`;
-
-const Label = styled.label`
-  color: #333;
-  margin-bottom: 15px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  max-width: 100%;
-  padding: 15px; // Increase the padding for larger inputs
-  font-size: 16px; // Increase the font size for better visibility
-  border: 1px solid #ddd;
-  border-radius: 8px; // Increase the border-radius for rounded corners
-  box-sizing: border-box;
-`;
-
-const Select = styled.select`
-  width: 100%;
-  max-width: 100%;
-  padding: 15px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-sizing: border-box;
-`;
-
-const SubmitButton = styled.button`
-  width: 30%;
-  padding: 8px;
-  background-color: teal;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-top: 20px;
-  margin-right: 5px;
-  font-weight: 600;
-  transition: ease 0.3s;
-
-  &:hover {
-    background-color: teal;
-    color: white;
-    transform: scale(1.1);
-  }
-`;
-
-const BackToProductsButton = styled.button`
-  width: 30%;
-  padding: 8px;
-  background-color: white;
-  color: black;
-  border: 1px solid black;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-top: 20px;
-  margin-left: 5px;
-  font-weight: 600;
-  transition: ease 0.3s;
-
-  &:hover {
-    color: black;
-    transform: scale(1.1);
-  }
-`;
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 5px;
-`;
 
 export default PatientUpsert;

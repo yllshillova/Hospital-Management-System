@@ -31,7 +31,7 @@ function DepartmentList() {
                         <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/department/" + department.id)} >
                             <FontAwesomeIcon icon={faCircle} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/departmentUpsert/" + department.id)} >
+                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/department/update/" + department.id)} >
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
                         {/*TODO: add handler for delete*/}
@@ -51,7 +51,7 @@ function DepartmentList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Departments List</TableHeader>
-                    <AddButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/departmentUpsert")}  >
+                    <AddButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/department/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>

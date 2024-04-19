@@ -25,7 +25,7 @@ function PatientDetails() {
 
         return (
             <div>
-                <h2>Department Details</h2>
+                <h2>Patient Details</h2>
                 <p>Id: {patient.id}</p>
                 <p>Name: {patient.name}</p>
                 <p>LastName: {patient.lastName}</p>
@@ -37,7 +37,7 @@ function PatientDetails() {
                 <p>BloodGroup: {patient.bloodgroup}</p>
                 <p>Gender: {patient.gender}</p>
                 <p>Email: {patient.email}</p>
-                <p>PhoneNumber: {patient.phonenumber}</p>
+                <p>PhoneNumber: {patient.phoneNumber}</p>
                 <p>Created At: {new Date(patient.createdAt).toLocaleDateString()}</p>
                 <p>Updated At: {new Date(patient.updatedAt).toLocaleDateString()}</p>
                 <p>Status: {patient.isDeleted ? "Active" : "Passive"}</p>

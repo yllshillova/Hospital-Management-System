@@ -33,7 +33,7 @@ function PatientList() {
                         <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/patient/" + patient.id)} >
                             <FontAwesomeIcon icon={faCircle} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }}>
+                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/patient/update/" + patient.id)}>
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
                         <ActionButton style={{ backgroundColor: "red" }}>
@@ -52,7 +52,7 @@ function PatientList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Patients List</TableHeader>
-                    <AddButton style={{ backgroundColor: "teal" }}>
+                    <AddButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/patient/insert")}>
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
