@@ -78,7 +78,7 @@ function DepartmentList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Departments List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/departmentUpsert")}  >
+                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/department/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
