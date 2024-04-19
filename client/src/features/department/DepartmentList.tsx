@@ -1,4 +1,5 @@
-﻿import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+﻿/* eslint-disable react-hooks/rules-of-hooks */
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteDepartmentMutation, useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import Department from "../../app/models/Department";
@@ -7,26 +8,35 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import toastNotify from "../../app/helpers/toastNotify";
+import useErrorHandler from "../../app/helpers/useErrorHandler";
 function DepartmentList() {
     const { data, isLoading, error } = useGetDepartmentsQuery(null);
     const [deleteDepartment] = useDeleteDepartmentMutation();
     const navigate = useNavigate();
+    const location = useLocation();
     let content;
 
 
 
-    const handleDepartmetDelete = async (id: number) => {
-        toast.promise(
-            deleteDepartment(id),
-            {
-                pending: "Processing your request...",
-                success: "Department Deleted Successfully 👌",
-                error: "Error displaying",
+    const handleDepartmetDelete = async (id: number,) => {
+        const result = await deleteDepartment(id);
+
+        if ('data' in result) {
+            toastNotify("Department Deleted Successfully", "success");
+        }
+        else if ('error' in result) {
+            const error = result.error as FetchBaseQueryError;
+            const { status } = error;
+
+            if (status) {
+                useErrorHandler(error, navigate, location.pathname);
             }
-        );
+        }
+
     };
 
 

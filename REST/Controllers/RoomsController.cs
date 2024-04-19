@@ -16,7 +16,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetRoomsQuery()));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{Id}")]
         public async Task<IActionResult> GetRoomById(Guid Id, RoomDto Room)
         {
             return HandleResult(await Mediator.Send(new GetRoomByIdQuery(Id)));
