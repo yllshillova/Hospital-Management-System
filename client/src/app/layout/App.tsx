@@ -4,7 +4,6 @@ import DepartmentList from '../../features/department/DepartmentList';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
 import DepartmentUpsert from '../../features/department/DepartmentUpsert';
-import PatientDetails from '../../features/patient/Details';
 import Login from '../../features/account/Login';
 import Register from '../../features/account/Register';
 import RoomList from "../../features/rooms/RoomList";
