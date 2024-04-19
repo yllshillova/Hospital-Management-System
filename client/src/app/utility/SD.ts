@@ -10,6 +10,6 @@ export enum SD_Bloodgroups {
 }
 
 export enum SD_Genders {
-    Male,
-    Female
+    Male = "Male",
+    Female="Female"
 }

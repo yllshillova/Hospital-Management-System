@@ -42,6 +42,7 @@ function DoctorDetails() {
                     <p>Id: {doctor.id}</p>
                     <p>Name: {doctor.name}</p>
                     <p>Last Name: {doctor.lastName}</p>
+                    <p>Specialization: {doctor.specialization}</p>
                     <p>Residence: {doctor.residence}</p>
                     <p>Address: {doctor.address}</p>
                     <p>Gender: {doctor.gender}</p>

@@ -52,6 +52,8 @@ function DoctorList() {
                     <TableRow>
                         <TableCell>{doctor.name}</TableCell>
                         <TableCell>{doctor.lastName} </TableCell>
+                        <TableCell>{doctor.email} </TableCell>
+                        <TableCell>{doctor.specialization} </TableCell>
                         <TableCell>{doctor.residence} </TableCell>
                         <TableCell>{doctor.address} </TableCell>
                         <TableCell>{doctor.gender} </TableCell>
@@ -93,6 +95,8 @@ function DoctorList() {
                         <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Last Name</TableHeaderCell>
+                            <TableHeaderCell>Email</TableHeaderCell>
+                            <TableHeaderCell>Specialization</TableHeaderCell>
                             <TableHeaderCell>Residence</TableHeaderCell>
                             <TableHeaderCell>Address</TableHeaderCell>
                             <TableHeaderCell>Gender</TableHeaderCell>
