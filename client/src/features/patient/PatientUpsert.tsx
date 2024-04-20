@@ -8,7 +8,7 @@ import { Header, SidePanel } from "../../app/layout";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, Select, FormGroup, Input, Label, OuterContainer, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { SD_Bloodgroups } from "../../app/utility/SD";
 
-const bloodgroup = [
+const bloodgroups = [
     SD_Bloodgroups.O_Positive,
     SD_Bloodgroups.O_Negative,
     SD_Bloodgroups.A_Positive,
@@ -26,7 +26,7 @@ const patientData = {
     address: "",
     residence: "",
     birthday: "",
-    bloodgroup: "",
+    bloodGroup: "",
     gender: "",
     email: "",
     phoneNumber: "",
@@ -52,7 +52,7 @@ function PatientUpsert() {
                 address: data.address,
                 residence: data.residence,
                 birthday: data.birthday,
-                bloodgroup: data.bloodgroup,
+                bloodGroup: data.bloodGroup,
                 gender: data.gender,
                 email: data.email,
                 phoneNumber: data.phoneNumber,
@@ -60,6 +60,7 @@ function PatientUpsert() {
                 occupation: data.occupation,
                 allergies: data.allergies,
             };
+            console.log("Blood Group:", data.bloodgroup);
             setPatientInputs(tempData);
         }
     }, [data]);
@@ -72,7 +73,7 @@ function PatientUpsert() {
     function formatDateToInputValue(dateString: string) {
         const date = new Date(dateString);
         const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0"); // +1 because getMonth() returns 0-11
+        const month = String(date.getMonth() + 1).padStart(2, "0");
         const day = String(date.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
     }
@@ -87,7 +88,7 @@ function PatientUpsert() {
         formData.append("Address", patientInputs.address);
         formData.append("Residence", patientInputs.residence);
         formData.append("Birthday", patientInputs.birthday);
-        formData.append("BloodGroup", patientInputs.bloodgroup);
+        formData.append("BloodGroup", patientInputs.bloodGroup);
         formData.append("Gender", patientInputs.gender);
         formData.append("Email", patientInputs.email);
         formData.append("PhoneNumber", patientInputs.phoneNumber);
@@ -100,10 +101,9 @@ function PatientUpsert() {
 
         if (id) {
             formData.append("Id", id);
-            console.log("Update department data :", Object.fromEntries(formData.entries()));
+            console.log("Update patient data :", Object.fromEntries(formData.entries()));
 
             response = await updatePatient({ data: formData, id });
-
             console.log("Update patient Response: ", response);
 
             toastNotify("Patient updated successfully", "success");
@@ -219,14 +219,14 @@ function PatientUpsert() {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Bloodgroup:</Label>
+                                <Label>BloodGroup:</Label>
                                 <Select
-                                    name="bloodgroup"
-                                    value={patientInputs.bloodgroup}
+                                    name="bloodGroup"
+                                    value={patientInputs.bloodGroup}
                                     onChange={handlePatientInput}
                                 >
                                     <option value="">Select Blood Group</option>
-                                    {bloodgroup.map((bloodgroup) => (
+                                    {bloodgroups.map((bloodgroup) => (
                                         <option key={bloodgroup} value={bloodgroup}>
                                             {bloodgroup}
                                         </option>
@@ -299,8 +299,8 @@ function PatientUpsert() {
                                 <SubmitButton type="submit">
                                     Submit
                                 </SubmitButton>
-                                <BackToProductsButton onClick={() => navigate("/departments")}>
-                                    Back to departments
+                                <BackToProductsButton onClick={() => navigate("/patients")}>
+                                    Back to patients
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>
