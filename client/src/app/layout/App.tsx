@@ -4,17 +4,14 @@ import DepartmentList from '../../features/department/DepartmentList';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
 import DepartmentUpsert from '../../features/department/DepartmentUpsert';
-import PatientDetails from '../../features/patient/Details';
-<<<<<<<<< Temporary merge branch 1
-import Login from '../../features/account/Login';
 import PatientList from '../../features/patient/PatientList';
-import PatientUpsert from '../../features/patient/PatientUpsert';
 import PatientDetails from '../../features/patient/PatientDetails';
-import RoomList from "../../features/rooms/RoomList";
-import RoomDetails from '../../features/rooms/RoomDetails';
+import PatientUpsert from '../../features/patient/PatientUpsert';
+import RoomList from '../../features/rooms/RoomList';
 import RoomUpsert from '../../features/rooms/RoomUpsert';
 import RoomDetails from '../../features/rooms/RoomDetails';
-import RoomUpsert from '../../features/rooms/RoomUpsert';
+import Login from '../../features/account/Login';
+import Register from '../../features/account/Register';
 
 
 function App() {
@@ -38,10 +35,8 @@ function App() {
                     <Route path="/room/:id" element={<RoomDetails />}></Route>
                     <Route path="/room/insert" element={<RoomUpsert />}></Route>
                     <Route path="/room/update/:id" element={<RoomUpsert />}></Route>
-                    <Route path="/room/:id" element={<RoomDetails />}></Route>
-                    <Route path="/roomUpsert" element={<RoomUpsert />}></Route>
-                    <Route path="/roomUpsert/:id" element={<RoomUpsert />}></Route>
->>>>>>>>> Temporary merge branch 2
+                    <Route path="/login" element={<Login />}></Route>
+                    <Route path="/register" element={<Register />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>
