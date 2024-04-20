@@ -19,22 +19,21 @@ namespace Application.Patients
             }
         }
 
-        public class UpdateDoctorCommandHandler(IPatientRepository _patientRepository, IMapper _mapper) : IRequestHandler<UpdatePatientCommand, Result<Unit>>
+        public class UpdatePatientCommandHandler(IPatientRepository _patientRepository, IMapper _mapper) : IRequestHandler<UpdatePatientCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
             {
                 var patient = await _patientRepository.GetByIdAsync(request.Patient.Id);
-                if (patient is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
+                if (patient is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found.");
 
                 _mapper.Map(request.Patient, patient);
                 patient.UpdatedAt = DateTime.Now;
-               
+
                 var result = await _patientRepository.UpdateAsync(patient);
-                if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the patient! Try again.");
+                if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the Patient. Try again!");
 
                 return Result<Unit>.Success(Unit.Value);
             }
         }
-
     }
 }
