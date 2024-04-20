@@ -9,6 +9,7 @@ import DepartmentUpsert from '../../features/department/DepartmentUpsert';
 import PatientDetails from '../../features/patient/Details';
 import Login from '../../features/account/Login';
 import Register from '../../features/account/Register';
+import Details from '../components/Details';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/department/update/:id" element={<DepartmentUpsert />}></Route>
                     <Route path="/login" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
+                    <Route path="/details" element={<Details />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>
