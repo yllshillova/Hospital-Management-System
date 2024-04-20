@@ -46,7 +46,7 @@ function PatientDetails() {
                     <p>Personal Number: {patient.personalNumber}</p>
                     <p>Address: {patient.address}</p>
                     <p>Residence: {patient.residence}</p>
-                    <p>Birthday: {patient.birthday}</p>
+                    <p>Birthday: {new Date(patient.birthday).toLocaleDateString()}</p>
                     <p>BloodGroup: {patient.bloodgroup}</p>
                     <p>Gender: {patient.gender}</p>
                     <p>Email: {patient.email}</p>

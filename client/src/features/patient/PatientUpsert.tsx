@@ -30,8 +30,6 @@ const patientData = {
     gender: "",
     email: "",
     phoneNumber: "",
-    createdAt: "",
-    updatedAt: "",
     isDeleted: false,
     occupation: "",
     allergies: ""
@@ -47,22 +45,20 @@ function PatientUpsert() {
     useEffect(() => {
         if (data) {
             const tempData = {
-                name: data.result.name,
-                lastName: data.result.lastName,
-                parentName: data.result.parentName,
-                personalNumber: data.result.personalNumber,
-                address: data.result.address,
-                residence: data.result.residence,
-                birthday: data.result.birthday,
-                bloodgroup: data.result.bloodgroup,
-                gender: data.result.gender,
-                email: data.result.email,
-                phoneNumber: data.result.phoneNumber,
-                createdAt: data.result.createdAt,
-                updatedAt: data.result.updatedAt,
+                name: data.name,
+                lastName: data.lastName,
+                parentName: data.parentName,
+                personalNumber: data.personalNumber,
+                address: data.address,
+                residence: data.residence,
+                birthday: data.birthday,
+                bloodgroup: data.bloodgroup,
+                gender: data.gender,
+                email: data.email,
+                phoneNumber: data.phoneNumber,
                 isDeleted: data.isDeleted.toLowerCase() === "true",
-                occupation: data.result.occupation,
-                allergies: data.result.allergies,
+                occupation: data.occupation,
+                allergies: data.allergies,
             };
             setPatientInputs(tempData);
         }
@@ -73,6 +69,13 @@ function PatientUpsert() {
         setPatientInputs(tempData);
     }
 
+    function formatDateToInputValue(dateString: string) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // +1 because getMonth() returns 0-11
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    }
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
@@ -88,8 +91,6 @@ function PatientUpsert() {
         formData.append("Gender", patientInputs.gender);
         formData.append("Email", patientInputs.email);
         formData.append("PhoneNumber", patientInputs.phoneNumber);
-        formData.append("CreatedAt", patientInputs.createdAt);
-        formData.append("UpdatedAt", patientInputs.updatedAt);
         formData.append("IsDeleted", patientInputs.isDeleted.toString());
         formData.append("Occupation", patientInputs.occupation);
         formData.append("Allergies", patientInputs.allergies);
@@ -213,7 +214,7 @@ function PatientUpsert() {
                                     type="date"
                                     required
                                     name="birthday"
-                                    value={patientInputs.birthday}
+                                    value={formatDateToInputValue(patientInputs.birthday)}
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
@@ -259,26 +260,6 @@ function PatientUpsert() {
                                     required
                                     name="phoneNumber"
                                     value={patientInputs.phoneNumber}
-                                    onChange={handlePatientInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>CreatedAt:</Label>
-                                <Input
-                                    type="date"
-                                    required
-                                    name="createdAt"
-                                    value={patientInputs.createdAt}
-                                    onChange={handlePatientInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>UpdatedAt:</Label>
-                                <Input
-                                    type="date"
-                                    required
-                                    name="updatedAt"
-                                    value={patientInputs.updatedAt}
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
