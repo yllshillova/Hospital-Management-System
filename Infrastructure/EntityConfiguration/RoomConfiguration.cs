@@ -8,10 +8,10 @@ namespace Infrastructure.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Room> builder)
         {
-            builder.HasOne(x => x.Patient)
-                .WithMany()
-                .HasForeignKey(x => x.PatientId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //builder.HasOne(x => x.Patient)
+            //    .WithMany()
+            //    .HasForeignKey(x => x.PatientId)
+            //    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
