@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+
 const roomApi = createApi({
     reducerPath: "roomSlice",
     baseQuery: fetchBaseQuery({
@@ -42,6 +43,14 @@ const roomApi = createApi({
             }),
             invalidatesTags: ["Rooms"],
         }),
+        //AddPatientToRoom: builder.mutation({
+        //    query: (data) => ({
+        //        url: "addPatientToRoom",
+        //        method: "POST",
+        //        body: data
+        //    }),
+        //    invalidatesTags: ["AddPatientToRoom"],
+        //}),
     }),
 });
 

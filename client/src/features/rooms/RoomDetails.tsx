@@ -123,7 +123,7 @@ function RoomDetails() {
             <SidePanel />
             <OrdersTable>
                 <TableNav>
-                    <TableHeader>Patients List in room</TableHeader>
+                    <TableHeader>Patients List in room </TableHeader>
                     <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/addPatientToRoom")}>
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>

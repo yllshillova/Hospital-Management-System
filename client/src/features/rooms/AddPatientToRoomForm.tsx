@@ -7,14 +7,21 @@ import { Header, SidePanel } from "../../app/layout";
 import { BackToProductsButton, Form, FormContainer, FormGroup, Input, Label, OuterContainer, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 
 const initialFormData = {
-    patientId: "",
-    roomId: ""
+    //patientId: "",
+    //roomId: "",
+    patientName: "",
+    nrDhomes:""
 };
 
 function AddPatientToRoomForm() {
-    const [formData, setFormData] = useState(initialFormData);
+    const [formData, setFormData] = useState({ ...initialFormData/*, nrDhomes*/ });
     //const [addPatientToRoom, { isLoading }] = useAddPatientToRoomMutation();
     const navigate = useNavigate();
+    //const { id:nrDhomes } = useParams(); //merr id e dhomes nga url
+
+    //useEffect(() => {
+    //    setFormData((prevData) => ({ ...prevData, nrDhomes })); // Përditësimi i numrit të dhomës në formë kur ndryshon ID-ja e dhomës
+    //}, [nrDhomes]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -53,24 +60,39 @@ function AddPatientToRoomForm() {
                         <Title>Add Patient to Room</Title>
                         <Form method="post" >{/*onSubmit={handleSubmit}*/}
                             <FormGroup>
-                                <Label>Patient ID:</Label>
+                                <Label>Patient Name:</Label>
                                 <Input
                                     type="text"
                                     required
-                                    name="patientId"
-                                    value={formData.patientId}
+                                    name="patientName"
+                                    value={formData.patientName}
                                     onChange={handleInputChange}
                                 />
+                                {/*<Label>Patient ID:</Label>*/}
+                                {/*<Input*/}
+                                {/*    type="text"*/}
+                                {/*    required*/}
+                                {/*    name="patientId"*/}
+                                {/*    value={formData.patientId}*/}
+                                {/*    onChange={handleInputChange}*/}
+                                {/*/>*/}
                             </FormGroup>
                             <FormGroup>
-                                <Label>Room ID:</Label>
+                                <Label>Room Number:</Label>
                                 <Input
                                     type="text"
-                                    required
-                                    name="roomId"
-                                    value={formData.roomId}
+                                    name="nrDhomes"
+                                    value={formData.nrDhomes}
                                     onChange={handleInputChange}
                                 />
+                                {/*<Label>Room ID:</Label>*/}
+                                {/*<Input*/}
+                                {/*    type="text"*/}
+                                {/*    required*/}
+                                {/*    name="roomId"*/}
+                                {/*    value={formData.roomId}*/}
+                                {/*    onChange={handleInputChange}*/}
+                                {/*/>*/}
                             </FormGroup>
                             <SubmitButton type="submit">
                                 Add Patient to Room
