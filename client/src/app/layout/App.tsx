@@ -12,6 +12,7 @@ import RoomUpsert from '../../features/rooms/RoomUpsert';
 import RoomDetails from '../../features/rooms/RoomDetails';
 import Login from '../../features/account/Login';
 import Register from '../../features/account/Register';
+import AddPatientToRoomForm from '../../features/rooms/AddPatientToRoomForm';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                     <Route path="/room/update/:id" element={<RoomUpsert />}></Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/register" element={<Register />}></Route>
+                    <Route path="/addPatientToRoom" element={<AddPatientToRoomForm />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>
