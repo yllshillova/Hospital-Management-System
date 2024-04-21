@@ -10,30 +10,30 @@ import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import { useGetPatientsQuery } from "../../app/APIs/patientApi";
+//import { useEffect, useState } from "react";
+//import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 import toastNotify from "../../app/helpers/toastNotify";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
 function RoomList() {
-    //const { data, isLoading, error } = useGetRoomsQuery(null);
-    const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomsQuery(null);
-    const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); 
+    const { data, isLoading, error } = useGetRoomsQuery(null);
+    /*const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomsQuery(null);*/
+   /* const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); */
     const navigate = useNavigate();
     const location = useLocation();
-    const [rooms, setRooms] = useState<Room[]>([]);
+    /*const [rooms, setRooms] = useState<Room[]>([]);*/
     const [deleteRoom] = useDeleteRoomMutation();
 
 
-    useEffect(() => {
-        if (roomsData && patientsData) {
-            const roomsWithPatients = roomsData.map((room: Room) => ({
-                ...room,
-                patientName: patientsData.find((patient: { id: number; }) => patient.id === room.patientId)?.name || 'Unknown', // Use patient's name or 'Unknown' if not found
-            }));
-            setRooms(roomsWithPatients);
-        }
-    }, [roomsData, patientsData]);
+    //useEffect(() => {
+    //    if (roomsData && patientsData) {
+    //        const roomsWithPatients = roomsData.map((room: Room) => ({
+    //            ...room,
+    //            patientName: patientsData.find((patient: { id: number; }) => patient.id === room.patientId)?.name || 'Unknown', // Use patient's name or 'Unknown' if not found
+    //        }));
+    //        setRooms(roomsWithPatients);
+    //    }
+    //}, [roomsData, patientsData]);
 
 
     let content;
@@ -54,7 +54,7 @@ function RoomList() {
         const result = await deleteRoom(id);
 
         if ('data' in result) {
-            toastNotify("Department Deleted Successfully", "success");
+            toastNotify("Room Deleted Successfully", "success");
         }
         else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
@@ -68,16 +68,17 @@ function RoomList() {
     };
  
 
-    if (roomsLoading || patientsLoading) {
+    if (isLoading /*|| patientsLoading*/) {
         content = <MainLoader />;
-    } else if (roomsError || patientsError) {
+    } else if (error/*roomsError || patientsError*/) {
         content = <div>Error loading data.</div>;
     } 
     else {
-        content = rooms.map((room: Room) => {
+        content = data.map((room: Room) => {
             return (
                 <tbody key={room.id}>
                     <TableRow>
+                        <TableCell>{room.nrDhomes}</TableCell>
                         <TableCell>{room.capacity}</TableCell>
                         <TableCell>{room.isFree === false ? "Occupied" : "Free"}</TableCell>
                        
@@ -113,6 +114,7 @@ function RoomList() {
                 <Table>
                     <thead>
                         <TableRow>
+                            <TableHeaderCell>NrDhomes</TableHeaderCell>
                             <TableHeaderCell>Capacity</TableHeaderCell>
                             <TableHeaderCell>Status</TableHeaderCell>
                           

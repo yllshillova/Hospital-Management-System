@@ -23,7 +23,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRoom(RoomDto Room)
+        public async Task<IActionResult> CreateRoom([FromForm] RoomDto Room)
         {
             return HandleResult(await Mediator.Send(new CreateRoomCommand(Room)));
         }

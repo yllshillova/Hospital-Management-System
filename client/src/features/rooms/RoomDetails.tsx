@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useLocation,useNavigate, useParams } from "react-router-dom";
-import { useGetPatientByIdQuery } from "../../app/APIs/patientApi"; // Importimi i query për të marrë të dhëna të pacientit
+//import { useGetPatientByIdQuery } from "../../app/APIs/patientApi"; // Importimi i query për të marrë të dhëna të pacientit
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useGetRoomByIdQuery } from "../../app/APIs/roomApi";
@@ -15,7 +15,7 @@ function isValidGuid(guid: string): boolean {
 function RoomDetails() {
     const { id } = useParams();
     const { data, isLoading ,isError ,error} = useGetRoomByIdQuery(id);
-    const { data: patientData, isLoading: patientLoading } = useGetPatientByIdQuery(data?.patientId); // Marrja e të dhënave të pacientit nga ID-ja e pacientit në departament
+   /* const { data: patientData, isLoading: patientLoading } = useGetPatientByIdQuery(data?.patientId); */// Marrja e të dhënave të pacientit nga ID-ja e pacientit në departament
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -31,11 +31,11 @@ function RoomDetails() {
 
 
 
-    if (isLoading || patientLoading) return <MainLoader />;
+    if (isLoading /*|| patientLoading*/) return <MainLoader />;
 
     if (data) {
         const room = data;
-        const patientName = patientData?.name || 'Unknown'; 
+       /* const patientName = patientData?.name || 'Unknown'; */
 
         return (
             <>
@@ -44,7 +44,7 @@ function RoomDetails() {
                     <p>Id: {room.id}</p>
                     <p>Capacity: {room.capacity}</p>
                     <p>Status: {room.isFree === false ? "Occupied" : "Free"}</p>
-                    <p>Patient Name: {patientName}</p> {/* Shfaq emrin e pacientit */}
+                    {/*<p>Patient Name: {patientName}</p> */}{/* Shfaq emrin e pacientit */}
                     <p>Created At: {new Date(room.createdAt).toLocaleDateString()}</p>
                     <p>Updated At: {new Date(room.updatedAt).toLocaleDateString()}</p>
                 </div>
