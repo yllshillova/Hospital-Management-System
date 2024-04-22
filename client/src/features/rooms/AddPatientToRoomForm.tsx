@@ -15,7 +15,7 @@ const initialFormData = {
 
 function AddPatientToRoomForm() {
     const [formData, setFormData] = useState({ ...initialFormData/*, nrDhomes*/ });
-    //const [addPatientToRoom, { isLoading }] = useAddPatientToRoomMutation();
+    //const [addPatientToRoom, { isLoading }] = useAddPatientToRoomMutation(); 
     const navigate = useNavigate();
     //const { id:nrDhomes } = useParams(); //merr id e dhomes nga url
 

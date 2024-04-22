@@ -1,10 +1,12 @@
 ﻿using Application.Rooms;
 using Microsoft.AspNetCore.Mvc;
 using static Application.Rooms.Create;
+using static Application.Rooms.CreateRoomPatient;
 using static Application.Rooms.Delete;
 using static Application.Rooms.Details;
 using static Application.Rooms.Edit;
 using static Application.Rooms.List;
+using static Application.Rooms.GetRoomPatients;
 
 namespace API.Controllers
 {
@@ -39,6 +41,17 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteRoom(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeleteRoomCommand(Id)));
+        }
+        [HttpPost("AddPatientsInRoom")]
+        public async Task<IActionResult> AddPatientsInRoom(RoomPatientDto RoomPatient)
+        {
+            return HandleResult(await Mediator.Send(new CreateRoomPatientCommand(RoomPatient)));
+        }
+
+        [HttpGet("GetRoomPatients{Id}")]
+        public async Task<IActionResult> GetRoomPatients(Guid Id)
+        {
+            return HandleResult(await Mediator.Send(new GetRoomPatientsByIdQuery(Id)));
         }
     }
 }

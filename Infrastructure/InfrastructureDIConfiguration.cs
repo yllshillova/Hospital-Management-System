@@ -31,6 +31,7 @@ namespace Infrastructure
             services.AddScoped<IEmergencyContactRepository, EmergencyContactRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
+            services.AddScoped<IRoomPatientRepository, RoomPatientRepository>();
 
         }
     }
