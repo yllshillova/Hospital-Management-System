@@ -1,14 +1,34 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
-import { Header, SidePanel } from "../../app/layout";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
-import { useCreateDoctorMutation, useGetDoctorByIdQuery, useUpdateDoctorMutation } from "../../app/APIs/doctorApi";
+import { useCreateDoctorMutation, useUpdateDoctorMutation } from "../../app/APIs/doctorApi";
 import { SD_Genders } from "../../app/utility/SD";
+import { Header, SidePanel } from '../../app/layout';
+import useErrorHandler from '../../app/helpers/useErrorHandler';
 
-const doctorData = {
+interface DoctorData {
+    name: string;
+    lastName: string;
+    specialization: string;
+    address: string;
+    residence: string;
+    birthday: string;
+    gender: string;
+    email: string;
+    isDeleted: boolean;
+    departmentId: string;
+}
+
+interface DoctorFormProps {
+    id?: string;
+    data?: DoctorData;
+}
+
+const doctorData: DoctorData = {
     name: "",
     lastName: "",
     specialization: "",
@@ -21,41 +41,26 @@ const doctorData = {
     departmentId: ""
 };
 
+const genders = [SD_Genders.Male, SD_Genders.Female];
 
-const genders = [
-    SD_Genders.Male,
-    SD_Genders.Female
-];
-
-
-
-
-function DoctorUpsert() {
-    const { id } = useParams();
-    const [doctorInputs, setDoctorInputs] = useState(doctorData);
+function DoctorForm({ id, data }: DoctorFormProps) {
+    const [doctorInputs, setDoctorInputs] = useState<DoctorData>(data || doctorData);
     const [createDoctor] = useCreateDoctorMutation();
     const [updateDoctor] = useUpdateDoctorMutation();
-    const { data } = useGetDoctorByIdQuery(id);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [errorMessages, setErrorMessages] = useState<string[]>([]); // State for error messages
 
-    useEffect(() => {
-        if (data) {
-            const tempData = {
-                name: data.name,
-                lastName: data.lastName,
-                specialization: data.specialization,
-                address: data.address,
-                residence: data.residence,
-                birthday: data.birthday,
-                gender: data.gender,
-                email: data.email,
-                isDeleted: data.isDeleted.toLowerCase() === "true",
-                departmentId: data.departmentId,
-            };
-            setDoctorInputs(tempData);
+    const handleDoctorInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+        const tempData = inputHelper(e, doctorInputs);
+        if (e.target.name === 'birthday') {
+            const formattedBirthday = formatBirthday(tempData.birthday);
+            if (formattedBirthday !== undefined) {
+                tempData.birthday = formattedBirthday;
+            }
         }
-    }, [data]);
+        setDoctorInputs(tempData);
+    };
 
     const formatBirthday = (birthday: string | Date): string | undefined => {
         if (birthday) {
@@ -68,64 +73,51 @@ function DoctorUpsert() {
         return undefined;
     };
 
-   const handleDoctorInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const tempData = inputHelper(e, doctorInputs);
-    
-    if (e.target.name === 'birthday') {
-        const formattedBirthday = formatBirthday(tempData.birthday);
-        if (formattedBirthday !== undefined) {
-            tempData.birthday = formattedBirthday;
-        }
-        //TODO: to validate the date with fluent validation
-        console.log("Invalid birthday date!")
-    }
-    
-    setDoctorInputs(tempData);
-};
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMessages([]); // Clear previous error messages
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setLoading(true);
-        const formData = new FormData();
+    const formData = new FormData();
 
-        formData.append("Name", doctorInputs.name);
-        formData.append("LastName", doctorInputs.lastName);
-        formData.append("Specialization", doctorInputs.specialization);
-        formData.append("Address", doctorInputs.address);
-        formData.append("Residence", doctorInputs.residence);
-        formData.append("Birthday", doctorInputs.birthday);
-        formData.append("Gender", doctorInputs.gender);
-        formData.append("Email", doctorInputs.email);
-        formData.append("IsDeleted", doctorInputs.isDeleted.toString());
-        formData.append("DepartmentId", doctorInputs.departmentId);
+    formData.append("Name", doctorInputs.name);
+    formData.append("LastName", doctorInputs.lastName);
+    formData.append("Specialization", doctorInputs.specialization);
+    formData.append("Address", doctorInputs.address);
+    formData.append("Residence", doctorInputs.residence);
+    formData.append("Birthday", doctorInputs.birthday);
+    formData.append("Gender", doctorInputs.gender);
+    formData.append("Email", doctorInputs.email);
+    formData.append("IsDeleted", doctorInputs.isDeleted.toString());
+    formData.append("DepartmentId", doctorInputs.departmentId);
 
+    const currentLocation = window.location.pathname; // Capture the current URL
 
-        let response;
+    if (id) {
+        formData.append("Id", id);
+        const response = await updateDoctor({ data: formData, id });
 
-
-        if (id) {
-            formData.append("Id", id);
-            console.log("Update department data :", Object.fromEntries(formData.entries()));
-
-            response = await updateDoctor({ data: formData, id });
-
-            console.log("Update department Response: ", response);
-
-            toastNotify("Department updated successfully", "success");
+        if (response.error) {
+            // Use error handler
+            useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
         } else {
-            console.log("Create Department Data:", Object.fromEntries(formData.entries()));
-            response = await createDoctor(formData);
-            console.log("Create Department response : ", response);
-            toastNotify("Department created successfully", "success");
-        }
-
-        if (response) {
-            setLoading(false);
+            toastNotify("Doctor updated successfully", "success");
             navigate('/doctors');
         }
+    } else {
+        const response = await createDoctor(formData);
 
-        setLoading(false);
+        if (response.error) {
+            // Use error handler
+            useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
+        } else {
+            toastNotify("Doctor created successfully", "success");
+            navigate('/doctors');
+        }
     }
+
+    setLoading(false);
+};
 
     const toggleIsDeleted = () => {
         setDoctorInputs((prevInputs) => ({
@@ -133,7 +125,6 @@ function DoctorUpsert() {
             isDeleted: !prevInputs.isDeleted,
         }));
     };
-
 
     return (
         <>
@@ -143,9 +134,20 @@ function DoctorUpsert() {
                 <Container>
                     <FormContainer >
                         {loading && <MainLoader />}
-                        {<Title>
+                        <Title>
                             {id ? "Edit Doctor" : "Add Doctor"}
-                        </Title>}
+                        </Title>
+
+                        {/* Display error messages */}
+                        {errorMessages.length > 0 && (
+                            <div style={{ color: 'red' }}>
+                                <ul>
+                                    {errorMessages.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
 
                         <Form
                             method="post"
@@ -156,7 +158,6 @@ function DoctorUpsert() {
                                 <Label>Name:</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="name"
                                     value={doctorInputs.name}
                                     onChange={handleDoctorInput}
@@ -166,7 +167,6 @@ function DoctorUpsert() {
                                 <Label>Last Name:</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="lastName"
                                     value={doctorInputs.lastName}
                                     onChange={handleDoctorInput}
@@ -176,16 +176,15 @@ function DoctorUpsert() {
                                 <Label>Specialization:</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="specialization"
                                     value={doctorInputs.specialization}
                                     onChange={handleDoctorInput}
                                 />
-                            </FormGroup><FormGroup>
+                            </FormGroup>
+                            <FormGroup>
                                 <Label>Address:</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="address"
                                     value={doctorInputs.address}
                                     onChange={handleDoctorInput}
@@ -195,7 +194,6 @@ function DoctorUpsert() {
                                 <Label>Residence:</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="residence"
                                     value={doctorInputs.residence}
                                     onChange={handleDoctorInput}
@@ -205,7 +203,6 @@ function DoctorUpsert() {
                                 <Label>Birthday:</Label>
                                 <Input
                                     type="date"
-                                    required
                                     name="birthday"
                                     value={formatBirthday(doctorInputs.birthday)}
                                     onChange={handleDoctorInput}
@@ -230,7 +227,6 @@ function DoctorUpsert() {
                                 <Label>Email:</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="email"
                                     value={doctorInputs.email}
                                     onChange={handleDoctorInput}
@@ -240,7 +236,6 @@ function DoctorUpsert() {
                                 <Label>DepartmentId:</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="departmentId"
                                     value={doctorInputs.departmentId}
                                     onChange={handleDoctorInput}
@@ -255,10 +250,9 @@ function DoctorUpsert() {
                                         checked={doctorInputs.isDeleted}
                                         onChange={toggleIsDeleted}
                                     />
-
                                 </Label>
                             </FormGroup>
-                           
+
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit
@@ -275,5 +269,4 @@ function DoctorUpsert() {
     );
 }
 
-
-export default DoctorUpsert;
+export default DoctorForm;

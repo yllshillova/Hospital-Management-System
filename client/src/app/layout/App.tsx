@@ -11,8 +11,9 @@ import RoomList from "../../features/rooms/RoomList";
 import RoomUpsert from '../../features/rooms/RoomUpsert';
 import DoctorList from '../../features/doctors/DoctorList';
 import DoctorDetails from '../../features/doctors/DoctorDetails';
-import DoctorUpsert from '../../features/doctors/DoctorUpsert';
+import DoctorInsert from '../../features/doctors/DoctorInsert';
 import RoomDetails from '../../features/rooms/RoomDetails';
+import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 
 
 function App() {
@@ -32,8 +33,8 @@ function App() {
                     <Route path="/department/update/:id" element={<DepartmentUpsert />}></Route>
                     <Route path="/doctors" element={<DoctorList />}></Route>
                     <Route path="/doctor/:id" element={<DoctorDetails />}></Route>
-                    <Route path="/doctor/insert" element={<DoctorUpsert />}></Route>
-                    <Route path="/doctor/update/:id" element={<DoctorUpsert />}></Route>
+                    <Route path="/doctor/insert" element={<DoctorInsert />}></Route>
+                    <Route path="/doctor/update/:id" element={<DoctorUpdate />}></Route>
                     <Route path="/rooms" element={<RoomList />}></Route>
                     <Route path="/rooms" element={<RoomList />}></Route>
                     <Route path="/room/:id" element={<RoomDetails />}></Route>

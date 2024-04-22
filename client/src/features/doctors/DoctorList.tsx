@@ -31,7 +31,6 @@ function DoctorList() {
         else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
             const { status } = error;
-
             if (status) {
                 useErrorHandler(error, navigate, location.pathname);
             }
@@ -54,10 +53,10 @@ function DoctorList() {
                         <TableCell>{doctor.lastName} </TableCell>
                         <TableCell>{doctor.email} </TableCell>
                         <TableCell>{doctor.specialization} </TableCell>
-                        <TableCell>{doctor.residence} </TableCell>
-                        <TableCell>{doctor.address} </TableCell>
-                        <TableCell>{doctor.gender} </TableCell>
-                        <TableCell>{new Date(doctor.birthday).toLocaleDateString()}</TableCell>
+                        {/*<TableCell>{doctor.residence} </TableCell>*/}
+                        {/*<TableCell>{doctor.address} </TableCell>*/}
+                        {/*<TableCell>{doctor.gender} </TableCell>*/}
+                        {/*<TableCell>{new Date(doctor.birthday).toLocaleDateString()}</TableCell>*/}
                         <TableCell>{doctor.departmentId} </TableCell>
                         <TableCell>{new Date(doctor.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(doctor.updatedAt).toLocaleDateString()}</TableCell>
@@ -97,10 +96,10 @@ function DoctorList() {
                             <TableHeaderCell>Last Name</TableHeaderCell>
                             <TableHeaderCell>Email</TableHeaderCell>
                             <TableHeaderCell>Specialization</TableHeaderCell>
-                            <TableHeaderCell>Residence</TableHeaderCell>
-                            <TableHeaderCell>Address</TableHeaderCell>
-                            <TableHeaderCell>Gender</TableHeaderCell>
-                            <TableHeaderCell>Birthday</TableHeaderCell>
+                            {/*<TableHeaderCell>Residence</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Address</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Gender</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Birthday</TableHeaderCell>*/}
                             <TableHeaderCell>DepartmentId</TableHeaderCell>
                             <TableHeaderCell>CreatedAt</TableHeaderCell>
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
