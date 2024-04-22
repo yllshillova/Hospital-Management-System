@@ -24,8 +24,21 @@ function SidePanel() {
     //}
 
     const handlePatientList = () => {
-        navigate('/PatientList');
+        navigate('/patients');
     }
+
+    const handleDepartmentsList = () => {
+        navigate('/departments');
+    }
+
+    const handleRoomsList = () => {
+        navigate('/rooms');
+    }
+
+    const handleDoctorsList = () => {
+        navigate('/doctors');
+    }
+
 
     //const handleAllOrders = () => {
     //    navigate('/AllOrders');
@@ -45,12 +58,12 @@ function SidePanel() {
     //];
 
     const menuItems = [
-        { icon: faUserDoctor, label: 'Users' },
+        { icon: faUserDoctor, label: 'Doctors', onClick: handleDoctorsList },
         { icon: faHospitalUser, label: 'Patients', onClick: handlePatientList },
-        { icon: faFolderTree, label: 'Departments' },
+        { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
         { icon: faCalendarDays, label: 'Appointments' },
         { icon: faBookMedical, label: 'Visits' },
-        { icon: faBedPulse, label: 'Rooms' },
+        { icon: faBedPulse, label: 'Rooms', onClick: handleRoomsList },
         { icon: faCog, label: 'Settings' },
         { icon: faSignOutAlt, label: 'Logout' },
 

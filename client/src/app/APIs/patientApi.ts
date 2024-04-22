@@ -1,9 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const patientApi = createApi({
-    reducerPath: "patientApi",
+    reducerPath: "patientSlice",
     baseQuery: fetchBaseQuery({
-        //defined the endpoint to apend the menu item here
-        baseUrl: "https://localhost:3000/api/", //to navigate to the endpoint ,
+        baseUrl: "http://localhost:5000/api/",
 
         // logic when making API request , we have to send a token back to the request
         //prepareHeaders: (headers: Headers, api) => {
@@ -15,7 +14,7 @@ const patientApi = createApi({
     endpoints: (builder) => ({
         getPatients: builder.query({
             query: () => ({
-                url: "patient",
+                url: "patients",
             }),
             providesTags: ["Patients"],
         }),
@@ -28,7 +27,7 @@ const patientApi = createApi({
         //for create
         createPatient: builder.mutation({
             query: (data) => ({
-                url: "patient",
+                url: "patients",
                 method: "POST",
                 body: data,
             }),
@@ -37,7 +36,7 @@ const patientApi = createApi({
         //for update
         updatePatient: builder.mutation({
             query: ({ data, id }) => ({
-                url: "patient/" + id,
+                url: "patients/" + id,
                 method: "PUT",
                 body: data,
             }),
@@ -45,7 +44,7 @@ const patientApi = createApi({
         }),
         deletePatient: builder.mutation({
             query: (id) => ({
-                url: "patient/" + id,
+                url: "patients/" + id,
                 method: "DELETE",
             }),
             invalidatesTags: ["Patients"],

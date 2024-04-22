@@ -16,24 +16,24 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetDoctorsQuery()));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetDoctorById(Guid id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetDoctorById(Guid Id)
         {
-            return HandleResult(await Mediator.Send(new GetDoctorByIdQuery(id)));
+            return HandleResult(await Mediator.Send(new GetDoctorByIdQuery(Id)));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDoctor(DoctorDto Doctor)
+        public async Task<IActionResult> CreateDoctor([FromForm] DoctorDto Doctor)
         {
             return HandleResult(await Mediator.Send(new CreateDoctorCommand(Doctor)));
         }
-        [HttpPut]
-        public async Task<IActionResult> EditDoctor(Guid Id,DoctorDto Doctor)
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> EditDoctor(Guid Id, [FromForm] DoctorDto Doctor)
         {
             Doctor.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateDoctorCommand(Doctor)));
         }
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteDoctor(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeleteDoctorCommand(Id)));

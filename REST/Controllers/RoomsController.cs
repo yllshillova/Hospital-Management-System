@@ -16,26 +16,26 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetRoomsQuery()));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetRoomById(Guid Id, RoomDto Room)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetRoomById(Guid Id)
         {
             return HandleResult(await Mediator.Send(new GetRoomByIdQuery(Id)));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRoom(RoomDto Room)
+        public async Task<IActionResult> CreateRoom([FromForm]RoomDto Room)
         {
             return HandleResult(await Mediator.Send(new CreateRoomCommand(Room)));
         }
 
-        [HttpPut]
-        public async Task<IActionResult> EditRoom(Guid Id, RoomDto Room)
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> EditRoom(Guid Id,[FromForm] RoomDto Room)
         {
             Room.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateRoomCommand(Room)));
         }
 
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteRoom(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeleteRoomCommand(Id)));

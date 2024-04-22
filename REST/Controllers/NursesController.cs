@@ -16,10 +16,10 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetNursesQuery()));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetNurseById(Guid id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetNurseById(Guid Id)
         {
-            return HandleResult(await Mediator.Send(new GetNurseByIdQuery(id)));
+            return HandleResult(await Mediator.Send(new GetNurseByIdQuery(Id)));
         }
 
         [HttpPost]
@@ -27,13 +27,13 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new CreateNurseCommand(Nurse)));
         }
-        [HttpPut]
+        [HttpPut("{Id}")]
         public async Task<IActionResult> EditNurse(Guid Id, NurseDto Nurse)
         {
             Nurse.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateNurseCommand(Nurse)));
         }
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteNurse(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeleteNurseCommand(Id)));

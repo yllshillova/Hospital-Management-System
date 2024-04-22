@@ -8,3 +8,8 @@ export enum SD_Bloodgroups {
     AB_Positive = "AB+",
     AB_Negative = "AB-",
 }
+
+export enum SD_Genders {
+    Male = "Male",
+    Female="Female"
+}

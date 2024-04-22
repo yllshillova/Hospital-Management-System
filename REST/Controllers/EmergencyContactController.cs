@@ -16,10 +16,10 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetEmergencyContactsQuery()));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetEmergencyContactById(Guid id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetEmergencyContactById(Guid Id)
         {
-            return HandleResult(await Mediator.Send(new GetEmergencyContactByIdQuery(id)));
+            return HandleResult(await Mediator.Send(new GetEmergencyContactByIdQuery(Id)));
         }
 
         [HttpPost]

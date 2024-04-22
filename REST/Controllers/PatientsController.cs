@@ -1,5 +1,4 @@
-﻿using Application.Doctors;
-using Application.Patients;
+﻿using Application.Patients;
 using Microsoft.AspNetCore.Mvc;
 using static Application.Patients.Create;
 using static Application.Patients.Delete;
@@ -17,28 +16,29 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetPatientsQuery()));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPatientById(Guid id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetPatientById(Guid Id)
         {
-            return HandleResult(await Mediator.Send(new GetPatientByIdQuery(id)));
+            return HandleResult(await Mediator.Send(new GetPatientByIdQuery(Id)));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePatient(PatientDto Patient)
+        public async Task<IActionResult> CreatePatient([FromForm] PatientDto Patient)
         {
             return HandleResult(await Mediator.Send(new CreatePatientCommand(Patient)));
         }
-        [HttpPut]
-        public async Task<IActionResult> EditPatient(Guid Id, PatientDto Patient)
+
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> EditPatient(Guid Id, [FromForm] PatientDto Patient)
         {
             Patient.Id = Id;
             return HandleResult(await Mediator.Send(new UpdatePatientCommand(Patient)));
         }
-        [HttpDelete]
-        public async Task<IActionResult> DeleteDoctor(Guid Id)
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeletePatient(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeletePatientCommand(Id)));
         }
-
     }
 }

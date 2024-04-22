@@ -6,15 +6,14 @@
      personalNumber: string;
      address: string;
      residence: string;
-     birthday: string;
+     birthday: Date;
      bloodgroup: string;
      gender: string;
      email: string;
-     phonenumber: string;
+     phoneNumber: string;
      createdAt: Date;
      updatedAt: Date;
      isDeleted: boolean;
      occupation: string;
      allergies: string;
-
 }

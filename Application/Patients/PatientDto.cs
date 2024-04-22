@@ -18,7 +18,7 @@ namespace Application.Patients
         public string PhoneNumber { get; set; }
         public string Occupation { get; set; }
         public string? Allergies { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public string IsDeleted { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
     }
 }

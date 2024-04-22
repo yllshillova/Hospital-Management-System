@@ -18,10 +18,10 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetAppointmentsQuery()));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAppointmentById(Guid id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetAppointmentById(Guid Id)
         {
-            return HandleResult(await Mediator.Send(new GetAppointmentByIdQuery(id)));
+            return HandleResult(await Mediator.Send(new GetAppointmentByIdQuery(Id)));
         }
 
         [HttpPost]
@@ -30,14 +30,14 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new CreateAppointmentCommand(Appointment)));
         }
 
-        [HttpPut]
+        [HttpPut("{Id}")]
         public async Task<IActionResult> EditAppointment(Guid Id, AppointmentDto Appointment)
         {
             Appointment.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateAppointmentCommand(Appointment)));
         }
 
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteAppointment(Guid Id)
         {
             return HandleResult(await Mediator.Send(new DeleteAppointmentCommand(Id)));
