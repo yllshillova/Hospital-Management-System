@@ -15,6 +15,7 @@
   <ItemGroup>
     <Folder Include="public\" />
     <Folder Include="src\app\APIs\" />
+    <Folder Include="src\app\components\" />
     <Folder Include="src\features\account\" />
   </ItemGroup>
 </Project>

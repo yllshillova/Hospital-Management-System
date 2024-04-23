@@ -10,7 +10,6 @@ import PatientList from '../../features/patient/PatientList';
 import PatientUpsert from '../../features/patient/PatientUpsert';
 import PatientDetails from '../../features/patient/PatientDetails';
 
-
 function App() {
 
     return (
