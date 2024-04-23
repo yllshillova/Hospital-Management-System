@@ -60,5 +60,5 @@ export const {
     useUpdatePatientMutation,
     useDeletePatientMutation
 } = patientApi;
- 
+
 export default patientApi;
