@@ -14,7 +14,9 @@ import DoctorDetails from '../../features/doctors/DoctorDetails';
 import DoctorInsert from '../../features/doctors/DoctorInsert';
 import RoomDetails from '../../features/rooms/RoomDetails';
 import DoctorUpdate from '../../features/doctors/DoctorUpdate';
-
+import Login from '../../features/account/Login';
+import Register from '../../features/account/Register';
+import Details from '../components/Details';
 
 function App() {
 
@@ -40,6 +42,9 @@ function App() {
                     <Route path="/room/:id" element={<RoomDetails />}></Route>
                     <Route path="/room/insert" element={<RoomUpsert />}></Route>
                     <Route path="/room/update/:id" element={<RoomUpsert />}></Route>
+                    <Route path="/login" element={<Login/>}></Route>
+                    <Route path="/register" element={<Register />}></Route>
+                    <Route path="/details" element={<Details />}></Route>
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>
