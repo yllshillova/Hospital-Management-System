@@ -1,5 +1,7 @@
 //import Patient from "./Patient";
 
+import RoomPatient from "./RoomPatient";
+
 export default interface Room {
     id: number;
     capacity: number;
@@ -10,4 +12,5 @@ export default interface Room {
     createdAt: Date;
     updatedAt: Date;
     nrDhomes: number;
+    roomPatients: RoomPatient[];
 }
