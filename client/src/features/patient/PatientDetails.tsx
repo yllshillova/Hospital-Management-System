@@ -36,7 +36,7 @@ function PatientDetails() {
 
     if (data) {
         const patient = data;
-        const statusLabel = patient.isDeleted ?
+        const statusLabel = patient.isDeleted === "True" ?
             <label style={{ fontWeight: "bold", color: "#DC143C" }}>Passive </label> :
             <label style={{ fontWeight: "bold", color: "#009F6B" }}>Active </label>;
         return (
