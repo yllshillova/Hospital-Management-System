@@ -8,7 +8,7 @@ import { Header, SidePanel } from "../../app/layout";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, Select, FormGroup, Input, Label, OuterContainer, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { SD_Bloodgroups } from "../../app/utility/SD";
 
-const bloodgroup = [
+const bloodgroups = [
     SD_Bloodgroups.O_Positive,
     SD_Bloodgroups.O_Negative,
     SD_Bloodgroups.A_Positive,
@@ -26,12 +26,10 @@ const patientData = {
     address: "",
     residence: "",
     birthday: "",
-    bloodgroup: "",
+    bloodGroup: "",
     gender: "",
     email: "",
     phoneNumber: "",
-    createdAt: "",
-    updatedAt: "",
     isDeleted: false,
     occupation: "",
     allergies: ""
@@ -47,23 +45,22 @@ function PatientUpsert() {
     useEffect(() => {
         if (data) {
             const tempData = {
-                name: data.result.name,
-                lastName: data.result.lastName,
-                parentName: data.result.parentName,
-                personalNumber: data.result.personalNumber,
-                address: data.result.address,
-                residence: data.result.residence,
-                birthday: data.result.birthday,
-                bloodgroup: data.result.bloodgroup,
-                gender: data.result.gender,
-                email: data.result.email,
-                phoneNumber: data.result.phoneNumber,
-                createdAt: data.result.createdAt,
-                updatedAt: data.result.updatedAt,
+                name: data.name,
+                lastName: data.lastName,
+                parentName: data.parentName,
+                personalNumber: data.personalNumber,
+                address: data.address,
+                residence: data.residence,
+                birthday: data.birthday,
+                bloodGroup: data.bloodGroup,
+                gender: data.gender,
+                email: data.email,
+                phoneNumber: data.phoneNumber,
                 isDeleted: data.isDeleted.toLowerCase() === "true",
-                occupation: data.result.occupation,
-                allergies: data.result.allergies,
+                occupation: data.occupation,
+                allergies: data.allergies,
             };
+            console.log("Blood Group:", data.bloodgroup);
             setPatientInputs(tempData);
         }
     }, [data]);
@@ -73,6 +70,13 @@ function PatientUpsert() {
         setPatientInputs(tempData);
     }
 
+    function formatDateToInputValue(dateString: string) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    }
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
@@ -84,12 +88,10 @@ function PatientUpsert() {
         formData.append("Address", patientInputs.address);
         formData.append("Residence", patientInputs.residence);
         formData.append("Birthday", patientInputs.birthday);
-        formData.append("BloodGroup", patientInputs.bloodgroup);
+        formData.append("BloodGroup", patientInputs.bloodGroup);
         formData.append("Gender", patientInputs.gender);
         formData.append("Email", patientInputs.email);
         formData.append("PhoneNumber", patientInputs.phoneNumber);
-        formData.append("CreatedAt", patientInputs.createdAt);
-        formData.append("UpdatedAt", patientInputs.updatedAt);
         formData.append("IsDeleted", patientInputs.isDeleted.toString());
         formData.append("Occupation", patientInputs.occupation);
         formData.append("Allergies", patientInputs.allergies);
@@ -99,10 +101,9 @@ function PatientUpsert() {
 
         if (id) {
             formData.append("Id", id);
-            console.log("Update department data :", Object.fromEntries(formData.entries()));
+            console.log("Update patient data :", Object.fromEntries(formData.entries()));
 
             response = await updatePatient({ data: formData, id });
-
             console.log("Update patient Response: ", response);
 
             toastNotify("Patient updated successfully", "success");
@@ -213,19 +214,19 @@ function PatientUpsert() {
                                     type="date"
                                     required
                                     name="birthday"
-                                    value={patientInputs.birthday}
+                                    value={formatDateToInputValue(patientInputs.birthday)}
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Bloodgroup:</Label>
+                                <Label>BloodGroup:</Label>
                                 <Select
-                                    name="bloodgroup"
-                                    value={patientInputs.bloodgroup}
+                                    name="bloodGroup"
+                                    value={patientInputs.bloodGroup}
                                     onChange={handlePatientInput}
                                 >
                                     <option value="">Select Blood Group</option>
-                                    {bloodgroup.map((bloodgroup) => (
+                                    {bloodgroups.map((bloodgroup) => (
                                         <option key={bloodgroup} value={bloodgroup}>
                                             {bloodgroup}
                                         </option>
@@ -259,26 +260,6 @@ function PatientUpsert() {
                                     required
                                     name="phoneNumber"
                                     value={patientInputs.phoneNumber}
-                                    onChange={handlePatientInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>CreatedAt:</Label>
-                                <Input
-                                    type="date"
-                                    required
-                                    name="createdAt"
-                                    value={patientInputs.createdAt}
-                                    onChange={handlePatientInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>UpdatedAt:</Label>
-                                <Input
-                                    type="date"
-                                    required
-                                    name="updatedAt"
-                                    value={patientInputs.updatedAt}
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
@@ -318,8 +299,8 @@ function PatientUpsert() {
                                 <SubmitButton type="submit">
                                     Submit
                                 </SubmitButton>
-                                <BackToProductsButton onClick={() => navigate("/departments")}>
-                                    Back to departments
+                                <BackToProductsButton onClick={() => navigate("/patients")}>
+                                    Back to patients
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>
