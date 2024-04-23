@@ -10,7 +10,8 @@ import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer,
 const roomData = {
     capacity: "",
     isFree: false,
-    patientId: ""
+    nrDhomes:""
+    /*patientId: ""*/
 };
 function RoomUpsert() {
     const { id } = useParams();
@@ -25,7 +26,8 @@ function RoomUpsert() {
             const tempData = {
                 capacity: data.capacity,
                 isFree: data.isFree,
-                patientId: data.patientId
+                nrDhomes:data.nrDhomes
+                /*patientId: data.patientId*/
             };
             setRoomInputs(tempData);
         }
@@ -43,7 +45,7 @@ function RoomUpsert() {
 
         formData.append("Capacity", roomInputs.capacity);
         formData.append("IsFree", roomInputs.isFree.toString());
-        formData.append("PatientId", roomInputs.patientId);
+        formData.append("NrDhomes", roomInputs.nrDhomes);
 
         let response;
 
@@ -98,6 +100,17 @@ function RoomUpsert() {
                             onSubmit={handleSubmit}
                         >
                             <FormGroup>
+                                <Label>NrDhomes:</Label>
+                                <Input
+                                    type="text"
+                                    required
+                                    name="nrDhomes"
+                                    value={roomInputs.nrDhomes}
+                                    onChange={handleRoomInput}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
                                 <Label>Capacity:</Label>
                                 <Input
                                     type="text"
@@ -128,16 +141,16 @@ function RoomUpsert() {
                                 {/*</Label>*/}
                             </FormGroup>
 
-                            <FormGroup>
-                                <Label>PatientId:</Label>
-                                <Input
-                                    type="text"
-                                    required
-                                    name="patientId"
-                                    value={roomInputs.patientId}
-                                    onChange={handleRoomInput}
-                                />
-                            </FormGroup>
+                            {/*<FormGroup>*/}
+                            {/*    <Label>PatientId:</Label>*/}
+                            {/*    <Input*/}
+                            {/*        type="text"*/}
+                            {/*        required*/}
+                            {/*        name="patientId"*/}
+                            {/*        value={roomInputs.patientId}*/}
+                            {/*        onChange={handleRoomInput}*/}
+                            {/*    />*/}
+                            {/*</FormGroup>*/}
 
                             <ButtonsContainer>
                                 <SubmitButton type="submit">

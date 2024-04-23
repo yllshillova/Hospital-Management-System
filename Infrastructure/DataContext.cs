@@ -18,6 +18,7 @@ namespace Infrastructure
         public DbSet<Visit> Visits { get; set; }
         public DbSet<EmergencyContact> EmergencyContacts { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<RoomPatient> RoomPatients { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -28,7 +29,7 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new EmergencyContactConfiguration());
             modelBuilder.ApplyConfiguration(new NurseConfiguration());
             modelBuilder.ApplyConfiguration(new PatientConfiguration());
-            modelBuilder.ApplyConfiguration(new RoomConfiguration());
+            //modelBuilder.ApplyConfiguration(new RoomConfiguration());
             modelBuilder.ApplyConfiguration(new VisitConfiguration());
 
         }
