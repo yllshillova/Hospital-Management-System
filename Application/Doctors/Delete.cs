@@ -17,19 +17,25 @@ namespace Application.Doctors
                 if (doctor is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
                 var visits = await _visitRepository.GetVisitsByDoctorIdAsync(doctor.Id);
-                if (visits is null || !visits.Any())
+                // Check if there are any visits associated with the doctor
+                if (visits != null && visits.Any())
                 {
                     doctor.IsDeleted = true;
                     doctor.UpdatedAt = DateTime.Now;
                     var result = await _doctorRepository.UpdateAsync(doctor);
+
+                    if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to mark the doctor as deleted! Try again.");
+                    return Result<Unit>.Success(Unit.Value);
+                }
+                else
+                {
+                    // If there are no visits, delete the doctor
+                    var result = await _doctorRepository.DeleteAsync(doctor);
+
                     if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the doctor! Try again.");
                     return Result<Unit>.Success(Unit.Value);
                 }
-
-                return Result<Unit>.Failure(ErrorType.BadRequest, "Unable to delete the doctor. The doctor cannot be deleted because there are existing records associated with them, such as appointments or visits." +
-                    " \r\nBefore deleting the doctor, please ensure that all related records are properly handled or reassigned to another doctor.");
             }
-
         }
     }
 }

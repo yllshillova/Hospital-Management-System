@@ -4,6 +4,8 @@ import { useGetDepartmentByIdQuery } from "../../app/APIs/departmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
+import { Header, SidePanel } from "../../app/layout";
+import { Attribute, Label, LeftContainer, MainContainer, SectionTitle, Value, WrapperContainer } from "../../app/common/styledComponents/details";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -28,23 +30,44 @@ function DepartmentDetails() {
 
     if (isLoading) return <MainLoader />;
 
-
-
-
-
     if (data) {
         const department = data;
-        console.log(department.isDeleted);
         return (
             <>
-                <div>
-                    <h2>Department Details</h2>
-                    <p>Id: {department.id}</p>
-                    <p>Name: {department.name}</p>
-                    <p>IsDeleted: {department.isDeleted}</p>
-                    <p>Created At: {new Date(department.createdAt).toLocaleDateString()}</p>
-                    <p>Updated At: {new Date(department.updatedAt).toLocaleDateString()}</p>
-                </div>
+                <Header />
+                <SidePanel />
+                <MainContainer>
+                    <WrapperContainer>
+                        <LeftContainer>
+                            <SectionTitle>Details of : {department.name}</SectionTitle>
+                            <Attribute>
+                                <label style={{ fontWeight: "bold", color: "#009F6B" }}>{department.isDeleted === "True" ? "Passive" : "Active"} </label>
+                            </Attribute>
+                            <Attribute>
+                                <Label>Name</Label>
+                                <Value>{department.name}</Value>
+                            </Attribute>
+                        </LeftContainer>
+                    </WrapperContainer>
+
+                    {/*<AdditionalInfoContainer>*/}
+                    {/*    <SectionTitle>Additional Information</SectionTitle>*/}
+                    {/*    <LabelsRow>*/}
+                    {/*        <Label>Created At</Label>*/}
+                    {/*        <Label></Label>*/}
+                    {/*        <Label></Label>*/}
+                    {/*        <Label>Updated At</Label>*/}
+                    {/*    </LabelsRow>*/}
+                    {/*    <ValuesRow>*/}
+                    {/*        <Value>{formatDate(doctor.createdAt)}</Value>*/}
+                    {/*        <Value></Value>*/}
+                    {/*        <Value></Value>*/}
+                    {/*        <Value></Value>*/}
+                    {/*        <Value></Value>*/}
+                    {/*        <Value>{formatDate(doctor.updatedAt)}</Value>*/}
+                    {/*    </ValuesRow>*/}
+                    {/*</AdditionalInfoContainer>*/}
+                </MainContainer>
             </>
         );
     }
@@ -52,3 +75,4 @@ function DepartmentDetails() {
 }
 
 export default DepartmentDetails;
+

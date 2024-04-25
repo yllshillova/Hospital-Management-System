@@ -86,7 +86,7 @@ function RoomList() {
                         <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/room/" + room.id)} >
                             <FontAwesomeIcon icon={faCircle} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/roomUpsert/" + room.id)} >
+                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/room/update/" + room.id)} >
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
                         {/*TODO: add handler for delete*/}
@@ -106,7 +106,7 @@ function RoomList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Rooms List</TableHeader>
-                    <AddButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/roomUpsert")}  >
+                    <AddButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/room/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useLocation,useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useGetPatientByIdQuery } from "../../app/APIs/patientApi"; // Importimi i query për të marrë të dhëna të pacientit
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -14,7 +14,7 @@ function isValidGuid(guid: string): boolean {
 
 function RoomDetails() {
     const { id } = useParams();
-    const { data, isLoading ,isError ,error} = useGetRoomByIdQuery(id);
+    const { data, isLoading, isError, error } = useGetRoomByIdQuery(id);
     const { data: patientData, isLoading: patientLoading } = useGetPatientByIdQuery(data?.patientId); // Marrja e të dhënave të pacientit nga ID-ja e pacientit në departament
     const navigate = useNavigate();
     const location = useLocation();
@@ -35,7 +35,7 @@ function RoomDetails() {
 
     if (data) {
         const room = data;
-        const patientName = patientData?.name || 'Unknown'; 
+        const patientName = patientData?.name || 'Unknown';
 
         return (
             <>

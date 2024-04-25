@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import patientApi from "../../APIs/patientApi";
 import departmentApi from "../../APIs/departmentApi";
 import roomApi from "../../APIs/roomApi";
+import doctorApi from "../../APIs/doctorApi";
 
 const store = configureStore({
     reducer: {
         [patientApi.reducerPath]: patientApi.reducer,
         [departmentApi.reducerPath]: departmentApi.reducer,
         [roomApi.reducerPath]: roomApi.reducer,
+        [doctorApi.reducerPath]: doctorApi.reducer,
     },
 
     middleware: (getDefaultMiddleware) =>
@@ -15,6 +17,7 @@ const store = configureStore({
             .concat(patientApi.middleware)
             .concat(departmentApi.middleware)
             .concat(roomApi.middleware)
+            .concat(doctorApi.middleware)
 });
 
 //exporting the root state
