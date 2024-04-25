@@ -13,6 +13,8 @@ import RoomDetails from '../../features/rooms/RoomDetails';
 import Login from '../../features/account/Login';
 import Register from '../../features/account/Register';
 import AddPatientToRoomForm from '../../features/rooms/AddPatientToRoomForm';
+import AppointmentList from '../../features/appointment/AppointmentList';
+import AppointmentDetails from '../../features/appointment/AppointmentDetails';
 
 
 function App() {
@@ -39,6 +41,11 @@ function App() {
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/register" element={<Register />}></Route>
                     <Route path="/addPatientToRoom" element={<AddPatientToRoomForm />}></Route>
+                    <Route path="/appointments" element={<AppointmentList />}></Route>
+                    <Route path="/appointment/:id" element={<AppointmentDetails />}></Route>
+                    {/*<Route path="/appointment/insert" element={<AppointmentUpsert />}></Route>*/}
+                    {/*<Route path="/appointment/update/:id" element={<AppointmentUpsert />}></Route>*/}
+
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>
