@@ -51,15 +51,15 @@ function DoctorList() {
                     <TableRow>
                         <TableCell>{doctor.name}</TableCell>
                         <TableCell>{doctor.lastName} </TableCell>
-                        <TableCell>{doctor.email} </TableCell>
+                        {/*<TableCell>{doctor.email} </TableCell>*/}
                         <TableCell>{doctor.specialization} </TableCell>
                         {/*<TableCell>{doctor.residence} </TableCell>*/}
                         {/*<TableCell>{doctor.address} </TableCell>*/}
                         {/*<TableCell>{doctor.gender} </TableCell>*/}
                         {/*<TableCell>{new Date(doctor.birthday).toLocaleDateString()}</TableCell>*/}
                         <TableCell>{doctor.departmentId} </TableCell>
-                        <TableCell>{new Date(doctor.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(doctor.updatedAt).toLocaleDateString()}</TableCell>
+                        {/*<TableCell>{new Date(doctor.createdAt).toLocaleDateString()}</TableCell>*/}
+                        {/*<TableCell>{new Date(doctor.updatedAt).toLocaleDateString()}</TableCell>*/}
                         <TableCell>{doctor.isDeleted} </TableCell>
 
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/doctor/" + doctor.id)} >
@@ -94,16 +94,17 @@ function DoctorList() {
                         <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Last Name</TableHeaderCell>
-                            <TableHeaderCell>Email</TableHeaderCell>
+                            {/*<TableHeaderCell>Email</TableHeaderCell>*/}
                             <TableHeaderCell>Specialization</TableHeaderCell>
                             {/*<TableHeaderCell>Residence</TableHeaderCell>*/}
                             {/*<TableHeaderCell>Address</TableHeaderCell>*/}
                             {/*<TableHeaderCell>Gender</TableHeaderCell>*/}
                             {/*<TableHeaderCell>Birthday</TableHeaderCell>*/}
                             <TableHeaderCell>DepartmentId</TableHeaderCell>
-                            <TableHeaderCell>CreatedAt</TableHeaderCell>
-                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
+                            {/*<TableHeaderCell>CreatedAt</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>UpdatedAt</TableHeaderCell>*/}
                             <TableHeaderCell>IsDeleted</TableHeaderCell>
+                            <TableHeaderCell>Actions</TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

@@ -9,6 +9,7 @@ import { useCreateDoctorMutation, useUpdateDoctorMutation } from "../../app/APIs
 import { SD_Genders } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
+import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
 
 interface DoctorData {
     name: string;
@@ -54,23 +55,12 @@ function DoctorForm({ id, data }: DoctorFormProps) {
     const handleDoctorInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, doctorInputs);
         if (e.target.name === 'birthday') {
-            const formattedBirthday = formatBirthday(tempData.birthday);
+            const formattedBirthday = validBirthdayDate(tempData.birthday);
             if (formattedBirthday !== undefined) {
                 tempData.birthday = formattedBirthday;
             }
         }
         setDoctorInputs(tempData);
-    };
-
-    const formatBirthday = (birthday: string | Date): string | undefined => {
-        if (birthday) {
-            const date = new Date(birthday);
-            if (!isNaN(date.getTime())) {
-                // Format date as YYYY-MM-DD if the date is valid
-                return date.toISOString().split('T')[0];
-            }
-        }
-        return undefined;
     };
 
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -204,7 +194,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 <Input
                                     type="date"
                                     name="birthday"
-                                    value={formatBirthday(doctorInputs.birthday)}
+                                    value={validBirthdayDate(doctorInputs.birthday)}
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
