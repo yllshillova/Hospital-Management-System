@@ -3,7 +3,6 @@ import Dashboard from '../../features/dashboard/Dashboard';
 import DepartmentList from '../../features/department/DepartmentList';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
-import DepartmentUpsert from '../../features/department/DepartmentUpsert';
 import PatientList from '../../features/patient/PatientList';
 import PatientUpsert from '../../features/patient/PatientUpsert';
 import PatientDetails from '../../features/patient/PatientDetails';
@@ -17,6 +16,8 @@ import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 import Login from '../../features/account/Login';
 import Register from '../../features/account/Register';
 import Details from '../components/Details';
+import DepartmentUpdate from '../../features/department/DepartmentUpdate';
+import DepartmentInsert from '../../features/department/DepartmentInsert';
 
 function App() {
 
@@ -31,8 +32,8 @@ function App() {
                     <Route path="/patient/update/:id" element={<PatientUpsert />}></Route>
                     <Route path="/departments" element={<DepartmentList />}></Route>
                     <Route path="/department/:id" element={<DepartmentDetails />}></Route>
-                    <Route path="/department/insert" element={<DepartmentUpsert />}></Route>
-                    <Route path="/department/update/:id" element={<DepartmentUpsert />}></Route>
+                    <Route path="/department/insert" element={<DepartmentUpdate />}></Route>
+                    <Route path="/department/update/:id" element={<DepartmentInsert />}></Route>
                     <Route path="/doctors" element={<DoctorList />}></Route>
                     <Route path="/doctor/:id" element={<DoctorDetails />}></Route>
                     <Route path="/doctor/insert" element={<DoctorInsert />}></Route>

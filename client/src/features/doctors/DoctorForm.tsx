@@ -10,6 +10,8 @@ import { SD_Genders } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
+import { useGetDepartmentsQuery } from '../../app/APIs/departmentApi';
+import Department from '../../app/models/Department';
 
 interface DoctorData {
     name: string;
@@ -52,6 +54,9 @@ function DoctorForm({ id, data }: DoctorFormProps) {
     const [loading, setLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState<string[]>([]); // State for error messages
 
+    const { data: departmentsData, isLoading: departmentsLoading, error: departmentsError } = useGetDepartmentsQuery(null);
+
+
     const handleDoctorInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, doctorInputs);
         if (e.target.name === 'birthday') {
@@ -66,7 +71,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setLoading(true);
-    setErrorMessages([]); // Clear previous error messages
+    setErrorMessages([]);
 
     const formData = new FormData();
 
@@ -81,14 +86,13 @@ function DoctorForm({ id, data }: DoctorFormProps) {
     formData.append("IsDeleted", doctorInputs.isDeleted.toString());
     formData.append("DepartmentId", doctorInputs.departmentId);
 
-    const currentLocation = window.location.pathname; // Capture the current URL
+    const currentLocation = window.location.pathname;
 
     if (id) {
         formData.append("Id", id);
         const response = await updateDoctor({ data: formData, id });
 
         if (response.error) {
-            // Use error handler
             useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
         } else {
             toastNotify("Doctor updated successfully", "success");
@@ -98,7 +102,6 @@ function DoctorForm({ id, data }: DoctorFormProps) {
         const response = await createDoctor(formData);
 
         if (response.error) {
-            // Use error handler
             useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
         } else {
             toastNotify("Doctor created successfully", "success");
@@ -223,13 +226,21 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>DepartmentId:</Label>
-                                <Input
-                                    type="text"
+                                <Label>Department:</Label>
+                                <Select
                                     name="departmentId"
                                     value={doctorInputs.departmentId}
                                     onChange={handleDoctorInput}
-                                />
+                                    disabled={departmentsLoading}
+                                >
+                                    <option value="">Select Department</option>
+                                    {departmentsData && departmentsData.map((department: Department) => (
+                                        <option key={department.id} value={department.id}>
+                                            {department.name}
+                                        </option>
+                                    ))}
+                                </Select>
+                                {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
                             </FormGroup>
                             <FormGroup>
                                 <Label>

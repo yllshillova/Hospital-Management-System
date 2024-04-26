@@ -16,10 +16,10 @@ function isValidGuid(guid: string): boolean {
 }
 
 function DoctorDetails() {
-    const { id } = useParams();
-    const { data, isLoading, error, isError } = useGetDoctorByIdQuery(id);
+    const { id } = useParams<string>();
+    const { data: doctor, isLoading, error, isError } = useGetDoctorByIdQuery(id);
     const { data: departmentData, isLoading: departmentLoader, error: departmentError }
-        = useGetDepartmentByIdQuery(data.departmentId);
+        = useGetDepartmentByIdQuery(doctor?.departmentId|| "");
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -39,8 +39,7 @@ function DoctorDetails() {
 
 
 
-    if (data) {
-        const doctor = data;
+    if (doctor && doctor.departmentId) {
         return (
             <>
                 <Header />
@@ -72,7 +71,15 @@ function DoctorDetails() {
                             </Attribute>
                             <Attribute>
                                 <Label>Department</Label>
-                                <Value>{departmentLoader ? <MiniLoader /> : departmentData ? departmentData.name : departmentError ? departmentError.data : "Department not found!"}</Value>
+                                <Value> {departmentLoader ? (
+                                    <MiniLoader />
+                                ) : departmentData ? (
+                                    departmentData.name
+                                ) : departmentError ? (
+                                    departmentError.data
+                                ) : (
+                                    "Department not found!"
+                                )}</Value>
                             </Attribute>
                         </LeftContainer>
 
