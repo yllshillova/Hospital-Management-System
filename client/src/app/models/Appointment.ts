@@ -2,7 +2,7 @@ import Doctor from "./Doctor";
 import Patient from "./Patient";
 
 export default interface Appointment {
-    id: number;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
     checkInDate: Date;
@@ -10,8 +10,8 @@ export default interface Appointment {
     status: string;
     reason: string;
     notes: string;
-    doctorId: number;
+    doctorId: string;
     doctor: Doctor;
-    patientId: number;
+    patientId: string;
     patient: Patient;
 }

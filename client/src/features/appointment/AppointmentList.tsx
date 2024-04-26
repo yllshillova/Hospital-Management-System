@@ -25,7 +25,7 @@ function AppointmentList() {
     const location = useLocation();
     let content;
 
-    const handleAppointmentDelete = async (id: number) => {
+    const handleAppointmentDelete = async (id: string) => {
         const result = await deleteAppointment(id);
 
         if ('data' in result) {
@@ -57,9 +57,9 @@ function AppointmentList() {
                         <TableCell>{new Date(appointment.updatedAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(appointment.checkInDate).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(appointment.checkOutDate).toLocaleDateString()}</TableCell>
-                        <TableCell>{appointment.status}</TableCell>
-                        <TableCell>{appointment.reason}</TableCell>
-                        <TableCell>{appointment.notes}</TableCell>
+                        {/*<TableCell>{appointment.status}</TableCell>*/}
+                        {/*<TableCell>{appointment.reason}</TableCell>*/}
+                        {/*<TableCell>{appointment.notes}</TableCell>*/}
                         <TableCell>{doctor ? doctor.name : "N/A"}</TableCell>
                         <TableCell>{patient ? patient.name : "N/A"}</TableCell>
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/appointment/" + appointment.id)}>
@@ -95,9 +95,9 @@ function AppointmentList() {
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
                             <TableHeaderCell>CheckInDate</TableHeaderCell>
                             <TableHeaderCell>CheckOutDate</TableHeaderCell>
-                            <TableHeaderCell>Status</TableHeaderCell>
-                            <TableHeaderCell>Reason</TableHeaderCell>
-                            <TableHeaderCell>Notes</TableHeaderCell>
+                            {/*<TableHeaderCell>Status</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Reason</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Notes</TableHeaderCell>*/}
                             <TableHeaderCell>Doctor</TableHeaderCell>
                             <TableHeaderCell>Patient</TableHeaderCell>
                         </TableHead>
