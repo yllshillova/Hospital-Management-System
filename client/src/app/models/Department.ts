@@ -1,5 +1,5 @@
 export default interface Department {
-    id: number;
+    id: string;
     name: string;
     createdAt: Date;
     updatedAt: Date;

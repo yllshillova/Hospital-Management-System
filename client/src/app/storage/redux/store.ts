@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import patientApi from "../../APIs/patientApi";
 import departmentApi from "../../APIs/departmentApi";
 import roomApi from "../../APIs/roomApi";
+import doctorApi from "../../APIs/doctorApi";
 import appointmentApi from "../../APIs/appointmentApi";
 
 const store = configureStore({
@@ -9,6 +10,7 @@ const store = configureStore({
         [patientApi.reducerPath]: patientApi.reducer,
         [departmentApi.reducerPath]: departmentApi.reducer,
         [roomApi.reducerPath]: roomApi.reducer,
+        [doctorApi.reducerPath]: doctorApi.reducer,
         [appointmentApi.reducerPath]: appointmentApi.reducer,
     },
 
@@ -17,6 +19,7 @@ const store = configureStore({
             .concat(patientApi.middleware)
             .concat(departmentApi.middleware)
             .concat(roomApi.middleware)
+            .concat(doctorApi.middleware)
             .concat(appointmentApi.middleware)
 });
 

@@ -2,7 +2,12 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { NavigateFunction } from "react-router-dom";
 import toastNotify from "./toastNotify";
 
-function useErrorHandler(error: FetchBaseQueryError, navigate: NavigateFunction, currentLocation: string) {
+export default function useErrorHandler(
+    error: FetchBaseQueryError,
+    navigate: NavigateFunction,
+    currentLocation: string,
+    setErrorMessages?: React.Dispatch<React.SetStateAction<string[]>>
+) {
     if (!error) {
         toastNotify("An unexpected error occurred", "error");
         return;
@@ -11,39 +16,51 @@ function useErrorHandler(error: FetchBaseQueryError, navigate: NavigateFunction,
     const { status, data } = error;
 
     if (status) {
+        let errorMessage: string[] = [];
+
+        if (data && typeof data === 'object' && 'errors' in data) {
+            // Extract errors from data object if it contains an 'errors' field
+            const errors = data.errors;
+            errorMessage= Object.values(errors).flat();
+        }
+
+        // Set error messages if provided
+        if (setErrorMessages) {
+            console.log(errorMessage);
+            setErrorMessages(errorMessage);
+            return;
+        }
+
+        // Handle different error statuses
         switch (status) {
             case 400:
                 toastNotify("Bad Request", "error");
-                navigate(currentLocation);
-                return;
+                break;
             case 401:
                 toastNotify("Unauthorized", "error");
-                navigate(currentLocation);
-                return;
+                break;
             case 403:
                 toastNotify("Forbidden", "error");
-                navigate(currentLocation);
-                return;
+                break;
             case 404:
                 navigate('/not-found');
                 return;
             case 500:
-                navigate(currentLocation);
-                return;
+                toastNotify("Internal Server Error", "error");
+                break;
             case 'PARSING_ERROR':
                 toastNotify(data, "error");
-                navigate(currentLocation);
-                return;
+                break;
             default:
                 toastNotify("An unexpected error occurred", "error");
                 navigate('/');
                 return;
         }
+
+        navigate(currentLocation);
+
     } else {
         toastNotify("An unexpected error occurred", "error");
         navigate('/');
-        return;
     }
 }
-
-export default useErrorHandler;

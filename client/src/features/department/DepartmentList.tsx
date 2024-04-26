@@ -22,7 +22,7 @@ function DepartmentList() {
 
 
 
-    const handleDepartmetDelete = async (id: number,) => {
+    const handleDepartmentDelete = async (id: number,) => {
         const result = await deleteDepartment(id);
 
         if ('data' in result) {
@@ -62,7 +62,7 @@ function DepartmentList() {
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
                         {/*TODO: add handler for delete*/}
-                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleDepartmetDelete(department.id) }>
+                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleDepartmentDelete(department.id) }>
                             <FontAwesomeIcon icon={faTrashAlt} />
                         </ActionButton>
                     </TableRow>
