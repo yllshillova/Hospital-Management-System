@@ -1,8 +1,8 @@
+import Doctor from "./Doctor";
 import Patient from "./Patient";
 
 export default interface Appointment {
     id: number;
-    name: string;
     createdAt: Date;
     updatedAt: Date;
     checkInDate: Date;
@@ -10,8 +10,8 @@ export default interface Appointment {
     status: string;
     reason: string;
     notes: string;
-    //doctorId: number;
-    //doctor: Doctor;
+    doctorId: number;
+    doctor: Doctor;
     patientId: number;
     patient: Patient;
 }

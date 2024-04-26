@@ -22,7 +22,7 @@ function DepartmentList() {
 
 
 
-    const handleDepartmentDelete = async (id: number,) => {
+    const handleDepartmentDelete = async (id: string) => {
         const result = await deleteDepartment(id);
 
         if ('data' in result) {

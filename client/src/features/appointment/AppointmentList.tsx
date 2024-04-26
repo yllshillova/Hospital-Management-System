@@ -13,12 +13,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import toastNotify from "../../app/helpers/toastNotify";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
-//import { useGetPatientsQuery } from "../../app/APIs/patientApi";
+import { useGetPatientsQuery } from "../../app/APIs/patientApi";
+import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 
 function AppointmentList() {
     const { data: appointmentData, isLoading: isAppointmentLoading, error: appointmentError } = useGetAppointmentsQuery(null);
-    //const { data: doctorData, isLoading: isDoctorLoading, error: doctorError } = useGetDoctorsQuery(null);
-    //const { data: patientData, isLoading: isPatientLoading, error: patientError } = useGetPatientsQuery(null);
+    const { data: doctorData, isLoading: isDoctorLoading, error: doctorError } = useGetDoctorsQuery(null);
+    const { data: patientData, isLoading: isPatientLoading, error: patientError } = useGetPatientsQuery(null);
     const [deleteAppointment] = useDeleteAppointmentMutation();
     const navigate = useNavigate();
     const location = useLocation();
@@ -39,15 +40,15 @@ function AppointmentList() {
         }
     };
 
-    if (isAppointmentLoading  /*|| isDoctorLoading || isPatientLoading*/)  {
+    if (isAppointmentLoading  || isDoctorLoading || isPatientLoading)  {
         content = <MainLoader />;
-    } else if (appointmentError  /* ||doctorError || patientError*/) {
+    } else if (appointmentError   ||doctorError || patientError) {
         content = <div>Error loading data.</div>;
     } else {
         content = appointmentData.map((appointment: Appointment) => {
             // Find the corresponding doctor and patient data
-            //const doctor = doctorData.find((doc) => doc.id === appointment.doctorId);
-           // const patient = patientData.find((pat) => pat.id === appointment.patientId);
+            const doctor = doctorData.find((doc: { id: number; }) => doc.id === appointment.doctorId);
+            const patient = patientData.find((pat: { id: number; }) => pat.id === appointment.patientId);
 
             return (
                 <tbody key={appointment.id}>
@@ -59,9 +60,9 @@ function AppointmentList() {
                         <TableCell>{appointment.status}</TableCell>
                         <TableCell>{appointment.reason}</TableCell>
                         <TableCell>{appointment.notes}</TableCell>
-                        {/*<TableCell>{doctor ? doctor.name : "N/A"}</TableCell>*/}
-                        {/*<TableCell>{patient ? patient.name : "N/A"}</TableCell>*/}
-                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/apoointment/" + appointment.id)}>
+                        <TableCell>{doctor ? doctor.name : "N/A"}</TableCell>
+                        <TableCell>{patient ? patient.name : "N/A"}</TableCell>
+                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/appointment/" + appointment.id)}>
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
                         <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/appointment/update/" + appointment.id)}>

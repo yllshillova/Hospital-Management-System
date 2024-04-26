@@ -5,42 +5,42 @@ const appointmentApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: "http://localhost:5000/api/",
     }),
-    tagTypes: ["Appointments"],
+    tagTypes: ["Appointment"],
     endpoints: (builder) => ({
         getAppointments: builder.query({
             query: () => ({
-                url: "appointments"
+                url: "appointment"
             }),
-            providesTags: ["Appointments"],
+            providesTags: ["Appointment"],
         }),
         getAppointmentById: builder.query({
             query: (id) => ({
-                url: `appointments/${id}`,
+                url: `appointment/${id}`,
             }),
-            providesTags: ["Appointments"],
+            providesTags: ["Appointment"],
         }),
         createAppointment: builder.mutation({
             query: (data) => ({
-                url: "appointments",
+                url: "appointment",
                 method: "POST",
                 body: data
             }),
-            invalidatesTags: ["Appointments"],
+            invalidatesTags: ["Appointment"],
         }),
         updateAppointment: builder.mutation({
             query: ({ data, id }) => ({
-                url: "appointments/" + id,
+                url: "appointment/" + id,
                 method: "PUT",
                 body: data
             }),
-            invalidatesTags: ["Appointments"],
+            invalidatesTags: ["Appointment"],
         }),
         deleteAppointment: builder.mutation({
             query: (id) => ({
-                url: "appointments/" + id,
+                url: "appointment/" + id,
                 method: "DELETE",
             }),
-            invalidatesTags: ["Appointments"],
+            invalidatesTags: ["Appointment"],
         }),
     }),
 });
