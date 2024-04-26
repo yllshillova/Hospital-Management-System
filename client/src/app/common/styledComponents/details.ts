@@ -4,7 +4,7 @@ import styled from "styled-components";
 export const MainContainer = styled.div`
     margin-left: 200px;
     padding: 20px;
-    margin-top: 45px;
+    margin-top: 50px;
 `;
 export const WrapperContainer = styled.div`
     display: flex;
@@ -66,3 +66,4 @@ export const Value = styled.span`
     font-weight:bold;
     margin-bottom: 5px;
 `;
+

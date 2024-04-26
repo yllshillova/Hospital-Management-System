@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const OrdersTable = styled.div`
   padding: 20px;
   margin-left: 200px;
-  background-color: #f5f5f5;
   margin-top: 50px;
 `;
 
@@ -27,6 +26,9 @@ export const TableHead = styled.tr`
 
 export const TableRow = styled.tr`
   border-bottom: 1px solid #d3d3d3;
+  &:nth-last-child(2) {
+    border-bottom: none;
+  }
   &:hover {
     background-color: #f5f5f5;
   }

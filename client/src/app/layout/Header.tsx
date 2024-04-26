@@ -26,7 +26,7 @@ function Header() {
                     <MenuIcon icon={faHospital} />
                 </LogoContainer>
                 {/*<MessageContainer> {nameUser} {" "} {surnameUser}*/}
-                <MessageContainer> {"Dr.Strange"}
+                <MessageContainer> {"Name Surname"}
                     <UserImage>
                         <img
                             src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"

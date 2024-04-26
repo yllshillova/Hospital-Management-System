@@ -2,8 +2,6 @@ import styled from "styled-components";
 
 export const OuterContainer = styled.div`
   margin-left: 200px;
-
-  background-color: #f5f5f5;
   padding: 20px;
 `;
 
@@ -43,6 +41,7 @@ export const FormGroup = styled.div`
 export const Label = styled.label`
   color: #333;
   margin-bottom: 15px;
+  margin-left:5px;
 `;
 
 export const Input = styled.input`

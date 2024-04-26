@@ -105,20 +105,16 @@ const SidePanelContainer = styled.div`
 const SidebarItem = styled.div`
   display: flex;
   align-items: center;
-  color: #708090;
-  font-size: 16px;
+  color: #E8E8E8		;
+  font-size: 13.5px; /* Reduced font size */
   cursor: pointer;
-  padding: 15px;
-  width: 80%;
-  margin:5px 3px;
+  padding: 12px; /* Equal padding on left and right */
+  margin: 5px 10%; /* Adjusted margin */
   transition: background-color 0.3s ease;
 
   &:hover {
-    border-radius: 15px;
-    //background-color: white;
-       // border: 2px solid #FF003F; /* Add border color and width */
-
-    color: #FF003F;
+    background-color:#4C516D; /* Light gray background on hover */
+    border-radius: 8px; /* Rounded corners on hover */
   }
 `;
 
@@ -126,18 +122,14 @@ const IconWrapper = styled.div`
   display: flex;
   justify-content: center;
   margin-right: 10px; /* Add margin between icon and label */
-  //color: ${(props) => props.color};
-  color:#708090;
-
-
-  ${SidebarItem}:hover & {
-    color: #FF003F; /* Change icon color on hover */
-  }
+  color: #E8E8E8;
+  flex: 1; /* Grow to fill available space */
 `;
 
 const Label = styled.div`
   font-weight: bold; /* Make the label bold */
-  margin-left: 15px; /* Add margin between icon and label */
+  flex: 3; /* Grow to fill available space */
+  align-self: flex-start; /* Align text to start from the left */
 `;
 //const DropdownContainer = styled.div`
 //  position: absolute;

@@ -286,18 +286,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
-                            <FormGroup>
-                                <Label>
-                                    Is Deleted{" "}
-                                    <input
-                                        type="checkbox"
-                                        name="isDeleted"
-                                        checked={patientInputs.isDeleted}
-                                        onChange={toggleIsDeleted}
-                                    />
-
-                                </Label>
-                            </FormGroup>
+                            
                             <FormGroup>
                                 <Label>Occupation:</Label>
                                 <Input
@@ -318,7 +307,18 @@ function PatientForm({ id, data }: PatientFormProps) {
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
+                            <FormGroup>
+                                <Label>
+                                    Is Deleted{" "}
+                                    <input
+                                        type="checkbox"
+                                        name="isDeleted"
+                                        checked={patientInputs.isDeleted}
+                                        onChange={toggleIsDeleted}
+                                    />
 
+                                </Label>
+                            </FormGroup>
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit
