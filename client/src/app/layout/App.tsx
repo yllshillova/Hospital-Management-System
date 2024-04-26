@@ -3,20 +3,14 @@ import Dashboard from '../../features/dashboard/Dashboard';
 import DepartmentList from '../../features/department/DepartmentList';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
-import PatientList from '../../features/patient/PatientList';
-import PatientUpsert from '../../features/patient/PatientUpsert';
-import PatientDetails from '../../features/patient/PatientDetails';
-import RoomList from "../../features/rooms/RoomList";
 import DepartmentUpsert from '../../features/department/DepartmentUpsert';
 import PatientList from '../../features/patient/PatientList';
 import PatientDetails from '../../features/patient/PatientDetails';
-import PatientUpsert from '../../features/patient/PatientUpsert';
-import RoomList from '../../features/rooms/RoomList';
+import RoomList from "../../features/rooms/RoomList";
 import RoomUpsert from '../../features/rooms/RoomUpsert';
 import DoctorList from '../../features/doctors/DoctorList';
 import DoctorDetails from '../../features/doctors/DoctorDetails';
 import DoctorInsert from '../../features/doctors/DoctorInsert';
-import RoomDetails from '../../features/rooms/RoomDetails';
 import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 import RoomDetails from '../../features/rooms/RoomDetails';
 import Login from '../../features/account/Login';
@@ -27,6 +21,10 @@ import DepartmentInsert from '../../features/department/DepartmentInsert';
 import AddPatientToRoomForm from '../../features/rooms/AddPatientToRoomForm';
 import AppointmentList from '../../features/appointment/AppointmentList';
 import AppointmentDetails from '../../features/appointment/AppointmentDetails';
+import DepartmentUpdate from '../../features/department/DepartmentUpdate';
+import DepartmentInsert from '../../features/department/DepartmentInsert';
+import PatientInsert from '../../features/patient/PatientInsert';
+import PatientUpdate from '../../features/patient/PatientUpdate';
 
 
 function App() {
@@ -38,8 +36,8 @@ function App() {
                     <Route path="/" element={<Dashboard />}></Route>
                     <Route path="/patients" element={<PatientList />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>
-                    <Route path="/patient/insert" element={<PatientUpsert />}></Route>
-                    <Route path="/patient/update/:id" element={<PatientUpsert />}></Route>
+                    <Route path="/patient/insert" element={<PatientInsert />}></Route>
+                    <Route path="/patient/update/:id" element={<PatientUpdate />}></Route>
                     <Route path="/departments" element={<DepartmentList />}></Route>
                     <Route path="/department/:id" element={<DepartmentDetails />}></Route>
                     <Route path="/department/insert" element={<DepartmentUpdate />}></Route>
@@ -49,10 +47,6 @@ function App() {
                     <Route path="/doctor/insert" element={<DoctorInsert />}></Route>
                     <Route path="/doctor/update/:id" element={<DoctorUpdate />}></Route>
                     <Route path="/rooms" element={<RoomList />}></Route>
-                    <Route path="/department/insert" element={<DepartmentUpsert />}></Route>
-                    <Route path="/department/update/:id" element={<DepartmentUpsert />}></Route>
-                    {/*<Route path="/departmentUpsert" element={<DepartmentUpsert />}></Route>*/}
-                    {/*<Route path="/departmentUpsert/:id" element={<DepartmentUpsert />}></Route>*/}
                     <Route path="/rooms" element={<RoomList />}></Route>
                     <Route path="/room/:id" element={<RoomDetails />}></Route>
                     <Route path="/room/insert" element={<RoomUpsert />}></Route>
@@ -60,14 +54,6 @@ function App() {
                     <Route path="/login" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
                     <Route path="/details" element={<Details />}></Route>
-                    <Route path="/login" element={<Login />}></Route>
-                    <Route path="/register" element={<Register />}></Route>
-                    <Route path="/addPatientToRoom" element={<AddPatientToRoomForm />}></Route>
-                    <Route path="/appointments" element={<AppointmentList />}></Route>
-                    <Route path="/appointment/:id" element={<AppointmentDetails />}></Route>
-                    {/*<Route path="/appointment/insert" element={<AppointmentUpsert />}></Route>*/}
-                    {/*<Route path="/appointment/update/:id" element={<AppointmentUpsert />}></Route>*/}
-
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
                 </Routes>

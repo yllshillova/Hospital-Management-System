@@ -42,79 +42,79 @@ function PatientDetails() {
         return (
             <>
                 <Header />
-                <SidePanel />
+    <SidePanel />
 
-                <MainContainer>
-                    <WrapperContainer>
+    <MainContainer>
+        <WrapperContainer>
 
-                        <LeftContainer>
-                            <SectionTitle>Patient Details</SectionTitle>
-                            <Attribute>
-                                {statusLabel}
-                            </Attribute>
-                            <Attribute>
-                                <Label>Name</Label>
-                                <Value>{patient.name}</Value>
-                            </Attribute>
-                            <Attribute>
-                                <Label>Last Name</Label>
-                                <Value>{patient.lastName}</Value>
-                            </Attribute>
-                            <Attribute>
-                                <Label>Parent Name</Label>
-                                <Value>{patient.parentName}</Value>
-                            </Attribute>
-                            <Attribute>
-                                <Label>Residence</Label>
-                                <Value>{patient.residence}</Value>
-                            </Attribute>
-                            <Attribute>
-                                <Label>Personal Number</Label>
-                                <Value>{patient.personalNumber}</Value>
-                            </Attribute>
-                        </LeftContainer>
+            <LeftContainer>
+                <SectionTitle>Patient Details</SectionTitle>
+                <Attribute>
+                           {statusLabel}
+                </Attribute>
+                <Attribute>
+                    <Label>Name</Label>
+                    <Value>{patient.name}</Value>
+                </Attribute>
+                <Attribute>
+                    <Label>Last Name</Label>
+                    <Value>{patient.lastName}</Value>
+                </Attribute>
+                <Attribute>
+                    <Label>Parent Name</Label>
+                    <Value>{patient.parentName}</Value>
+                </Attribute>
+                <Attribute>
+                    <Label>Residence</Label>
+                    <Value>{patient.residence}</Value>
+                </Attribute>
+                <Attribute>
+                    <Label>Personal Number</Label>
+                    <Value>{patient.personalNumber}</Value>
+                </Attribute>
+            </LeftContainer>
 
-                        <RightContainer>
-                            <SectionTitle>Personal Information</SectionTitle>
-                            <LabelsRow>
-                                <Label>Address</Label>
-                                <Label>Phone Number</Label>
-                                <Label>Email</Label>
-                            </LabelsRow>
-                            <ValuesRow>
-                                <Value>{patient.address}</Value>
-                                <Value>{patient.phoneNumber}</Value>
-                                <Value>{patient.email}</Value>
-                            </ValuesRow>
+            <RightContainer>
+                <SectionTitle>Personal Information</SectionTitle>
+                <LabelsRow>
+                    <Label>Address</Label>
+                    <Label>Phone Number</Label>
+                    <Label>Email</Label>
+                </LabelsRow>
+                <ValuesRow>
+                    <Value>{patient.address}</Value>
+                    <Value>{patient.phoneNumber}</Value>
+                    <Value>{patient.email}</Value>
+                </ValuesRow>
 
-                            <LabelsRow>
-                                <Label>Birthday</Label>
-                                <Label>Occupation</Label>
-                                <Label>Gender</Label>
-                            </LabelsRow>
-                            <ValuesRow>
-                                <Value>{new Date(patient.birthday).toLocaleDateString()}</Value>
-                                <Value>{patient.occupation}</Value>
-                                <Value>{patient.gender}</Value>
-                            </ValuesRow>
-                        </RightContainer>
-                    </WrapperContainer>
+                <LabelsRow>
+                    <Label>Birthday</Label>
+                    <Label>Occupation</Label>
+                    <Label>Gender</Label>
+                </LabelsRow>
+                <ValuesRow>
+                    <Value>{new Date(patient.birthday).toLocaleDateString()}</Value>
+                    <Value>{patient.occupation}</Value>
+                    <Value>{patient.gender}</Value>
+                </ValuesRow>
+                </RightContainer>
+        </WrapperContainer>
 
-                    <AdditionalInfoContainer>
-                        <SectionTitle>Additional Information</SectionTitle>
-                        <LabelsRow>
-                            <Label>Blood Group</Label>
-                            <Label></Label>
-                            <Label></Label>
-                            <Label>Allergies</Label>
-                        </LabelsRow>
-                        <ValuesRow>
-                            <Value style={{ color: "crimson", fontWeight: "bold" }}>{patient.bloodGroup}</Value>
-                            <Value>{patient.allergies}</Value>
-                        </ValuesRow>
-                    </AdditionalInfoContainer>
-                </MainContainer>
-            </>
+        <AdditionalInfoContainer>
+            <SectionTitle>Additional Information</SectionTitle>
+            <LabelsRow>
+                <Label>Blood Group</Label>
+                <Label></Label>
+                <Label></Label>
+                <Label>Allergies</Label>
+            </LabelsRow>
+            <ValuesRow>
+                <Value style={{color:"crimson", fontWeight:"bold"} }>{patient.bloodGroup}</Value>
+                <Value>{patient.allergies}</Value>
+            </ValuesRow>
+        </AdditionalInfoContainer>
+    </MainContainer>
+</>
         );
     }
     return null;
