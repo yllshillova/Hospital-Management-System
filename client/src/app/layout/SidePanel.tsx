@@ -88,49 +88,63 @@ function SidePanel() {
 }
 
 const SidePanelContainer = styled.div`
-  position: fixed;
-  top: 48px; /* Adjust based on the height of Header */
-  left: 0;
-  bottom: 0;
-  min-width: 200px;
-  background-color: #1a252e  ;
-  display: flex;
-  flex-direction: column;
-  padding: 20px 0;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-  z-index: 100;
-  height: 100vh;
+    position: fixed;
+    top: 48px;
+    left: 0;
+    bottom: 0;
+    min-width: 200px;
+    background-color: #1a252e;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    height: 100vh;
+
+    @media screen and (max-width: 768px) {
+        width: 60%;
+    }
+
+    @media screen and (max-width: 480px) {
+        width: 40%;
+    }
+
+    @media screen and (max-width: 360px) {
+        width: 80%;
+    }
 `;
 
 const SidebarItem = styled.div`
-  display: flex;
-  align-items: center;
-  color: #E8E8E8		;
-  font-size: 13.5px; /* Reduced font size */
-  cursor: pointer;
-  padding: 12px; /* Equal padding on left and right */
-  margin: 5px 10%; /* Adjusted margin */
-  transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    color: #E8E8E8;
+    font-size: 13.5px;
+    cursor: pointer;
+    padding: 12px;
+    margin: 5px 10%;
+    transition: background-color 0.3s ease;
 
-  &:hover {
-    background-color:#4C516D; /* Light gray background on hover */
-    border-radius: 8px; /* Rounded corners on hover */
-  }
+    &:hover {
+        background-color: #4C516D;
+        border-radius: 8px;
+    }
 `;
 
 const IconWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-right: 10px; /* Add margin between icon and label */
-  color: #E8E8E8;
-  flex: 1; /* Grow to fill available space */
+    display: flex;
+    justify-content: center;
+    margin-right: 10px;
+    color: #E8E8E8;
+    flex: 1;
 `;
 
 const Label = styled.div`
-  font-weight: bold; /* Make the label bold */
-  flex: 3; /* Grow to fill available space */
-  align-self: flex-start; /* Align text to start from the left */
+    font-weight: bold;
+    flex: 3;
+    align-self: flex-start;
 `;
+
+
 //const DropdownContainer = styled.div`
 //  position: absolute;
 //  top: 100%;

@@ -4,6 +4,11 @@ export const OrdersTable = styled.div`
   padding: 20px;
   margin-left: 200px;
   margin-top: 50px;
+  @media screen and (max-width: 768px) {
+    padding: 10px; /* Adjusted padding for smaller screens */
+    margin-left: 0; /* Adjusted margin for smaller screens */
+    margin-top: 30px; /* Adjusted margin-top for smaller screens */
+  }
 `;
 
 export const TableHeader = styled.h1`
