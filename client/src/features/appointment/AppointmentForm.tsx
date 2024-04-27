@@ -51,7 +51,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
     const [errorMessages, setErrorMessages] = useState<string[]>([]); // State for error messages
 
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
-    const { data: doctorsData, isLoading: doctorsLoading/*, error: doctorsError */} = useGetDoctorsQuery(null);
+    const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
 
 
     const handleAppointmentInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -203,7 +203,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                         </option>
                                     ))}
                                 </Select>
-                                {patientsError && <div style={{ color: 'red' }}>Error loading departments</div>}
+                                {patientsError && <div style={{ color: 'red' }}>Error loading patients</div>}
                             </FormGroup>
 
                             <FormGroup>
@@ -221,7 +221,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                         </option>
                                     ))}
                                 </Select>
-                                {patientsError && <div style={{ color: 'red' }}>Error loading departments</div>}
+                                {doctorsError && <div style={{ color: 'red' }}>Error loading doctors</div>}
                             </FormGroup>
 
                             <ButtonsContainer>

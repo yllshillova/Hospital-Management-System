@@ -47,8 +47,8 @@ function AppointmentList() {
     } else {
         content = appointmentData.map((appointment: Appointment) => {
             // Find the corresponding doctor and patient data
-            const doctor = doctorData.find((doc: { id: number; }) => doc.id === appointment.doctorId);
-            const patient = patientData.find((pat: { id: number; }) => pat.id === appointment.patientId);
+            const doctor = doctorData.find((doc: { id: string; }) => doc.id === appointment.doctorId);
+            const patient = patientData.find((pat: { id: string; }) => pat.id === appointment.patientId);
 
             return (
                 <tbody key={appointment.id}>
@@ -84,7 +84,7 @@ function AppointmentList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Appointments List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/appointmentUpsert")}>
+                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/appointment/insert")}>
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
