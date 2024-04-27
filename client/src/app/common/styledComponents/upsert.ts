@@ -8,7 +8,6 @@ export const OuterContainer = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid #ddd;
   max-width: 600px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
