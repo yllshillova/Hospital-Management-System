@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faSignOutAlt, faHospitalUser, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays, faUserInjured } from '@fortawesome/free-solid-svg-icons';
 //import { useDispatch } from 'react-redux';
 //import {
 //    emptyUserState,
@@ -62,7 +62,7 @@ function SidePanel() {
 
     const menuItems = [
         { icon: faUserDoctor, label: 'Doctors', onClick: handleDoctorsList },
-        { icon: faHospitalUser, label: 'Patients', onClick: handlePatientList },
+        { icon: faUserInjured, label: 'Patients', onClick: handlePatientList },
         { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
         { icon: faCalendarDays, label: 'Appointments', onClick: handleAppointmentsList },
         { icon: faBookMedical, label: 'Visits' },

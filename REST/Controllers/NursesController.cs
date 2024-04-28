@@ -4,6 +4,7 @@ using static Application.Nurses.Create;
 using static Application.Nurses.Delete;
 using static Application.Nurses.Details;
 using static Application.Nurses.Edit;
+using static Application.Nurses.GetNursesCount;
 using static Application.Nurses.List;
 
 namespace API.Controllers
@@ -20,6 +21,12 @@ namespace API.Controllers
         public async Task<IActionResult> GetNurseById(Guid Id)
         {
             return HandleResult(await Mediator.Send(new GetNurseByIdQuery(Id)));
+        }
+
+        [HttpGet("Count")]
+        public async Task<IActionResult> GetNursesCount()
+        {
+            return HandleResult(await Mediator.Send(new GetNursesCountQuery()));
         }
 
         [HttpPost]

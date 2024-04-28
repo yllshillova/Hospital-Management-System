@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Header, SidePanel } from "../../app/layout";
-import RecentX from "./components/RecentX";
-import RecentZ from "./components/RecentZ";
+//import RecentZ from "./components/RecentZ";
 import Sections from "./components/Sections";
 import BottomSection from "./components/BottomSection";
+import LatestAppointments from "./components/LatestAppointments";
 
 function Dashboard() {
     return (
@@ -13,12 +13,12 @@ function Dashboard() {
             <MainContent>
                 <Sections />
                 <InlineContainer>
-                   <RecentXContainer>
-                        <RecentX />
-                    </RecentXContainer>
-                    <RecentYContainer>
-                        <RecentZ />
-                    </RecentYContainer>
+                    <LatestAppointmentsContainer>
+                        <LatestAppointments />
+                    </LatestAppointmentsContainer>
+                    {/*<RecentYContainer>*/}
+                    {/*    <RecentZ />*/}
+                    {/*</RecentYContainer>*/}
                 </InlineContainer>{" "}
                 <BottomSection />
             </MainContent>
@@ -46,14 +46,14 @@ const FlexContainer = styled.div`
   align-self: stretch; /* Make components stretch to the same height */
 `;
 
-const RecentXContainer = styled(FlexContainer)`
+const LatestAppointmentsContainer = styled(FlexContainer)`
   flex: 2; /* Set flex to 2 for RecentOrders */
   margin-right: 5px; /* Adjust the margin */
 `;
 
-const RecentYContainer = styled(FlexContainer)`
-  flex: 1; /* Set flex to 1 for RecentUsers */
-  margin-left: 5px; /* Adjust the margin */
-`;
+//const RecentYContainer = styled(FlexContainer)`
+//  flex: 1; /* Set flex to 1 for RecentUsers */
+//  margin-left: 5px; /* Adjust the margin */
+//`;
 
 export default Dashboard;

@@ -4,11 +4,6 @@ using Domain.Contracts;
 using Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Rooms
 {
@@ -22,7 +17,7 @@ namespace Application.Rooms
             {
                 if (request.Id != Guid.Empty)
                 {
-                    var room = await _context.RoomPatients.Include(x=>x.Patient).Where(x=>x.RoomId == request.Id).ToListAsync();
+                    var room = await _context.RoomPatients.Include(x => x.Patient).Where(x => x.RoomId == request.Id).ToListAsync();
                     //if (room is null) return Result<PatientInRoomDto>.Failure(ErrorType.NotFound, "No records could be found.");
 
                     //var roomDto = _mapper.Map<PatientInRoomDto>(room);

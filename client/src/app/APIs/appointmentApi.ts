@@ -19,6 +19,12 @@ const appointmentApi = createApi({
             }),
             providesTags: ["Appointment"],
         }),
+        getLatestAppointments: builder.query({
+            query: () => ({
+                url: "appointment/Latest"
+            }),
+            providesTags: ["Appointment"],
+        }),
         createAppointment: builder.mutation({
             query: (data) => ({
                 url: "appointment",
@@ -49,6 +55,7 @@ const appointmentApi = createApi({
 export const {
     useGetAppointmentsQuery,
     useGetAppointmentByIdQuery,
+    useGetLatestAppointmentsQuery,
     useCreateAppointmentMutation,
     useUpdateAppointmentMutation,
     useDeleteAppointmentMutation
