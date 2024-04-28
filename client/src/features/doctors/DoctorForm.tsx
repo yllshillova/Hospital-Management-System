@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
@@ -56,6 +56,16 @@ function DoctorForm({ id, data }: DoctorFormProps) {
 
     const { data: departmentsData, isLoading: departmentsLoading, error: departmentsError } = useGetDepartmentsQuery(null);
 
+    useEffect(() => {
+        if (data) {
+            const tempData = {
+                ...doctorInputs,
+                isDeleted: data.isDeleted.toString() === "True",
+            }
+            setDoctorInputs(tempData);
+        }
+    }, [data]);
+
 
     const handleDoctorInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, doctorInputs);
@@ -68,55 +78,48 @@ function DoctorForm({ id, data }: DoctorFormProps) {
         setDoctorInputs(tempData);
     };
 
-   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    setLoading(true);
-    setErrorMessages([]);
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        e.preventDefault();
+        setLoading(true);
+        setErrorMessages([]);
 
-    const formData = new FormData();
+        const formData = new FormData();
 
-    formData.append("Name", doctorInputs.name);
-    formData.append("LastName", doctorInputs.lastName);
-    formData.append("Specialization", doctorInputs.specialization);
-    formData.append("Address", doctorInputs.address);
-    formData.append("Residence", doctorInputs.residence);
-    formData.append("Birthday", doctorInputs.birthday);
-    formData.append("Gender", doctorInputs.gender);
-    formData.append("Email", doctorInputs.email);
-    formData.append("IsDeleted", doctorInputs.isDeleted.toString());
-    formData.append("DepartmentId", doctorInputs.departmentId);
+        formData.append("Name", doctorInputs.name);
+        formData.append("LastName", doctorInputs.lastName);
+        formData.append("Specialization", doctorInputs.specialization);
+        formData.append("Address", doctorInputs.address);
+        formData.append("Residence", doctorInputs.residence);
+        formData.append("Birthday", doctorInputs.birthday);
+        formData.append("Gender", doctorInputs.gender);
+        formData.append("Email", doctorInputs.email);
+        formData.append("IsDeleted", doctorInputs.isDeleted.toString());
+        formData.append("DepartmentId", doctorInputs.departmentId);
 
-    const currentLocation = window.location.pathname;
+        const currentLocation = window.location.pathname;
 
-    if (id) {
-        formData.append("Id", id);
-        const response = await updateDoctor({ data: formData, id });
+        if (id) {
+            formData.append("Id", id);
+            const response = await updateDoctor({ data: formData, id });
 
-        if (response.error) {
-            useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
+            if (response.error) {
+                useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
+            } else {
+                toastNotify("Doctor updated successfully", "success");
+                navigate('/doctors');
+            }
         } else {
-            toastNotify("Doctor updated successfully", "success");
-            navigate('/doctors');
+            const response = await createDoctor(formData);
+
+            if (response.error) {
+                useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
+            } else {
+                toastNotify("Doctor created successfully", "success");
+                navigate('/doctors');
+            }
         }
-    } else {
-        const response = await createDoctor(formData);
 
-        if (response.error) {
-            useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
-        } else {
-            toastNotify("Doctor created successfully", "success");
-            navigate('/doctors');
-        }
-    }
-
-    setLoading(false);
-};
-
-    const toggleIsDeleted = () => {
-        setDoctorInputs((prevInputs) => ({
-            ...prevInputs,
-            isDeleted: !prevInputs.isDeleted,
-        }));
+        setLoading(false);
     };
 
     return (
@@ -242,18 +245,19 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 </Select>
                                 {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
                             </FormGroup>
-                            <FormGroup>
+
+                            {id ? <FormGroup>
                                 <Label>
                                     Is Deleted{" "}
                                     <input
                                         type="checkbox"
                                         name="isDeleted"
                                         checked={doctorInputs.isDeleted}
-                                        onChange={toggleIsDeleted}
+                                        onChange={handleDoctorInput}
                                     />
                                 </Label>
-                            </FormGroup>
-
+                            </FormGroup> : ""
+                            }
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit

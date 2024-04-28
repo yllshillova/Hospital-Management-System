@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
-import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer,  SubmitButton, Title } from "../../app/common/styledComponents/upsert";
+import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
 import { useCreateDepartmentMutation, useUpdateDepartmentMutation } from '../../app/APIs/departmentApi';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 interface DepartmentData {
     name: string;
@@ -32,6 +33,18 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState<string[]>([]); // State for error messages
+
+
+    useEffect(() => {
+        if (data) {
+            const tempData = {
+                ...departmentInputs,
+                isDeleted: data.isDeleted.toString() === "True",
+            }
+            setDepartmentInputs(tempData);
+        }
+    }, [data]);
+
 
     const handleDepartmentInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, departmentInputs);
@@ -83,12 +96,6 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
         setLoading(false);
     };
 
-    const toggleIsDeleted = () => {
-        setDepartmentInputs((prevInputs) => ({
-            ...prevInputs,
-            isDeleted: !prevInputs.isDeleted,
-        }));
-    };
 
     return (
         <>
@@ -127,18 +134,18 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
                                     onChange={handleDepartmentInput}
                                 />
                             </FormGroup>
-                            <FormGroup>
+                            {id ? <FormGroup>
                                 <Label>
                                     Is Deleted{" "}
                                     <input
                                         type="checkbox"
                                         name="isDeleted"
                                         checked={departmentInputs.isDeleted}
-                                        onChange={toggleIsDeleted}
+                                        onChange={handleDepartmentInput}
                                     />
                                 </Label>
                             </FormGroup>
-
+                                : ""}
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit

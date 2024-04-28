@@ -19,6 +19,7 @@ function DoctorUpdate() {
     if (isLoading) return <MainLoader />;
 
     if (data) {
+        console.log(data);
         return <DoctorForm id={id} data={data} />;
     }
 
