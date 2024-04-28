@@ -167,7 +167,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                             onSubmit={handleSubmit}
                         >
                             <FormGroup>
-                                <Label>Name:</Label>
+                                <Label>Name</Label>
                                 <Input
                                     type="text"
                                     required
@@ -177,7 +177,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>LastName:</Label>
+                                <Label>Last Name</Label>
                                 <Input
                                     type="text"
                                     required
@@ -187,7 +187,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>ParentName:</Label>
+                                <Label>Parent Name</Label>
                                 <Input
                                     type="text"
                                     required
@@ -197,7 +197,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>PersonalNumber:</Label>
+                                <Label>Personal Number</Label>
                                 <Input
                                     type="text"
                                     required
@@ -208,7 +208,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label>Address:</Label>
+                                <Label>Address</Label>
                                 <Input
                                     type="text"
                                     required
@@ -218,7 +218,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Residence:</Label>
+                                <Label>Residence</Label>
                                 <Input
                                     type="text"
                                     required
@@ -227,17 +227,49 @@ function PatientForm({ id, data }: PatientFormProps) {
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
+                            
                             <FormGroup>
-                                <Label>Birthday:</Label>
+                                <Label>Email</Label>
                                 <Input
-                                    type="date"
-                                    name="birthday"
-                                    value={validBirthdayDate(patientInputs.birthday)}
+                                    type="text"
+                                    required
+                                    name="email"
+                                    value={patientInputs.email}
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>BloodGroup:</Label>
+                                <Label>Phone Number</Label>
+                                <Input
+                                    type="text"
+                                    required
+                                    name="phoneNumber"
+                                    value={patientInputs.phoneNumber}
+                                    onChange={handlePatientInput}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label>Occupation</Label>
+                                <Input
+                                    type="text"
+                                    required
+                                    name="occupation"
+                                    value={patientInputs.occupation}
+                                    onChange={handlePatientInput}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label>Allergies</Label>
+                                <Input
+                                    type="text"
+                                    required
+                                    name="allergies"
+                                    value={patientInputs.allergies}
+                                    onChange={handlePatientInput}
+                                />
+                            </FormGroup>
+                            
+                            <FormGroup>
                                 <Select
                                     name="bloodGroup"
                                     value={patientInputs.bloodGroup}
@@ -252,7 +284,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 </Select>
                             </FormGroup>
                             <FormGroup>
-                                <Label>Gender:</Label>
                                 <Select
                                     name="gender"
                                     value={patientInputs.gender}
@@ -267,43 +298,11 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 </Select>
                             </FormGroup>
                             <FormGroup>
-                                <Label>Email:</Label>
+                                <Label>Birthday</Label>
                                 <Input
-                                    type="text"
-                                    required
-                                    name="email"
-                                    value={patientInputs.email}
-                                    onChange={handlePatientInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Phone Number:</Label>
-                                <Input
-                                    type="text"
-                                    required
-                                    name="phoneNumber"
-                                    value={patientInputs.phoneNumber}
-                                    onChange={handlePatientInput}
-                                />
-                            </FormGroup>
-                            
-                            <FormGroup>
-                                <Label>Occupation:</Label>
-                                <Input
-                                    type="text"
-                                    required
-                                    name="occupation"
-                                    value={patientInputs.occupation}
-                                    onChange={handlePatientInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Allergies:</Label>
-                                <Input
-                                    type="text"
-                                    required
-                                    name="allergies"
-                                    value={patientInputs.allergies}
+                                    type="date"
+                                    name="birthday"
+                                    value={validBirthdayDate(patientInputs.birthday)}
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>

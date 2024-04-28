@@ -151,7 +151,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                             onSubmit={handleSubmit}
                         >
                             <FormGroup>
-                                <Label>Name:</Label>
+                                <Label>Name</Label>
                                 <Input
                                     type="text"
                                     name="name"
@@ -160,7 +160,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Last Name:</Label>
+                                <Label>Last Name</Label>
                                 <Input
                                     type="text"
                                     name="lastName"
@@ -169,7 +169,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Specialization:</Label>
+                                <Label>Specialization</Label>
                                 <Input
                                     type="text"
                                     name="specialization"
@@ -178,7 +178,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Address:</Label>
+                                <Label>Address</Label>
                                 <Input
                                     type="text"
                                     name="address"
@@ -187,7 +187,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Residence:</Label>
+                                <Label>Residence</Label>
                                 <Input
                                     type="text"
                                     name="residence"
@@ -196,7 +196,15 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Birthday:</Label>
+                                <Label>Email</Label>
+                                <Input
+                                    type="text"
+                                    name="email"
+                                    value={doctorInputs.email}
+                                    onChange={handleDoctorInput}
+                                />
+                            </FormGroup>
+                            <FormGroup>
                                 <Input
                                     type="date"
                                     name="birthday"
@@ -205,7 +213,6 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Gender:</Label>
                                 <Select
                                     name="gender"
                                     value={doctorInputs.gender}
@@ -219,17 +226,8 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     ))}
                                 </Select>
                             </FormGroup>
+                            
                             <FormGroup>
-                                <Label>Email:</Label>
-                                <Input
-                                    type="text"
-                                    name="email"
-                                    value={doctorInputs.email}
-                                    onChange={handleDoctorInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Department:</Label>
                                 <Select
                                     name="departmentId"
                                     value={doctorInputs.departmentId}
