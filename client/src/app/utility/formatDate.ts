@@ -12,3 +12,13 @@ export function formatDate(birthday: string | Date): string | undefined {
     }
     return undefined;
 }
+
+export const formatDateGeneral = (dateString: string | undefined) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-CA', { // Using 'en-CA' as it returns date in 'YYYY-MM-DD' format
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).format(date);
+};
