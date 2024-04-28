@@ -24,6 +24,12 @@ const patientApi = createApi({
             }),
             providesTags: ["Patients"],
         }),
+        getPatientsCount: builder.query({
+            query: () => ({
+                url: "patients/Count"
+            }),
+            providesTags: ["Patients"],
+        }),
         //for create
         createPatient: builder.mutation({
             query: (data) => ({
@@ -56,9 +62,10 @@ export const {
 
     useGetPatientsQuery,
     useGetPatientByIdQuery,
+    useGetPatientsCountQuery,
     useCreatePatientMutation,
     useUpdatePatientMutation,
     useDeletePatientMutation
 } = patientApi;
- 
+
 export default patientApi;

@@ -3,18 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteRoomMutation, useGetRoomsQuery } from "../../app/APIs/roomApi";
 import MainLoader from "../../app/common/MainLoader";
 import Room from "../../app/models/Room";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import { useLocation, useNavigate } from "react-router-dom";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
 //import { useEffect, useState } from "react";
 //import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 import toastNotify from "../../app/helpers/toastNotify";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
+import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
 function RoomList() {
     const { data, isLoading, error } = useGetRoomsQuery(null);
     /*const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomsQuery(null);*/
@@ -84,8 +84,8 @@ function RoomList() {
                        
                         <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(room.updatedAt).toLocaleDateString()}</TableCell>
-                        <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/room/" + room.id)} >
-                            <FontAwesomeIcon icon={faCircle} />
+                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/room/" + room.id)} >
+                            <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
                         <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/room/update/" + room.id)} >
                             <FontAwesomeIcon icon={faEdit} />
@@ -107,20 +107,20 @@ function RoomList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Rooms List</TableHeader>
-                    <AddButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/room/insert")}  >
+                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/room/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
                 <Table>
                     <thead>
-                        <TableRow>
+                        <TableHead>
                             <TableHeaderCell>NrDhomes</TableHeaderCell>
                             <TableHeaderCell>Capacity</TableHeaderCell>
                             <TableHeaderCell>Status</TableHeaderCell>
                           
                             <TableHeaderCell>CreatedAt</TableHeaderCell>
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
-                        </TableRow>
+                        </TableHead>
                     </thead>
                     {content}
                 </Table>

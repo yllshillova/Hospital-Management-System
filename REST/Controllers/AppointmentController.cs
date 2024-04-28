@@ -4,6 +4,7 @@ using static Application.Appointments.Create;
 using static Application.Appointments.Delete;
 using static Application.Appointments.Details;
 using static Application.Appointments.Edit;
+using static Application.Appointments.GetLatestAppointments;
 using static Application.Appointments.List;
 
 namespace API.Controllers
@@ -22,6 +23,12 @@ namespace API.Controllers
         public async Task<IActionResult> GetAppointmentById(Guid Id)
         {
             return HandleResult(await Mediator.Send(new GetAppointmentByIdQuery(Id)));
+        }
+
+        [HttpGet("Latest")]
+        public async Task<IActionResult> GetLatestAppointmentsCount()
+        {
+            return HandleResult(await Mediator.Send(new GetLatestAppointmentsQuery()));
         }
 
         [HttpPost]

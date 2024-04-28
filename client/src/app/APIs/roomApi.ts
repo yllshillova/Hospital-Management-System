@@ -43,14 +43,21 @@ const roomApi = createApi({
             }),
             invalidatesTags: ["Rooms"],
         }),
-        //AddPatientToRoom: builder.mutation({
-        //    query: (data) => ({
-        //        url: "addPatientToRoom",
-        //        method: "POST",
-        //        body: data
-        //    }),
-        //    invalidatesTags: ["AddPatientToRoom"],
-        //}),
+        addPatientsInRoom: builder.mutation({
+            query: (data) => ({
+                url: "rooms/addPatientsInRoom",
+                method: "POST",
+                body: data
+            }),
+            invalidatesTags: ["Rooms"],
+        }),
+        getRoomPatients: builder.query({
+            query: (id) => ({
+                url: `rooms/getRoomPatients${id}`,
+            }),
+            providesTags: ["Rooms"],
+        }),
+        
     }),
 });
 
@@ -60,7 +67,9 @@ export const {
     useGetRoomByIdQuery,
     useCreateRoomMutation,
     useUpdateRoomMutation,
-    useDeleteRoomMutation
+    useDeleteRoomMutation,
+    useAddPatientsInRoomMutation,
+    useGetRoomPatientsQuery
 } = roomApi;
 
 export default roomApi;

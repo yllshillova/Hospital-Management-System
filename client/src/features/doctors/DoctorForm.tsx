@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
@@ -9,6 +9,9 @@ import { useCreateDoctorMutation, useUpdateDoctorMutation } from "../../app/APIs
 import { SD_Genders } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
+import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
+import { useGetDepartmentsQuery } from '../../app/APIs/departmentApi';
+import Department from '../../app/models/Department';
 
 interface DoctorData {
     name: string;
@@ -51,10 +54,23 @@ function DoctorForm({ id, data }: DoctorFormProps) {
     const [loading, setLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState<string[]>([]); // State for error messages
 
+    const { data: departmentsData, isLoading: departmentsLoading, error: departmentsError } = useGetDepartmentsQuery(null);
+
+    useEffect(() => {
+        if (data) {
+            const tempData = {
+                ...doctorInputs,
+                isDeleted: data.isDeleted.toString() === "True",
+            }
+            setDoctorInputs(tempData);
+        }
+    }, [data]);
+
+
     const handleDoctorInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, doctorInputs);
         if (e.target.name === 'birthday') {
-            const formattedBirthday = formatBirthday(tempData.birthday);
+            const formattedBirthday = validBirthdayDate(tempData.birthday);
             if (formattedBirthday !== undefined) {
                 tempData.birthday = formattedBirthday;
             }
@@ -62,68 +78,48 @@ function DoctorForm({ id, data }: DoctorFormProps) {
         setDoctorInputs(tempData);
     };
 
-    const formatBirthday = (birthday: string | Date): string | undefined => {
-        if (birthday) {
-            const date = new Date(birthday);
-            if (!isNaN(date.getTime())) {
-                // Format date as YYYY-MM-DD if the date is valid
-                return date.toISOString().split('T')[0];
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        e.preventDefault();
+        setLoading(true);
+        setErrorMessages([]);
+
+        const formData = new FormData();
+
+        formData.append("Name", doctorInputs.name);
+        formData.append("LastName", doctorInputs.lastName);
+        formData.append("Specialization", doctorInputs.specialization);
+        formData.append("Address", doctorInputs.address);
+        formData.append("Residence", doctorInputs.residence);
+        formData.append("Birthday", doctorInputs.birthday);
+        formData.append("Gender", doctorInputs.gender);
+        formData.append("Email", doctorInputs.email);
+        formData.append("IsDeleted", doctorInputs.isDeleted.toString());
+        formData.append("DepartmentId", doctorInputs.departmentId);
+
+        const currentLocation = window.location.pathname;
+
+        if (id) {
+            formData.append("Id", id);
+            const response = await updateDoctor({ data: formData, id });
+
+            if (response.error) {
+                useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
+            } else {
+                toastNotify("Doctor updated successfully", "success");
+                navigate('/doctors');
+            }
+        } else {
+            const response = await createDoctor(formData);
+
+            if (response.error) {
+                useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
+            } else {
+                toastNotify("Doctor created successfully", "success");
+                navigate('/doctors');
             }
         }
-        return undefined;
-    };
 
-   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    setLoading(true);
-    setErrorMessages([]); // Clear previous error messages
-
-    const formData = new FormData();
-
-    formData.append("Name", doctorInputs.name);
-    formData.append("LastName", doctorInputs.lastName);
-    formData.append("Specialization", doctorInputs.specialization);
-    formData.append("Address", doctorInputs.address);
-    formData.append("Residence", doctorInputs.residence);
-    formData.append("Birthday", doctorInputs.birthday);
-    formData.append("Gender", doctorInputs.gender);
-    formData.append("Email", doctorInputs.email);
-    formData.append("IsDeleted", doctorInputs.isDeleted.toString());
-    formData.append("DepartmentId", doctorInputs.departmentId);
-
-    const currentLocation = window.location.pathname; // Capture the current URL
-
-    if (id) {
-        formData.append("Id", id);
-        const response = await updateDoctor({ data: formData, id });
-
-        if (response.error) {
-            // Use error handler
-            useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
-        } else {
-            toastNotify("Doctor updated successfully", "success");
-            navigate('/doctors');
-        }
-    } else {
-        const response = await createDoctor(formData);
-
-        if (response.error) {
-            // Use error handler
-            useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
-        } else {
-            toastNotify("Doctor created successfully", "success");
-            navigate('/doctors');
-        }
-    }
-
-    setLoading(false);
-};
-
-    const toggleIsDeleted = () => {
-        setDoctorInputs((prevInputs) => ({
-            ...prevInputs,
-            isDeleted: !prevInputs.isDeleted,
-        }));
+        setLoading(false);
     };
 
     return (
@@ -155,7 +151,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                             onSubmit={handleSubmit}
                         >
                             <FormGroup>
-                                <Label>Name:</Label>
+                                <Label>Name</Label>
                                 <Input
                                     type="text"
                                     name="name"
@@ -164,7 +160,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Last Name:</Label>
+                                <Label>Last Name</Label>
                                 <Input
                                     type="text"
                                     name="lastName"
@@ -173,7 +169,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Specialization:</Label>
+                                <Label>Specialization</Label>
                                 <Input
                                     type="text"
                                     name="specialization"
@@ -182,7 +178,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Address:</Label>
+                                <Label>Address</Label>
                                 <Input
                                     type="text"
                                     name="address"
@@ -191,7 +187,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Residence:</Label>
+                                <Label>Residence</Label>
                                 <Input
                                     type="text"
                                     name="residence"
@@ -200,16 +196,23 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Birthday:</Label>
+                                <Label>Email</Label>
                                 <Input
-                                    type="date"
-                                    name="birthday"
-                                    value={formatBirthday(doctorInputs.birthday)}
+                                    type="text"
+                                    name="email"
+                                    value={doctorInputs.email}
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Gender:</Label>
+                                <Input
+                                    type="date"
+                                    name="birthday"
+                                    value={validBirthdayDate(doctorInputs.birthday)}
+                                    onChange={handleDoctorInput}
+                                />
+                            </FormGroup>
+                            <FormGroup>
                                 <Select
                                     name="gender"
                                     value={doctorInputs.gender}
@@ -223,36 +226,36 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     ))}
                                 </Select>
                             </FormGroup>
+                            
                             <FormGroup>
-                                <Label>Email:</Label>
-                                <Input
-                                    type="text"
-                                    name="email"
-                                    value={doctorInputs.email}
-                                    onChange={handleDoctorInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>DepartmentId:</Label>
-                                <Input
-                                    type="text"
+                                <Select
                                     name="departmentId"
                                     value={doctorInputs.departmentId}
                                     onChange={handleDoctorInput}
-                                />
+                                    disabled={departmentsLoading}
+                                >
+                                    <option value="">Select Department</option>
+                                    {departmentsData && departmentsData.map((department: Department) => (
+                                        <option key={department.id} value={department.id}>
+                                            {department.name}
+                                        </option>
+                                    ))}
+                                </Select>
+                                {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
                             </FormGroup>
-                            <FormGroup>
+
+                            {id ? <FormGroup>
                                 <Label>
                                     Is Deleted{" "}
                                     <input
                                         type="checkbox"
                                         name="isDeleted"
                                         checked={doctorInputs.isDeleted}
-                                        onChange={toggleIsDeleted}
+                                        onChange={handleDoctorInput}
                                     />
                                 </Label>
-                            </FormGroup>
-
+                            </FormGroup> : ""
+                            }
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit

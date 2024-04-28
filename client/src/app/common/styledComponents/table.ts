@@ -3,8 +3,12 @@ import styled from "styled-components";
 export const OrdersTable = styled.div`
   padding: 20px;
   margin-left: 200px;
-  background-color: #f5f5f5;
   margin-top: 50px;
+  @media screen and (max-width: 768px) {
+    padding: 10px; /* Adjusted padding for smaller screens */
+    margin-left: 0; /* Adjusted margin for smaller screens */
+    margin-top: 30px; /* Adjusted margin-top for smaller screens */
+  }
 `;
 
 export const TableHeader = styled.h1`
@@ -27,6 +31,9 @@ export const TableHead = styled.tr`
 
 export const TableRow = styled.tr`
   border-bottom: 1px solid #d3d3d3;
+  &:nth-last-child(2) {
+    border-bottom: none;
+  }
   &:hover {
     background-color: #f5f5f5;
   }

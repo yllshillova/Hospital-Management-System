@@ -10,7 +10,7 @@ const initialFormData = {
     //patientId: "",
     //roomId: "",
     patientName: "",
-    nrDhomes:""
+    nrDhomes: ""
 };
 
 function AddPatientToRoomForm() {
@@ -20,7 +20,7 @@ function AddPatientToRoomForm() {
     //const { id:nrDhomes } = useParams(); //merr id e dhomes nga url
 
     //useEffect(() => {
-    //    setFormData((prevData) => ({ ...prevData, nrDhomes })); // Përditësimi i numrit të dhomës në formë kur ndryshon ID-ja e dhomës
+    //    setFormData((prevData) => ({ ...prevData, nrDhomes })); // PÃ«rditÃ«simi i numrit tÃ« dhomÃ«s nÃ« formÃ« kur ndryshon ID-ja e dhomÃ«s
     //}, [nrDhomes]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,73 +38,73 @@ function AddPatientToRoomForm() {
     //        return;
     //    }
 
-        //    try {
-        //        //const response = await addPatientToRoom(formData);
-        //        if (response) {
-        //            toastNotify("Patient added to room successfully", "success");
-        //            navigate('/patients');
-        //        }
-        //    } catch (error) {
-        //        console.error("Error adding patient to room:", error);
-        //        toastNotify("Failed to add patient to room. Please try again later.", "error");
-        //    }
-        //};
+    //    try {
+    //        //const response = await addPatientToRoom(formData);
+    //        if (response) {
+    //            toastNotify("Patient added to room successfully", "success");
+    //            navigate('/patients');
+    //        }
+    //    } catch (error) {
+    //        console.error("Error adding patient to room:", error);
+    //        toastNotify("Failed to add patient to room. Please try again later.", "error");
+    //    }
+    //};
 
-        return (
-            <>
-                <Header />
-                <SidePanel />
-                <OuterContainer>
-                    <FormContainer>
-                        {/*   {isLoading && <MainLoader />}*/}
-                        <Title>Add Patient to Room</Title>
-                        <Form method="post" >{/*onSubmit={handleSubmit}*/}
-                            <FormGroup>
-                                <Label>Patient Name:</Label>
-                                <Input
-                                    type="text"
-                                    required
-                                    name="patientName"
-                                    value={formData.patientName}
-                                    onChange={handleInputChange}
-                                />
-                                {/*<Label>Patient ID:</Label>*/}
-                                {/*<Input*/}
-                                {/*    type="text"*/}
-                                {/*    required*/}
-                                {/*    name="patientId"*/}
-                                {/*    value={formData.patientId}*/}
-                                {/*    onChange={handleInputChange}*/}
-                                {/*/>*/}
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Room Number:</Label>
-                                <Input
-                                    type="text"
-                                    name="nrDhomes"
-                                    value={formData.nrDhomes}
-                                    onChange={handleInputChange}
-                                />
-                                {/*<Label>Room ID:</Label>*/}
-                                {/*<Input*/}
-                                {/*    type="text"*/}
-                                {/*    required*/}
-                                {/*    name="roomId"*/}
-                                {/*    value={formData.roomId}*/}
-                                {/*    onChange={handleInputChange}*/}
-                                {/*/>*/}
-                            </FormGroup>
-                            <SubmitButton type="submit">
-                                Add Patient to Room
-                            </SubmitButton>
-                            <BackToProductsButton onClick={() => navigate("/room/:id")}>
-                                Back to Patients
-                            </BackToProductsButton>
-                        </Form>
-                    </FormContainer>
-                </OuterContainer>
-            </>
-        );
-    }
+    return (
+        <>
+            <Header />
+            <SidePanel />
+            <OuterContainer>
+                <FormContainer>
+                    {/*   {isLoading && <MainLoader />}*/}
+                    <Title>Add Patient to Room</Title>
+                    <Form method="post" >{/*onSubmit={handleSubmit}*/}
+                        <FormGroup>
+                            <Label>Patient Name:</Label>
+                            <Input
+                                type="text"
+                                required
+                                name="patientName"
+                                value={formData.patientName}
+                                onChange={handleInputChange}
+                            />
+                            {/*<Label>Patient ID:</Label>*/}
+                            {/*<Input*/}
+                            {/*    type="text"*/}
+                            {/*    required*/}
+                            {/*    name="patientId"*/}
+                            {/*    value={formData.patientId}*/}
+                            {/*    onChange={handleInputChange}*/}
+                            {/*/>*/}
+                        </FormGroup>
+                        <FormGroup>
+                            <Label>Room Number:</Label>
+                            <Input
+                                type="text"
+                                name="nrDhomes"
+                                value={formData.nrDhomes}
+                                onChange={handleInputChange}
+                            />
+                            {/*<Label>Room ID:</Label>*/}
+                            {/*<Input*/}
+                            {/*    type="text"*/}
+                            {/*    required*/}
+                            {/*    name="roomId"*/}
+                            {/*    value={formData.roomId}*/}
+                            {/*    onChange={handleInputChange}*/}
+                            {/*/>*/}
+                        </FormGroup>
+                        <SubmitButton type="submit">
+                            Add Patient to Room
+                        </SubmitButton>
+                        <BackToProductsButton onClick={() => navigate("/room/:id")}>
+                            Back to Patients
+                        </BackToProductsButton>
+                    </Form>
+                </FormContainer>
+            </OuterContainer>
+        </>
+    );
+}
 
 export default AddPatientToRoomForm;

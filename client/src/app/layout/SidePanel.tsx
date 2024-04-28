@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faSignOutAlt, faHospitalUser, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays, faUserInjured } from '@fortawesome/free-solid-svg-icons';
 //import { useDispatch } from 'react-redux';
 //import {
 //    emptyUserState,
@@ -39,6 +39,13 @@ function SidePanel() {
         navigate('/doctors');
     }
 
+    const handleAppointmentsList = () => {
+        navigate('/appointments');
+    }
+
+    const handleNursesList = () => {
+       navigate('/nurses');
+    }
 
     //const handleAllOrders = () => {
     //    navigate('/AllOrders');
@@ -59,9 +66,10 @@ function SidePanel() {
 
     const menuItems = [
         { icon: faUserDoctor, label: 'Doctors', onClick: handleDoctorsList },
-        { icon: faHospitalUser, label: 'Patients', onClick: handlePatientList },
+        { icon: faUserDoctor, label: 'Nurses', onClick: handleNursesList },
+        { icon: faUserInjured, label: 'Patients', onClick: handlePatientList },
         { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
-        { icon: faCalendarDays, label: 'Appointments' },
+        { icon: faCalendarDays, label: 'Appointments', onClick: handleAppointmentsList },
         { icon: faBookMedical, label: 'Visits' },
         { icon: faBedPulse, label: 'Rooms', onClick: handleRoomsList },
         { icon: faCog, label: 'Settings' },
@@ -85,57 +93,63 @@ function SidePanel() {
 }
 
 const SidePanelContainer = styled.div`
-  position: fixed;
-  top: 48px; /* Adjust based on the height of Header */
-  left: 0;
-  bottom: 0;
-  min-width: 200px;
-  background-color: #1a252e  ;
-  display: flex;
-  flex-direction: column;
-  padding: 20px 0;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-  z-index: 100;
-  height: 100vh;
+    position: fixed;
+    top: 48px;
+    left: 0;
+    bottom: 0;
+    min-width: 200px;
+    background-color: #1a252e;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    height: 100vh;
+
+    @media screen and (max-width: 768px) {
+        width: 60%;
+    }
+
+    @media screen and (max-width: 480px) {
+        width: 40%;
+    }
+
+    @media screen and (max-width: 360px) {
+        width: 80%;
+    }
 `;
 
 const SidebarItem = styled.div`
-  display: flex;
-  align-items: center;
-  color: #708090;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 15px;
-  width: 80%;
-  margin:5px 3px;
-  transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    color: #E8E8E8;
+    font-size: 13.5px;
+    cursor: pointer;
+    padding: 12px;
+    margin: 5px 10%;
+    transition: background-color 0.3s ease;
 
-  &:hover {
-    border-radius: 15px;
-    //background-color: white;
-       // border: 2px solid #FF003F; /* Add border color and width */
-
-    color: #FF003F;
-  }
+    &:hover {
+        background-color: #4C516D;
+        border-radius: 8px;
+    }
 `;
 
 const IconWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-right: 10px; /* Add margin between icon and label */
-  //color: ${(props) => props.color};
-  color:#708090;
-
-
-  ${SidebarItem}:hover & {
-    color: #FF003F; /* Change icon color on hover */
-  }
+    display: flex;
+    justify-content: center;
+    margin-right: 10px;
+    color: #E8E8E8;
+    flex: 1;
 `;
 
 const Label = styled.div`
-  font-weight: bold; /* Make the label bold */
-  margin-left: 15px; /* Add margin between icon and label */
+    font-weight: bold;
+    flex: 3;
+    align-self: flex-start;
 `;
+
+
 //const DropdownContainer = styled.div`
 //  position: absolute;
 //  top: 100%;

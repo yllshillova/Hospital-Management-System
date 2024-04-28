@@ -28,10 +28,10 @@ namespace Application.Patients
 
                 var patient = _mapper.Map<Patient>(request.Patient);
                 if (patient is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
-               
+
                 patient.CreatedAt = DateTime.Now;
                 patient.UpdatedAt = patient.CreatedAt;
-                
+
                 var result = await _patientRepository.CreateAsync(patient);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the patient! Try again.");
 

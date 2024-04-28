@@ -60,7 +60,6 @@ function PatientUpsert() {
                 occupation: data.occupation,
                 allergies: data.allergies,
             };
-            console.log("Blood Group:", data.bloodgroup);
             setPatientInputs(tempData);
         }
     }, [data]);

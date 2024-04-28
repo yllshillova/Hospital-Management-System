@@ -4,6 +4,8 @@ import { useGetPatientByIdQuery } from "../../app/APIs/patientApi";
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
+import { Header, SidePanel } from "../../app/layout";
+import { AdditionalInfoContainer, Attribute, Label, LabelsRow, LeftContainer, MainContainer, RightContainer, SectionTitle, Value, ValuesRow, WrapperContainer } from "../../app/common/styledComponents/details";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -34,30 +36,85 @@ function PatientDetails() {
 
     if (data) {
         const patient = data;
-        console.log(patient.isDeleted);
+        const statusLabel = patient.isDeleted === "True" ?
+            <label style={{ fontWeight: "bold", color: "#DC143C" }}>Passive </label> :
+            <label style={{ fontWeight: "bold", color: "#009F6B" }}>Active </label>;
         return (
             <>
-                <div>
-                    <h2>Patient Details</h2>
-                    <p>Id: {patient.id}</p>
-                    <p>Name: {patient.name}</p>
-                    <p>Last Name: {patient.lastName}</p>
-                    <p>Parent Name: {patient.parentName}</p>
-                    <p>Personal Number: {patient.personalNumber}</p>
-                    <p>Address: {patient.address}</p>
-                    <p>Residence: {patient.residence}</p>
-                    <p>Birthday: {new Date(patient.birthday).toLocaleDateString()}</p>
-                    <p>BloodGroup: {patient.bloodGroup}</p>
-                    <p>Gender: {patient.gender}</p>
-                    <p>Email: {patient.email}</p>
-                    <p>PhoneNumber: {patient.phoneNumber}</p>
-                    <p>IsDeleted: {patient.isDeleted}</p>
-                    <p>Created At: {new Date(patient.createdAt).toLocaleDateString()}</p>
-                    <p>Updated At: {new Date(patient.updatedAt).toLocaleDateString()}</p>
-                    <p>Occupation: {patient.occupation}</p>
-                    <p>Allergies: {patient.allergies}</p>
-                </div>
-            </>
+                <Header />
+    <SidePanel />
+
+    <MainContainer>
+        <WrapperContainer>
+
+            <LeftContainer>
+                <SectionTitle>Patient Details</SectionTitle>
+                <Attribute>
+                           {statusLabel}
+                </Attribute>
+                <Attribute>
+                    <Label>Name</Label>
+                    <Value>{patient.name}</Value>
+                </Attribute>
+                <Attribute>
+                    <Label>Last Name</Label>
+                    <Value>{patient.lastName}</Value>
+                </Attribute>
+                <Attribute>
+                    <Label>Parent Name</Label>
+                    <Value>{patient.parentName}</Value>
+                </Attribute>
+                <Attribute>
+                    <Label>Residence</Label>
+                    <Value>{patient.residence}</Value>
+                </Attribute>
+                <Attribute>
+                    <Label>Personal Number</Label>
+                    <Value>{patient.personalNumber}</Value>
+                </Attribute>
+            </LeftContainer>
+
+            <RightContainer>
+                <SectionTitle>Personal Information</SectionTitle>
+                <LabelsRow>
+                    <Label>Address</Label>
+                    <Label>Phone Number</Label>
+                    <Label>Email</Label>
+                </LabelsRow>
+                <ValuesRow>
+                    <Value>{patient.address}</Value>
+                    <Value>{patient.phoneNumber}</Value>
+                    <Value>{patient.email}</Value>
+                </ValuesRow>
+
+                <LabelsRow>
+                    <Label>Birthday</Label>
+                    <Label>Occupation</Label>
+                    <Label>Gender</Label>
+                </LabelsRow>
+                <ValuesRow>
+                    <Value>{new Date(patient.birthday).toLocaleDateString()}</Value>
+                    <Value>{patient.occupation}</Value>
+                    <Value>{patient.gender}</Value>
+                </ValuesRow>
+                </RightContainer>
+        </WrapperContainer>
+
+        <AdditionalInfoContainer>
+            <SectionTitle>Additional Information</SectionTitle>
+            <LabelsRow>
+                <Label>Blood Group</Label>
+                <Label></Label>
+                <Label></Label>
+                <Label>Allergies</Label>
+            </LabelsRow>
+            <ValuesRow>
+                <Value style={{color:"crimson", fontWeight:"bold"} }>{patient.bloodGroup}</Value>
+                <Value>{patient.allergies}</Value>
+            </ValuesRow>
+        </AdditionalInfoContainer>
+    </MainContainer>
+</>
         );
     }
     return null;

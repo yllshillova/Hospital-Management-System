@@ -11,9 +11,12 @@ namespace Application.Doctors
                                 .SetValidator(new ValidLengthValidator<DoctorDto, string>(4, 100));
             RuleFor(d => d.LastName).SetValidator(new NotNullValidator<DoctorDto, string>())
                                     .SetValidator(new ValidLengthValidator<DoctorDto, string>(4, 100));
-            RuleFor(d => d.Residence).SetValidator(new ValidLengthValidator<DoctorDto, string>(4, 100));
-            RuleFor(d => d.Address).SetValidator(new ValidLengthValidator<DoctorDto, string>(4, 100));
-            RuleFor(d => d.Gender).SetValidator(new ValidLengthValidator<DoctorDto, string>(4, 100));
+            RuleFor(d => d.Residence).SetValidator(new ValidLengthValidator<DoctorDto, string>(4, 100))
+                                     .SetValidator(new NotNullValidator<DoctorDto, string>());
+            RuleFor(d => d.Address).SetValidator(new ValidLengthValidator<DoctorDto, string>(4, 100))
+                                   .SetValidator(new NotNullValidator<DoctorDto, string>());
+            RuleFor(d => d.Gender).SetValidator(new ValidLengthValidator<DoctorDto, string>(4, 100))
+                                  .SetValidator(new NotNullValidator<DoctorDto, string>());
             RuleFor(d => d.Birthday).Must(BeAValidDate).WithMessage("Birthday field is not valid.");
             RuleFor(d => d.Specialization).SetValidator(new NotNullValidator<DoctorDto, string>())
                                           .SetValidator(new ValidLengthValidator<DoctorDto, string>(4, 100));

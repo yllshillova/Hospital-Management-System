@@ -2,14 +2,14 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHospital } from '@fortawesome/free-solid-svg-icons/faHospital';
+import { useNavigate } from 'react-router-dom';
 //import { faGaugeHigh } from '@fortawesome/free-solid-svg-icons';
-//import { useNavigate } from 'react-router-dom';
 //import { userModel } from '../../Interfaces';
 //import { useSelector } from 'react-redux';
 //import { RootState } from '../../Storage/Redux/store';
 
 function Header() {
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
     //const userData: userModel = useSelector(
     //    (state: RootState) => state.userAuthStore
     //);
@@ -21,12 +21,11 @@ function Header() {
         <StickyHeader>
             <HeaderContainer>
                 <LogoContainer>
-                    {/*<Logo onClick={() => navigate('/')}>Dashboard</Logo>*/}
-                    <Logo>Dashboard</Logo>
+                    <Logo onClick={() => navigate('/')} >Dashboard</Logo>
                     <MenuIcon icon={faHospital} />
                 </LogoContainer>
                 {/*<MessageContainer> {nameUser} {" "} {surnameUser}*/}
-                <MessageContainer> {"Dr.Strange"}
+                <MessageContainer> {"Name Surname"}
                     <UserImage>
                         <img
                             src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
@@ -55,6 +54,9 @@ const HeaderContainer = styled.header`
   background-color: #1a252e;
   color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  @media screen and (max-width: 768px) {
+        padding: 10px;
+    }
 `;
 
 const LogoContainer = styled.div`
