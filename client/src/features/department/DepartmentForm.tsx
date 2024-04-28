@@ -9,7 +9,6 @@ import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
 import { useCreateDepartmentMutation, useUpdateDepartmentMutation } from '../../app/APIs/departmentApi';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 interface DepartmentData {
     name: string;
