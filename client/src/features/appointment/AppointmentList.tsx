@@ -25,7 +25,7 @@ function AppointmentList() {
     const location = useLocation();
     let content;
 
-    const handleAppointmentDelete = async (id: number) => {
+    const handleAppointmentDelete = async (id: string) => {
         const result = await deleteAppointment(id);
 
         if ('data' in result) {
@@ -47,8 +47,8 @@ function AppointmentList() {
     } else {
         content = appointmentData.map((appointment: Appointment) => {
             // Find the corresponding doctor and patient data
-            const doctor = doctorData.find((doc: { id: number; }) => doc.id === appointment.doctorId);
-            const patient = patientData.find((pat: { id: number; }) => pat.id === appointment.patientId);
+            const doctor = doctorData.find((doc: { id: string; }) => doc.id === appointment.doctorId);
+            const patient = patientData.find((pat: { id: string; }) => pat.id === appointment.patientId);
 
             return (
                 <tbody key={appointment.id}>
@@ -57,9 +57,9 @@ function AppointmentList() {
                         <TableCell>{new Date(appointment.updatedAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(appointment.checkInDate).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(appointment.checkOutDate).toLocaleDateString()}</TableCell>
-                        <TableCell>{appointment.status}</TableCell>
-                        <TableCell>{appointment.reason}</TableCell>
-                        <TableCell>{appointment.notes}</TableCell>
+                        {/*<TableCell>{appointment.status}</TableCell>*/}
+                        {/*<TableCell>{appointment.reason}</TableCell>*/}
+                        {/*<TableCell>{appointment.notes}</TableCell>*/}
                         <TableCell>{doctor ? doctor.name : "N/A"}</TableCell>
                         <TableCell>{patient ? patient.name : "N/A"}</TableCell>
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/appointment/" + appointment.id)}>
@@ -84,7 +84,7 @@ function AppointmentList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Appointments List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/appointmentUpsert")}>
+                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/appointment/insert")}>
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
@@ -95,9 +95,9 @@ function AppointmentList() {
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
                             <TableHeaderCell>CheckInDate</TableHeaderCell>
                             <TableHeaderCell>CheckOutDate</TableHeaderCell>
-                            <TableHeaderCell>Status</TableHeaderCell>
-                            <TableHeaderCell>Reason</TableHeaderCell>
-                            <TableHeaderCell>Notes</TableHeaderCell>
+                            {/*<TableHeaderCell>Status</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Reason</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Notes</TableHeaderCell>*/}
                             <TableHeaderCell>Doctor</TableHeaderCell>
                             <TableHeaderCell>Patient</TableHeaderCell>
                         </TableHead>

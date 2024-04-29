@@ -32,7 +32,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAppointment(AppointmentDto Appointment)
+        public async Task<IActionResult> CreateAppointment( AppointmentDto Appointment)
         {
             return HandleResult(await Mediator.Send(new CreateAppointmentCommand(Appointment)));
         }
