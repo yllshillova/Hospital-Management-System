@@ -24,6 +24,10 @@ import DepartmentUpdate from '../../features/department/DepartmentUpdate';
 import DepartmentInsert from '../../features/department/DepartmentInsert';
 import PatientInsert from '../../features/patient/PatientInsert';
 import PatientUpdate from '../../features/patient/PatientUpdate';
+import VisitInsert from '../../features/visit/VisitInsert';
+import VisitUpdate from '../../features/patient/PatientUpdate';
+import VisitList from '../../features/visit/VisitList';
+import VisitDetails from '../../features/visit/VisitDetails';
 
 
 function App() {
@@ -52,6 +56,10 @@ function App() {
                     <Route path="/addPatientToRoom" element={<AddPatientToRoomForm />}></Route>
                     <Route path="/appointments" element={<AppointmentList />}></Route>
                     <Route path="/appointment/:id" element={<AppointmentDetails />}></Route>
+                    <Route path="/visits" element={<VisitList />}></Route>
+                    <Route path="/visit/:id" element={<VisitDetails />}></Route>
+                    <Route path="/visit/insert" element={<VisitInsert />}></Route>
+                    <Route path="/visit/update/:id" element={<VisitUpdate />}></Route>
                     <Route path="/login" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
                    {/* <Route path="/details" element={<Details />}></Route>*/}

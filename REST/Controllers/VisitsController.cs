@@ -23,12 +23,12 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateVisit(VisitDto Visit)
+        public async Task<IActionResult> CreateVisit([FromForm] VisitDto Visit)
         {
             return HandleResult(await Mediator.Send(new CreateVisitCommand(Visit)));
         }
         [HttpPut("{Id}")]
-        public async Task<IActionResult> EditVisit(Guid Id, VisitDto Visit)
+        public async Task<IActionResult> EditVisit(Guid Id, [FromForm] VisitDto Visit)
         {
             Visit.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateVisitCommand(Visit)));

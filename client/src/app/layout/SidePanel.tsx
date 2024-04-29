@@ -43,29 +43,16 @@ function SidePanel() {
         navigate('/appointments');
     }
 
-    //const handleAllOrders = () => {
-    //    navigate('/AllOrders');
-    //}
-    //const handleAllUsers = () => {
-    //    navigate('/UsersList');
-    //}
-
-    //const menuItems = [
-    //    { icon: faHome, label: 'Home', color: 'crimson', onClick: handleHome },
-    //    { icon: faUsers, label: 'Users', color: 'darkorange', onClick: handleAllUsers },
-    //    { icon: faBoxOpen, label: 'Products', color: '#007FFF', onClick: handlePL },
-    //    { icon: faClipboardList, label: 'Orders', color: '#F9629F', onClick: handleAllOrders },
-    //    { icon: faCog, label: 'Settings', color: '#5F9EA0' },
-    //    { icon: faSignOutAlt, label: 'Logout', color: 'yellow', onClick: handleLogout },
-
-    //];
+    const handleVisitsList = () => {
+        navigate('/visits');
+    }
 
     const menuItems = [
         { icon: faUserDoctor, label: 'Doctors', onClick: handleDoctorsList },
         { icon: faUserInjured, label: 'Patients', onClick: handlePatientList },
         { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
         { icon: faCalendarDays, label: 'Appointments', onClick: handleAppointmentsList },
-        { icon: faBookMedical, label: 'Visits' },
+        { icon: faBookMedical, label: 'Visits', onClick: handleVisitsList },
         { icon: faBedPulse, label: 'Rooms', onClick: handleRoomsList },
         { icon: faCog, label: 'Settings' },
         { icon: faSignOutAlt, label: 'Logout' },
