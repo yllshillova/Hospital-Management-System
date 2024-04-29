@@ -87,7 +87,7 @@ function VisitList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Visits List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/visit/insert")}  >
+                    <AddButton onClick={() => navigate("/visit/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>

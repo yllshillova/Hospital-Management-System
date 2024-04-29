@@ -25,9 +25,9 @@ import DepartmentInsert from '../../features/department/DepartmentInsert';
 import PatientInsert from '../../features/patient/PatientInsert';
 import PatientUpdate from '../../features/patient/PatientUpdate';
 import VisitInsert from '../../features/visit/VisitInsert';
-import VisitUpdate from '../../features/patient/PatientUpdate';
 import VisitList from '../../features/visit/VisitList';
 import VisitDetails from '../../features/visit/VisitDetails';
+import VisitUpdate from '../../features/visit/VisitUpdate';
 
 
 function App() {

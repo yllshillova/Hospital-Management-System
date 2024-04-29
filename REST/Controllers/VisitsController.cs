@@ -1,5 +1,6 @@
 ﻿using Application.Visits;
 using Microsoft.AspNetCore.Mvc;
+using static Application.Appointments.GetLatestVisits;
 using static Application.Visits.Create;
 using static Application.Visits.Delete;
 using static Application.Visits.Details;
@@ -16,10 +17,16 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetVisitsQuery()));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{Id}")]
         public async Task<IActionResult> GetVisitById(Guid id)
         {
             return HandleResult(await Mediator.Send(new GetVisitByIdQuery(id)));
+        }
+
+        [HttpGet("Latest")]
+        public async Task<IActionResult> GetLatestVisits()
+        {
+            return HandleResult(await Mediator.Send(new GetLatestVisitsQuery()));
         }
 
         [HttpPost]

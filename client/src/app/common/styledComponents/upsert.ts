@@ -68,7 +68,7 @@ export const Select = styled.select`
 export const SubmitButton = styled.button`
   width: 48%;
   padding: 8px;
-  background-color: #1a252e;
+  background-color: #002147;;
   color: white;
   border: none;
   border-radius: 5px;

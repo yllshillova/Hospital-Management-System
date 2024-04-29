@@ -101,7 +101,7 @@ function DoctorList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Doctors List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/doctor/insert")}  >
+                    <AddButton  onClick={() => navigate("/doctor/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>

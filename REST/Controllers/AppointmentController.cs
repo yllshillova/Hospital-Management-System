@@ -26,7 +26,7 @@ namespace API.Controllers
         }
 
         [HttpGet("Latest")]
-        public async Task<IActionResult> GetLatestAppointmentsCount()
+        public async Task<IActionResult> GetLatestAppointments()
         {
             return HandleResult(await Mediator.Send(new GetLatestAppointmentsQuery()));
         }

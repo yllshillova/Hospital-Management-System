@@ -17,7 +17,7 @@ function Sections() {
         { icon: faFolderTree, label: 'Departments', value: departmentsCount || "No", color: '#72A0C1' },
         { icon: faUserDoctor, label: 'Doctors', value: doctorsCount || "No", color: '#5072A7' },
         { icon: faUserNurse, label: 'Nurses', value: "No", color: '#00538C' },
-        { icon: faUserInjured, label: 'Patients', value: patientsCount || "No", color: '#002244' },
+        { icon: faUserInjured, label: 'Patients', value: patientsCount || "No", color: '#002147;' },
 
     ];
     let content;

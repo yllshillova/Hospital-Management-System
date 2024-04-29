@@ -80,7 +80,7 @@ const SidePanelContainer = styled.div`
     left: 0;
     bottom: 0;
     min-width: 200px;
-    background-color: #1a252e;
+    background-color: #002147;
     display: flex;
     flex-direction: column;
     padding: 20px 0;

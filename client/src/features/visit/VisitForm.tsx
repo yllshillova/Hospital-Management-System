@@ -9,7 +9,7 @@ import MainLoader from "../../app/common/MainLoader";
 import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 import Doctor from "../../app/models/Doctor";
 import Patient from "../../app/models/Patient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import inputHelper from "../../app/helpers/inputHelper";
 import { useNavigate } from "react-router-dom";
 
@@ -28,7 +28,7 @@ const visitData: Visit = {
     remarks: "",
     doctorId: "",
     patientId: "",
-    id: 0,
+    id: "",
     createdAt: new Date(), 
     updatedAt: new Date(), 
     doctor: {} as Doctor, 
@@ -46,6 +46,27 @@ function VisitForm({ id, data }: VisitFormProps) {
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
     const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
 
+    //useEffect(() => {
+    //    if (data) {
+    //        const tempData = {
+    //            complaints: data.complaints || "",
+    //            diagnosis: data.diagnosis || "",
+    //            examinations: data.examinations || "",
+    //            therapy: data.therapy || "",
+    //            requiredAnalysis: data.requiredAnalysis || "",
+    //            advice: data.advice || "",
+    //            remarks: data.remarks || "",
+    //            doctorId: data.doctorId || "",
+    //            patientId: data.patientId || "",
+    //            id: data.id || "",
+    //            createdAt: data.createdAt || new Date(),
+    //            updatedAt: data.updatedAt || new Date(),
+    //            doctor: data.doctor || {} as Doctor,
+    //            patient: data.patient || {} as Patient
+    //        };
+    //        setVisitInputs(tempData);
+    //    }
+    //}, [data]);
 
     const handleVisitInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, visitInputs);

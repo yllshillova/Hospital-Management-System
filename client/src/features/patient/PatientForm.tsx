@@ -306,6 +306,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                                     onChange={handlePatientInput}
                                 />
                             </FormGroup>
+                            {id ?  
                             <FormGroup>
                                 <Label>
                                     Is Deleted{" "}
@@ -317,13 +318,13 @@ function PatientForm({ id, data }: PatientFormProps) {
                                     />
 
                                 </Label>
-                            </FormGroup>
+                            </FormGroup> : ""}
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit
                                 </SubmitButton>
                                 <BackToProductsButton onClick={() => navigate("/patients")}>
-                                    Back to patients
+                                    Back to Patients
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>

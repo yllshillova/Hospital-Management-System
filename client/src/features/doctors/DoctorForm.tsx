@@ -204,28 +204,6 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
-                            <FormGroup>
-                                <Input
-                                    type="date"
-                                    name="birthday"
-                                    value={validBirthdayDate(doctorInputs.birthday)}
-                                    onChange={handleDoctorInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Select
-                                    name="gender"
-                                    value={doctorInputs.gender}
-                                    onChange={handleDoctorInput}
-                                >
-                                    <option value="">Select Gender</option>
-                                    {genders.map((gender) => (
-                                        <option key={gender} value={gender}>
-                                            {gender}
-                                        </option>
-                                    ))}
-                                </Select>
-                            </FormGroup>
                             
                             <FormGroup>
                                 <Select
@@ -243,6 +221,30 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 </Select>
                                 {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
                             </FormGroup>
+                            <FormGroup>
+                                <Select
+                                    name="gender"
+                                    value={doctorInputs.gender}
+                                    onChange={handleDoctorInput}
+                                >
+                                    <option value="">Select Gender</option>
+                                    {genders.map((gender) => (
+                                        <option key={gender} value={gender}>
+                                            {gender}
+                                        </option>
+                                    ))}
+                                </Select>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label>Birthday</Label>
+                                <Input
+                                    type="date"
+                                    name="birthday"
+                                    value={validBirthdayDate(doctorInputs.birthday)}
+                                    onChange={handleDoctorInput}
+                                />
+                            </FormGroup>
+                            
 
                             {id ? <FormGroup>
                                 <Label>

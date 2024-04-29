@@ -19,9 +19,9 @@ const visitApi = createApi({
             }),
             providesTags: ["Visits"],
         }),
-        getVisitsCount: builder.query({
+        getLatestVisits: builder.query({
             query: () => ({
-                url: "visits/Count"
+                url: "visits/Latest"
             }),
             providesTags: ["Visits"],
         }),
@@ -54,7 +54,7 @@ const visitApi = createApi({
 export const {
     useGetVisitsQuery,
     useGetVisitByIdQuery,
-    useGetVisitsCountQuery,
+    useGetLatestVisitsQuery,
     useCreateVisitMutation,
     useUpdateVisitMutation,
     useDeleteVisitMutation,
