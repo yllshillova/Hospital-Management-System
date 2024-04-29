@@ -32,13 +32,13 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAppointment(AppointmentDto Appointment)
+        public async Task<IActionResult> CreateAppointment([FromForm] AppointmentDto Appointment)
         {
             return HandleResult(await Mediator.Send(new CreateAppointmentCommand(Appointment)));
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> EditAppointment(Guid Id, AppointmentDto Appointment)
+        public async Task<IActionResult> EditAppointment(Guid Id, [FromForm] AppointmentDto Appointment)
         {
             Appointment.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateAppointmentCommand(Appointment)));

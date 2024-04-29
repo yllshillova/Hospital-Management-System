@@ -99,7 +99,6 @@ function VisitList() {
                             <TableHeaderCell>Complaints</TableHeaderCell>
                             <TableHeaderCell>CreatedAt</TableHeaderCell>
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
-                            <TableHeaderCell>Actions</TableHeaderCell>
 
                         </TableHead>
                     </thead>
