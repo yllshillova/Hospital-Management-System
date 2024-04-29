@@ -11,6 +11,8 @@ namespace Application.Accounts.Register
                                .SetValidator(new ValidLengthValidator<RegisterDto, string>(4, 100));
             RuleFor(d => d.LastName).SetValidator(new NotNullValidator<RegisterDto, string>())
                                     .SetValidator(new ValidLengthValidator<RegisterDto, string>(4, 100));
+            RuleFor(d => d.UserName).SetValidator(new NotNullValidator<RegisterDto, string>())
+                                    .SetValidator(new ValidLengthValidator<RegisterDto, string>(4, 100));
             RuleFor(d => d.Email).SetValidator(new NotNullValidator<RegisterDto, string>())
                                  .SetValidator(new EmailValidator<RegisterDto, string>());
             RuleFor(d => d.Password).SetValidator(new NotNullValidator<RegisterDto, string>())

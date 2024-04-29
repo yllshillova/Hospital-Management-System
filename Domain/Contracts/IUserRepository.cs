@@ -6,4 +6,5 @@ public interface IUserRepository
     Task<bool> IsEmailTakenAsync(string email);
     Task<bool> CreateUserAsync(AppUser user, string password);
     Task<bool> ValidatePasswordAsync(AppUser user, string password);
+    Task<bool> AddToRoleAsync(AppUser user, string role);
 }

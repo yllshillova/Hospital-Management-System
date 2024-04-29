@@ -1,4 +1,4 @@
-﻿namespace Application.Accounts.Register
+﻿namespace Application.Accounts.Users
 {
     public class UserDto
     {
