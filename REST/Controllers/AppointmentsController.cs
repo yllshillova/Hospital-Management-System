@@ -11,7 +11,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppointmentController : BaseApiController
+    public class AppointmentsController : BaseApiController
     {
         [HttpGet]
         public async Task<IActionResult> GetAppointments()
@@ -32,7 +32,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAppointment( AppointmentDto Appointment)
+        public async Task<IActionResult> CreateAppointment(AppointmentDto Appointment)
         {
             return HandleResult(await Mediator.Send(new CreateAppointmentCommand(Appointment)));
         }
