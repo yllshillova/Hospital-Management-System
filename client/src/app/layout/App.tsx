@@ -28,6 +28,8 @@ import VisitInsert from '../../features/visit/VisitInsert';
 import VisitList from '../../features/visit/VisitList';
 import VisitDetails from '../../features/visit/VisitDetails';
 import VisitUpdate from '../../features/visit/VisitUpdate';
+import AppointmentUpdate from '../../features/appointment/AppointmentUpdate';
+import AppointmentInsert from '../../features/appointment/AppointmentInsert';
 
 
 function App() {
@@ -60,6 +62,8 @@ function App() {
                     <Route path="/visit/:id" element={<VisitDetails />}></Route>
                     <Route path="/visit/insert" element={<VisitInsert />}></Route>
                     <Route path="/visit/update/:id" element={<VisitUpdate />}></Route>
+                    <Route path="/appointment/insert" element={<AppointmentInsert />}></Route>
+                    <Route path="/appointment/update/:id" element={<AppointmentUpdate />}></Route>
                     <Route path="/login" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
                    {/* <Route path="/details" element={<Details />}></Route>*/}

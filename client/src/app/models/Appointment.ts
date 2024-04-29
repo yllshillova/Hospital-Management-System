@@ -10,8 +10,8 @@ export default interface Appointment {
     status: string;
     reason: string;
     notes: string;
-    doctorId: number;
+    doctorId: string;
     doctor: Doctor;
-    patientId: number;
+    patientId: string;
     patient: Patient;
 }
