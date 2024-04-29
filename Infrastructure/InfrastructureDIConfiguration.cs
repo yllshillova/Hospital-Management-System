@@ -32,6 +32,7 @@ namespace Infrastructure
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
             services.AddScoped<IRoomPatientRepository, RoomPatientRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
         }
     }
