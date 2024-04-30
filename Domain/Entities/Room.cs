@@ -9,7 +9,7 @@ namespace Domain.Entities
         public bool IsFree { get; set; }
         //public Guid PatientId { get; set; }
         //public Patient Patient { get; set; }
-        public int NrDhomes { get; set; }
+        public int Number { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
