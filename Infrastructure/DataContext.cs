@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
-    public class DataContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
+    public class DataContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     {
         public DataContext(DbContextOptions options) : base(options)
         {
