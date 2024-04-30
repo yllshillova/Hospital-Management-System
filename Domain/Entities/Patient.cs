@@ -23,5 +23,6 @@ namespace Domain.Entities
         public string Occupation { get; set; }
         public string? Allergies { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
+        public ICollection<RoomPatient> RoomPatients { get; set; }
     }
 }

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeletePatientMutation, useGetPatientsQuery } from "../../app/APIs/patientApi";
 import MainLoader from "../../app/common/MainLoader";
 import Patient from "../../app/models/Patient";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -75,13 +75,13 @@ function PatientList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Patients List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/patient/insert")}>
+                    <AddButton onClick={() => navigate("/patient/insert")}>
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
                 <Table>
                     <thead>
-                        <TableRow>
+                        <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Last Name</TableHeaderCell>
                             <TableHeaderCell>Parent Name</TableHeaderCell>
@@ -89,7 +89,7 @@ function PatientList() {
                             <TableHeaderCell>Is Deleted</TableHeaderCell>
                             <TableHeaderCell>Created At</TableHeaderCell>
                             <TableHeaderCell>Updated At</TableHeaderCell>
-                        </TableRow>
+                        </TableHead>
                     </thead>
                     {content}
                 </Table>

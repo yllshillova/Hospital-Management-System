@@ -1,5 +1,7 @@
+import RoomPatient from "./RoomPatient";
+
  export default interface Patient{
-     id: number;
+     id: string;
      name: string;
      lastName: string;
      parentName: string;
@@ -16,4 +18,5 @@
      isDeleted: boolean;
      occupation: string;
      allergies: string;
+     roomPatients: RoomPatient[];
 }

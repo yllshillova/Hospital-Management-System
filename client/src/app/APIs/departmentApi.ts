@@ -19,6 +19,12 @@ const departmentApi = createApi({
             }),
             providesTags: ["Departments"],
         }),
+        getDepartmentsCount: builder.query({
+            query: () => ({
+                url: "departments/Count"
+            }),
+            providesTags: ["Departments"],
+        }),
         createDepartment: builder.mutation({
             query: (data) => ({
                 url: "departments",
@@ -49,6 +55,7 @@ const departmentApi = createApi({
 export const {
     useGetDepartmentsQuery,
     useGetDepartmentByIdQuery,
+    useGetDepartmentsCountQuery,
     useCreateDepartmentMutation,
     useUpdateDepartmentMutation,
     useDeleteDepartmentMutation

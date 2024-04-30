@@ -4,6 +4,7 @@ using static Application.Doctors.Create;
 using static Application.Doctors.Delete;
 using static Application.Doctors.Details;
 using static Application.Doctors.Edit;
+using static Application.Doctors.GetPatientsCount;
 using static Application.Doctors.List;
 
 namespace API.Controllers
@@ -16,10 +17,16 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetDoctorsQuery()));
         }
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetDoctorById(Guid Id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetDoctorById(Guid id)
         {
-            return HandleResult(await Mediator.Send(new GetDoctorByIdQuery(Id)));
+            return HandleResult(await Mediator.Send(new GetDoctorByIdQuery(id)));
+        }
+
+        [HttpGet("Count")]
+        public async Task<IActionResult> GetDoctorsCount()
+        {
+            return HandleResult(await Mediator.Send(new GetDoctorsCountQuery()));
         }
 
         [HttpPost]
@@ -27,16 +34,16 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new CreateDoctorCommand(Doctor)));
         }
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> EditDoctor(Guid Id, [FromForm] DoctorDto Doctor)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditDoctor(Guid id, [FromForm] DoctorDto Doctor)
         {
-            Doctor.Id = Id;
+            Doctor.Id = id;
             return HandleResult(await Mediator.Send(new UpdateDoctorCommand(Doctor)));
         }
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteDoctor(Guid Id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteDoctor(Guid id)
         {
-            return HandleResult(await Mediator.Send(new DeleteDoctorCommand(Id)));
+            return HandleResult(await Mediator.Send(new DeleteDoctorCommand(id)));
         }
 
     }

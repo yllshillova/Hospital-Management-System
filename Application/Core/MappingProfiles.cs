@@ -8,6 +8,7 @@ using Application.Departments;
 using Application.Nurses;
 using Application.EmergencyContacts;
 using Application.Appointments;
+using Application.Accounts.Users;
 
 
 namespace Application.Core
@@ -22,8 +23,8 @@ namespace Application.Core
             CreateMap<Department, DepartmentDto>().ReverseMap();
             CreateMap<Nurse, NurseDto>().ReverseMap();
             CreateMap<Appointment, AppointmentDto>().ReverseMap();
-
             CreateMap<EmergencyContact, EmergencyContactDto>().ReverseMap();
+            CreateMap<AppUser, UserDto>().ReverseMap();
         }
     }
 }

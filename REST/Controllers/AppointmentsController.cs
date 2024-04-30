@@ -4,13 +4,14 @@ using static Application.Appointments.Create;
 using static Application.Appointments.Delete;
 using static Application.Appointments.Details;
 using static Application.Appointments.Edit;
+using static Application.Appointments.GetLatestAppointments;
 using static Application.Appointments.List;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppointmentController : BaseApiController
+    public class AppointmentsController : BaseApiController
     {
         [HttpGet]
         public async Task<IActionResult> GetAppointments()
@@ -24,14 +25,20 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetAppointmentByIdQuery(Id)));
         }
 
+        [HttpGet("Latest")]
+        public async Task<IActionResult> GetLatestAppointments()
+        {
+            return HandleResult(await Mediator.Send(new GetLatestAppointmentsQuery()));
+        }
+
         [HttpPost]
-        public async Task<IActionResult> CreateAppointment(AppointmentDto Appointment)
+        public async Task<IActionResult> CreateAppointment([FromForm] AppointmentDto Appointment)
         {
             return HandleResult(await Mediator.Send(new CreateAppointmentCommand(Appointment)));
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> EditAppointment(Guid Id, AppointmentDto Appointment)
+        public async Task<IActionResult> EditAppointment(Guid Id, [FromForm] AppointmentDto Appointment)
         {
             Appointment.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateAppointmentCommand(Appointment)));

@@ -22,7 +22,7 @@ function DepartmentList() {
 
 
 
-    const handleDepartmentDelete = async (id: number,) => {
+    const handleDepartmentDelete = async (id: string) => {
         const result = await deleteDepartment(id);
 
         if ('data' in result) {
@@ -78,7 +78,7 @@ function DepartmentList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Departments List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/department/insert")}  >
+                    <AddButton onClick={() => navigate("/department/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>

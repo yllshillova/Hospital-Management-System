@@ -4,6 +4,7 @@ using static Application.Departments.Create;
 using static Application.Departments.Delete;
 using static Application.Departments.Details;
 using static Application.Departments.Edit;
+using static Application.Departments.GetDepartmentsCount;
 using static Application.Departments.List;
 
 namespace API.Controllers
@@ -20,6 +21,12 @@ namespace API.Controllers
         public async Task<IActionResult> GetDepartmentById(Guid Id)
         {
             return HandleResult(await Mediator.Send(new GetDepartmentByIdQuery(Id)));
+        }
+
+        [HttpGet("Count")]
+        public async Task<IActionResult> GetDepartmentsCount()
+        {
+            return HandleResult(await Mediator.Send(new GetVistsCountQuery()));
         }
 
         [HttpPost]

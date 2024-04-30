@@ -21,6 +21,7 @@ export default function useErrorHandler(
         if (data && typeof data === 'object' && 'errors' in data) {
             // Extract errors from data object if it contains an 'errors' field
             const errors = data.errors;
+            console.log(errors);
             errorMessage= Object.values(errors).flat();
         }
 

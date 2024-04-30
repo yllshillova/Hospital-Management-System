@@ -1,5 +1,5 @@
 export default interface Doctor {
-    id: number;
+    id: string;
     name: string;
     lastName: string;
     specialization: string;
@@ -11,5 +11,5 @@ export default interface Doctor {
     createdAt: Date;
     updatedAt: Date;
     isDeleted: boolean;
-    departmentId: number;
+    departmentId: string;
 }

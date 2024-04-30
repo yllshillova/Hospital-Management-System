@@ -4,7 +4,7 @@ import styled from "styled-components";
 export const MainContainer = styled.div`
     margin-left: 200px;
     padding: 20px;
-    margin-top: 45px;
+    margin-top: 50px;
 `;
 export const WrapperContainer = styled.div`
     display: flex;
@@ -13,7 +13,6 @@ export const WrapperContainer = styled.div`
 export const LeftContainer = styled.div`
     flex: 1;
     background-color: white;
-    border: 1px solid #A9A9A9;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -21,7 +20,6 @@ export const LeftContainer = styled.div`
 export const RightContainer = styled.div`
     flex: 2;
     background-color: white;
-    border: 1px solid #A9A9A9;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
@@ -30,7 +28,6 @@ export const AdditionalInfoContainer = styled.div`
     margin-top: 16px;
     background-color: white;
     padding: 20px;
-    border: 1px solid #A9A9A9;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
@@ -66,3 +63,4 @@ export const Value = styled.span`
     font-weight:bold;
     margin-bottom: 5px;
 `;
+

@@ -3,37 +3,37 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteRoomMutation, useGetRoomsQuery } from "../../app/APIs/roomApi";
 import MainLoader from "../../app/common/MainLoader";
 import Room from "../../app/models/Room";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import { useLocation, useNavigate } from "react-router-dom";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import { useGetPatientsQuery } from "../../app/APIs/patientApi";
+//import { useEffect, useState } from "react";
+//import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 import toastNotify from "../../app/helpers/toastNotify";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
+import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
 function RoomList() {
-    //const { data, isLoading, error } = useGetRoomsQuery(null);
-    const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomsQuery(null);
-    const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); 
+    const { data, isLoading, error } = useGetRoomsQuery(null);
+    /*const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomsQuery(null);*/
+   /* const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); */
     const navigate = useNavigate();
     const location = useLocation();
-    const [rooms, setRooms] = useState<Room[]>([]);
+    /*const [rooms, setRooms] = useState<Room[]>([]);*/
     const [deleteRoom] = useDeleteRoomMutation();
 
 
-    useEffect(() => {
-        if (roomsData && patientsData) {
-            const roomsWithPatients = roomsData.map((room: Room) => ({
-                ...room,
-                patientName: patientsData.find((patient: { id: number; }) => patient.id === room.patientId)?.name || 'Unknown', // Use patient's name or 'Unknown' if not found
-            }));
-            setRooms(roomsWithPatients);
-        }
-    }, [roomsData, patientsData]);
+    //useEffect(() => {
+    //    if (roomsData && patientsData) {
+    //        const roomsWithPatients = roomsData.map((room: Room) => ({
+    //            ...room,
+    //            patientName: patientsData.find((patient: { id: number; }) => patient.id === room.patientId)?.name || 'Unknown', // Use patient's name or 'Unknown' if not found
+    //        }));
+    //        setRooms(roomsWithPatients);
+    //    }
+    //}, [roomsData, patientsData]);
 
 
     let content;
@@ -54,7 +54,7 @@ function RoomList() {
         const result = await deleteRoom(id);
 
         if ('data' in result) {
-            toastNotify("Department Deleted Successfully", "success");
+            toastNotify("Room Deleted Successfully", "success");
         }
         else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
@@ -68,23 +68,24 @@ function RoomList() {
     };
  
 
-    if (roomsLoading || patientsLoading) {
+    if (isLoading /*|| patientsLoading*/) {
         content = <MainLoader />;
-    } else if (roomsError || patientsError) {
+    } else if (error/*roomsError || patientsError*/) {
         content = <div>Error loading data.</div>;
     } 
     else {
-        content = rooms.map((room: Room) => {
+        content = data.map((room: Room) => {
             return (
                 <tbody key={room.id}>
                     <TableRow>
+                        <TableCell>{room.nrDhomes}</TableCell>
                         <TableCell>{room.capacity}</TableCell>
                         <TableCell>{room.isFree === false ? "Occupied" : "Free"}</TableCell>
                        
                         <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(room.updatedAt).toLocaleDateString()}</TableCell>
-                        <ActionButton style={{ backgroundColor: "green" }} onClick={() => navigate("/room/" + room.id)} >
-                            <FontAwesomeIcon icon={faCircle} />
+                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/room/" + room.id)} >
+                            <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
                         <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/room/update/" + room.id)} >
                             <FontAwesomeIcon icon={faEdit} />
@@ -106,19 +107,20 @@ function RoomList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Rooms List</TableHeader>
-                    <AddButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/room/insert")}  >
+                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/room/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
                 <Table>
                     <thead>
-                        <TableRow>
+                        <TableHead>
+                            <TableHeaderCell>NrDhomes</TableHeaderCell>
                             <TableHeaderCell>Capacity</TableHeaderCell>
                             <TableHeaderCell>Status</TableHeaderCell>
                           
                             <TableHeaderCell>CreatedAt</TableHeaderCell>
                             <TableHeaderCell>UpdatedAt</TableHeaderCell>
-                        </TableRow>
+                        </TableHead>
                     </thead>
                     {content}
                 </Table>

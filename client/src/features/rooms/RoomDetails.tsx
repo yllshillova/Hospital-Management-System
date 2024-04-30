@@ -1,57 +1,90 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useGetPatientByIdQuery } from "../../app/APIs/patientApi"; // Importimi i query për të marrë të dhëna të pacientit
+import { useNavigate, useParams } from "react-router-dom";
 import MainLoader from "../../app/common/MainLoader";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { useGetRoomByIdQuery } from "../../app/APIs/roomApi";
-import useErrorHandler from "../../app/helpers/useErrorHandler";
+import {  AddButton, OrdersTable, Table, TableCell, TableHeader, TableHeaderCell, TableNav, TableRow } from "../../app/common/styledComponents/table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { Header, SidePanel } from "../../app/layout";
+import { useGetRoomPatientsQuery } from "../../app/APIs/roomApi";
+//import Patient from "../../app/models/Patient";
+//import RoomPatient from "../../app/models/RoomPatient";
+//import toastNotify from "../../app/helpers/toastNotify";
+//import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+//import useErrorHandler from "../../app/helpers/useErrorHandler";
+export interface patientName{
+    firstName: string;
+    lastName: string;
 
-
-function isValidGuid(guid: string): boolean {
-    const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
-    return guidRegex.test(guid);
 }
-
 function RoomDetails() {
     const { id } = useParams();
-    const { data, isLoading, isError, error } = useGetRoomByIdQuery(id);
-    const { data: patientData, isLoading: patientLoading } = useGetPatientByIdQuery(data?.patientId); // Marrja e të dhënave të pacientit nga ID-ja e pacientit në departament
+    const { data, isLoading: patientsLoading, error: patientsError } = useGetRoomPatientsQuery(id); // Merr lista e pacientï¿½ve pï¿½r dhomï¿½n me ID tï¿½ caktuar
     const navigate = useNavigate();
-    const location = useLocation();
+    console.log(data)
+    let content;
 
-    if (!isValidGuid(id as string)) {
-        navigate('/not-found');
-        return;
+    if (patientsLoading) {
+        content = <MainLoader />; // Nï¿½se tï¿½ dhï¿½nat janï¿½ ende duke u ngarkuar, shfaq njï¿½ ikonï¿½ ngarkimi
+    } else if (patientsError) {
+        content = <div>Error loading patients.</div>; // Nï¿½se ka ndodhur njï¿½ gabim gjatï¿½ ngarkimit tï¿½ pacientï¿½ve, shfaq njï¿½ mesazh gabimi
+    } else {
+        data.map((roomPatient: patientName) => (
+            console.log(roomPatient)
+        ))
+        // Filtroni pacientï¿½t pï¿½r tï¿½ marrï¿½ vetï¿½m ato qï¿½ janï¿½ nï¿½ dhomï¿½n me ID e caktuar
+       // const roomPatients = data.filter((roomPatient: RoomPatient) => roomPatient.roomId === id);
+        //   content = roomPatients.map((roomPatient: RoomPatient) => (
+       content = data.map((roomPatient: patientName ) => (
+            <tbody key={0}>
+                <TableRow>
+                    <TableCell>{roomPatient.firstName}</TableCell>
+                    <TableCell>{roomPatient.lastName}</TableCell>
+                    {/*<TableCell>{roomPatient.patient.parentName}</TableCell>*/}
+                    {/*<TableCell>{roomPatient.patient.phoneNumber}</TableCell>*/}
+                    {/*<TableCell>{roomPatient.patient.isDeleted}</TableCell>*/}
+                    {/*<TableCell>{new Date(roomPatient.patient.createdAt).toLocaleDateString()}</TableCell>*/}
+                    {/*<TableCell>{new Date(roomPatient.patient.updatedAt).toLocaleDateString()}</TableCell>*/}
+                    {/*<ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/patient/" + roomPatient.patientId)}>*/}
+                    {/*    <FontAwesomeIcon icon={faInfo} />*/}
+                    {/*</ActionButton>*/}
+                    {/*<ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/patient/update/" + roomPatient.patientId)}>*/}
+                    {/*    <FontAwesomeIcon icon={faEdit} />*/}
+                    {/*</ActionButton>*/}
+                    {/*<ActionButton style={{ backgroundColor: "red" }} >*/}{/*onClick={() => handleDeletePatient(roomPatient.patientId)}*/}
+                    {/*    <FontAwesomeIcon icon={faTrashAlt} />*/}
+                    {/*</ActionButton>*/}
+                </TableRow>
+            </tbody>
+));
     }
-    const fbError = error as FetchBaseQueryError;
 
-    if (isError) {
-        useErrorHandler(fbError, navigate, location.pathname);
-    }
-
-
-
-    if (isLoading || patientLoading) return <MainLoader />;
-
-    if (data) {
-        const room = data;
-        const patientName = patientData?.name || 'Unknown';
-
-        return (
-            <>
-                <div>
-                    <h2>Room Details</h2>
-                    <p>Id: {room.id}</p>
-                    <p>Capacity: {room.capacity}</p>
-                    <p>Status: {room.isFree === false ? "Occupied" : "Free"}</p>
-                    <p>Patient Name: {patientName}</p> {/* Shfaq emrin e pacientit */}
-                    <p>Created At: {new Date(room.createdAt).toLocaleDateString()}</p>
-                    <p>Updated At: {new Date(room.updatedAt).toLocaleDateString()}</p>
-                </div>
-            </>
-        );
-    }
-    return null;
+    return (
+        <>
+            <Header />
+            <SidePanel />
+            <OrdersTable>
+                <TableNav>
+                    <TableHeader>Patients List in room </TableHeader>
+                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate( `/addPatientToRoom?${id}`)}>
+                        <FontAwesomeIcon icon={faAdd} />
+                    </AddButton>
+                </TableNav>
+                <Table>
+                    <thead>
+                        <TableRow>
+                            <TableHeaderCell>Name</TableHeaderCell>
+                            <TableHeaderCell>Last Name</TableHeaderCell>
+                            {/*<TableHeaderCell>Parent Name</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Phone Number</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Is Deleted</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Created At</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Updated At</TableHeaderCell>*/}
+                        </TableRow>
+                    </thead>
+                    {content}
+                </Table>
+            </OrdersTable>
+        </>
+    );
 }
 
 export default RoomDetails;
