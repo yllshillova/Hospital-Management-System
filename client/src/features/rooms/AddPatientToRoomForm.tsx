@@ -10,7 +10,7 @@ const initialFormData = {
     //patientId: "",
     //roomId: "",
     patientName: "",
-    nrDhomes: ""
+    number: ""
 };
 
 function AddPatientToRoomForm() {
@@ -81,8 +81,8 @@ function AddPatientToRoomForm() {
                             <Label>Room Number:</Label>
                             <Input
                                 type="text"
-                                name="nrDhomes"
-                                value={formData.nrDhomes}
+                                name="number"
+                                value={formData.number}
                                 onChange={handleInputChange}
                             />
                             {/*<Label>Room ID:</Label>*/}
