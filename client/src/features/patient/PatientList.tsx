@@ -75,7 +75,7 @@ function PatientList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Patients List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/patient/insert")}>
+                    <AddButton onClick={() => navigate("/patient/insert")}>
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>

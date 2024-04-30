@@ -9,25 +9,25 @@ const appointmentApi = createApi({
     endpoints: (builder) => ({
         getAppointments: builder.query({
             query: () => ({
-                url: "appointment"
+                url: "appointments"
             }),
             providesTags: ["Appointment"],
         }),
         getAppointmentById: builder.query({
             query: (id) => ({
-                url: `appointment/${id}`,
+                url: `appointments/${id}`,
             }),
             providesTags: ["Appointment"],
         }),
         getLatestAppointments: builder.query({
             query: () => ({
-                url: "appointment/Latest"
+                url: "appointments/Latest"
             }),
             providesTags: ["Appointment"],
         }),
         createAppointment: builder.mutation({
             query: (data) => ({
-                url: "appointment",
+                url: "appointments",
                 method: "POST",
                 body: data
             }),
@@ -35,7 +35,7 @@ const appointmentApi = createApi({
         }),
         updateAppointment: builder.mutation({
             query: ({ data, id }) => ({
-                url: "appointment/" + id,
+                url: "appointments/" + id,
                 method: "PUT",
                 body: data
             }),
@@ -43,7 +43,7 @@ const appointmentApi = createApi({
         }),
         deleteAppointment: builder.mutation({
             query: (id) => ({
-                url: "appointment/" + id,
+                url: "appointments/" + id,
                 method: "DELETE",
             }),
             invalidatesTags: ["Appointment"],

@@ -125,7 +125,7 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
                             onSubmit={handleSubmit}
                         >
                             <FormGroup>
-                                <Label>Name:</Label>
+                                <Label>Name</Label>
                                 <Input
                                     type="text"
                                     name="name"
@@ -150,7 +150,7 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
                                     Submit
                                 </SubmitButton>
                                 <BackToProductsButton onClick={() => navigate("/departments")}>
-                                    Back to doctors
+                                    Back to Departments
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>

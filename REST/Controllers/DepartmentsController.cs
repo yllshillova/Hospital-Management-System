@@ -26,7 +26,7 @@ namespace API.Controllers
         [HttpGet("Count")]
         public async Task<IActionResult> GetDepartmentsCount()
         {
-            return HandleResult(await Mediator.Send(new GetDepartmentsCountQuery()));
+            return HandleResult(await Mediator.Send(new GetVistsCountQuery()));
         }
 
         [HttpPost]

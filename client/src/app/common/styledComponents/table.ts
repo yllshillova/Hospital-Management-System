@@ -69,7 +69,7 @@ export const ActionButton = styled.button`
 `;
 
 export const AddButton = styled.button`
-  background: teal;
+  background: #002147;;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -77,9 +77,7 @@ export const AddButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: ease 0.3s;
-
   &:hover {
-    background-color: teal;
     transform: scale(1.1);
   }
 `;

@@ -51,7 +51,7 @@ const HeaderContainer = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #1a252e;
+  background-color: #002147;
   color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   @media screen and (max-width: 768px) {

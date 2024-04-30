@@ -4,6 +4,7 @@ import departmentApi from "../../APIs/departmentApi";
 import roomApi from "../../APIs/roomApi";
 import doctorApi from "../../APIs/doctorApi";
 import appointmentApi from "../../APIs/appointmentApi";
+import visitApi from "../../APIs/visitApi";
 
 const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
         [roomApi.reducerPath]: roomApi.reducer,
         [doctorApi.reducerPath]: doctorApi.reducer,
         [appointmentApi.reducerPath]: appointmentApi.reducer,
+        [visitApi.reducerPath] : visitApi.reducer,
     },
 
     middleware: (getDefaultMiddleware) =>
@@ -21,6 +23,7 @@ const store = configureStore({
             .concat(roomApi.middleware)
             .concat(doctorApi.middleware)
             .concat(appointmentApi.middleware)
+            .concat(visitApi.middleware)
 });
 
 //exporting the root state

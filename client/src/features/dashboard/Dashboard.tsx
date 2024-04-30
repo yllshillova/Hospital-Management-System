@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { Header, SidePanel } from "../../app/layout";
 //import RecentZ from "./components/RecentZ";
 import Sections from "./components/Sections";
-import BottomSection from "./components/BottomSection";
 import LatestAppointments from "./components/LatestAppointments";
+import LatestVisits from "./components/LatestVisits";
 
 function Dashboard() {
     return (
@@ -20,7 +20,7 @@ function Dashboard() {
                     {/*    <RecentZ />*/}
                     {/*</RecentYContainer>*/}
                 </InlineContainer>{" "}
-                <BottomSection />
+                <LatestVisits />
             </MainContent>
         </>
     );

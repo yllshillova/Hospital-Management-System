@@ -11,7 +11,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppointmentController : BaseApiController
+    public class AppointmentsController : BaseApiController
     {
         [HttpGet]
         public async Task<IActionResult> GetAppointments()
@@ -26,19 +26,19 @@ namespace API.Controllers
         }
 
         [HttpGet("Latest")]
-        public async Task<IActionResult> GetLatestAppointmentsCount()
+        public async Task<IActionResult> GetLatestAppointments()
         {
             return HandleResult(await Mediator.Send(new GetLatestAppointmentsQuery()));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAppointment( AppointmentDto Appointment)
+        public async Task<IActionResult> CreateAppointment([FromForm] AppointmentDto Appointment)
         {
             return HandleResult(await Mediator.Send(new CreateAppointmentCommand(Appointment)));
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> EditAppointment(Guid Id, AppointmentDto Appointment)
+        public async Task<IActionResult> EditAppointment(Guid Id, [FromForm] AppointmentDto Appointment)
         {
             Appointment.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateAppointmentCommand(Appointment)));

@@ -7,18 +7,18 @@ import MiniLoader from "../../../app/common/MiniLoader";
 function LatestAppointments() {
 
     const { data: latestAppointments , isLoading, error } = useGetLatestAppointmentsQuery(null); 
-    const { data: patientData } = useGetPatientsQuery(null);
+    const { data: patientsData , isLoading : patientsLoading, error: patientsError} = useGetPatientsQuery(null);
 
     let content;
 
-    if (isLoading) {
+    if (isLoading || patientsLoading) {
         content = <MiniLoader />;
-    } else if (error) {
+    } else if (error || patientsError) {
         content = <div>Error loading the latest appointments</div>
     }
     else {
         content = latestAppointments?.map((appointment: Appointment, index: number) => {
-            const patient = patientData?.find((patient: Patient) => patient.id === appointment.patientId);
+            const patient = patientsData?.find((patient: Patient) => patient.id === appointment.patientId);
             return (
                 <tbody>
                     <TableRow key={index}>

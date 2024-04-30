@@ -1,6 +1,6 @@
 import RoomPatient from "./RoomPatient";
 
-export default interface Patient{
+ export default interface Patient{
      id: string;
      name: string;
      lastName: string;
