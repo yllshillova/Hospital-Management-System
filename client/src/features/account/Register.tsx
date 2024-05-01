@@ -146,7 +146,7 @@ function Register() {
                                 </InputBox>
                             </FormControl>
 
-                            <FormControl style={{ margin: "0 60px" }}>
+                            <FormControl >
                                 <InputBox>
                                     <FontAwesomeIcon icon={faCircleUser} className="icon" style={{ color: '#355070' }} />
                                     <Input
@@ -187,169 +187,123 @@ function Register() {
     );
 }
 const Container = styled.div`
-  margin: 10px 0;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    margin: 10px 0;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 const Wrapper = styled.div`
-  display: flex;
-  width: 85%;
+    display: flex;
+    width: 90%;
 `;
 
 const LeftSide = styled.div`
-  flex: 1;
-  padding: 20px;
-  background-color: #355070;
-  border-radius: 20px 0 0 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content:center;
+    flex: 1;
+    padding: 20px;
+    background-color: #355070;
+    border-radius: 20px 0 0 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
 `;
 
 const RightSide = styled.div`
-  flex: 2;
-  padding: 20px;
-  background-color: white;
-  border-radius: 0 20px 20px 0;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    flex: 2;
+    padding: 20px;
+    background-color: white;
+    border-radius: 0 20px 20px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
+
 const LeftTitle = styled.h1`
-  font-size: 2.0rem;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  margin-bottom:20px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 20px;
 `;
 
 const Title = styled.h1`
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: #355070;
-  text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #355070;
+    text-align: center;
+    margin-bottom: 20px;
 `;
 
 const Form = styled.form`
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: 30px;
-`;
-
-const InputBox = styled.div`
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  width: 88%;
-  margin: 10px auto;
-
-  input {
-    border: none;
-    font-size: 1rem;
-    width: calc(100% - 30px);
-    font-weight: normal;
-    line-height: 1.4rem;
-    color: #000;
-    padding: 1rem 0;
-    border-radius: 0;
-    outline: 0;
-    position: relative;
-    border-bottom: 2px solid silver;
-  }
-
-  .icon {
-    flex: 0 0 auto;
-    margin-right: 10px;
-    font-size: 1rem;
-    color: silver;
-  }
-`;
-
-const Input = styled.input`
-  border: 0.5px solid gray;
-  font-size: 1rem;
-  width: calc(100% - 30px);
-  font-weight: normal;
-  line-height: 1.4rem;
-  color: #000;
-  padding: 1rem 0;
-  border-radius: 0;
-  outline: 0;
-  position: relative;
-  border-bottom: 2px solid silver;
+    display: flex;
+    flex-direction: column;
 `;
 
 const FormControl = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
+    margin-bottom: 20px;
+`;
 
-  label {
-    font-size: 1rem;
-    font-weight: bold;
-    margin-left: 5px;
-  }
+const InputBox = styled.div`
+    display: flex;
+    align-items: center;
+    margin: 0 70px; /* Added margin */
+`;
+
+const Input = styled.input`
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid silver;
+    padding: 8px; /* Adjusted padding */
+    font-size: 0.9rem; /* Adjusted font size */
+    outline: none;
 `;
 
 const Agreement = styled.span`
-  margin: 5px 5px;
-  font-size: 1rem;
-  font-weight: normal;
-  text-align:center;
+    margin: 10px 45px;
+    font-size: 0.9rem;
+    text-align: center;
 `;
 
 const Button = styled.button`
-  margin: 20px 175px;
-  width: 40%;
-  border: none;
-  border-radius:5px;
-  padding: 13px 13px;
-  background-color: #355070;
-  color: white;
-  cursor: pointer;
-  transition: ease 0.3s;
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
+    width: 50%;
+    padding: 15px;
+    margin: 20px auto;
+    border: none;
+    border-radius: 5px;
+    background-color: #355070;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
 
-//const Select = styled.select`
-//  border: 0.5px solid gray;
-//  font-size: 1rem;
-//  width: 225px;
-//  height: 57px;
-//  padding: 1rem;
-//  border-radius: 0.25rem;
-//  margin: 5px;
-//`;
+    &:hover {
+        background-color: #2a4365;
+        transform: scale(1.1);
+
+    }
+`;
 
 const LinksContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
+
 const Text = styled.p`
-  margin: 5px 5px;
-  font-size: 1rem;
-  font-weight: normal;
+    font-size: 0.9rem;
 `;
 
 const Link = styled.a`
-margin: 5px 3px;
+   margin: 5px 3px;
   font-size: 12px;
   cursor: pointer;
-  color: crimson;
+  color:crimson;
   font-size: 1rem;
   font-weight: bold;
   transition: ease 0.3s;
-
   &:hover {
-    color:teal;
     transform: scale(1.1);
   }
 `;
+
 export default Register;

@@ -15,21 +15,18 @@ export const LeftContainer = styled.div`
     background-color: white;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 export const RightContainer = styled.div`
     flex: 2;
     background-color: white;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 `;
 export const AdditionalInfoContainer = styled.div`
     margin-top: 16px;
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 export const SectionTitle = styled.h2`
     font-size: 1.2rem;
