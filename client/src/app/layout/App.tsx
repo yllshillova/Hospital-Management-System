@@ -14,9 +14,6 @@ import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 import RoomDetails from '../../features/rooms/RoomDetails';
 import Login from '../../features/account/Login';
 import Register from '../../features/account/Register';
-//import Details from '../components/Details';
-//import DepartmentUpdate from '../../features/department/DepartmentUpdate';
-//import DepartmentInsert from '../../features/department/DepartmentInsert';
 import AddPatientToRoomForm from '../../features/rooms/AddPatientToRoomForm';
 import AppointmentList from '../../features/appointment/AppointmentList';
 import AppointmentDetails from '../../features/appointment/AppointmentDetails';
@@ -30,7 +27,6 @@ import VisitDetails from '../../features/visit/VisitDetails';
 import VisitUpdate from '../../features/visit/VisitUpdate';
 import AppointmentUpdate from '../../features/appointment/AppointmentUpdate';
 import AppointmentInsert from '../../features/appointment/AppointmentInsert';
-import Logout from '../../features/account/Logout';
 
 
 function App() {
