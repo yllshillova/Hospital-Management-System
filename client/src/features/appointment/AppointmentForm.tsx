@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 //import inputHelper from "../../app/helpers/inputHelper";
@@ -82,18 +83,21 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
             const response = await updateAppointment({ data: formData, id });
 
             if (response.error) {
+                console.log(response.error);
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Visit updated successfully", "success");
-                navigate('/visits');
+                toastNotify("Appointment has been  updated ", "success");
+                navigate('/Appointment');
             }
         } else {
             const response = await createAppointment(formData);
+            console.log(response);
 
             if (response.error) {
+                console.log(response.error);
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Appointment created successfully", "success");
+                toastNotify("Appointment has been created ", "success");
                 navigate('/appointments');
             }
 
@@ -140,7 +144,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                     <option value="">Select Doctor</option>
                                     {doctorsData && doctorsData.map((doctor: Doctor) => (
                                         <option key={doctor.id} value={doctor.id}>
-                                            {doctor.name}
+                                            {doctor.name} {" "} {doctor.lastName}
                                         </option>
                                     ))}
                                 </Select>
@@ -157,7 +161,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                     <option value="">Select Patient</option>
                                     {patientsData && patientsData.map((patient: Patient) => (
                                         <option key={patient.id} value={patient.id}>
-                                            {patient.name}
+                                            {patient.name} {" "} {patient.lastName}
                                         </option>
                                     ))}
                                 </Select>
@@ -166,7 +170,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                             <FormGroup>
                                 <Label>CheckInDate</Label>
                                 <Input
-                                    type="date"
+                                    type="datetime-local"
                                     name="checkInDate"
                                     value={validCheckInOutDate(appointmentInputs.checkInDate)}
                                     onChange={handleAppointmentInput}
@@ -175,7 +179,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                             <FormGroup>
                                 <Label>CheckOutDate</Label>
                                 <Input
-                                    type="date"
+                                    type="datetime-local"
                                     name="checkOutDate"
                                     value={validCheckInOutDate(appointmentInputs.checkOutDate)}
                                     onChange={handleAppointmentInput}
@@ -213,7 +217,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                     Submit
                                 </SubmitButton>
                                 <BackToProductsButton onClick={() => navigate("/appointments")}>
-                                    Back to Visits
+                                    Back to Appointments
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>

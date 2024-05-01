@@ -10,7 +10,7 @@ import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer,
 const roomData = {
     capacity: "",
     isFree: false,
-    nrDhomes:""
+    number:""
     /*patientId: ""*/
 };
 function RoomUpsert() {
@@ -26,7 +26,7 @@ function RoomUpsert() {
             const tempData = {
                 capacity: data.capacity,
                 isFree: data.isFree,
-                nrDhomes:data.nrDhomes
+                number:data.number
                 /*patientId: data.patientId*/
             };
             setRoomInputs(tempData);
@@ -45,7 +45,7 @@ function RoomUpsert() {
 
         formData.append("Capacity", roomInputs.capacity);
         formData.append("IsFree", roomInputs.isFree.toString());
-        formData.append("NrDhomes", roomInputs.nrDhomes);
+        formData.append("Number", roomInputs.number);
 
         let response;
 
@@ -100,12 +100,12 @@ function RoomUpsert() {
                             onSubmit={handleSubmit}
                         >
                             <FormGroup>
-                                <Label>NrDhomes:</Label>
+                                <Label>Number:</Label>
                                 <Input
                                     type="text"
                                     required
-                                    name="nrDhomes"
-                                    value={roomInputs.nrDhomes}
+                                    name="number"
+                                    value={roomInputs.number}
                                     onChange={handleRoomInput}
                                 />
                             </FormGroup>

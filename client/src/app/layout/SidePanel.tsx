@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { clearToken } from '../storage/redux/authSlice';
 import { useDispatch } from 'react-redux';
 import toastNotify from '../helpers/toastNotify';
+import { faUserNurse } from '@fortawesome/free-solid-svg-icons/faUserNurse';
 
 function SidePanel() {
     const dispatch = useDispatch();
@@ -48,6 +49,9 @@ function SidePanel() {
     const handleVisitsList = () => {
         navigate('/visits');
     }
+    const handleNursesList = () => {
+       navigate('/nurses');
+    }
     const handleLogout = () => {
         localStorage.removeItem('token');
 
@@ -59,6 +63,7 @@ function SidePanel() {
     }
     const sideBarComponents = [
         { icon: faUserDoctor, label: 'Doctors', onClick: handleDoctorsList },
+        { icon: faUserNurse, label: 'Nurses', onClick: handleNursesList },
         { icon: faUserInjured, label: 'Patients', onClick: handlePatientList },
         { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
         { icon: faCalendarDays, label: 'Appointments', onClick: handleAppointmentsList },

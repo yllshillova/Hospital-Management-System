@@ -13,8 +13,5 @@ namespace Application.Rooms
 
         //public List<PatientRoom> patients { get; set; }
     }
-    public class PatientRoom
-    {
- 
-    }
+   
 }

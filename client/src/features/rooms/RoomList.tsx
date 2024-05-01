@@ -78,7 +78,7 @@ function RoomList() {
             return (
                 <tbody key={room.id}>
                     <TableRow>
-                        <TableCell>{room.nrDhomes}</TableCell>
+                        <TableCell>{room.number}</TableCell>
                         <TableCell>{room.capacity}</TableCell>
                         <TableCell>{room.isFree === false ? "Occupied" : "Free"}</TableCell>
                        
@@ -114,12 +114,12 @@ function RoomList() {
                 <Table>
                     <thead>
                         <TableHead>
-                            <TableHeaderCell>NrDhomes</TableHeaderCell>
+                            <TableHeaderCell>Number</TableHeaderCell>
                             <TableHeaderCell>Capacity</TableHeaderCell>
                             <TableHeaderCell>Status</TableHeaderCell>
                           
-                            <TableHeaderCell>CreatedAt</TableHeaderCell>
-                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
+                            <TableHeaderCell>Created At</TableHeaderCell>
+                            <TableHeaderCell>Updated At</TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

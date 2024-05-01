@@ -1,4 +1,4 @@
-﻿/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MainLoader from "../../app/common/MainLoader";
 import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
@@ -11,13 +11,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import toastNotify from "../../app/helpers/toastNotify";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
-import { useDeleteDoctorMutation, useGetDoctorsQuery } from "../../app/APIs/doctorApi";
-import Doctor from "../../app/models/Doctor";
+import { useDeleteNurseMutation, useGetNursesQuery } from "../../app/APIs/nurseApi";
+import Nurse from "../../app/models/Nurse";
 import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MiniLoader from "../../app/common/MiniLoader";
 import Department from "../../app/models/Department";
-function DoctorList() {
-    const { data, isLoading, error } = useGetDoctorsQuery(null);
+function NurseList() {
+    const { data, isLoading, error } = useGetNursesQuery(null);
     const { data: departments, isLoading: isDepartmentsLoading } = useGetDepartmentsQuery(null);
 
     const departmentMap = new Map<string, string>();
@@ -29,18 +29,18 @@ function DoctorList() {
         return departmentMap.get(departmentId) || "Department not found!";
     };
 
-    const [deleteDoctor] = useDeleteDoctorMutation();
+    const [deleteNurse] = useDeleteNurseMutation();
     const navigate = useNavigate();
     const location = useLocation();
     let content;
 
 
 
-    const handleDoctorDelete = async (id: string,) => {
-        const result = await deleteDoctor(id);
+    const handleNurseDelete = async (id: string,) => {
+        const result = await deleteNurse(id);
 
         if ('data' in result) {
-            toastNotify("Doctor Deleted Successfully", "success");
+            toastNotify("Nurse Deleted Successfully", "success");
         }
         else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
@@ -56,36 +56,26 @@ function DoctorList() {
     if (isLoading) {
         content = <MainLoader />;
     } else if (error) {
-        content = <div>{(error.data as FetchBaseQueryError)}</div>;
+        content = <div>Error loading nurses.</div>;
     }
     else {
-        content = data.map((doctor: Doctor) => {
+        content = data.map((nurse: Nurse) => {
             return (
-                <tbody key={doctor.id}>
+                <tbody key={nurse.id}>
                     <TableRow>
-                        <TableCell>{doctor.name}</TableCell>
-                        <TableCell>{doctor.lastName} </TableCell>
-                        {/*<TableCell>{doctor.email} </TableCell>*/}
-                        <TableCell>{doctor.specialization} </TableCell>
-                        {/*<TableCell>{doctor.residence} </TableCell>*/}
-                        {/*<TableCell>{doctor.address} </TableCell>*/}
-                        {/*<TableCell>{doctor.gender} </TableCell>*/}
-                        {/*<TableCell>{new Date(doctor.birthday).toLocaleDateString()}</TableCell>*/}
+                        <TableCell>{nurse.name}</TableCell>
+                        <TableCell>{nurse.lastName} </TableCell>
                         <TableCell>{isDepartmentsLoading ? (
                             <MiniLoader />
-                        ) : getDepartmentName(doctor.departmentId)} </TableCell>
-                        {/*<TableCell>{new Date(doctor.createdAt).toLocaleDateString()}</TableCell>*/}
-                        {/*<TableCell>{new Date(doctor.updatedAt).toLocaleDateString()}</TableCell>*/}
-                        <TableCell>{doctor.isDeleted} </TableCell>
-
-                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/doctor/" + doctor.id)} >
+                        ) : getDepartmentName(nurse.departmentId)} </TableCell>
+                        <TableCell>{nurse.isDeleted} </TableCell>
+                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/nurse/" + nurse.id)} >
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/doctor/update/" + doctor.id)} >
+                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/nurse/update/" + nurse.id)} >
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
-                        {/*TODO: add handler for delete*/}
-                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleDoctorDelete(doctor.id)}>
+                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleNurseDelete(nurse.id)}>
                             <FontAwesomeIcon icon={faTrashAlt} />
                         </ActionButton>
                     </TableRow>
@@ -100,8 +90,8 @@ function DoctorList() {
             <SidePanel />
             <OrdersTable>
                 <TableNav>
-                    <TableHeader>Doctors List</TableHeader>
-                    <AddButton  onClick={() => navigate("/doctor/insert")}  >
+                    <TableHeader>Nurses List</TableHeader>
+                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/nurse/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
@@ -110,15 +100,7 @@ function DoctorList() {
                         <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Last Name</TableHeaderCell>
-                            {/*<TableHeaderCell>Email</TableHeaderCell>*/}
-                            <TableHeaderCell>Specialization</TableHeaderCell>
-                            {/*<TableHeaderCell>Residence</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Address</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Gender</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Birthday</TableHeaderCell>*/}
                             <TableHeaderCell>Department</TableHeaderCell>
-                            {/*<TableHeaderCell>CreatedAt</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>UpdatedAt</TableHeaderCell>*/}
                             <TableHeaderCell>Is Deleted</TableHeaderCell>
                         </TableHead>
                     </thead>
@@ -129,4 +111,4 @@ function DoctorList() {
     );
 }
 
-export default DoctorList;
+export default NurseList;

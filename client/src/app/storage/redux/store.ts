@@ -4,6 +4,7 @@ import departmentApi from "../../APIs/departmentApi";
 import roomApi from "../../APIs/roomApi";
 import doctorApi from "../../APIs/doctorApi";
 import appointmentApi from "../../APIs/appointmentApi";
+import nurseApi from "../../APIs/nurseApi";
 import visitApi from "../../APIs/visitApi";
 import accountApi from "../../APIs/accountApi";
 import { authReducer } from "./authSlice";
@@ -17,7 +18,8 @@ const store = configureStore({
         [roomApi.reducerPath]: roomApi.reducer,
         [doctorApi.reducerPath]: doctorApi.reducer,
         [appointmentApi.reducerPath]: appointmentApi.reducer,
-        [visitApi.reducerPath] : visitApi.reducer,
+        [nurseApi.reducerPath]: nurseApi.reducer,
+        [visitApi.reducerPath]: visitApi.reducer,
     },
 
     middleware: (getDefaultMiddleware) =>
@@ -27,6 +29,7 @@ const store = configureStore({
             .concat(roomApi.middleware)
             .concat(doctorApi.middleware)
             .concat(appointmentApi.middleware)
+            .concat(nurseApi.middleware)
             .concat(visitApi.middleware)
             .concat(accountApi.middleware)
 });

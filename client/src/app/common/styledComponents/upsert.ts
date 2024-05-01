@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const OuterContainer = styled.div`
   margin-left: 170px;
-  padding: 10px;
+  padding: 20px;
 `;
 
 export const Container = styled.div`
