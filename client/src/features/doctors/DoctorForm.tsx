@@ -52,7 +52,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
     const [updateDoctor] = useUpdateDoctorMutation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [errorMessages, setErrorMessages] = useState<string[]>([]); // State for error messages
+    const [errorMessages, setErrorMessages] = useState<string[]>([]); 
 
     const { data: departmentsData, isLoading: departmentsLoading, error: departmentsError } = useGetDepartmentsQuery(null);
 

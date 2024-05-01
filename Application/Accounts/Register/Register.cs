@@ -14,21 +14,22 @@ namespace Application.Accounts.Register
 
         public class CommandValidator : AbstractValidator<RegisterCommand>
         {
-            public CommandValidator()
+            private readonly IUserRepository _userRepository;
+            public CommandValidator(IUserRepository userRepository)
             {
-                RuleFor(x => x.Register).SetValidator(new RegisterValidator());
+                _userRepository = userRepository;
+                RuleFor(x => x.Register)
+                    .SetValidator(new RegisterValidator(_userRepository));
             }
+
         }
 
-        public class RegisterCommandHandler(IUserRepository _userRepository, ITokenRepository _tokenRepository, IMapper _mapper) 
+        public class RegisterCommandHandler(IUserRepository _userRepository, ITokenRepository _tokenRepository, IMapper _mapper)
             : IRequestHandler<RegisterCommand, Result<UserDto>>
         {
             public async Task<Result<UserDto>> Handle(RegisterCommand request, CancellationToken cancellationToken)
             {
-                if (await _userRepository.IsEmailTakenAsync(request.Register.Email))
-                {
-                    return Result<UserDto>.Failure(ErrorType.BadRequest, "Email is taken. Try another one!");
-                }
+                if (request.Register is null) return Result<UserDto>.Failure(ErrorType.BadRequest, "Problem while registering the user!");
 
                 var user = new AppUser
                 {

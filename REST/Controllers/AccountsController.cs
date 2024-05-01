@@ -17,13 +17,13 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetCurrentUserQuery(User)));
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        public async Task<IActionResult> Login([FromForm]LoginDto loginDto)
         {
             return HandleResult(await Mediator.Send(new LoginCommand(loginDto)));
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromForm]RegisterDto registerDto)
         {
             return HandleResult(await Mediator.Send(new RegisterCommand(registerDto)));
         }
