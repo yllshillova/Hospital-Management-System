@@ -18,7 +18,7 @@ function LatestVisits() {
     if (isLoading || patientsLoading || doctorsLoading) {
         content = <MiniLoader />;
     } else if (error || patientsError || docError) {
-        content = <div>Error loading the latest visits</div>
+        content = <MiniLoader />;
     }
     else {
         content = latestVisits?.map((visit: Visit, index: number) => {
@@ -28,10 +28,11 @@ function LatestVisits() {
             return (
                 <tbody>
                     <TableRow key={index}>
-                        <TableCell>{" "}</TableCell>
                         <TableCell>{doctor.name} {" "} {doctor.lastName}</TableCell>
                         <TableCell>{patient.name} {" "} {patient.lastName}</TableCell>
                         <TableCell>{visit.complaints}</TableCell>
+                        <TableCell>{visit.diagnosis}</TableCell>
+
                     </TableRow>
                 </tbody>
 
@@ -47,10 +48,10 @@ function LatestVisits() {
                 <Table>
                     <thead>
                         <TableRow>
-                            <TableHeader>{""}</TableHeader>
                             <TableHeader>Doctor</TableHeader>
                             <TableHeader>Patient</TableHeader>
                             <TableHeader>Complaints</TableHeader>
+                            <TableHeader>Diagnosis</TableHeader>
                         </TableRow>
                     </thead>
                     {content}
@@ -86,23 +87,30 @@ const Table = styled.table`
   border-collapse: collapse;
 `;
 
-const TableRow = styled.tr`
-  &:hover {
-    background-color: #f5f5f5; 
-  }
-  border-bottom: 1px solid #F5F5F5;
+export const TableHead = styled.tr`
+  border-bottom: 1px solid #d3d3d3;
+`;
 
+export const TableRow = styled.tr`
+  border-bottom: 1px solid #d3d3d3;
+  &:nth-last-child(2) {
+    border-bottom: none;
+  }
+  &:hover {
+    background-color: #f5f5f5;
+  }
 `;
 
 const TableHeader = styled.th`
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #F5F5F5;
+  border-bottom: 1px solid #ddd;
 `;
 
 const TableCell = styled.td`
   padding: 10px;
 `;
+
 //const ProductImage = styled.img`
 //  width: 50px; 
 //  height: 50px; 
