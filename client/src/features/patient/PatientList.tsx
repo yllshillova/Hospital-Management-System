@@ -39,7 +39,7 @@ function PatientList() {
     if (isLoading) {
         content = <MainLoader />;
     } else if (error) {
-        content = <div> Error loading patients.</div>;
+        content = <div>{(error.data as FetchBaseQueryError)}</div>;
     }
     else {
         content = data.map((patient: Patient) => {

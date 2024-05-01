@@ -71,7 +71,7 @@ function RoomList() {
     if (isLoading /*|| patientsLoading*/) {
         content = <MainLoader />;
     } else if (error/*roomsError || patientsError*/) {
-        content = <div>Error loading data.</div>;
+        content = <div>{(error.data as FetchBaseQueryError)}</div>;
     } 
     else {
         content = data.map((room: Room) => {

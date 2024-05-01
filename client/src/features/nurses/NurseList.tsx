@@ -56,7 +56,7 @@ function NurseList() {
     if (isLoading) {
         content = <MainLoader />;
     } else if (error) {
-        content = <div>Error loading nurses.</div>;
+        content = <div>{(error.data as FetchBaseQueryError)}</div>;
     }
     else {
         content = data.map((nurse: Nurse) => {
