@@ -12,32 +12,20 @@ import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
 import { useGetDepartmentsQuery } from '../../app/APIs/departmentApi';
 import Department from '../../app/models/Department';
-
-interface DoctorData {
-    name: string;
-    lastName: string;
-    specialization: string;
-    address: string;
-    residence: string;
-    birthday: string;
-    gender: string;
-    email: string;
-    isDeleted: boolean;
-    departmentId: string;
-}
+import Doctor from '../../app/models/Doctor';
 
 interface DoctorFormProps {
     id?: string;
-    data?: DoctorData;
+    data?: Doctor;
 }
 
-const doctorData: DoctorData = {
+const doctorData: Doctor = {
     name: "",
     lastName: "",
     specialization: "",
     address: "",
     residence: "",
-    birthday: "",
+    birthday: new Date(),
     gender: "",
     email: "",
     isDeleted: false,
@@ -47,7 +35,7 @@ const doctorData: DoctorData = {
 const genders = [SD_Genders.Male, SD_Genders.Female];
 
 function DoctorForm({ id, data }: DoctorFormProps) {
-    const [doctorInputs, setDoctorInputs] = useState<DoctorData>(data || doctorData);
+    const [doctorInputs, setDoctorInputs] = useState<Doctor>(data || doctorData);
     const [createDoctor] = useCreateDoctorMutation();
     const [updateDoctor] = useUpdateDoctorMutation();
     const navigate = useNavigate();
@@ -90,7 +78,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
         formData.append("Specialization", doctorInputs.specialization);
         formData.append("Address", doctorInputs.address);
         formData.append("Residence", doctorInputs.residence);
-        formData.append("Birthday", doctorInputs.birthday);
+        formData.append("Birthday", doctorInputs.birthday.toString());
         formData.append("Gender", doctorInputs.gender);
         formData.append("Email", doctorInputs.email);
         formData.append("IsDeleted", doctorInputs.isDeleted.toString());

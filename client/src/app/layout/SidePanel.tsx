@@ -7,14 +7,19 @@ import { faCog, faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderT
 //    setLoggedInUser,
 //} from "../../Storage/Redux/userAuthSlice";
 import { useNavigate } from 'react-router-dom';
-import { clearToken } from '../storage/redux/authSlice';
-import { useDispatch } from 'react-redux';
+import { AuthState, clearToken } from '../storage/redux/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import toastNotify from '../helpers/toastNotify';
 import { faUserNurse } from '@fortawesome/free-solid-svg-icons/faUserNurse';
+import { RootState } from '@reduxjs/toolkit/query';
 
 function SidePanel() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const userData: AuthState = useSelector(
+        (state: RootState) => state.auth
+    );
 
     //const handleLogout = () => {
     //    localStorage.removeItem("authToken");

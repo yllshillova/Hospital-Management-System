@@ -41,10 +41,11 @@ function DepartmentList() {
 
 
 
+
     if (isLoading) {
         content = <MainLoader />;
     } else if (error) {
-        content = <div>Error loading departments.</div>;
+        content = <div>{(error.data as FetchBaseQueryError)}</div>;
     }
     else {
         content = data.map((department: Department) => {
