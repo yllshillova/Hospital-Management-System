@@ -48,8 +48,12 @@ function VisitList() {
 
     if (isLoading || patientsLoading || doctorsLoading) {
         content = <MainLoader />;
-    } else if (error || patientsError || doctorsError) {
-        content = <div>{(error.data as FetchBaseQueryError)}</div>;
+    } else if (error || doctorsError || patientsError) {
+        content = (
+            <div>
+                {(error?.data as FetchBaseQueryError) || (doctorsError?.data as FetchBaseQueryError) || (patientsError?.data as FetchBaseQueryError)}
+            </div>
+        );
     }
     else {
         content = data.map((visit: Visit, index: number) => {

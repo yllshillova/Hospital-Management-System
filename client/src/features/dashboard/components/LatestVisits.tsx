@@ -17,8 +17,12 @@ function LatestVisits() {
 
     if (isLoading || patientsLoading || doctorsLoading) {
         content = <MiniLoader />;
-    } else if (error || patientsError || docError) {
-        content = <MiniLoader />;
+    } else if (error || docError || patientsError) {
+        content = (
+            <div>
+                {(error?.data as FetchBaseQueryError) || (patientsError?.data as FetchBaseQueryError) || (docError?.data as FetchBaseQueryError)}
+            </div>
+        );
     }
     else {
         content = latestVisits?.map((visit: Visit, index: number) => {

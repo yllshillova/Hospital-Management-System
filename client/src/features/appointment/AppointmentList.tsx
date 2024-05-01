@@ -42,8 +42,12 @@ function AppointmentList() {
 
     if (isAppointmentLoading  || isDoctorLoading || isPatientLoading)  {
         content = <MainLoader />;
-    } else if (appointmentError   ||doctorError || patientError) {
-        content = <div>{(error.data as FetchBaseQueryError)}</div>;
+    } else if (appointmentError || doctorError || patientError) {
+        content = (
+            <div>
+                {(appointmentError?.data as FetchBaseQueryError) || (doctorError?.data as FetchBaseQueryError) || (patientError?.data as FetchBaseQueryError)}
+            </div>
+        );
     } else {
         content = appointmentData.map((appointment: Appointment) => {
             // Find the corresponding doctor and patient data
