@@ -1,5 +1,4 @@
 ﻿using Application.Nurses;
-using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using static Application.Nurses.Create;
 using static Application.Nurses.Delete;
@@ -31,7 +30,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNurse([FromForm]NurseDto Nurse)
+        public async Task<IActionResult> CreateNurse([FromForm] NurseDto Nurse)
         {
             return HandleResult(await Mediator.Send(new CreateNurseCommand(Nurse)));
         }

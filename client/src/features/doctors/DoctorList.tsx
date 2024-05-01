@@ -119,7 +119,7 @@ function DoctorList() {
                             <TableHeaderCell>Department</TableHeaderCell>
                             {/*<TableHeaderCell>CreatedAt</TableHeaderCell>*/}
                             {/*<TableHeaderCell>UpdatedAt</TableHeaderCell>*/}
-                            <TableHeaderCell>IsDeleted</TableHeaderCell>
+                            <TableHeaderCell>Is Deleted</TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

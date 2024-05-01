@@ -118,8 +118,8 @@ function RoomList() {
                             <TableHeaderCell>Capacity</TableHeaderCell>
                             <TableHeaderCell>Status</TableHeaderCell>
                           
-                            <TableHeaderCell>CreatedAt</TableHeaderCell>
-                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
+                            <TableHeaderCell>Created At</TableHeaderCell>
+                            <TableHeaderCell>Updated At</TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

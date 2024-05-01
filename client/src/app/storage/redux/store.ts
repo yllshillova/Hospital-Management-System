@@ -14,8 +14,8 @@ const store = configureStore({
         [roomApi.reducerPath]: roomApi.reducer,
         [doctorApi.reducerPath]: doctorApi.reducer,
         [appointmentApi.reducerPath]: appointmentApi.reducer,
-        [nurseApi.reducerPath]: nurseApi.reducer
-        [visitApi.reducerPath] : visitApi.reducer,
+        [nurseApi.reducerPath]: nurseApi.reducer,
+        [visitApi.reducerPath]: visitApi.reducer,
     },
 
     middleware: (getDefaultMiddleware) =>

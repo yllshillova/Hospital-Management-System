@@ -47,21 +47,22 @@ function AppointmentList() {
     } else {
         content = appointmentData.map((appointment: Appointment) => {
             // Find the corresponding doctor and patient data
-            const doctor = doctorData.find((doc: { id: string; }) => doc.id === appointment.doctorId);
+            //const doctor = doctorData.find((doc: { id: string; }) => doc.id === appointment.doctorId);
             const patient = patientData.find((pat: { id: string; }) => pat.id === appointment.patientId);
 
             return (
                 <tbody key={appointment.id}>
                     <TableRow>
+
+                        {/*<TableCell>{doctor.name} {" "} {doctor.lastName}</TableCell>*/}
+                        <TableCell>{patient.name} {" "} {patient.lastName}</TableCell>
+
+                        <TableCell>{new Date(appointment.checkInDate!).toLocaleString()}</TableCell>
+                        <TableCell>{new Date(appointment.checkOutDate!).toLocaleString()}</TableCell>
+
                         <TableCell>{new Date(appointment.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(appointment.updatedAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(appointment.checkInDate).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(appointment.checkOutDate).toLocaleDateString()}</TableCell>
-                        {/*<TableCell>{appointment.status}</TableCell>*/}
-                        {/*<TableCell>{appointment.reason}</TableCell>*/}
-                        {/*<TableCell>{appointment.notes}</TableCell>*/}
-                        <TableCell>{doctor ? doctor.name : "N/A"}</TableCell>
-                        <TableCell>{patient ? patient.name : "N/A"}</TableCell>
+
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/appointment/" + appointment.id)}>
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
@@ -71,6 +72,7 @@ function AppointmentList() {
                         <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleAppointmentDelete(appointment.id)}>
                             <FontAwesomeIcon icon={faTrashAlt} />
                         </ActionButton>
+
                     </TableRow>
                 </tbody>
             );
@@ -84,22 +86,19 @@ function AppointmentList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Appointments List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/appointment/insert")}>
+                    <AddButton onClick={() => navigate("/appointment/insert")}>
                         <FontAwesomeIcon icon={faAdd} />
                     </AddButton>
                 </TableNav>
                 <Table>
                     <thead>
                         <TableHead>
-                            <TableHeaderCell>CreatedAt</TableHeaderCell>
-                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
+                            {/*<TableHeaderCell>Doctor</TableHeaderCell>*/}
+                            <TableHeaderCell>Patient</TableHeaderCell>
                             <TableHeaderCell>CheckInDate</TableHeaderCell>
                             <TableHeaderCell>CheckOutDate</TableHeaderCell>
-                            {/*<TableHeaderCell>Status</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Reason</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Notes</TableHeaderCell>*/}
-                            <TableHeaderCell>Doctor</TableHeaderCell>
-                            <TableHeaderCell>Patient</TableHeaderCell>
+                            <TableHeaderCell>CreatedAt</TableHeaderCell>
+                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

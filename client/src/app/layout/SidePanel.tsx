@@ -7,6 +7,7 @@ import { faCog, faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderT
 //    setLoggedInUser,
 //} from "../../Storage/Redux/userAuthSlice";
 import { useNavigate } from 'react-router-dom';
+import { faUserNurse } from '@fortawesome/free-solid-svg-icons/faUserNurse';
 
 function SidePanel() {
 
@@ -59,7 +60,7 @@ function SidePanel() {
 
     const menuItems = [
         { icon: faUserDoctor, label: 'Doctors', onClick: handleDoctorsList },
-        { icon: faUserDoctor, label: 'Nurses', onClick: handleNursesList },
+        { icon: faUserNurse, label: 'Nurses', onClick: handleNursesList },
         { icon: faUserInjured, label: 'Patients', onClick: handlePatientList },
         { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
         { icon: faCalendarDays, label: 'Appointments', onClick: handleAppointmentsList },

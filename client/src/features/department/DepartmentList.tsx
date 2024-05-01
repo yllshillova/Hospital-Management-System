@@ -86,9 +86,9 @@ function DepartmentList() {
                     <thead>
                         <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>IsDeleted</TableHeaderCell>
-                            <TableHeaderCell>CreatedAt</TableHeaderCell>
-                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
+                            <TableHeaderCell>Is Deleted</TableHeaderCell>
+                            <TableHeaderCell>Created At</TableHeaderCell>
+                            <TableHeaderCell>Updated At</TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

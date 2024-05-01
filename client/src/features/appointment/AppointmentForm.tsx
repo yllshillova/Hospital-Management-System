@@ -83,18 +83,21 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
             const response = await updateAppointment({ data: formData, id });
 
             if (response.error) {
+                console.log(response.error);
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Visit updated successfully", "success");
-                navigate('/visits');
+                toastNotify("Appointment has been  updated ", "success");
+                navigate('/Appointment');
             }
         } else {
             const response = await createAppointment(formData);
+            console.log(response);
 
             if (response.error) {
+                console.log(response.error);
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Appointment created successfully", "success");
+                toastNotify("Appointment has been created ", "success");
                 navigate('/appointments');
             }
 

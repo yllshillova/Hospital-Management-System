@@ -19,6 +19,12 @@ const nurseApi = createApi({
             }),
             providesTags: ["Nurses"],
         }),
+        getNursesCount: builder.query({
+            query: () => ({
+                url: "nurses/Count"
+            }),
+            providesTags: ["Nurses"],
+        }),
         createNurse: builder.mutation({
             query: (data) => ({
                 url: "nurses",
@@ -49,6 +55,7 @@ const nurseApi = createApi({
 export const {
     useGetNursesQuery,
     useGetNurseByIdQuery,
+    useGetNursesCountQuery,
     useCreateNurseMutation,
     useUpdateNurseMutation,
     useDeleteNurseMutation

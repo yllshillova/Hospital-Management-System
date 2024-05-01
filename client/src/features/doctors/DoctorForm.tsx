@@ -263,7 +263,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     Submit
                                 </SubmitButton>
                                 <BackToProductsButton onClick={() => navigate("/doctors")}>
-                                    Back to doctors
+                                    Back to Doctors
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>

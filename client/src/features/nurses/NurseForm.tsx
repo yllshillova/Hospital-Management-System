@@ -192,6 +192,7 @@ function NurseForm({ id, data }: NurseFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
+                                <Label>Birthday</Label>
                                 <Input
                                     type="date"
                                     name="birthday"
@@ -248,7 +249,7 @@ function NurseForm({ id, data }: NurseFormProps) {
                                     Submit
                                 </SubmitButton>
                                 <BackToProductsButton onClick={() => navigate("/nurses")}>
-                                    Back to nurses
+                                    Back to Nurses
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>

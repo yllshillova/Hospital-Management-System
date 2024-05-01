@@ -1,19 +1,12 @@
-//export function validCheckInOutDate(dateString: string | Date): string | undefined {
-//    if (dateString) {
-//        const date = new Date(dateString);
-
-//        if (!isNaN(date.getTime())) {
-//            return date.toISOString().split('T')[0];
-//        }
-//    }
-//    return undefined;
-//}
-
 export function validCheckInOutDate(date: Date): string | undefined {
     // Check if the input is a valid Date object
-    if (date instanceof Date && !isNaN(date.getTime())) {
+    if (date instanceof Date && !isNaN(date.getDate())) {
+        // Adjust for local timezone offset
+        const localDateTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
         // Format the date according to ISO 8601 standard (YYYY-MM-DDTHH:mm:ss)
-        const formattedDateTime = date.toISOString().slice(0, 19); // Extract YYYY-MM-DDTHH:mm:ss part
+        const formattedDateTime = localDateTime.toISOString().slice(0, 19); // Extract YYYY-MM-DDTHH:mm:ss part
+
         // Return the formatted date-time string
         return formattedDateTime;
     }
