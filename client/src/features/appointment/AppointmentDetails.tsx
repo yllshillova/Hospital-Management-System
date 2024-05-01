@@ -5,12 +5,14 @@ import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { useGetAppointmentByIdQuery } from "../../app/APIs/appointmentApi";
-import { useGetDoctorByIdQuery } from "../../app/APIs/doctorApi";
-import { useGetPatientByIdQuery } from "../../app/APIs/patientApi";
 //import { formatDate } from "../../app/utility/formatDate";
-import { WrapperContainer, MainContainer, LeftContainer, SectionTitle, Attribute, Label, Value} from "../../app/common/styledComponents/details";
 import { Header, SidePanel } from "../../app/layout";
-import MiniLoader from "../../app/common/MiniLoader";
+import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Title } from "../../app/common/styledComponents/upsert";
+import Patient from "../../app/models/Patient";
+import Doctor from "../../app/models/Doctor";
+import { useGetPatientsQuery } from "../../app/APIs/patientApi";
+import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
+import { formatDateTimeLocal } from "../../app/utility/formatDate";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -20,9 +22,9 @@ function isValidGuid(guid: string): boolean {
 function AppointmentDetails() {
     
     const { id } = useParams<string>();
-    const { data: appointment, isLoading, error, isError} = useGetAppointmentByIdQuery(id);
-    const { data: doctorData, isLoading: isDoctorLoading, error: doctorError } = useGetDoctorByIdQuery(appointment?.doctorId || null);
-    const { data: patientData, isLoading: isPatientLoading, error: patientError} = useGetPatientByIdQuery(appointment?.patientId || null);
+    const { data, isLoading, error, isError} = useGetAppointmentByIdQuery(id);
+    const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError, isError: doctorsIsError } = useGetDoctorsQuery(null);
+    const { data: patientsData, isLoading: patientsLoading, error: patientsError, isError: patientsIsError } = useGetPatientsQuery(null);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -32,75 +34,92 @@ function AppointmentDetails() {
     }
     const fbError = error as FetchBaseQueryError;
 
-    if (isError) {
+    if (isError || doctorsIsError || patientsIsError) {
         useErrorHandler(fbError, navigate, location.pathname);
     }
-    if (isLoading) return <MainLoader />;
+    if (isLoading || patientsLoading || doctorsLoading) return <MainLoader />;
 
-    if (appointment && appointment.doctorId && appointment.patientId) {
-
-
+    if (data) {
+        const patient = patientsData?.find((patient: Patient) => patient.id === data.patientId);
+        const doctor = doctorsData?.find((doctor: Doctor) => doctor.id === data.doctorId);
 
         return (
             <>
                 <Header />
                 <SidePanel />
 
-                <MainContainer>
-                    <WrapperContainer>
+                <OuterContainer>
+                    <Container>
+                        <FormContainer >
+                            {isLoading && <MainLoader />}
+                            <Title>
+                                Details of Appointment X
+                            </Title>
 
-                        <LeftContainer>
-                            <SectionTitle>Details of appointment: {appointment.status}</SectionTitle>
-                            {/*<Attribute>*/}
-                            {/*    <label style={{ fontWeight: "bold", color: "#009F6B" }}>{doctor.isDeleted === "True" ? "Passive" : "Active"} </label>*/}
-                            {/*</Attribute>*/}
-                            <Attribute>
-                                <Label>CheckInDate</Label>
-                                <Value>{new Date(appointment.checkInDate!).toLocaleString()}</Value>
-                            </Attribute>
-                            <Attribute>
-                                <Label>CheckOutDate</Label>
-                                <Value>{new Date(appointment.checkOutDate!).toLocaleString()}</Value>
-                            </Attribute>
-                            <Attribute>
-                                <Label>Status</Label>
-                                <Value>{appointment.status}</Value>
-                            </Attribute>
-                            <Attribute>
-                                <Label>Reason</Label>
-                                <Value>{appointment.reason}</Value>
-                            </Attribute>
-                            <Attribute>
-                                <Label>Notes</Label>
-                                <Value>{appointment.notes}</Value>
-                            </Attribute>
-                            <Attribute>
-                                <Label>Doctor</Label>
-                                <Value> {isDoctorLoading ? (
-                                    <MiniLoader />
-                                ) : doctorData ? (
-                                    doctorData.name
-                                ) : doctorError ? (
-                                    doctorError.data
-                                ) : (
-                                    "Doctor not found!"
-                                )}</Value>
-                            </Attribute>
-                            <Attribute>
-                                <Label>Patient</Label>
-                                <Value> {isPatientLoading ? (
-                                    <MiniLoader />
-                                ) : patientData ? (
-                                    patientData.name
-                                ) : patientError ? (
-                                    patientError.data
-                                ) : (
-                                    "Patient not found!"
-                                )}</Value>
-                            </Attribute>
-                        </LeftContainer>
-                    </WrapperContainer>
-                </MainContainer>
+                            <Form>
+                                <FormGroup>
+                                    <Label>Check In Date</Label>
+                                    <Input
+                                        type="datetime-local"
+                                        value={formatDateTimeLocal(data.checkInDate)}
+                                    />
+                                </FormGroup>
+
+                                <FormGroup>
+                                    <Label>Check Out Date</Label>
+                                    <Input
+                                        type="datetime-local"
+                                        value={formatDateTimeLocal(data.checkOutDate)}
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label>Status</Label>
+                                    <Input
+                                        type="text"
+                                        value={data.status}
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label>Reason</Label>
+                                    <Input
+                                        type="text"
+                                        value={data.reason}
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label>Notes</Label>
+                                    <Input
+                                        type="Notes"
+                                        value={data.notes}
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label>Doctor</Label>
+                                    <Input
+                                        type="text"
+                                        value={`${doctor.name} ${doctor.lastName}`}
+                                    />
+                                    {doctorsError && <div style={{ color: 'red' }}>Error loading doctor</div>}
+                                </FormGroup>
+
+                                <FormGroup>
+                                    <Label>Patient</Label>
+                                    <Input
+                                        type="text"
+                                        value={`${patient.name} ${patient.lastName}`}
+                                    />
+                                    {patientsError && <div style={{ color: 'red' }}>Error loading patient</div>}
+                                </FormGroup>
+
+                                <ButtonsContainer>
+                                    <BackToProductsButton onClick={() => navigate("/visits")}>
+                                        Back to Appointments
+                                    </BackToProductsButton>
+                                </ButtonsContainer>
+                            </Form>
+                        </FormContainer>
+                    </Container>
+                </OuterContainer>
             </>
         );
 

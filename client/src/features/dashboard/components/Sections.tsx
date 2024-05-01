@@ -6,6 +6,7 @@ import { useGetDoctorsCountQuery } from '../../../app/APIs/doctorApi';
 import { useGetPatientsCountQuery } from '../../../app/APIs/patientApi';
 import MiniLoader from '../../../app/common/MiniLoader';
 import { useGetNursesCountQuery } from '../../../app/APIs/nurseApi';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 function Sections() {
 
@@ -26,7 +27,7 @@ function Sections() {
     if (departmentsLoading || doctorsLoading || patientsLoading) {
         content = <MiniLoader />;
     } else if (depError || docError || patError) {
-        content = <div>Error loading data</div>
+        content = <div>{(depError?.data as FetchBaseQueryError) || (docError?.data as FetchBaseQueryError) || (patError?.data as FetchBaseQueryError)}</div>;
     }
     else {
         content = sectionsData.map((section, index) => (
