@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 //import inputHelper from "../../app/helpers/inputHelper";

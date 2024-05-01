@@ -11,6 +11,6 @@ export default interface Room {
     //patientName: string;
     createdAt: Date;
     updatedAt: Date;
-    nrDhomes: number;
+    number: number;
     roomPatients: RoomPatient[];
 }
