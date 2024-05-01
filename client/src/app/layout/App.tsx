@@ -30,6 +30,7 @@ import VisitDetails from '../../features/visit/VisitDetails';
 import VisitUpdate from '../../features/visit/VisitUpdate';
 import AppointmentUpdate from '../../features/appointment/AppointmentUpdate';
 import AppointmentInsert from '../../features/appointment/AppointmentInsert';
+import Logout from '../../features/account/Logout';
 
 
 function App() {

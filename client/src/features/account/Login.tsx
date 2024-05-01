@@ -10,6 +10,8 @@ import toastNotify from "../../app/helpers/toastNotify";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
 import MainLoader from "../../app/common/MainLoader";
+import { useDispatch } from "react-redux";
+import { setToken } from "../../app/storage/redux/authSlice";
 
 
 
@@ -19,7 +21,7 @@ const loginData = {
 };
 
 function Login() {
-
+    const dispatch = useDispatch();
     const [loginInputs, setLoginInputs] = useState(loginData);
     const [loginUser] = useLoginMutation();
     const [loading, setLoading] = useState(false);
@@ -57,6 +59,13 @@ function Login() {
         const response = await loginUser(formData);
 
         if ('data' in response) {
+            const { token } = response.data;
+
+            localStorage.setItem("token", token);
+            console.log(response);
+
+            dispatch(setToken(token));
+
             toastNotify("User logged in successfully", "success");
             navigate('/');
         } else if ('error' in response) {

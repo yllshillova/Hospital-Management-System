@@ -7,10 +7,12 @@ import { faCog, faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderT
 //    setLoggedInUser,
 //} from "../../Storage/Redux/userAuthSlice";
 import { useNavigate } from 'react-router-dom';
+import { clearToken } from '../storage/redux/authSlice';
+import { useDispatch } from 'react-redux';
+import toastNotify from '../helpers/toastNotify';
 
 function SidePanel() {
-
-    //const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     //const handleLogout = () => {
@@ -46,8 +48,16 @@ function SidePanel() {
     const handleVisitsList = () => {
         navigate('/visits');
     }
+    const handleLogout = () => {
+        localStorage.removeItem('token');
 
-    const menuItems = [
+        dispatch(clearToken());
+        navigate('/login');
+
+        // Optionally, you can display a logout confirmation message using a toast notification
+         toastNotify('Logged out successfully', 'success');
+    }
+    const sideBarComponents = [
         { icon: faUserDoctor, label: 'Doctors', onClick: handleDoctorsList },
         { icon: faUserInjured, label: 'Patients', onClick: handlePatientList },
         { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
@@ -55,15 +65,15 @@ function SidePanel() {
         { icon: faBookMedical, label: 'Visits', onClick: handleVisitsList },
         { icon: faBedPulse, label: 'Rooms', onClick: handleRoomsList },
         { icon: faCog, label: 'Settings' },
-        { icon: faSignOutAlt, label: 'Logout' },
+        { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout },
 
     ];
 
     return (
         <SidePanelContainer>
-            {menuItems.map((item, index) => (
+            {sideBarComponents.map((item, index) => (
                 <SidebarItem key={index} onClick={item.onClick}>
-                
+
                     <IconWrapper>
                         <FontAwesomeIcon icon={item.icon} size="lg" />
                     </IconWrapper>

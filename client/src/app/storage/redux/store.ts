@@ -6,16 +6,18 @@ import doctorApi from "../../APIs/doctorApi";
 import appointmentApi from "../../APIs/appointmentApi";
 import visitApi from "../../APIs/visitApi";
 import accountApi from "../../APIs/accountApi";
+import { authReducer } from "./authSlice";
 
 const store = configureStore({
     reducer: {
+        auth: authReducer,
+        [accountApi.reducerPath]: accountApi.reducer,
         [patientApi.reducerPath]: patientApi.reducer,
         [departmentApi.reducerPath]: departmentApi.reducer,
         [roomApi.reducerPath]: roomApi.reducer,
         [doctorApi.reducerPath]: doctorApi.reducer,
         [appointmentApi.reducerPath]: appointmentApi.reducer,
         [visitApi.reducerPath] : visitApi.reducer,
-        [accountApi.reducerPath]: accountApi.reducer,
     },
 
     middleware: (getDefaultMiddleware) =>
