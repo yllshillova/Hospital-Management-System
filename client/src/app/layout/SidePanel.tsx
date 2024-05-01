@@ -46,9 +46,20 @@ function SidePanel() {
     const handleVisitsList = () => {
         navigate('/visits');
     }
+    const handleNursesList = () => {
+       navigate('/nurses');
+    }
+
+    //const handleAllOrders = () => {
+    //    navigate('/AllOrders');
+    //}
+    //const handleAllUsers = () => {
+    //    navigate('/UsersList');
+    //}
 
     const menuItems = [
         { icon: faUserDoctor, label: 'Doctors', onClick: handleDoctorsList },
+        { icon: faUserDoctor, label: 'Nurses', onClick: handleNursesList },
         { icon: faUserInjured, label: 'Patients', onClick: handlePatientList },
         { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
         { icon: faCalendarDays, label: 'Appointments', onClick: handleAppointmentsList },

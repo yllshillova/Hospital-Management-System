@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
 using MediatR;
+using System.Numerics;
 
 namespace Application.Nurses
 {
@@ -18,6 +19,7 @@ namespace Application.Nurses
                 if (nurse is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
                 nurse.IsDeleted = true;
+                nurse.UpdatedAt = DateTime.Now;
                 var result = await _nurseRepository.UpdateAsync(nurse);
 
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the nurse! Try again.");
