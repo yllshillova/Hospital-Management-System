@@ -154,7 +154,7 @@ function VisitForm({ id, data }: VisitFormProps) {
                                     <option value="">Select Doctor</option>
                                     {doctorsData && doctorsData.map((doctor: Doctor) => (
                                         <option key={doctor.id} value={doctor.id}>
-                                            {doctor.name}
+                                            {doctor.name} {" "} {doctor.lastName}
                                         </option>
                                     ))}
                                 </Select>
@@ -171,7 +171,7 @@ function VisitForm({ id, data }: VisitFormProps) {
                                     <option value="">Select Patient</option>
                                     {patientsData && patientsData.map((patient: Patient) => (
                                         <option key={patient.id} value={patient.id}>
-                                            {patient.name}
+                                            {patient.name} {" "} {patient.lastName}
                                         </option>
                                     ))}
                                 </Select>

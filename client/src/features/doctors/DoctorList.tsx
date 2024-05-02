@@ -56,7 +56,7 @@ function DoctorList() {
     if (isLoading) {
         content = <MainLoader />;
     } else if (error) {
-        content = <div>Error loading doctors.</div>;
+        content = <div>{(error.data as FetchBaseQueryError)}</div>;
     }
     else {
         content = data.map((doctor: Doctor) => {
@@ -119,7 +119,7 @@ function DoctorList() {
                             <TableHeaderCell>Department</TableHeaderCell>
                             {/*<TableHeaderCell>CreatedAt</TableHeaderCell>*/}
                             {/*<TableHeaderCell>UpdatedAt</TableHeaderCell>*/}
-                            <TableHeaderCell>IsDeleted</TableHeaderCell>
+                            <TableHeaderCell>Is Deleted</TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

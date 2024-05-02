@@ -1,27 +1,113 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import styled from "styled-components";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../app/APIs/accountApi";
+import { useEffect, useState } from "react";
+import inputHelper from "../../app/helpers/inputHelper";
+import toastNotify from "../../app/helpers/toastNotify";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import useErrorHandler from "../../app/helpers/useErrorHandler";
+import MainLoader from "../../app/common/MainLoader";
+import { useDispatch } from "react-redux";
+import { setToken } from "../../app/storage/redux/authSlice";
 
 
+
+const loginData = {
+    email: "",
+    password: ""
+};
 
 function Login() {
-
+    const dispatch = useDispatch();
+    const [loginInputs, setLoginInputs] = useState(loginData);
+    const [loginUser] = useLoginMutation();
+    const [loading, setLoading] = useState(false);
+    const [errorMessages, setErrorMessages] = useState<string[]>([]);
     const navigate = useNavigate();
+
+    const data = loginUser.data;
+
+    useEffect(() => {
+        if (data) {
+            const tempData = {
+                email: data.email,
+                password: data.password
+            };
+            setLoginInputs(tempData);
+        }
+    }, [data]);
+
+    const handleLoginInput= (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+        const tempData = inputHelper(e, loginInputs);
+        setLoginInputs(tempData);
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        e.preventDefault();
+        setLoading(true);
+        setErrorMessages([]);
+
+        const formData = new FormData();
+        formData.append("Email", loginInputs.email);
+        formData.append("Password", loginInputs.password);
+
+        const currentLocation = window.location.pathname;
+
+        const response = await loginUser(formData);
+
+        if ('data' in response) {
+            const { token } = response.data;
+
+            localStorage.setItem("token", token);
+            console.log(response);
+
+            dispatch(setToken(token));
+
+            toastNotify("User logged in successfully", "success");
+            navigate('/');
+        } else if ('error' in response) {
+
+            const error = response.error as FetchBaseQueryError;
+            if ('data' in error) {
+                toastNotify((error.data as string), 'error');
+            }
+
+            const { status } = error;
+            console.log(response.error);
+            if (status) {
+                useErrorHandler(error, navigate, currentLocation, setErrorMessages);
+            }
+        }
+        setLoading(false);
+    };
 
     return (
         <>
             <LoginContainer>
-
+                {loading && <MainLoader />}
                 <Title>Login</Title>
-                <Form>
+                {errorMessages.length > 0 && (
+                    <div style={{ color: 'red' }}>
+                        <ul>
+                            {errorMessages.map((error, index) => (
+                                <li key={index}>{error}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                <Form method="post" encType="multipart/form-data" onSubmit={handleSubmit}>
                     <FormControl>
                         <InputBox>
                             <FontAwesomeIcon icon={faUser} className="icon" />
                             <input
                                 type="text"
-                                name="userName"
-                                placeholder="Enter your username"
+                                name="email"
+                                placeholder="Email"
+                                value={loginInputs.email}
+                                onChange={handleLoginInput}
                             />
                         </InputBox>
                     </FormControl>
@@ -31,7 +117,9 @@ function Login() {
                             <input
                                 type="password"
                                 name="password"
-                                placeholder="Enter your password"
+                                placeholder="Password"
+                                value={loginInputs.password}
+                                onChange={handleLoginInput}
                             />
                         </InputBox>
                     </FormControl>

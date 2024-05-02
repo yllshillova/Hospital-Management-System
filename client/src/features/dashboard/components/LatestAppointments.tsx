@@ -13,8 +13,13 @@ function LatestAppointments() {
 
     if (isLoading || patientsLoading) {
         content = <MiniLoader />;
+    
     } else if (error || patientsError) {
-        content = <div>Error loading the latest appointments</div>
+        content = (
+            <div>
+                {(error?.data as FetchBaseQueryError) || (patientsError?.data as FetchBaseQueryError)}
+            </div>
+        );
     }
     else {
         content = latestAppointments?.map((appointment: Appointment, index: number) => {

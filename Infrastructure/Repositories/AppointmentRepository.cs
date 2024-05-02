@@ -32,9 +32,9 @@ namespace Infrastructure.Repositories
 
             return appointments;
         }
-                                            //ekzistus     parameter  ekzistus    parameter
-                                                 //9         //10     //11          //12   
-        public async Task<bool> IsValidAppointment(DateTime checkInDate,DateTime checkOutDate,Guid doctorId)
+        //ekzistus     parameter  ekzistus    parameter
+        //9         //10     //11          //12   
+        public async Task<bool> IsValidAppointment(DateTime checkInDate, DateTime checkOutDate, Guid doctorId)
         {
             var appointments = await GetAppointmentsByDoctorId(doctorId);
 

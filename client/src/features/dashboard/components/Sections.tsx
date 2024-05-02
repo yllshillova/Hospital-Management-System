@@ -5,18 +5,20 @@ import { useGetDepartmentsCountQuery } from '../../../app/APIs/departmentApi';
 import { useGetDoctorsCountQuery } from '../../../app/APIs/doctorApi';
 import { useGetPatientsCountQuery } from '../../../app/APIs/patientApi';
 import MiniLoader from '../../../app/common/MiniLoader';
+import { useGetNursesCountQuery } from '../../../app/APIs/nurseApi';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 function Sections() {
 
     const { data: departmentsCount, isLoading: departmentsLoading, error: depError } = useGetDepartmentsCountQuery({});
     const { data: doctorsCount, isLoading: doctorsLoading, error: docError } = useGetDoctorsCountQuery({});
-    // TODO const { data: nursesCount } = useGetNursesCountQuery({});
+     const { data: nursesCount } = useGetNursesCountQuery({});
     const { data: patientsCount, isLoading: patientsLoading, error: patError } = useGetPatientsCountQuery({});
 
     const sectionsData = [
         { icon: faFolderTree, label: 'Departments', value: departmentsCount || "No", color: '#72A0C1' },
         { icon: faUserDoctor, label: 'Doctors', value: doctorsCount || "No", color: '#5072A7' },
-        { icon: faUserNurse, label: 'Nurses', value: "No", color: '#00538C' },
+        { icon: faUserNurse, label: 'Nurses', value: nursesCount || "No", color: '#00538C' },
         { icon: faUserInjured, label: 'Patients', value: patientsCount || "No", color: '#002147;' },
 
     ];
@@ -25,7 +27,7 @@ function Sections() {
     if (departmentsLoading || doctorsLoading || patientsLoading) {
         content = <MiniLoader />;
     } else if (depError || docError || patError) {
-        content = <div>Error loading data</div>
+        content = <div>{(depError?.data as FetchBaseQueryError) || (docError?.data as FetchBaseQueryError) || (patError?.data as FetchBaseQueryError)}</div>;
     }
     else {
         content = sectionsData.map((section, index) => (
@@ -50,6 +52,7 @@ function Sections() {
 }
 const SectionsContainer = styled.div`
   margin: 30px;
+  margin-top:0;
   display: flex;
   justify-content: space-around; 
 `;

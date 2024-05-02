@@ -5,7 +5,7 @@ import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { Header, SidePanel } from "../../app/layout";
-import { AdditionalInfoContainer, Attribute, Label, LabelsRow, LeftContainer, MainContainer, RightContainer, SectionTitle, Value, ValuesRow, WrapperContainer } from "../../app/common/styledComponents/details";
+import { Attribute, Label, LabelsRow, LeftContainer, MainContainer, RightContainer, SectionTitle, Value, ValuesRow, WrapperContainer } from "../../app/common/styledComponents/details";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -30,10 +30,6 @@ function PatientDetails() {
 
     if (isLoading) return <MainLoader />;
 
-
-
-
-
     if (data) {
         const patient = data;
         const statusLabel = patient.isDeleted === "True" ?
@@ -50,7 +46,7 @@ function PatientDetails() {
             <LeftContainer>
                 <SectionTitle>Patient Details</SectionTitle>
                 <Attribute>
-                           {statusLabel}
+                 {statusLabel}
                 </Attribute>
                 <Attribute>
                     <Label>Name</Label>
@@ -78,7 +74,7 @@ function PatientDetails() {
                 <SectionTitle>Personal Information</SectionTitle>
                 <LabelsRow>
                     <Label>Address</Label>
-                    <Label>Phone Number</Label>
+                    <Label>Phone</Label>
                     <Label>Email</Label>
                 </LabelsRow>
                 <ValuesRow>
@@ -97,22 +93,30 @@ function PatientDetails() {
                     <Value>{patient.occupation}</Value>
                     <Value>{patient.gender}</Value>
                 </ValuesRow>
+                <LabelsRow>
+                    <Label>Blood Group</Label>
+                    <Label>Allergies</Label>
+                     </LabelsRow>
+                   <ValuesRow>
+                   <Value style={{color:"crimson", fontWeight:"bold"} }>{patient.bloodGroup}</Value>
+                   <Value>{patient.allergies}</Value>
+                   </ValuesRow>
                 </RightContainer>
         </WrapperContainer>
 
-        <AdditionalInfoContainer>
-            <SectionTitle>Additional Information</SectionTitle>
-            <LabelsRow>
-                <Label>Blood Group</Label>
-                <Label></Label>
-                <Label></Label>
-                <Label>Allergies</Label>
-            </LabelsRow>
-            <ValuesRow>
-                <Value style={{color:"crimson", fontWeight:"bold"} }>{patient.bloodGroup}</Value>
-                <Value>{patient.allergies}</Value>
-            </ValuesRow>
-        </AdditionalInfoContainer>
+        {/*<AdditionalInfoContainer>*/}
+        {/*    <SectionTitle>Additional Information</SectionTitle>*/}
+        {/*    <LabelsRow>*/}
+        {/*        <Label>Blood Group</Label>*/}
+        {/*        <Label></Label>*/}
+        {/*        <Label></Label>*/}
+        {/*        <Label>Allergies</Label>*/}
+        {/*    </LabelsRow>*/}
+        {/*    <ValuesRow>*/}
+        {/*        <Value style={{color:"crimson", fontWeight:"bold"} }>{patient.bloodGroup}</Value>*/}
+        {/*        <Value>{patient.allergies}</Value>*/}
+        {/*    </ValuesRow>*/}
+        {/*</AdditionalInfoContainer>*/}
     </MainContainer>
 </>
         );

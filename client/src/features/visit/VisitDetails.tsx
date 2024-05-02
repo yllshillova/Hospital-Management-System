@@ -37,8 +37,6 @@ function VisitDetails() {
     if (isLoading || patientsLoading || doctorsLoading)  return <MainLoader />;
 
 
-
-
     if (data) {
         const patient = patientsData?.find((patient: Patient) => patient.id === data.patientId);
         const doctor = doctorsData?.find((doctor: Doctor) => doctor.id === data.doctorId);

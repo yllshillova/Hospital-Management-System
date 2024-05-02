@@ -17,10 +17,10 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetNursesQuery()));
         }
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetNurseById(Guid Id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetNurseById(Guid id)
         {
-            return HandleResult(await Mediator.Send(new GetNurseByIdQuery(Id)));
+            return HandleResult(await Mediator.Send(new GetNurseByIdQuery(id)));
         }
 
         [HttpGet("Count")]
@@ -30,20 +30,20 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNurse(NurseDto Nurse)
+        public async Task<IActionResult> CreateNurse([FromForm] NurseDto Nurse)
         {
             return HandleResult(await Mediator.Send(new CreateNurseCommand(Nurse)));
         }
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> EditNurse(Guid Id, NurseDto Nurse)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditNurse(Guid id, [FromForm] NurseDto Nurse)
         {
-            Nurse.Id = Id;
+            Nurse.Id = id;
             return HandleResult(await Mediator.Send(new UpdateNurseCommand(Nurse)));
         }
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteNurse(Guid Id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteNurse(Guid id)
         {
-            return HandleResult(await Mediator.Send(new DeleteNurseCommand(Id)));
+            return HandleResult(await Mediator.Send(new DeleteNurseCommand(id)));
         }
 
     }

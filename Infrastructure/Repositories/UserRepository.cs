@@ -24,11 +24,14 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(user => user.Email == email);
         }
 
-        public async Task<bool> IsEmailTakenAsync(string email)
+        public bool IsEmailTaken(string email)
         {
-            return await _context.Users.AnyAsync(user => user.Email == email);
+            return _context.Users.Any(user => user.Email == email);
         }
-
+        public bool IsUsernameTaken(string username)
+        {
+            return _context.Users.Any(user => user.UserName == username);
+        }
         public async Task<bool> CreateUserAsync(AppUser user, string password)
         {
             var result = await _userManager.CreateAsync(user, password);

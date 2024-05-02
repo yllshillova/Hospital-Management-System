@@ -13,6 +13,24 @@ export function formatDate(birthday: string | Date): string | undefined {
     return undefined;
 }
 
+export function formatDateTimeLocal(dateTime: string | Date): string | undefined {
+    if (dateTime) {
+        const date = new Date(dateTime);
+        if (!isNaN(date.getTime())) {
+            // Adjust for local timezone offset
+            const localDateTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+            // Format the date according to ISO 8601 standard (YYYY-MM-DDTHH:mm)
+            const formattedDateTime = localDateTime.toISOString().slice(0, 16); // Extract YYYY-MM-DDTHH:mm part
+
+            return formattedDateTime;
+        }
+    }
+    return undefined;
+}
+
+
+
 export const formatDateGeneral = (dateString: string | undefined) => {
     if (!dateString) return '';
     const date = new Date(dateString);

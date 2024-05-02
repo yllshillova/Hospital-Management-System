@@ -14,9 +14,6 @@ import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 import RoomDetails from '../../features/rooms/RoomDetails';
 import Login from '../../features/account/Login';
 import Register from '../../features/account/Register';
-//import Details from '../components/Details';
-//import DepartmentUpdate from '../../features/department/DepartmentUpdate';
-//import DepartmentInsert from '../../features/department/DepartmentInsert';
 import AddPatientToRoomForm from '../../features/rooms/AddPatientToRoomForm';
 import AppointmentList from '../../features/appointment/AppointmentList';
 import AppointmentDetails from '../../features/appointment/AppointmentDetails';
@@ -30,6 +27,10 @@ import VisitDetails from '../../features/visit/VisitDetails';
 import VisitUpdate from '../../features/visit/VisitUpdate';
 import AppointmentUpdate from '../../features/appointment/AppointmentUpdate';
 import AppointmentInsert from '../../features/appointment/AppointmentInsert';
+import NurseList from '../../features/nurses/NurseList';
+import NurseDetails from '../../features/nurses/NurseDetails';
+import NurseUpdate from '../../features/nurses/NurseUpdate';
+import NurseInsert from '../../features/nurses/NurseInsert';
 
 
 function App() {
@@ -55,6 +56,10 @@ function App() {
                     <Route path="/room/:id" element={<RoomDetails />}></Route>
                     <Route path="/room/insert" element={<RoomUpsert />}></Route>
                     <Route path="/room/update/:id" element={<RoomUpsert />}></Route>
+                    <Route path="/nurses" element={<NurseList />}></Route>
+                    <Route path="/nurse/:id" element={<NurseDetails />}></Route>
+                    <Route path="/nurse/insert" element={<NurseInsert />}></Route>
+                    <Route path="/nurse/update/:id" element={<NurseUpdate />}></Route>
                     <Route path="/addPatientToRoom" element={<AddPatientToRoomForm />}></Route>
                     <Route path="/appointments" element={<AppointmentList />}></Route>
                     <Route path="/appointment/:id" element={<AppointmentDetails />}></Route>

@@ -10,7 +10,7 @@ namespace Application.Accounts.Login
             RuleFor(d => d.Email).SetValidator(new NotNullValidator<LoginDto, string>())
                                  .SetValidator(new EmailValidator<LoginDto, string>());
             RuleFor(d => d.Password).SetValidator(new NotNullValidator<LoginDto, string>())
-                                 .Matches(IsPasswordComplex());
+                                 .Matches(IsPasswordComplex()).WithMessage("The password is not complex enough!");
         }
 
         private string IsPasswordComplex()
