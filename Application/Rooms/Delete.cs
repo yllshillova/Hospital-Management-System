@@ -3,9 +3,6 @@ using Domain.Contracts;
 using Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.Rooms
 {
@@ -40,10 +37,10 @@ namespace Application.Rooms
             public async Task<Result<Unit>> Handle(DeleteRoomCommand request, CancellationToken cancellationToken)
             {
                 //var room = await _roomRepository.GetByIdAsync(request.Id);
-                var room = await _context.Rooms.Include(x=>x.RoomPatients).Where(x=>x.Id == request.Id).FirstOrDefaultAsync();
+                var room = await _context.Rooms.Include(x => x.Patients).Where(x => x.Id == request.Id).FirstOrDefaultAsync();
                 if (room is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
-                if(room.RoomPatients.Count() >= 1) return Result<Unit>.Failure(ErrorType.NotFound, "Room has patients!");
+                if (room.Patients.Count() >= 1) return Result<Unit>.Failure(ErrorType.NotFound, "Room has patients!");
 
                 var result = await _roomRepository.DeleteAsync(room);
                 //var result = false;

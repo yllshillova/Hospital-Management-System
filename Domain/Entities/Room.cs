@@ -13,7 +13,7 @@ namespace Domain.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public ICollection<RoomPatient> RoomPatients { get; set; }
+        public ICollection<Patient> Patients { get; set; }
 
     }
 }

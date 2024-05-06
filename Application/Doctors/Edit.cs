@@ -18,16 +18,16 @@ namespace Application.Doctors
             }
         }
 
-        public class UpdateDoctorCommandHandler(IDoctorRepository _doctorRepository,IMapper _mapper) : IRequestHandler<UpdateDoctorCommand, Result<Unit>>
+        public class UpdateDoctorCommandHandler(IDoctorRepository _doctorRepository, IMapper _mapper) : IRequestHandler<UpdateDoctorCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(UpdateDoctorCommand request, CancellationToken cancellationToken)
             {
                 var doctor = await _doctorRepository.GetByIdAsync(request.Doctor.Id);
                 if (doctor is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
-                
+
                 _mapper.Map(request.Doctor, doctor);
                 doctor.UpdatedAt = DateTime.Now;
-                
+
                 var result = await _doctorRepository.UpdateAsync(doctor);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the doctor! Try again.");
 

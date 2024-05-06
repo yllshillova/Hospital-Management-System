@@ -3,7 +3,7 @@ using Domain.Interfaces;
 
 namespace Domain.Entities
 {
-    public class Patient : IEntityBase,IPerson,IIsSoftDeletable
+    public class Patient : IEntityBase, IPerson, IIsSoftDeletable
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -23,6 +23,5 @@ namespace Domain.Entities
         public string Occupation { get; set; }
         public string? Allergies { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
-        public ICollection<RoomPatient> RoomPatients { get; set; }
     }
 }

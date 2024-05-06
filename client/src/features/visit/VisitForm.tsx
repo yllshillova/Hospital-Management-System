@@ -9,9 +9,13 @@ import MainLoader from "../../app/common/MainLoader";
 import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 import Doctor from "../../app/models/Doctor";
 import Patient from "../../app/models/Patient";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import inputHelper from "../../app/helpers/inputHelper";
 import { useNavigate } from "react-router-dom";
+import { useAssignPatientMutation } from "../../app/APIs/roomApi";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBedPulse } from "@fortawesome/free-solid-svg-icons/faBedPulse";
 
 interface VisitFormProps {
     id?: string;
@@ -45,6 +49,7 @@ function VisitForm({ id, data }: VisitFormProps) {
 
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
     const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
+    const [assignPatientToRoom, { isLoading: assigningPatient }] = useAssignPatientMutation();
 
     //useEffect(() => {
     //    if (data) {
@@ -115,6 +120,27 @@ function VisitForm({ id, data }: VisitFormProps) {
 
         }
         setLoading(false);
+    };
+
+    const handleAssignToRoom = async (): Promise<void> => {
+        if (!visitInputs.patientId) {
+            toastNotify("Please select a patient first", "warning");
+            return;
+        }
+
+        try {
+            const response = await assignPatientToRoom(  visitInputs.patientId );
+            if (response.error) {
+                // Handle error
+                toastNotify("Failed to assign patient to room", "error");
+            } else {
+                // Handle success
+                toastNotify("Patient assigned to room successfully", "success");
+            }
+        } catch (error) {
+            // Handle error
+            toastNotify("An error occurred while assigning patient to room", "error");
+        }
     };
 
     return (
@@ -242,6 +268,11 @@ function VisitForm({ id, data }: VisitFormProps) {
                             </FormGroup>
                             
 
+                            <AssignToRoomButton onClick={handleAssignToRoom} disabled={assigningPatient}>
+                                <FontAwesomeIcon icon={faBedPulse}/>
+                                <ButtonText>Assign to Room</ButtonText>
+                            </AssignToRoomButton>
+
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit
@@ -257,4 +288,31 @@ function VisitForm({ id, data }: VisitFormProps) {
         </>
     );
 }
+const AssignToRoomButton = styled.button`
+    background-color: #002147;
+    color: #fff;
+    border-radius: 5px;
+    padding: 8px ; /* Adjusted padding to reduce height */
+    cursor: pointer;
+    font-size: 14px; /* Adjusted font size to reduce height */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 85px; /* Adjusted margin to push it more to the left */
+    margin-top:5px;
+    margin-bottom:19px;
+    transition: ease 0.3s;
+    &:hover {
+        transform: scale(1.1);
+    } 
+`;
+
+const ButtonText = styled.span`
+    margin-right: 5px;
+      font-weight: 600;
+
+`;
+
+
+
 export default VisitForm;

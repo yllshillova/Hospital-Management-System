@@ -7,5 +7,6 @@ namespace Domain.Contracts
     {
         Task<IEnumerable<Visit>> GetVisitsByDoctorIdAsync(Guid doctorId);
         Task<IEnumerable<Visit>> GetVisitsByPatientIdAsync(Guid patientId);
+        Task<Patient> GetPatientById(Guid patientId);
     }
 }

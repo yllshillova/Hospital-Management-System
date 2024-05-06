@@ -42,12 +42,12 @@ export const TableRow = styled.tr`
 export const TableHeaderCell = styled.th`
   font-weight: bold;
   padding: 10px;
-  text-align: center;
+  text-align: left;
 `;
 
 export const TableCell = styled.td`
   padding: 12px;
-  text-align: center;
+  text-align: left;
   white-space: nowrap; 
 `;
 

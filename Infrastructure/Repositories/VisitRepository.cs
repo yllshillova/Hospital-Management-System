@@ -31,6 +31,11 @@ namespace Infrastructure.Repositories
 
             return visits;
         }
+        public async Task<Patient> GetPatientById(Guid patientId)
+        {
+            var patient = await _context.Patients.FirstOrDefaultAsync(patient => patient.Id == patientId);
+            return patient;
+        }
 
     }
 
