@@ -7,11 +7,13 @@ namespace Application.Rooms
     {
         public RoomValidator()
         {
-            RuleFor(d => d.IsFree).SetValidator(new NotNullValidator<RoomDto, bool>());
-            //RuleFor(d => d.PatientId).SetValidator(new NotNullValidator<RoomDto, Guid>());
-            RuleFor(d => d.Number).SetValidator(new NotNullValidator<RoomDto, int>());
-            RuleFor(d => d.Capacity).SetValidator(new NotNullValidator<RoomDto, int>())
-                                    .LessThanOrEqualTo(10).WithMessage("Capacity must be at most 10");
+            //RuleFor(d => d.IsFree).SetValidator(new NotNullValidator<RoomDto, bool>());
+            RuleFor(d => d.RoomNumber).SetValidator(new NotNullValidator<RoomDto, int>());
+            RuleFor(d => d.Beds).SetValidator(new NotNullValidator<RoomDto, int>())
+                                    .LessThanOrEqualTo(4).WithMessage("Beds must be at most 4");
+            RuleFor(d => d.BedsAvailable).SetValidator(new NotNullValidator<RoomDto, int>())
+                                    .LessThanOrEqualTo(4).WithMessage("Beds available must be at most 4");
+            RuleFor(d => d.DepartmentId).SetValidator(new NotNullValidator<RoomDto, Guid>());
         }
     }
 }

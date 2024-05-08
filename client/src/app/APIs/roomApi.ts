@@ -29,13 +29,19 @@ const roomApi = createApi({
             invalidatesTags: ["Rooms"],
         }),
         assignPatient: builder.mutation({
-            query: (patientId) => ({
-                url: `rooms/AssignPatient?PatientId=${patientId}`, // Send patientId as a query parameter
+            query: ({ patientId, doctorId }) => ({
+                url: `rooms/AssignPatient?PatientId=${patientId}&&DoctorId=${doctorId}`, // Send both patientId and doctorId as query parameters
                 method: "POST",
             }),
             invalidatesTags: ["Rooms"]
         }),
-
+        removePatient: builder.mutation({
+            query: (patientId) => ({
+                url: "rooms/RemovePatient/" + patientId,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["Rooms"],
+        }),
         updateRoom: builder.mutation({
             query: ({ data, id }) => ({
                 url: "rooms/" + id,
@@ -61,6 +67,7 @@ export const {
     useGetRoomByIdQuery,
     useCreateRoomMutation,
     useAssignPatientMutation,
+    useRemovePatientMutation,
     useUpdateRoomMutation,
     useDeleteRoomMutation,
 } = roomApi;

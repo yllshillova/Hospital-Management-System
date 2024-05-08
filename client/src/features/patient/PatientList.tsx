@@ -87,8 +87,8 @@ function PatientList() {
                             <TableHeaderCell>Parent Name</TableHeaderCell>
                             <TableHeaderCell>Phone Number</TableHeaderCell>
                             <TableHeaderCell>Is Deleted</TableHeaderCell>
-                            <TableHeaderCell>Created At</TableHeaderCell>
-                            <TableHeaderCell>Updated At</TableHeaderCell>
+                            <TableHeaderCell>Date Created </TableHeaderCell>
+                            <TableHeaderCell>Date Updated </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

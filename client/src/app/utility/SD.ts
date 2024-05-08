@@ -1,6 +1,6 @@
 export enum SD_Bloodgroups {
-    O_Positive = "0+",
-    O_Negative = "0-",
+    O_Positive = "O+",
+    O_Negative = "O-",
     A_Positive = "A+",
     A_Negative = "A-",
     B_Positive = "B+",

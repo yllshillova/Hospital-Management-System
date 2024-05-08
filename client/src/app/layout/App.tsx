@@ -14,7 +14,6 @@ import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 import RoomDetails from '../../features/rooms/RoomDetails';
 import Login from '../../features/account/Login';
 import Register from '../../features/account/Register';
-import AddPatientToRoomForm from '../../features/rooms/AddPatientToRoomForm';
 import AppointmentList from '../../features/appointment/AppointmentList';
 import AppointmentDetails from '../../features/appointment/AppointmentDetails';
 import DepartmentUpdate from '../../features/department/DepartmentUpdate';
@@ -60,7 +59,6 @@ function App() {
                     <Route path="/nurse/:id" element={<NurseDetails />}></Route>
                     <Route path="/nurse/insert" element={<NurseInsert />}></Route>
                     <Route path="/nurse/update/:id" element={<NurseUpdate />}></Route>
-                    <Route path="/addPatientToRoom" element={<AddPatientToRoomForm />}></Route>
                     <Route path="/appointments" element={<AppointmentList />}></Route>
                     <Route path="/appointment/:id" element={<AppointmentDetails />}></Route>
                     <Route path="/visits" element={<VisitList />}></Route>

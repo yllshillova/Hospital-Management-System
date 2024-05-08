@@ -123,13 +123,13 @@ function VisitForm({ id, data }: VisitFormProps) {
     };
 
     const handleAssignToRoom = async (): Promise<void> => {
-        if (!visitInputs.patientId) {
-            toastNotify("Please select a patient first", "warning");
+        if (!visitInputs.patientId || !visitInputs.doctorId) {
+            toastNotify("Please select a patient and a doctor first", "warning");
             return;
         }
 
         try {
-            const response = await assignPatientToRoom(  visitInputs.patientId );
+            const response = await assignPatientToRoom({ patientId: visitInputs.patientId, doctorId: visitInputs.doctorId });
             if (response.error) {
                 // Handle error
                 toastNotify("Failed to assign patient to room", "error");
@@ -142,6 +142,7 @@ function VisitForm({ id, data }: VisitFormProps) {
             toastNotify("An error occurred while assigning patient to room", "error");
         }
     };
+
 
     return (
         <>
@@ -310,7 +311,6 @@ const AssignToRoomButton = styled.button`
 const ButtonText = styled.span`
     margin-right: 5px;
       font-weight: 600;
-
 `;
 
 

@@ -69,6 +69,8 @@ function NurseList() {
                             <MiniLoader />
                         ) : getDepartmentName(nurse.departmentId)} </TableCell>
                         <TableCell>{nurse.isDeleted} </TableCell>
+                        <TableCell>{new Date(nurse.createdAt).toLocaleDateString()}</TableCell>
+                        <TableCell>{new Date(nurse.updatedAt).toLocaleDateString()}</TableCell>
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/nurse/" + nurse.id)} >
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
@@ -102,6 +104,8 @@ function NurseList() {
                             <TableHeaderCell>Last Name</TableHeaderCell>
                             <TableHeaderCell>Department</TableHeaderCell>
                             <TableHeaderCell>Is Deleted</TableHeaderCell>
+                            <TableHeaderCell>Date Created </TableHeaderCell>
+                            <TableHeaderCell>Date Updated </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

@@ -4,6 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240506121544_roomAttributesAdded")]
+    partial class roomAttributesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -609,11 +612,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Patient", b =>
                 {
-                    b.HasOne("Domain.Entities.Room", "Room")
+                    b.HasOne("Domain.Entities.Room", null)
                         .WithMany("Patients")
                         .HasForeignKey("RoomId");
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>

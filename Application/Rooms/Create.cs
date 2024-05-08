@@ -30,6 +30,7 @@ namespace Application.Rooms
 
                 room.CreatedAt = DateTime.Now;
                 room.UpdatedAt = room.CreatedAt;
+                room.BedsAvailable = room.Beds;
 
                 var result = await _roomRepository.CreateAsync(room);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the room. Try again!");
