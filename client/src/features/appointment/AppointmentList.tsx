@@ -29,7 +29,7 @@ function AppointmentList() {
         const result = await deleteAppointment(id);
 
         if ('data' in result) {
-            toastNotify("Appointment Deleted Successfully", "success");
+            toastNotify("Appointment has been deleted", "success");
         } else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
             const { status } = error;

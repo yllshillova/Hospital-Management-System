@@ -112,7 +112,7 @@ function AppointmentDetails() {
                                 </FormGroup>
 
                                 <ButtonsContainer>
-                                    <BackToProductsButton onClick={() => navigate("/visits")}>
+                                    <BackToProductsButton onClick={() => navigate("/appointments")}>
                                         Back to Appointments
                                     </BackToProductsButton>
                                 </ButtonsContainer>

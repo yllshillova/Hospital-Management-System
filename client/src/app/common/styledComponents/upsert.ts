@@ -104,5 +104,5 @@ export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-left:160px;
-  width: 50%;
+  width: 60%;
 `;

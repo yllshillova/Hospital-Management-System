@@ -11,6 +11,7 @@ import MainLoader from "../../app/common/MainLoader";
 import { useGetVisitsQuery } from "../../app/APIs/visitApi";
 import Visit from "../../app/models/Visit";
 import toastNotify from "../../app/helpers/toastNotify";
+import emptyBed from "../../app/layout/Images/emptyBed.jpg";
 
 function RoomDetails() {
     const { id } = useParams<string>();
@@ -53,7 +54,13 @@ function RoomDetails() {
 
     let content;
     if (patients.length === 0) {
-        content = <div>This room is currently empty.</div>;
+        content = (
+                <EmptyRoomContainer>
+                <EmptyRoomTitle>No patient found in  room #{roomsData?.roomNumber}</EmptyRoomTitle>
+                   <EmptyBedImage src={emptyBed} alt="Empty Bed" />
+                </EmptyRoomContainer>
+
+        );
     } else {
         content = patients.map(patient => {
             // returns the specific visit for the patient
@@ -80,7 +87,8 @@ function RoomDetails() {
             <Header />
             <SidePanel />
             <OrdersTable>
-                <TableHeader>Room #{roomsData?.roomNumber}</TableHeader>
+                {patients.length > 0 && 
+                <TableHeader>Room #{roomsData?.roomNumber}</TableHeader>}
                 <RoomContainer>
                     {content}
                 </RoomContainer>
@@ -89,13 +97,31 @@ function RoomDetails() {
         </>
     );
 }
-
 const RoomContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     padding: 9px;
     justify-content: space-between;
+`;
+
+const EmptyRoomContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-left: 180px;
+    margin-top:10px;
+`;
+
+const EmptyRoomTitle = styled.h2`
+    font-size: 18px;
+`;
+
+const EmptyBedImage = styled.img`
+    width: 580px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
 `;
 
 const PatientCard = styled.div`
@@ -136,6 +162,7 @@ const PatientData = styled.div`
         font-size: 13.5px; /* Adjust font size */
     }
 `;
+
 const RemovePatientButton = styled.button`
     position: absolute;
     top: 17px;
@@ -166,7 +193,7 @@ const BackButton = styled.button`
     cursor: pointer;
     font-size: 13.5px;
     transition: ease 0.3s;
-
+    font-weight: bold;
     &:hover {
         transform: scale(1.1);
     }

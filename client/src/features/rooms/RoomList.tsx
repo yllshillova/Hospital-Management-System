@@ -49,7 +49,8 @@ function RoomList() {
         const result = await deleteRoom(id);
 
         if ('data' in result) {
-            toastNotify("Room Deleted Successfully", "success");
+            toastNotify("Room has been deleted ", "success");
+            navigate('/rooms');
         }
         else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
@@ -73,7 +74,7 @@ function RoomList() {
             return (
                 <tbody key={room.id}>
                     <TableRow>
-                        <TableCell>{room.roomNumber}</TableCell>
+                        <TableCell>#{room.roomNumber}</TableCell>
                         <TableCell>{room.bedsAvailable}</TableCell>
                         <TableCell>{isDepartmentsLoading ? (
                             <MiniLoader />
@@ -122,5 +123,4 @@ function RoomList() {
         </>
     );
 }
-
 export default RoomList;

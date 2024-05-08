@@ -1,15 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { useCreateAppointmentMutation, useUpdateAppointmentMutation } from "../../app/APIs/appointmentApi";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-//import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
-//import { useGetDepartmentsQuery } from '../../app/APIs/departmentApi';
 import { useGetPatientsQuery } from '../../app/APIs/patientApi';
 import { useGetDoctorsQuery } from '../../app/APIs/doctorApi';
 import Patient from '../../app/models/Patient';
@@ -17,7 +14,6 @@ import Doctor from '../../app/models/Doctor';
 import { validCheckInOutDate } from '../../app/utility/validCheckInOutDate';
 import Appointment from '../../app/models/Appointment';
 import inputHelper from '../../app/helpers/inputHelper';
-//import Appointment from '../../app/models/Appointment';
 
 interface AppointmentFormProps {
     id?: string;
@@ -50,14 +46,10 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
     const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
 
-
-
-
     const handleAppointmentInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, appointmentInputs);
         setAppointmentInputs(tempData);
     };
-
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
@@ -73,8 +65,6 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
         formData.append("Notes", appointmentInputs.notes);
         formData.append("PatientId", appointmentInputs.patientId);
         formData.append("DoctorId", appointmentInputs.doctorId);
-
-
 
         const currentLocation = window.location.pathname;
         if (id) {
@@ -104,8 +94,6 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
         }
         setLoading(false);
     };
-
-
 
     return (
         <>
@@ -168,7 +156,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                 {patientsError && <div style={{ color: 'red' }}>Error loading patients</div>}
                             </FormGroup>
                             <FormGroup>
-                                <Label>CheckInDate</Label>
+                                <Label>Check In </Label>
                                 <Input
                                     type="datetime-local"
                                     name="checkInDate"
@@ -177,7 +165,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>CheckOutDate</Label>
+                                <Label>Check Out </Label>
                                 <Input
                                     type="datetime-local"
                                     name="checkOutDate"

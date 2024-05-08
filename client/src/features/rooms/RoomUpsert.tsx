@@ -148,7 +148,7 @@ function RoomUpsert() {
                                     Submit
                                 </SubmitButton>
                                 <BackToProductsButton onClick={() => navigate("/rooms")}>
-                                    Back to rooms
+                                    Back to Rooms
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>
