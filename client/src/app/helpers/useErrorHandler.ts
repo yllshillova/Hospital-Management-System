@@ -23,8 +23,10 @@ export default function useErrorHandler(
             const errors = data.errors;
             console.log(errors);
             errorMessage= Object.values(errors).flat();
+        
+        } else if (typeof data === 'string') { // Check if data is a string
+            errorMessage = [data]; // Assign the error message directly
         }
-
         // Set error messages if provided
         if (setErrorMessages) {
             console.log(errorMessage);

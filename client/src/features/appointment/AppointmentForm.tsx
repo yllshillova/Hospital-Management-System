@@ -88,7 +88,8 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
             console.log(response);
 
             if (response.error) {
-                console.log(response.error);
+                console.log(response);
+
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Appointment has been created ", "success");

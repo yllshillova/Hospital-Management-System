@@ -11,7 +11,8 @@ import MainLoader from "../../app/common/MainLoader";
 import { useGetVisitsQuery } from "../../app/APIs/visitApi";
 import Visit from "../../app/models/Visit";
 import toastNotify from "../../app/helpers/toastNotify";
-import emptyBed from "../../app/layout/Images/emptyBed.jpg";
+import manInHb from "../../app/layout/Images/manInHb.jpg";
+import womanInHB from "../../app/layout/Images/womanInHB.jpg";
 
 function RoomDetails() {
     const { id } = useParams<string>();
@@ -50,15 +51,15 @@ function RoomDetails() {
             toastNotify("An error occurred while removing patient from room", "error");
         }
     };
-    
+
 
     let content;
     if (patients.length === 0) {
         content = (
-                <EmptyRoomContainer>
-                <EmptyRoomTitle>No patient found in  room #{roomsData?.roomNumber}</EmptyRoomTitle>
-                   <EmptyBedImage src={emptyBed} alt="Empty Bed" />
-                </EmptyRoomContainer>
+            <EmptyRoomContainer>
+                <EmptyRoomTitle>No patient found in room #{roomsData?.roomNumber}</EmptyRoomTitle>
+                <EmptyBedImage src={emptyBed} alt="Empty Bed" />
+            </EmptyRoomContainer>
 
         );
     } else {
@@ -67,16 +68,16 @@ function RoomDetails() {
             const patientVisit = visits.find((visit: Visit) => visit?.patientId === patient.id);
             return (
                 <PatientCard key={patient.id}>
+                    <ImageContainer>
+                        <Image src={patient.gender === 'Male' ? manInHb : womanInHB} alt="Patient in bed" />
+                    {/*    <RemovePatientButton onClick={() => handleRemovePatient(patient.id)} disabled={removingPatient}>Remove Patient</RemovePatientButton>*/}
+                    </ImageContainer>
                     <PatientData>
                         <p>Name <strong>{patient.name} {" "} {patient.lastName}</strong> </p>
                         <p>Diagnosis <strong>{patientVisit?.diagnosis}</strong></p>
                         <p>Therapy <strong>{patientVisit?.therapy}</strong> </p>
                         <p>Remarks <strong>{patientVisit?.remarks}</strong></p>
                     </PatientData>
-                    <RemovePatientButton onClick={() => handleRemovePatient(patient.id)} disabled={removingPatient}>Remove Patient</RemovePatientButton>
-                    <ImageContainer>
-                        <Image src={patientInBed} alt="Patient in bed" />
-                    </ImageContainer>
                 </PatientCard>
             );
         });
@@ -87,8 +88,8 @@ function RoomDetails() {
             <Header />
             <SidePanel />
             <OrdersTable>
-                {patients.length > 0 && 
-                <TableHeader>Room #{roomsData?.roomNumber}</TableHeader>}
+                {patients.length > 0 &&
+                    <TableHeader>Room #{roomsData?.roomNumber}</TableHeader>}
                 <RoomContainer>
                     {content}
                 </RoomContainer>
@@ -132,6 +133,7 @@ const PatientCard = styled.div`
     max-width: calc(50% - 20px); /* Two cards per row with 20px gap */
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
+    position: relative; /* added to position the remove button */
     &:hover {
         transform: translateY(-5px);
     }
@@ -143,14 +145,16 @@ const PatientCard = styled.div`
 `;
 
 const ImageContainer = styled.div`
-    margin-right: 35px; /* Adjust margin to move image to the left */
-    margin-top: 15px;
+    position: relative;
+    margin-top:15px;
 `;
 
 const Image = styled.img`
     width: 170px;
-    height: auto;
-    border-radius: 8px;
+    height: 130px;
+    margin-left:10px;
+    object-fit: fit; /* Ensures the image maintains its aspect ratio */
+
 `;
 
 const PatientData = styled.div`
@@ -166,7 +170,7 @@ const PatientData = styled.div`
 const RemovePatientButton = styled.button`
     position: absolute;
     top: 17px;
-    right: 24px;
+    right: 10px; /* Adjusted for better alignment */
     background-color: crimson;
     color: #fff;
     border: none;
