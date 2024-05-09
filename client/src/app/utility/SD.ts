@@ -13,3 +13,8 @@ export enum SD_Genders {
     Male = "Male",
     Female="Female"
 }
+
+export enum SD_Statuses {
+    Scheduled = "Scheduled",
+    Cancelled = "Cancelled"
+}

@@ -170,7 +170,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Name</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="name"
                                     value={patientInputs.name}
                                     onChange={handlePatientInput}
@@ -180,7 +179,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Last Name</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="lastName"
                                     value={patientInputs.lastName}
                                     onChange={handlePatientInput}
@@ -190,7 +188,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Parent Name</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="parentName"
                                     value={patientInputs.parentName}
                                     onChange={handlePatientInput}
@@ -200,7 +197,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Personal Number</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="personalNumber"
                                     value={patientInputs.personalNumber}
                                     onChange={handlePatientInput}
@@ -211,7 +207,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Address</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="address"
                                     value={patientInputs.address}
                                     onChange={handlePatientInput}
@@ -221,7 +216,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Residence</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="residence"
                                     value={patientInputs.residence}
                                     onChange={handlePatientInput}
@@ -232,7 +226,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Email</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="email"
                                     value={patientInputs.email}
                                     onChange={handlePatientInput}
@@ -242,7 +235,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Phone Number</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="phoneNumber"
                                     value={patientInputs.phoneNumber}
                                     onChange={handlePatientInput}
@@ -252,7 +244,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Occupation</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="occupation"
                                     value={patientInputs.occupation}
                                     onChange={handlePatientInput}
@@ -272,6 +263,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                             <FormGroup>
                                 <Select
                                     name="bloodGroup"
+                                    required
                                     value={patientInputs.bloodGroup}
                                     onChange={handlePatientInput}
                                 >
@@ -286,6 +278,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                             <FormGroup>
                                 <Select
                                     name="gender"
+                                    required
                                     value={patientInputs.gender}
                                     onChange={handlePatientInput}
                                 >

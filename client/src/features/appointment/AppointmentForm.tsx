@@ -14,7 +14,7 @@ import Doctor from '../../app/models/Doctor';
 import { validCheckInOutDate } from '../../app/utility/validCheckInOutDate';
 import Appointment from '../../app/models/Appointment';
 import inputHelper from '../../app/helpers/inputHelper';
-
+import { SD_Statuses } from '../../app/utility/SD';
 interface AppointmentFormProps {
     id?: string;
     data?: Appointment;
@@ -34,7 +34,10 @@ const appointmentData: Appointment = {
     doctor: {} as Doctor,
     patient: {} as Patient
 };
-
+const statuses = [
+    SD_Statuses.Scheduled,
+    SD_Statuses.Cancelled,
+];
 function AppointmentForm({ id, data }: AppointmentFormProps) {
     const [appointmentInputs, setAppointmentInputs] = useState<Appointment>(data || appointmentData);
     const [createAppointment] = useCreateAppointmentMutation();
@@ -60,15 +63,16 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
 
         formData.append("CheckInDate", new Date(appointmentInputs.checkInDate!).toLocaleString());
         formData.append("CheckOutDate", new Date(appointmentInputs.checkOutDate!).toLocaleString());
-        formData.append("Status", appointmentInputs.status);
         formData.append("Reason", appointmentInputs.reason);
         formData.append("Notes", appointmentInputs.notes);
         formData.append("PatientId", appointmentInputs.patientId);
         formData.append("DoctorId", appointmentInputs.doctorId);
+        
 
         const currentLocation = window.location.pathname;
         if (id) {
             formData.append("Id", id);
+            formData.append("Status", appointmentInputs.status);
 
             const response = await updateAppointment({ data: formData, id });
 
@@ -77,7 +81,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Appointment has been  updated ", "success");
-                navigate('/Appointment');
+                navigate('/appointments');
             }
         } else {
             const response = await createAppointment(formData);
@@ -173,15 +177,24 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                     onChange={handleAppointmentInput}
                                 />
                             </FormGroup>
-                            <FormGroup>
-                                <Label>Status</Label>
-                                <Input
-                                    type="text"
-                                    name="status"
-                                    value={appointmentInputs.status}
-                                    onChange={handleAppointmentInput}
-                                />
-                            </FormGroup>
+                            {id &&
+                                <FormGroup>
+                                    <Label>Status</Label>
+                                    <Select
+                                        name="status"
+                                        value={appointmentInputs.status}
+                                        onChange={handleAppointmentInput}
+                                        required
+                                    >
+                                        <option value="">Select status</option>
+                                        {statuses.map((status) => (
+                                            <option key={status} value={status}>
+                                                {status}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </FormGroup>
+                            }
                             <FormGroup>
                                 <Label>Reason:</Label>
                                 <Input

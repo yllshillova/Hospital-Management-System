@@ -31,9 +31,8 @@ namespace Application.Appointments
 
                 var appointment = _mapper.Map<Appointment>(request.Appointment);
 
-
                 if (appointment is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
-
+                appointment.Status = "Scheduled";
                 appointment.CreatedAt = DateTime.Now;
                 appointment.UpdatedAt = appointment.CreatedAt;
 

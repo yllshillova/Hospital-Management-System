@@ -53,7 +53,7 @@ function AppointmentDetails() {
                         <FormContainer >
                             {isLoading && <MainLoader />}
                             <Title>
-                                Details of Appointment X
+                                Appointment for {patient.name} {patient.lastName}
                             </Title>
 
                             <Form>
