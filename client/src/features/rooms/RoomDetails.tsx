@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import patientInBed from "../../app/layout/Images/patientInRoom.jpg";
+//import patientInBed from "../../app/layout/Images/patientInRoom.jpg";
 import { Header, SidePanel } from "../../app/layout";
 import { OrdersTable, TableHeader } from "../../app/common/styledComponents/table";
-import { useGetRoomByIdQuery, useRemovePatientMutation } from "../../app/APIs/roomApi";
+import { useGetRoomByIdQuery } from "../../app/APIs/roomApi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Patient from "../../app/models/Patient";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -10,15 +10,15 @@ import useErrorHandler from "../../app/helpers/useErrorHandler";
 import MainLoader from "../../app/common/MainLoader";
 import { useGetVisitsQuery } from "../../app/APIs/visitApi";
 import Visit from "../../app/models/Visit";
-import toastNotify from "../../app/helpers/toastNotify";
+//import toastNotify from "../../app/helpers/toastNotify";
 import manInHb from "../../app/layout/Images/manInHb.jpg";
 import womanInHB from "../../app/layout/Images/womanInHB.jpg";
-
+import emptyBed from "../../app/layout/Images/emptyBed.jpg";
 function RoomDetails() {
     const { id } = useParams<string>();
     const { data: roomsData, isLoading: roomsLoading, error: roomsError, isError: roomsIsError } = useGetRoomByIdQuery(id);
     const { data: visitsData, isLoading: visitsLoading, error: visitsError, isError: visitsIsError } = useGetVisitsQuery(null);
-    const [removePatient, { isLoading: removingPatient }] = useRemovePatientMutation(); // useRemovePatientMutation hook
+    //const [removePatient, { isLoading: removingPatient }] = useRemovePatientMutation(); // useRemovePatientMutation hook
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,23 +34,23 @@ function RoomDetails() {
     const visits = visitsData?.filter((visit: Visit) => patients.some(patient => patient.id === visit.patientId));
 
 
-    const handleRemovePatient = async (patientId: string): Promise<void> => {
-        try {
-            const response = await removePatient(patientId);
-            console.log(patientId);
-            console.log(response);
-            if (response.error) {
-                // Handle error
-                toastNotify("Failed to remove patient from room", "error");
-            } else {
-                // Handle success
-                toastNotify("Patient removed from room successfully", "success");
-            }
-        } catch (error) {
-            // Handle error
-            toastNotify("An error occurred while removing patient from room", "error");
-        }
-    };
+    //const handleRemovePatient = async (patientId: string): Promise<void> => {
+    //    try {
+    //        const response = await removePatient(patientId);
+    //        console.log(patientId);
+    //        console.log(response);
+    //        if (response.error) {
+    //            // Handle error
+    //            toastNotify("Failed to remove patient from room", "error");
+    //        } else {
+    //            // Handle success
+    //            toastNotify("Patient removed from room successfully", "success");
+    //        }
+    //    } catch (error) {
+    //        // Handle error
+    //        toastNotify("An error occurred while removing patient from room", "error");
+    //    }
+    //};
 
 
     let content;
@@ -167,23 +167,23 @@ const PatientData = styled.div`
     }
 `;
 
-const RemovePatientButton = styled.button`
-    position: absolute;
-    top: 17px;
-    right: 10px; /* Adjusted for better alignment */
-    background-color: crimson;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 13.5px;
-    transition: ease 0.3s;
+//const RemovePatientButton = styled.button`
+//    position: absolute;
+//    top: 17px;
+//    right: 10px; /* Adjusted for better alignment */
+//    background-color: crimson;
+//    color: #fff;
+//    border: none;
+//    border-radius: 4px;
+//    padding: 5px 10px;
+//    cursor: pointer;
+//    font-size: 13.5px;
+//    transition: ease 0.3s;
 
-    &:hover {
-        transform: scale(1.1);
-    }
-`;
+//    &:hover {
+//        transform: scale(1.1);
+//    }
+//`;
 
 const BackButton = styled.button`
     position: absolute;
