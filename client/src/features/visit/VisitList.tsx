@@ -101,8 +101,8 @@ function VisitList() {
                             <TableHeaderCell>Doctor</TableHeaderCell>
                             <TableHeaderCell>Patient</TableHeaderCell>
                             <TableHeaderCell>Complaints</TableHeaderCell>
-                            <TableHeaderCell>CreatedAt</TableHeaderCell>
-                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
+                            <TableHeaderCell>Date Created </TableHeaderCell>
+                            <TableHeaderCell>Date Updated </TableHeaderCell>
 
                         </TableHead>
                     </thead>

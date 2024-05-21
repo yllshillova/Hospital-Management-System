@@ -1,15 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { useCreateAppointmentMutation, useUpdateAppointmentMutation } from "../../app/APIs/appointmentApi";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-//import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
-//import { useGetDepartmentsQuery } from '../../app/APIs/departmentApi';
 import { useGetPatientsQuery } from '../../app/APIs/patientApi';
 import { useGetDoctorsQuery } from '../../app/APIs/doctorApi';
 import Patient from '../../app/models/Patient';
@@ -17,8 +14,7 @@ import Doctor from '../../app/models/Doctor';
 import { validCheckInOutDate } from '../../app/utility/validCheckInOutDate';
 import Appointment from '../../app/models/Appointment';
 import inputHelper from '../../app/helpers/inputHelper';
-//import Appointment from '../../app/models/Appointment';
-
+import { SD_Statuses } from '../../app/utility/SD';
 interface AppointmentFormProps {
     id?: string;
     data?: Appointment;
@@ -38,7 +34,10 @@ const appointmentData: Appointment = {
     doctor: {} as Doctor,
     patient: {} as Patient
 };
-
+const statuses = [
+    SD_Statuses.Scheduled,
+    SD_Statuses.Cancelled,
+];
 function AppointmentForm({ id, data }: AppointmentFormProps) {
     const [appointmentInputs, setAppointmentInputs] = useState<Appointment>(data || appointmentData);
     const [createAppointment] = useCreateAppointmentMutation();
@@ -50,14 +49,10 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
     const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
 
-
-
-
     const handleAppointmentInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, appointmentInputs);
         setAppointmentInputs(tempData);
     };
-
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
@@ -68,17 +63,16 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
 
         formData.append("CheckInDate", new Date(appointmentInputs.checkInDate!).toLocaleString());
         formData.append("CheckOutDate", new Date(appointmentInputs.checkOutDate!).toLocaleString());
-        formData.append("Status", appointmentInputs.status);
         formData.append("Reason", appointmentInputs.reason);
         formData.append("Notes", appointmentInputs.notes);
         formData.append("PatientId", appointmentInputs.patientId);
         formData.append("DoctorId", appointmentInputs.doctorId);
-
-
+        
 
         const currentLocation = window.location.pathname;
         if (id) {
             formData.append("Id", id);
+            formData.append("Status", appointmentInputs.status);
 
             const response = await updateAppointment({ data: formData, id });
 
@@ -87,14 +81,15 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Appointment has been  updated ", "success");
-                navigate('/Appointment');
+                navigate('/appointments');
             }
         } else {
             const response = await createAppointment(formData);
             console.log(response);
 
             if (response.error) {
-                console.log(response.error);
+                console.log(response);
+
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Appointment has been created ", "success");
@@ -104,8 +99,6 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
         }
         setLoading(false);
     };
-
-
 
     return (
         <>
@@ -168,7 +161,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                 {patientsError && <div style={{ color: 'red' }}>Error loading patients</div>}
                             </FormGroup>
                             <FormGroup>
-                                <Label>CheckInDate</Label>
+                                <Label>Check In </Label>
                                 <Input
                                     type="datetime-local"
                                     name="checkInDate"
@@ -177,7 +170,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>CheckOutDate</Label>
+                                <Label>Check Out </Label>
                                 <Input
                                     type="datetime-local"
                                     name="checkOutDate"
@@ -185,15 +178,24 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                     onChange={handleAppointmentInput}
                                 />
                             </FormGroup>
-                            <FormGroup>
-                                <Label>Status</Label>
-                                <Input
-                                    type="text"
-                                    name="status"
-                                    value={appointmentInputs.status}
-                                    onChange={handleAppointmentInput}
-                                />
-                            </FormGroup>
+                            {id &&
+                                <FormGroup>
+                                    <Label>Status</Label>
+                                    <Select
+                                        name="status"
+                                        value={appointmentInputs.status}
+                                        onChange={handleAppointmentInput}
+                                        required
+                                    >
+                                        <option value="">Select status</option>
+                                        {statuses.map((status) => (
+                                            <option key={status} value={status}>
+                                                {status}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </FormGroup>
+                            }
                             <FormGroup>
                                 <Label>Reason:</Label>
                                 <Input

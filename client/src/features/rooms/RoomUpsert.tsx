@@ -5,12 +5,15 @@ import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { Header, SidePanel } from "../../app/layout";
-import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
+import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
+import Department from "../../app/models/Department";
+import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 
 const roomData = {
-    capacity: "",
-    isFree: false,
-    number:""
+    roomNumber: "",
+    beds: "",
+    //bedsAvailable: "",
+    departmentId: ""
     /*patientId: ""*/
 };
 function RoomUpsert() {
@@ -18,16 +21,17 @@ function RoomUpsert() {
     const [roomInputs, setRoomInputs] = useState(roomData);
     const [createRoom] = useCreateRoomMutation();
     const [updateRoom] = useUpdateRoomMutation();
+    const { data: departmentsData, isLoading: departmentsLoading, error: departmentsError } = useGetDepartmentsQuery(null);
     const { data } = useGetRoomByIdQuery(id);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         if (data) {
             const tempData = {
-                capacity: data.capacity,
-                isFree: data.isFree,
-                number:data.number
-                /*patientId: data.patientId*/
+                beds: data.beds,
+                roomNumber: data.roomNumber,
+                //bedsAvailable: data.bedsAvailable,
+                departmentId : data.departmentId
             };
             setRoomInputs(tempData);
         }
@@ -43,9 +47,10 @@ function RoomUpsert() {
         setLoading(true);
         const formData = new FormData();
 
-        formData.append("Capacity", roomInputs.capacity);
-        formData.append("IsFree", roomInputs.isFree.toString());
-        formData.append("Number", roomInputs.number);
+        formData.append("Beds", roomInputs.beds);
+        formData.append("RoomNumber", roomInputs.roomNumber);
+        //formData.append("BedsAvailable", roomInputs.bedsAvailable);
+        formData.append("DepartmentId", roomInputs.departmentId);
 
         let response;
 
@@ -102,62 +107,48 @@ function RoomUpsert() {
                             <FormGroup>
                                 <Label>Number:</Label>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     required
-                                    name="number"
-                                    value={roomInputs.number}
+                                    name="roomNumber"
+                                    value={roomInputs.roomNumber}
                                     onChange={handleRoomInput}
                                 />
                             </FormGroup>
 
                             <FormGroup>
-                                <Label>Capacity:</Label>
+                                <Label>Beds:</Label>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     required
-                                    name="capacity"
-                                    value={roomInputs.capacity}
+                                    name="beds"
+                                    value={roomInputs.beds}
                                     onChange={handleRoomInput}
                                 />
                             </FormGroup>
-
                             <FormGroup>
-                             <Label>isFree:</Label>
-                                <Input
-                                   type="checkbox"
-                                   name="isFree"
-                                   checked={roomInputs.isFree}
-                                   onChange={(e) => setRoomInputs({ ...roomInputs, isFree: e.target.checked })}
-                                />
-                                {/*<Label>*/}
-                                {/*    Is Free{" "}*/}
-                                {/*    <input*/}
-                                {/*        type="checkbox"*/}
-                                {/*        name="isDeleted"*/}
-                                {/*        checked={roomInputs.isFree}*/}
-                                {/*        onChange={toggleIsFree}*/}
-                                {/*    />*/}
-
-                                {/*</Label>*/}
+                                <Select
+                                    name="departmentId"
+                                    value={roomInputs.departmentId}
+                                    onChange={handleRoomInput}
+                                    disabled={departmentsLoading}
+                                >
+                                    <option value="">Select Department</option>
+                                    {departmentsData && departmentsData.map((department: Department) => (
+                                        <option key={department.id} value={department.id}>
+                                            {department.name}
+                                        </option>
+                                    ))}
+                                </Select>
+                                {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
                             </FormGroup>
-
-                            {/*<FormGroup>*/}
-                            {/*    <Label>PatientId:</Label>*/}
-                            {/*    <Input*/}
-                            {/*        type="text"*/}
-                            {/*        required*/}
-                            {/*        name="patientId"*/}
-                            {/*        value={roomInputs.patientId}*/}
-                            {/*        onChange={handleRoomInput}*/}
-                            {/*    />*/}
-                            {/*</FormGroup>*/}
+                            
 
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit
                                 </SubmitButton>
                                 <BackToProductsButton onClick={() => navigate("/rooms")}>
-                                    Back to rooms
+                                    Back to Rooms
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>

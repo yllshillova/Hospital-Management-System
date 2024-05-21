@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Infrastructure
 {
@@ -37,7 +36,6 @@ namespace Infrastructure
             services.AddScoped<IEmergencyContactRepository, EmergencyContactRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
-            services.AddScoped<IRoomPatientRepository, RoomPatientRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             await MigrateDatabaseAndSeedData(services.BuildServiceProvider());

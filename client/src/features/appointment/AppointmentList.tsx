@@ -29,7 +29,7 @@ function AppointmentList() {
         const result = await deleteAppointment(id);
 
         if ('data' in result) {
-            toastNotify("Appointment Deleted Successfully", "success");
+            toastNotify("Appointment has been deleted", "success");
         } else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
             const { status } = error;
@@ -99,10 +99,10 @@ function AppointmentList() {
                         <TableHead>
                             {/*<TableHeaderCell>Doctor</TableHeaderCell>*/}
                             <TableHeaderCell>Patient</TableHeaderCell>
-                            <TableHeaderCell>CheckInDate</TableHeaderCell>
-                            <TableHeaderCell>CheckOutDate</TableHeaderCell>
-                            <TableHeaderCell>CreatedAt</TableHeaderCell>
-                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
+                            <TableHeaderCell>Check In Date</TableHeaderCell>
+                            <TableHeaderCell>Check Out Date</TableHeaderCell>
+                            <TableHeaderCell>Date Created </TableHeaderCell>
+                            <TableHeaderCell>Date Updated </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

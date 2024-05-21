@@ -5,30 +5,65 @@
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class RoomPatients_added : Migration
+    public partial class roomPatientsTableDeleted : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "RoomPatients");
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "RoomId",
+                table: "Patients",
+                type: "uniqueidentifier",
+                nullable: true)
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "PatientHistoricalData")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "ValidTo")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "ValidFrom");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_RoomId",
+                table: "Patients",
+                column: "RoomId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Patients_Rooms_RoomId",
+                table: "Patients",
+                column: "RoomId",
+                principalTable: "Rooms",
+                principalColumn: "Id");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
             migrationBuilder.DropForeignKey(
-                name: "FK_Rooms_Patients_PatientId",
-                table: "Rooms");
+                name: "FK_Patients_Rooms_RoomId",
+                table: "Patients");
 
             migrationBuilder.DropIndex(
-                name: "IX_Rooms_PatientId",
-                table: "Rooms");
+                name: "IX_Patients_RoomId",
+                table: "Patients");
 
             migrationBuilder.DropColumn(
-                name: "PatientId",
-                table: "Rooms");
+                name: "RoomId",
+                table: "Patients")
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "PatientHistoricalData")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", null)
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "ValidTo")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "ValidFrom");
 
             migrationBuilder.CreateTable(
                 name: "RoomPatients",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -58,33 +93,6 @@ namespace Infrastructure.Migrations
                 name: "IX_RoomPatients_RoomId",
                 table: "RoomPatients",
                 column: "RoomId");
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "RoomPatients");
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "PatientId",
-                table: "Rooms",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Rooms_PatientId",
-                table: "Rooms",
-                column: "PatientId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Rooms_Patients_PatientId",
-                table: "Rooms",
-                column: "PatientId",
-                principalTable: "Patients",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
     }
 }

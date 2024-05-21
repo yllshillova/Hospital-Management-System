@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class Doctor :AppUser
+    public class Doctor : AppUser
     {
         public Guid DepartmentId { get; set; }
         public Department Department { get; set; }

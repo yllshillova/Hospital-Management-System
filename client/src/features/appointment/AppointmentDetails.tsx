@@ -53,7 +53,7 @@ function AppointmentDetails() {
                         <FormContainer >
                             {isLoading && <MainLoader />}
                             <Title>
-                                Details of Appointment X
+                                Appointment for {patient.name} {patient.lastName}
                             </Title>
 
                             <Form>
@@ -112,7 +112,7 @@ function AppointmentDetails() {
                                 </FormGroup>
 
                                 <ButtonsContainer>
-                                    <BackToProductsButton onClick={() => navigate("/visits")}>
+                                    <BackToProductsButton onClick={() => navigate("/appointments")}>
                                         Back to Appointments
                                     </BackToProductsButton>
                                 </ButtonsContainer>

@@ -9,36 +9,31 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import { useLocation, useNavigate } from "react-router-dom";
-//import { useEffect, useState } from "react";
-//import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 import toastNotify from "../../app/helpers/toastNotify";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
+import Department from "../../app/models/Department";
+import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
+import MiniLoader from "../../app/common/MiniLoader";
+
 function RoomList() {
+
     const { data, isLoading, error } = useGetRoomsQuery(null);
-    /*const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomsQuery(null);*/
-   /* const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); */
+    const { data: departments, isLoading: isDepartmentsLoading } = useGetDepartmentsQuery(null);
+
+    const departmentMap = new Map<string, string>();
+    departments?.forEach((department: Department) => {
+        departmentMap.set(department.id, department.name);
+    });
+
+    const getDepartmentName = (departmentId: string) => {
+        return departmentMap.get(departmentId) || "Department not found!";
+    };
     const navigate = useNavigate();
     const location = useLocation();
-    /*const [rooms, setRooms] = useState<Room[]>([]);*/
     const [deleteRoom] = useDeleteRoomMutation();
-
-
-    //useEffect(() => {
-    //    if (roomsData && patientsData) {
-    //        const roomsWithPatients = roomsData.map((room: Room) => ({
-    //            ...room,
-    //            patientName: patientsData.find((patient: { id: number; }) => patient.id === room.patientId)?.name || 'Unknown', // Use patient's name or 'Unknown' if not found
-    //        }));
-    //        setRooms(roomsWithPatients);
-    //    }
-    //}, [roomsData, patientsData]);
-
-
-    let content;
-
-
+    
     //const handleRoomDelete = async (id: number) => {
     //    toast.promise(
     //        deleteRoom(id),
@@ -50,11 +45,12 @@ function RoomList() {
     //    );
     //};
 
-    const handleRoomDelete = async (id: number,) => {
+    const handleRoomDelete = async (id: string,) => {
         const result = await deleteRoom(id);
 
         if ('data' in result) {
-            toastNotify("Room Deleted Successfully", "success");
+            toastNotify("Room has been deleted ", "success");
+            navigate('/rooms');
         }
         else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
@@ -66,7 +62,7 @@ function RoomList() {
         }
 
     };
- 
+    let content;
 
     if (isLoading /*|| patientsLoading*/) {
         content = <MainLoader />;
@@ -78,11 +74,11 @@ function RoomList() {
             return (
                 <tbody key={room.id}>
                     <TableRow>
-                        <TableCell>{room.number}</TableCell>
-                        <TableCell>{room.capacity}</TableCell>
-                        <TableCell>{room.isFree === false ? "Occupied" : "Free"}</TableCell>
-                       
-                        <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
+                        <TableCell>#{room.roomNumber}</TableCell>
+                        <TableCell>{room.bedsAvailable}</TableCell>
+                        <TableCell>{isDepartmentsLoading ? (
+                            <MiniLoader />
+                        ) : getDepartmentName(room.departmentId)} </TableCell>                        <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(room.updatedAt).toLocaleDateString()}</TableCell>
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/room/" + room.id)} >
                             <FontAwesomeIcon icon={faInfo} />
@@ -115,11 +111,10 @@ function RoomList() {
                     <thead>
                         <TableHead>
                             <TableHeaderCell>Number</TableHeaderCell>
-                            <TableHeaderCell>Capacity</TableHeaderCell>
-                            <TableHeaderCell>Status</TableHeaderCell>
-                          
-                            <TableHeaderCell>Created At</TableHeaderCell>
-                            <TableHeaderCell>Updated At</TableHeaderCell>
+                            <TableHeaderCell>Beds Available</TableHeaderCell>
+                            <TableHeaderCell>Department</TableHeaderCell>
+                            <TableHeaderCell>Date Created </TableHeaderCell>
+                            <TableHeaderCell>Date Updated </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}
@@ -128,5 +123,4 @@ function RoomList() {
         </>
     );
 }
-
 export default RoomList;

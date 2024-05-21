@@ -74,9 +74,9 @@ function DoctorList() {
                         <TableCell>{isDepartmentsLoading ? (
                             <MiniLoader />
                         ) : getDepartmentName(doctor.departmentId)} </TableCell>
-                        {/*<TableCell>{new Date(doctor.createdAt).toLocaleDateString()}</TableCell>*/}
-                        {/*<TableCell>{new Date(doctor.updatedAt).toLocaleDateString()}</TableCell>*/}
                         <TableCell>{doctor.isDeleted} </TableCell>
+                        <TableCell>{new Date(doctor.createdAt).toLocaleDateString()}</TableCell>
+                        <TableCell>{new Date(doctor.updatedAt).toLocaleDateString()}</TableCell>
 
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/doctor/" + doctor.id)} >
                             <FontAwesomeIcon icon={faInfo} />
@@ -120,6 +120,8 @@ function DoctorList() {
                             {/*<TableHeaderCell>CreatedAt</TableHeaderCell>*/}
                             {/*<TableHeaderCell>UpdatedAt</TableHeaderCell>*/}
                             <TableHeaderCell>Is Deleted</TableHeaderCell>
+                            <TableHeaderCell>Date Created </TableHeaderCell>
+                            <TableHeaderCell>Date Updated </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

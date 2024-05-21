@@ -15,7 +15,7 @@ namespace Application.Rooms
             {
                 if (request.Id != Guid.Empty)
                 {
-                    var room = await _roomRepository.GetByIdAsync(request.Id);
+                    var room = await _roomRepository.GetByIdWithPatientsAsync(request.Id);
                     if (room is null) return Result<RoomDto>.Failure(ErrorType.NotFound, "No records could be found.");
 
                     var roomDto = _mapper.Map<RoomDto>(room);

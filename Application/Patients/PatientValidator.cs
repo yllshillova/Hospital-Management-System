@@ -22,14 +22,16 @@ namespace Application.Patients
                                      .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Birthday).Must(BeAValidDate).WithMessage("Birthday field is not valid.");
             RuleFor(d => d.BloodGroup).SetValidator(new NotNullValidator<PatientDto, string>())
-                                      .Must(BeValidBloodGroup).WithMessage("Invalid blood group."); ;
+                                      .Must(BeValidBloodGroup).WithMessage("Invalid blood group.");
             RuleFor(d => d.Gender).SetValidator(new NotNullValidator<PatientDto, string>())
                                   .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Email).SetValidator(new NotNullValidator<PatientDto, string>())
                                  .Matches(IsValidEmail());
-            RuleFor(d => d.PhoneNumber).SetValidator(new NotNullValidator<PatientDto, string>())
-                                       .Must(phoneNumber => BeValidNumber(phoneNumber, 9))
-                                       .WithMessage("Invalid phone number. It should contain exactly 9 digits.");
+            RuleFor(d => d.PhoneNumber)
+                                       .SetValidator(new NotNullValidator<PatientDto, string>())
+                                       .Matches(@"^(044|045|046|048|049)\d{6}$")
+                                       .WithMessage("Invalid phone number. It should start with 044,045,046,048 or 049 and contain exactly 9 digits.");
+
             RuleFor(d => d.Occupation).SetValidator(new NotNullValidator<PatientDto, string>())
                                       .SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));
             RuleFor(d => d.Allergies).SetValidator(new ValidLengthValidator<PatientDto, string>(4, 100));

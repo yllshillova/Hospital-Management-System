@@ -4,6 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240503193103_roomPatientsTableDeleted")]
+    partial class roomPatientsTableDeleted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -325,27 +328,22 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Beds")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BedsAvailable")
+                    b.Property<int>("Capacity")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DepartmentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<bool>("IsFree")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("RoomNumber")
+                    b.Property<int>("Number")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Rooms");
                 });
@@ -609,22 +607,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Patient", b =>
                 {
-                    b.HasOne("Domain.Entities.Room", "Room")
+                    b.HasOne("Domain.Entities.Room", null)
                         .WithMany("Patients")
                         .HasForeignKey("RoomId");
-
-                    b.Navigation("Room");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Room", b =>
-                {
-                    b.HasOne("Domain.Entities.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Domain.Entities.Visit", b =>

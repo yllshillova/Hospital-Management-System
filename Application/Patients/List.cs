@@ -1,7 +1,6 @@
 ﻿using Application.Core;
 using AutoMapper;
 using Domain.Contracts;
-using Domain.Entities;
 using MediatR;
 
 namespace Application.Patients
