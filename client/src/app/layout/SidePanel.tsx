@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays, faUserInjured } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays, faUserInjured, faComment } from '@fortawesome/free-solid-svg-icons';
 //import { useDispatch } from 'react-redux';
 //import {
 //    emptyUserState,
@@ -57,6 +57,9 @@ function SidePanel() {
     const handleNursesList = () => {
        navigate('/nurses');
     }
+    const handleChat = () => {
+        navigate('/chatPanel');
+    }
     const handleLogout = () => {
         localStorage.removeItem('token');
 
@@ -74,8 +77,10 @@ function SidePanel() {
         { icon: faCalendarDays, label: 'Appointments', onClick: handleAppointmentsList },
         { icon: faBookMedical, label: 'Visits', onClick: handleVisitsList },
         { icon: faBedPulse, label: 'Rooms', onClick: handleRoomsList },
+        { icon: faComment, label: 'Chat', onClick: handleChat },
         { icon: faCog, label: 'Settings' },
         { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout },
+
 
     ];
 

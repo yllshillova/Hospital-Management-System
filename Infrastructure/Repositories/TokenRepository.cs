@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
             {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
             var roles = await _userManager.GetRolesAsync(user);

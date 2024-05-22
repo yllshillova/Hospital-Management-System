@@ -30,9 +30,13 @@ import NurseList from '../../features/nurses/NurseList';
 import NurseDetails from '../../features/nurses/NurseDetails';
 import NurseUpdate from '../../features/nurses/NurseUpdate';
 import NurseInsert from '../../features/nurses/NurseInsert';
+import ChatPanel from '../../features/chat/ChatPanel';
 
 
 function App() {
+
+   
+
 
     return (
         <div>
@@ -67,7 +71,9 @@ function App() {
                     <Route path="/visit/update/:id" element={<VisitUpdate />}></Route>
                     <Route path="/appointment/insert" element={<AppointmentInsert />}></Route>
                     <Route path="/appointment/update/:id" element={<AppointmentUpdate />}></Route>
-                    <Route path="/login" element={<Login/>}></Route>
+                    <Route path="/login" element={<Login />}></Route>
+                    <Route path="/chatPanel" element={<ChatPanel />}></Route>
+
                     <Route path="/register" element={<Register />}></Route>
                    {/* <Route path="/details" element={<Details />}></Route>*/}
                     <Route path="/not-found" element={<NotFound />}></Route>
