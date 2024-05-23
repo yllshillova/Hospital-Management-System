@@ -12,9 +12,12 @@ namespace Application.Doctors
 
         public class UpdateDoctorCommandValidator : AbstractValidator<UpdateDoctorCommand>
         {
-            public UpdateDoctorCommandValidator()
+            private readonly IUserRepository _userRepository;
+            public UpdateDoctorCommandValidator(IUserRepository userRepository)
             {
-                RuleFor(x => x.Doctor).SetValidator(new DoctorValidator());
+                _userRepository = userRepository;
+
+                RuleFor(x => x.Doctor).SetValidator(new DoctorValidator(_userRepository));
             }
         }
 
@@ -24,7 +27,11 @@ namespace Application.Doctors
             {
                 var doctor = await _doctorRepository.GetByIdAsync(request.Doctor.Id);
                 if (doctor is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
-
+                if (string.IsNullOrWhiteSpace(request.Doctor.Password))
+                {
+                    // If the password is not provided, maintain the existing password
+                    request.Doctor.Password = doctor.PasswordHash;
+                }
                 _mapper.Map(request.Doctor, doctor);
                 doctor.UpdatedAt = DateTime.Now;
 

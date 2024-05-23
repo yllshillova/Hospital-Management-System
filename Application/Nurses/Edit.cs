@@ -12,9 +12,12 @@ namespace Application.Nurses
 
         public class UpdateNurseCommandValidator : AbstractValidator<UpdateNurseCommand>
         {
-            public UpdateNurseCommandValidator()
+            private readonly IUserRepository _userRepository;
+            public UpdateNurseCommandValidator(IUserRepository userRepository )
             {
-                RuleFor(x => x.Nurse).SetValidator(new NurseValidator());
+                _userRepository = userRepository;
+
+                RuleFor(x => x.Nurse).SetValidator(new NurseValidator(_userRepository));
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Application.Core;
+﻿using Application.Accounts.Register;
+using Application.Core;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
@@ -13,13 +14,17 @@ namespace Application.Nurses
 
         public class CommandValidator : AbstractValidator<CreateNurseCommand>
         {
-            public CommandValidator()
+            private readonly IUserRepository _userRepository;
+            public CommandValidator(IUserRepository userRepository )
             {
-                RuleFor(x => x.Nurse).SetValidator(new NurseValidator());
+                _userRepository = userRepository;
+
+                RuleFor(x => x.Nurse)
+                    .SetValidator(new NurseValidator(_userRepository));
             }
         }
 
-        public class CreateNurseCommandHandler(INurseRepository _nurseRepository, IMapper _mapper) : IRequestHandler<CreateNurseCommand, Result<Unit>>
+        public class CreateNurseCommandHandler(INurseRepository _nurseRepository, IUserRepository _userRepository, IMapper _mapper) : IRequestHandler<CreateNurseCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(CreateNurseCommand request, CancellationToken cancellationToken)
             {
@@ -27,7 +32,16 @@ namespace Application.Nurses
 
                 var nurse = _mapper.Map<Nurse>(request.Nurse);
                 if (nurse is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
-                
+
+
+                var user = _mapper.Map<AppUser>(request.Nurse);
+
+                var nurseCreation = await _userRepository.CreateUserAsync(user, request.Nurse.Password);
+                if (!nurseCreation) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the user! Try again.");
+
+                var addToRole = await _userRepository.AddToRoleAsync(user, "Nurse");
+                if (!addToRole) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to assign the nurse role!");
+
                 nurse.CreatedAt = DateTime.Now;
                 nurse.UpdatedAt = nurse.CreatedAt;
                
