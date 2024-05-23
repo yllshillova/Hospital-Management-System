@@ -9,12 +9,16 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { onReceiveMessage, sendMessage } from '../../app/utility/signalrService';
-
-interface User {
-    id: string;
-    name: string;
-    lastName: string;
-}
+import User from '../../app/models/User';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../app/storage/redux/store';
+import { setSearchTerm } from '../../app/storage/redux/searchSlice';
+import { useGetDoctorsQuery } from '../../app/APIs/doctorApi';
+import { useGetNursesQuery } from '../../app/APIs/nurseApi';
+import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
+import Doctor from '../../app/models/Doctor';
+import Nurse from '../../app/models/Nurse';
+import { faUserNurse } from '@fortawesome/free-solid-svg-icons/faUserNurse';
 
 interface Message {
     sender: string;
@@ -26,20 +30,40 @@ interface Message {
 function ChatPanel() {
 
     const { data: users, isLoading, error , isError } = useGetStaffQuery(null);
+    const { data: doctors, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
+    const { data: nurses, isLoading: nursesLoading, error: nursesError } = useGetNursesQuery(null);
 
     const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useDispatch();
 
-    const fbError = error as FetchBaseQueryError;
-    if (isError ) {
-        useErrorHandler(fbError, navigate, location.pathname);
-    }
-    if (isLoading) return <MainLoader />;
+    
 
     const [selectedUser, setSelectedUser] = useState<User | null>(null); // State to store the selected user
+    const [displayedUsers, setDisplayedUsers] = useState<User[]>([]);
+    const [userNotFound, setUserNotFound] = useState(false);
+
+    const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
 
     const [messages, setMessages] = useState<{ [key: string]: Message[] }>({});
     const [message, setMessage] = useState<string>('');
+
+    useEffect(() => {
+        if (users) {
+            setDisplayedUsers(users);
+        }
+    }, [users]);
+
+    
+    if (isLoading || doctorsLoading || nursesLoading) return <MainLoader />;
+
+    if (isError || doctorsError || nursesError) {
+        const fbError = error as FetchBaseQueryError;
+        const fbDoctorsError = doctorsError as FetchBaseQueryError;
+        const fbNursesError = nursesError as FetchBaseQueryError;
+        useErrorHandler(fbError || fbDoctorsError || fbNursesError, navigate, location.pathname);
+        return <div>Error loading data</div>;
+    }
 
     // Function to handle user item click
     const handleUserItemClick = (user: User) => {
@@ -52,7 +76,7 @@ function ChatPanel() {
                 const userMessages = prevMessages[user] || [];
                 return {
                     ...prevMessages,
-                    [user]: [...userMessages, { sender: user, content: message, alignment: 'right' }]
+                    [user]: [...userMessages, { sender: user, content: message, alignment: 'left' }]
                 };
             });
         });
@@ -64,7 +88,7 @@ function ChatPanel() {
                 const userMessages = prevMessages[selectedUser.id] || [];
                 return {
                     ...prevMessages,
-                    [selectedUser.id]: [...userMessages, { sender: 'Me', content: message, alignment: 'left' }]
+                    [selectedUser.id]: [...userMessages, { sender: 'Me', content: message, alignment: 'right' }]
                 };
             });
             sendMessage(selectedUser.id, message);
@@ -76,22 +100,61 @@ function ChatPanel() {
         setMessage(e.target.value);
     };
 
+    
+
+    const handleSearchClick = () => {
+        if (users) {
+            if (searchTerm === '') {
+                setDisplayedUsers(users);
+                setUserNotFound(false); // Reset user not found state
+            } else {
+                const results = users.filter((user: User) =>
+                    `${user.name} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+                setDisplayedUsers(results);
+                setUserNotFound(results.length === 0); // Set user not found state based on search results
+            }
+        }
+    };
+
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const searchTerm = e.target.value;
+        dispatch(setSearchTerm(searchTerm));
+    };
+
     return (
         <>
             <Header />
             <SidePanel />
 
             <UserListContainer>
-                <Title>Staff</Title>
-                {users?.map((user : User) => (
-                    <UserItem key={user.id} onClick={() => handleUserItemClick(user)}>
-                        <UserIcon>
-                            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png" alt={`${user.name} icon`} />
-                        </UserIcon>
-                        <UserName>{user.name} {" "} {user.lastName}</UserName>
-                    </UserItem>
-                ))}
+                <SearchContainer>
+                    <SearchInput
+                        type="text"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        placeholder="Search staff"
+                    />
+                    <SearchButton onClick={handleSearchClick}>Search</SearchButton>
+                </SearchContainer>
+                {displayedUsers.map((user: User) => {
+                    const isDoctor = doctors.some((doctor: Doctor) => doctor.id === user.id);
+                    const isNurse = nurses.some((nurse: Nurse) => nurse.id === user.id);
+                    return (
+                        <UserItem key={user.id} onClick={() => handleUserItemClick(user)}>
+                            <UserIcon>
+                                {isDoctor && <FontAwesomeIcon icon={faUserDoctor} />}
+                                {isNurse && !isDoctor && <FontAwesomeIcon icon={faUserNurse} />}
+                            </UserIcon>
+                            <UserName>{user.name} {user.lastName}</UserName>
+                        </UserItem>
+                    );
+                })}
+            {userNotFound && <UserNotFoundMessage>User not found</UserNotFoundMessage>}
+
             </UserListContainer>
+
 
             {selectedUser && (
                 <ChatBoxContainer>
@@ -155,7 +218,7 @@ const UserListContainer = styled.div`
 const UserItem = styled.div`
     display: flex;
     align-items: center;
-    padding: 10px 12px;
+    padding: 8px 8px;
     margin: 5px 5%;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -167,39 +230,40 @@ const UserItem = styled.div`
 `;
 
 const UserIcon = styled.div`
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    overflow: hidden;
+    background-color:#002147;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 10px;
 
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    svg {
+        color: white; /* Red icon */
+        font-size: 18px;
     }
 `;
 
 const UserName = styled.div`
     font-size: 13.5px;
     font-weight: bold;
-    color: #899499;
+    color: black;
 `;
 
-const Title = styled.p`
-    margin: 0 40px;
-    text-align: center;
+const UserNotFoundMessage = styled.p`
+    margin: 10px;
+    padding: 10px;
+    color: crimson;
+    font-size: 13.5px;
     font-weight: bold;
-    margin-bottom: 3px;
+    border-radius: 5px;
 `;
 
 const ChatBoxContainer = styled.div`
     position: fixed;
     bottom: 0;
-    right: 202px;
+    right: 307px;
     width: 300px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -231,10 +295,10 @@ const ChatMessages = styled.div`
     flex: 1;
     padding: 10px;t
     overflow-y: auto;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    max-height: 400px; /* Set a maximum height for the chat messages */
-    word-break: break-word; /* Break long words to prevent overflow */
-    overflow-wrap: break-word; /* Ensure long words break within the container */
+    overflow-x: hidden; 
+    max-height: 400px; 
+    word-break: break-word;
+    overflow-wrap: break-word; 
 `;
 const Message = styled.div<{ alignment: 'left' | 'right' }>`
     margin: 5px 0;
@@ -265,6 +329,40 @@ const SendButton = styled.button`
     border-radius: 5px;
     margin-left: 10px;
     cursor: pointer;
+    transition: ease 0.3s;
+    &:hover {
+        transform: scale(1.1);
+    }
+`;
+const SearchContainer = styled.div`
+    display: flex;
+    padding: 10px 15px;
+    `;
+
+const SearchInput = styled.input`
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 13.5px;
+    ::placeholder {
+        font-weight: bold;
+    }
+
 `;
 
+
+const SearchButton = styled.button`
+    background-color: #002147;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: ease 0.3s;
+    &:hover {
+        transform: scale(1.1);
+    }
+`;
 export default ChatPanel;
