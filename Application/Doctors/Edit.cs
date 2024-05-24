@@ -32,7 +32,9 @@ namespace Application.Doctors
                     // If the password is not provided, maintain the existing password
                     request.Doctor.Password = doctor.PasswordHash;
                 }
+
                 _mapper.Map(request.Doctor, doctor);
+                doctor.CreatedAt = request.Doctor.CreatedAt;
                 doctor.UpdatedAt = DateTime.Now;
 
                 var result = await _doctorRepository.UpdateAsync(doctor);

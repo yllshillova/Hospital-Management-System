@@ -1,5 +1,4 @@
-﻿using Application.Accounts.Register;
-using Application.Core;
+﻿using Application.Core;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
@@ -23,30 +22,27 @@ namespace Application.Doctors
             }
         }
 
-        public class CreateDoctorCommandHandler(IDoctorRepository _doctorRepository, IUserRepository _userRepository, IMapper _mapper) : IRequestHandler<CreateDoctorCommand, Result<Unit>>
+        public class CreateDoctorCommandHandler(ITokenRepository _tokenRepository, IUserRepository _userRepository, IMapper _mapper) : IRequestHandler<CreateDoctorCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
             {
-                if (request.Doctor is null) return Result<Unit>.Failure(ErrorType.BadRequest, "Couldn't complete the action! Try again.");
+                if (request.Doctor is null)
+                    return Result<Unit>.Failure(ErrorType.BadRequest, "Couldn't complete the action. Try again.");
 
                 var doctor = _mapper.Map<Doctor>(request.Doctor);
-                if (doctor is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
-
-                var user = _mapper.Map<AppUser>(request.Doctor);
-
-                var doctorCreation = await _userRepository.CreateUserAsync(user, request.Doctor.Password);
-                if (!doctorCreation) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the user! Try again.");
-
-                var addToRole = await _userRepository.AddToRoleAsync(user, "Doctor");
-                if (!addToRole) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to assign the doctor role!");
-
                 doctor.CreatedAt = DateTime.Now;
-                doctor.UpdatedAt = doctor.CreatedAt;
+                doctor.UpdatedAt = DateTime.Now;
 
-                var result = await _doctorRepository.CreateAsync(doctor);
-                if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the doctor! Try again.");
+                var success = await _userRepository.CreateUserWithRoleAsync(doctor, request.Doctor.Password, "Doctor");
+                if (!success)
+                    return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the doctor.");
+
+                var doctorDto = _mapper.Map<DoctorDto>(doctor);
+                doctorDto.Token = await _tokenRepository.CreateToken(doctor);
+
 
                 return Result<Unit>.Success(Unit.Value);
+
             }
         }
 

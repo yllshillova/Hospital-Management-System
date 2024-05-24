@@ -16,6 +16,7 @@ namespace Application.Doctors
         public Guid DepartmentId { get; set; }
         public string IsDeleted { get; set; }
         public string Password { get; set; }
+        public string Token { get; set; }
 
     }
 }

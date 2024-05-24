@@ -42,6 +42,57 @@ namespace Infrastructure.Repositories
             }
             return true;
         }
+        public async Task<bool> CreateUserWithRoleAsync<T>(T user, string password, string role) where T : AppUser
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var result = await _userManager.CreateAsync(user, password);
+                if (!result.Succeeded)
+                {
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+
+                // Add user to role
+                var addToRoleResult = await AddToRoleAsync(user, role);
+                if (!addToRoleResult)
+                {
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+
+                if (user is Doctor)
+                {
+                    var doctor = user as Doctor;
+                    var doctorEntity = new Doctor
+                    {
+                        Id = doctor.Id,
+                        Specialization = doctor.Specialization,
+                        DepartmentId = doctor.DepartmentId,
+                    };
+                }
+                else if (user is Nurse)
+                {
+                    var nurse = user as Nurse;
+                    var doctorEntity = new Nurse
+                    {
+                        Id = nurse.Id,
+                        DepartmentId = nurse.DepartmentId,
+                    };
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, "An error occurred while creating the user with role.");
+                return false;
+            }
+        }
         public async Task<bool> AddToRoleAsync(AppUser user, string role)
         {
             var result = await _userManager.AddToRoleAsync(user, role);

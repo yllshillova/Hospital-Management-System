@@ -1,6 +1,4 @@
-﻿using Application.Accounts.Register;
-using Application.BaseValidators;
-using Domain.Contracts;
+﻿using Application.BaseValidators;
 using FluentValidation;
 
 namespace Application.Doctors

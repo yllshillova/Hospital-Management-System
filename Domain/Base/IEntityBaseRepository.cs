@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using Domain.Interfaces;
 
 namespace Domain.Base
 {
