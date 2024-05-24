@@ -31,6 +31,7 @@ import NurseDetails from '../../features/nurses/NurseDetails';
 import NurseUpdate from '../../features/nurses/NurseUpdate';
 import NurseInsert from '../../features/nurses/NurseInsert';
 import ChatPanel from '../../features/chat/ChatPanel';
+import News_Chat from '../../features/news_chat/News_Chat';
 
 
 function App() {
@@ -73,6 +74,8 @@ function App() {
                     <Route path="/appointment/update/:id" element={<AppointmentUpdate />}></Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/chatPanel" element={<ChatPanel />}></Route>
+                    <Route path="/news_chat" element={<News_Chat />}></Route>
+
 
                     <Route path="/register" element={<Register />}></Route>
                    {/* <Route path="/details" element={<Details />}></Route>*/}

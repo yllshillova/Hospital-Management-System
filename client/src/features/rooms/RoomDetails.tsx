@@ -11,7 +11,7 @@ import MainLoader from "../../app/common/MainLoader";
 import { useGetVisitsQuery } from "../../app/APIs/visitApi";
 import Visit from "../../app/models/Visit";
 //import toastNotify from "../../app/helpers/toastNotify";
-import manInHb from "../../app/layout/Images/manInHb.jpg";
+import manInHb from "../../app/layout/Images/manInHB.jpg";
 import womanInHB from "../../app/layout/Images/womanInHB.jpg";
 import emptyBed from "../../app/layout/Images/emptyBed.jpg";
 function RoomDetails() {

@@ -57,8 +57,8 @@ function SidePanel() {
     const handleNursesList = () => {
        navigate('/nurses');
     }
-    const handleChat = () => {
-        navigate('/chatPanel');
+    const handleNews_Chat = () => {
+        navigate('/news_chat');
     }
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -77,7 +77,7 @@ function SidePanel() {
         { icon: faCalendarDays, label: 'Appointments', onClick: handleAppointmentsList },
         { icon: faBookMedical, label: 'Visits', onClick: handleVisitsList },
         { icon: faBedPulse, label: 'Rooms', onClick: handleRoomsList },
-        { icon: faComment, label: 'Chat', onClick: handleChat },
+        { icon: faComment, label: 'Chat', onClick: handleNews_Chat },
         { icon: faCog, label: 'Settings' },
         { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout },
 

@@ -147,8 +147,11 @@ function ChatPanel() {
                                 {isDoctor && <FontAwesomeIcon icon={faUserDoctor} />}
                                 {isNurse && !isDoctor && <FontAwesomeIcon icon={faUserNurse} />}
                             </UserIcon>
-                            <UserName>{user.name} {user.lastName}</UserName>
-                        </UserItem>
+                            <UserName>
+                                {isDoctor && "Dr. "}
+                                {isNurse && !isDoctor && "Nurse. "}
+                                {user.name} {user.lastName}
+                            </UserName>                        </UserItem>
                     );
                 })}
             {userNotFound && <UserNotFoundMessage>User not found</UserNotFoundMessage>}
@@ -263,7 +266,7 @@ const UserNotFoundMessage = styled.p`
 const ChatBoxContainer = styled.div`
     position: fixed;
     bottom: 0;
-    right: 307px;
+    right: 300px;
     width: 300px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
