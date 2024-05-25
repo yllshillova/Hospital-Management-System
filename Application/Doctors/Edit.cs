@@ -29,7 +29,7 @@ namespace Application.Doctors
                 if (doctor is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
                 if (string.IsNullOrWhiteSpace(request.Doctor.Password))
                 {
-                    // If the password is not provided, maintain the existing password
+                    // If the password is not provided,  the existing password is maintained
                     request.Doctor.Password = doctor.PasswordHash;
                 }
 

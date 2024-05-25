@@ -2,7 +2,7 @@
 
 namespace Application.Nurses
 {
-    public class NurseDto :  BaseEntityDto
+    public class NurseDto : BaseEntityDto
     {
         public string Name { get; set; }
         public string LastName { get; set; }
@@ -15,6 +15,7 @@ namespace Application.Nurses
         public DateTime? Birthday { get; set; }
         public Guid DepartmentId { get; set; }
         public string Password { get; set; }
+        public string Token { get; set; }
 
     }
 }

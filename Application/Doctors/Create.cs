@@ -33,8 +33,8 @@ namespace Application.Doctors
                 doctor.CreatedAt = DateTime.Now;
                 doctor.UpdatedAt = DateTime.Now;
 
-                var success = await _userRepository.CreateUserWithRoleAsync(doctor, request.Doctor.Password, "Doctor");
-                if (!success)
+                var doctorCreation = await _userRepository.CreateUserWithRoleAsync(doctor, request.Doctor.Password, "Doctor");
+                if (!doctorCreation)
                     return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the doctor.");
 
                 var doctorDto = _mapper.Map<DoctorDto>(doctor);
