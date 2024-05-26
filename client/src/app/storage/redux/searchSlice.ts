@@ -3,12 +3,12 @@ import User from '../../models/User';
 
 interface SearchState {
     searchTerm: string;
-    filteredUsers: User[];
+    filteredPatients: User[];
 }
 
 const initialState: SearchState = {
     searchTerm: '',
-    filteredUsers: [],
+    filteredPatients: [],
 };
 
 const searchSlice = createSlice({

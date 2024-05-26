@@ -1,12 +1,73 @@
 import { useGetLatestAppointmentsQuery } from "../../app/APIs/appointmentApi";
 import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
-import { useGetPatientsQuery } from "../../app/APIs/patientApi";
+import { useGetLatestPatientsQuery, useGetPatientsQuery } from "../../app/APIs/patientApi";
 import { useGetLatestVisitsQuery } from "../../app/APIs/visitApi";
-import Patient from "../../app/models/Patient";
-import Doctor from "../../app/models/Doctor";
 import styled from 'styled-components';
 
-// Styled components
+
+function NewsSection() {
+
+    const { data: latestVisits, isLoading: visitsLoading, error: visitsError } = useGetLatestVisitsQuery(null);
+    const { data: latestAppointments, isLoading: appointmentsLoading, error: appointmentsError } = useGetLatestAppointmentsQuery(null);
+    const { data: doctors, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
+    const { data: patients, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
+    const { data: latestPatients, isLoading: latestpatientsLoading, error: latestPatientsError } = useGetLatestPatientsQuery(null);
+
+    const news = [...(latestAppointments || []), ...(latestVisits || []), ...(latestPatients || [])];
+    news.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+
+    console.log("Sorted news:", news);
+
+    if (appointmentsLoading || visitsLoading || doctorsLoading || patientsLoading || latestpatientsLoading) {
+        return <Container>Loading...</Container>;
+    }
+
+    if (appointmentsError || visitsError || doctorsError || patientsError || latestPatientsError) {
+        return <Container>Error: Unable to fetch data</Container>;
+    }
+
+    function getFullName(entityId: number, entities: any[]): string {
+        const entity = entities.find((item) => item.id === entityId);
+        if (entity) {
+            return `${entity.name} ${entity.lastName}`;
+        }
+        return '';
+    }
+
+
+
+    return (
+        <Container>
+            <Title>News</Title>
+            {news.map((item) => (
+                <NewsCard key={item.id}>
+                    {item.hasOwnProperty("reason") ? (
+                        <>
+                            <NewsTitle>Appointment</NewsTitle>
+                            <NewsDescription>
+                                Patient {getFullName(item.patientId, patients)} has made an appointment with Dr. {getFullName(item.doctorId, doctors)} on {new Date(item.checkInDate).toLocaleString()}
+                            </NewsDescription>
+                        </>
+                    ) : item.hasOwnProperty("therapy") ? (
+                        <>
+                            <NewsTitle>Visit</NewsTitle>
+                            <NewsDescription>
+                                    Dr. {getFullName(item.doctorId, doctors)} has completed a visit for patient {getFullName(item.patientId, patients)}
+                            </NewsDescription>
+                        </>
+                        ) : (
+                                <>
+                                    <NewsTitle>Patient</NewsTitle>
+                                    <NewsDescription>
+                                    {getFullName(item.id, latestPatients)} has been added to the hospital
+                                     </NewsDescription>
+                                </>
+                    )}
+                </NewsCard>
+            ))}
+        </Container>
+    );
+}
 const Container = styled.div`
     max-width: calc(100% - 200px); /* Adjust for the side panel width */
     margin: 0 auto;
@@ -29,6 +90,10 @@ const NewsCard = styled.div`
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     padding: 8px;
     margin-bottom: 8px;
+    transition: transform 0.3s ease-in-out;
+    &:hover {
+    transform: translateY(-5px);
+    }
 `;
 
 const NewsTitle = styled.h2`
@@ -41,52 +106,6 @@ const NewsDescription = styled.p`
     font-size: 12px;
     margin: 0;
 `;
-function NewsSection() {
-    const { data: latestVisits, isLoading: visitsLoading, error: visitsError } = useGetLatestVisitsQuery(null);
-    const { data: latestAppointments, isLoading: appointmentsLoading, error: appointmentsError } = useGetLatestAppointmentsQuery(null);
-    const { data: doctors, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
-    const { data: patients, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
-
-    const news = [...(latestAppointments || []), ...(latestVisits || [])];
-    news.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-
-    console.log("Sorted news:", news);
-
-    if (appointmentsLoading || visitsLoading || doctorsLoading || patientsLoading) {
-        return <Container>Loading...</Container>;
-    }
-
-    if (appointmentsError || visitsError || doctorsError || patientsError) {
-        return <Container>Error: Unable to fetch data</Container>;
-    }
-
-    return (
-        <Container>
-            <Title>News</Title>
-            {news.map((item) => (
-                <NewsCard key={item.id}>
-                    {item.hasOwnProperty("reason") ? (
-                        <>
-                            <NewsTitle>Appointment</NewsTitle>
-                            <NewsDescription>
-                                Patient {patients.find((patient: Patient) => patient.id === item.patientId)?.name} has made an appointment with Dr. {doctors.find((doctor: Doctor) => doctor.id === item.doctorId)?.name} at x.
-                            </NewsDescription>
-                        </>
-                    ) : item.hasOwnProperty("therapy") ? (
-                        <>
-                            <NewsTitle>Visit</NewsTitle>
-                            <NewsDescription>
-                                Dr. {doctors.find((doctor: Doctor) => doctor.id === item.doctorId)?.name} has completed a visit for patient {patients.find((patient: Patient) => patient.id === item.patientId)?.name}.
-                            </NewsDescription>
-                        </>
-                    ) : (
-                        // Handle other types of news items here
-                        null
-                    )}
-                </NewsCard>
-            ))}
-        </Container>
-    );
-}
-
 export default NewsSection;
+
+

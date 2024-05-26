@@ -18,3 +18,8 @@ export enum SD_Statuses {
     Scheduled = "Scheduled",
     Cancelled = "Cancelled"
 }
+export enum SD_Roles {
+    ADMINISTRATOR = "Administrator",
+    DOCTOR = "Doctor",
+    NURSE = "Nurse",
+}

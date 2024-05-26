@@ -11,7 +11,9 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
 import MainLoader from "../../app/common/MainLoader";
 import { useDispatch } from "react-redux";
-import { setToken } from "../../app/storage/redux/authSlice";
+import { setLoggedInUser, setToken } from "../../app/storage/redux/authSlice";
+import { jwtDecode } from "jwt-decode";
+import User from "../../app/models/User";
 
 
 
@@ -57,16 +59,21 @@ function Login() {
         const currentLocation = window.location.pathname;
 
         const response = await loginUser(formData);
+        console.log(response);
 
         if ('data' in response) {
             const { token } = response.data;
+
+            const { id, name, lastName ,email, role, jwtToken }: User = jwtDecode(token);
+            console.log('Decoded token:', { id, name, lastName, email, role, jwtToken });
 
             localStorage.setItem("token", token);
             console.log(response);
 
             dispatch(setToken(token));
+            dispatch(setLoggedInUser({id, name, lastName, email, role, jwtToken}))
 
-            toastNotify("User logged in successfully", "success");
+            toastNotify(`Welcome ${name}`);
             navigate('/');
         } else if ('error' in response) {
 

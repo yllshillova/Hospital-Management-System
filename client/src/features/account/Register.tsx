@@ -126,7 +126,7 @@ function Register() {
                                     <Input
                                         type="text"
                                         name="lastName"
-                                        placeholder="LastName"
+                                        placeholder="Last Name"
                                         value={registerInputs.lastName}
                                         onChange={handleRegisterInput}
                                     />
