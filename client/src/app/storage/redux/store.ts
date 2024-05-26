@@ -8,6 +8,7 @@ import nurseApi from "../../APIs/nurseApi";
 import visitApi from "../../APIs/visitApi";
 import accountApi from "../../APIs/accountApi";
 import { authReducer } from "./authSlice";
+import emergencyContactApi from "../../APIs/emergencyContactApi";
 
 const store = configureStore({
     reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
         [appointmentApi.reducerPath]: appointmentApi.reducer,
         [nurseApi.reducerPath]: nurseApi.reducer,
         [visitApi.reducerPath]: visitApi.reducer,
+        [emergencyContactApi.reducerPath]: emergencyContactApi.reducer,
     },
 
     middleware: (getDefaultMiddleware) =>
@@ -32,6 +34,7 @@ const store = configureStore({
             .concat(nurseApi.middleware)
             .concat(visitApi.middleware)
             .concat(accountApi.middleware)
+            .concat(emergencyContactApi.middleware)
 });
 
 //exporting the root state

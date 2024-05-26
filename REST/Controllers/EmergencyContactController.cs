@@ -5,6 +5,7 @@ using static Application.EmergencyContacts.Delete;
 using static Application.EmergencyContacts.Details;
 using static Application.EmergencyContacts.Edit;
 using static Application.EmergencyContacts.List;
+using static Application.EmergencyContacts.GetByPatientId;
 
 namespace API.Controllers
 {
@@ -21,6 +22,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new GetEmergencyContactByIdQuery(Id)));
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateEmergencyContact(EmergencyContactDto EmergencyContact)
@@ -39,5 +41,10 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new DeleteEmergencyContactCommand(Id)));
         }
 
+        [HttpGet("patient/{PatientId}")]
+        public async Task<IActionResult> GetEmergencyContactsByPatientId(Guid PatientId)
+        {
+            return HandleResult(await Mediator.Send(new GetEmergencyContactsByPatientIdQuery(PatientId)));
+        }
     }
 }
