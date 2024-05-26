@@ -102,26 +102,42 @@ function ChatPanel() {
 
     
 
-    const handleSearchClick = () => {
-        if (users) {
-            if (searchTerm === '') {
-                setDisplayedUsers(users);
-                setUserNotFound(false); // Reset user not found state
-            } else {
-                const results = users.filter((user: User) =>
-                    `${user.name} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
-                );
-                setDisplayedUsers(results);
-                setUserNotFound(results.length === 0); // Set user not found state based on search results
-            }
-        }
-    };
+    //const handleSearchClick = () => {
+    //    if (users) {
+    //        if (searchTerm === '') {
+    //            setDisplayedUsers(users);
+    //            setUserNotFound(false); // Reset user not found state
+    //        } else {
+    //            const results = users.filter((user: User) =>
+    //                `${user.name} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+    //            );
+    //            setDisplayedUsers(results);
+    //            setUserNotFound(results.length === 0); // Set user not found state based on search results
+    //        }
+    //    }
+    //};
 
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const searchTerm = e.target.value;
         dispatch(setSearchTerm(searchTerm));
     };
+
+    // Reset displayed users when searchTerm changes
+    useEffect(() => {
+        if (users) {
+            if (searchTerm === '') {
+                setDisplayedUsers(users);
+                setUserNotFound(false);
+            } else {
+                const results = users.filter((user: User) =>
+                    `${user.name} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+                setDisplayedUsers(results);
+                setUserNotFound(results.length === 0);
+            }
+        }
+    }, [searchTerm, users]);
 
     return (
         <>
@@ -136,8 +152,15 @@ function ChatPanel() {
                         onChange={handleSearchChange}
                         placeholder="Search staff"
                     />
-                    <SearchButton onClick={handleSearchClick}>Search</SearchButton>
-                </SearchContainer>
+                    {searchTerm && (
+                        <CancelButton
+                            onClick={() => {
+                                dispatch(setSearchTerm(''));
+                            }}
+                        >
+                            Cancel
+                        </CancelButton>
+                    )}                </SearchContainer>
                 {displayedUsers.map((user: User) => {
                     const isDoctor = doctors.some((doctor: Doctor) => doctor.id === user.id);
                     const isNurse = nurses.some((nurse: Nurse) => nurse.id === user.id);
@@ -198,7 +221,7 @@ const UserListContainer = styled.div`
     right: 0;
     bottom: 0;
     background-color: white;
-    min-width: 200px;
+    min-width: 300px;
     display: flex;
     flex-direction: column;
     padding: 20px 0;
@@ -348,14 +371,15 @@ const SearchInput = styled.input`
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 13.5px;
+    height: 25px; 
+
     ::placeholder {
         font-weight: bold;
     }
-
 `;
 
 
-const SearchButton = styled.button`
+const CancelButton = styled.button`
     background-color: #002147;
     color: white;
     padding: 10px 20px;

@@ -13,6 +13,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import toastNotify from "../../app/helpers/toastNotify";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from "../../app/utility/SD";
 function DepartmentList() {
     const { data, isLoading, error } = useGetDepartmentsQuery(null);
     const [deleteDepartment] = useDeleteDepartmentMutation();
@@ -99,4 +101,4 @@ function DepartmentList() {
     );
 }
 
-export default DepartmentList;
+export default withAuthorization(DepartmentList, [SD_Roles.ADMINISTRATOR]);

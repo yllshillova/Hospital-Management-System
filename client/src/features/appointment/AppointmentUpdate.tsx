@@ -5,6 +5,8 @@ import AppointmentForm from './AppointmentForm';
 import { useGetAppointmentByIdQuery } from '../../app/APIs/appointmentApi';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { SD_Roles } from '../../app/utility/SD';
+import withAuthorization from '../../app/hoc/withAuthorization';
 
 function AppointmentUpdate() {
     const { id } = useParams<{ id: string }>();
@@ -25,4 +27,4 @@ function AppointmentUpdate() {
     return <div>No appointment data available.</div>;
 }
 
-export default AppointmentUpdate;
+export default withAuthorization(AppointmentUpdate, [SD_Roles.NURSE]);

@@ -6,13 +6,14 @@ import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { useCreateNurseMutation, useUpdateNurseMutation } from "../../app/APIs/nurseApi";
-import { SD_Genders } from "../../app/utility/SD";
+import { SD_Genders, SD_Roles } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
 import { useGetDepartmentsQuery } from '../../app/APIs/departmentApi';
 import Department from '../../app/models/Department';
 import Nurse from '../../app/models/Nurse';
+import withAuthorization from '../../app/hoc/withAuthorization';
 
 
 interface NurseFormProps {
@@ -280,4 +281,4 @@ function NurseForm({ id, data }: NurseFormProps) {
     );
 }
 
-export default NurseForm;
+export default withAuthorization(NurseForm, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

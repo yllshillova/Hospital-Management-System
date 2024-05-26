@@ -14,6 +14,8 @@ import Visit from "../../app/models/Visit";
 import manInHb from "../../app/layout/Images/manInHB.jpg";
 import womanInHB from "../../app/layout/Images/womanInHB.jpg";
 import emptyBed from "../../app/layout/Images/emptyBed.jpg";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from "../../app/utility/SD";
 function RoomDetails() {
     const { id } = useParams<string>();
     const { data: roomsData, isLoading: roomsLoading, error: roomsError, isError: roomsIsError } = useGetRoomByIdQuery(id);
@@ -24,9 +26,11 @@ function RoomDetails() {
     const location = useLocation();
     const patients: Patient[] = roomsData?.patients || [];
 
-    const fbError = roomsError as FetchBaseQueryError;
+    const roomsfbError = roomsError as FetchBaseQueryError;
+    const visitsfbError = visitsError as FetchBaseQueryError;
+
     if (roomsIsError || visitsIsError) {
-        useErrorHandler(fbError, navigate, location.pathname);
+        useErrorHandler(roomsfbError || visitsfbError, navigate, location.pathname);
     }
     if (roomsLoading || visitsLoading) return <MainLoader />;
 
@@ -203,4 +207,4 @@ const BackButton = styled.button`
     }
 `;
 
-export default RoomDetails;
+export default withAuthorization(RoomDetails, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);

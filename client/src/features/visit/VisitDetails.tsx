@@ -10,6 +10,8 @@ import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 import Doctor from "../../app/models/Doctor";
 import Patient from "../../app/models/Patient";
+import { SD_Roles } from "../../app/utility/SD";
+import withAuthorization from "../../app/hoc/withAuthorization";
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
     return guidRegex.test(guid);
@@ -138,4 +140,4 @@ function VisitDetails() {
     return null;
 }
 
-export default VisitDetails;
+export default withAuthorization(VisitDetails, [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);

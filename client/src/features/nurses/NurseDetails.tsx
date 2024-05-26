@@ -9,6 +9,8 @@ import { formatDate } from "../../app/utility/formatDate";
 import { useGetDepartmentByIdQuery } from "../../app/APIs/departmentApi";
 import MiniLoader from "../../app/common/MiniLoader";
 import { Attribute, Label, LabelsRow, LeftContainer, MainContainer, RightContainer, SectionTitle, Value, ValuesRow, WrapperContainer } from "../../app/common/styledComponents/details";
+import withAuthorization from '../../app/hoc/withAuthorization';
+import { SD_Roles } from "../../app/utility/SD";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -125,4 +127,4 @@ function NurseDetails() {
     return null;
 }
 
-export default NurseDetails;
+export default withAuthorization(NurseDetails, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

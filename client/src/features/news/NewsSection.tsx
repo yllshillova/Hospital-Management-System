@@ -92,7 +92,8 @@ const NewsCard = styled.div`
     margin-bottom: 8px;
     transition: transform 0.3s ease-in-out;
     &:hover {
-    transform: translateY(-5px);
+        transform: scale(1.02);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
     }
 `;
 

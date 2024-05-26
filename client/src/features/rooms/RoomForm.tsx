@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useCreateRoomMutation, useGetRoomByIdQuery, useUpdateRoomMutation } from "../../app/APIs/roomApi";
+import {  useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCreateRoomMutation, useUpdateRoomMutation } from "../../app/APIs/roomApi";
 import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
@@ -8,34 +8,39 @@ import { Header, SidePanel } from "../../app/layout";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import Department from "../../app/models/Department";
 import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
+import Room from "../../app/models/Room";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from "../../app/utility/SD";
 
-const roomData = {
+
+
+interface RoomFormProps {
+    id?: string;
+    data?: Room;
+}
+
+const roomData: Room = {
     roomNumber: "",
     beds: "",
-    //bedsAvailable: "",
-    departmentId: ""
-    /*patientId: ""*/
+    bedsAvailable: "",
+    departmentId: "",
+    id: "",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    patients: [], 
+
 };
-function RoomUpsert() {
-    const { id } = useParams();
-    const [roomInputs, setRoomInputs] = useState(roomData);
+
+function RoomForm({ id, data }: RoomFormProps) {
+
+    const [roomInputs, setRoomInputs] = useState<Room>(data || roomData);
     const [createRoom] = useCreateRoomMutation();
     const [updateRoom] = useUpdateRoomMutation();
     const { data: departmentsData, isLoading: departmentsLoading, error: departmentsError } = useGetDepartmentsQuery(null);
-    const { data } = useGetRoomByIdQuery(id);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    useEffect(() => {
-        if (data) {
-            const tempData = {
-                beds: data.beds,
-                roomNumber: data.roomNumber,
-                //bedsAvailable: data.bedsAvailable,
-                departmentId : data.departmentId
-            };
-            setRoomInputs(tempData);
-        }
-    }, [data]);
+
+
 
     const handleRoomInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const tempData = inputHelper(e, roomInputs);
@@ -160,4 +165,4 @@ function RoomUpsert() {
 }
 
 
-export default RoomUpsert;
+export default withAuthorization(RoomForm, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);

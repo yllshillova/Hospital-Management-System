@@ -14,7 +14,8 @@ import Doctor from '../../app/models/Doctor';
 import { validCheckInOutDate } from '../../app/utility/validCheckInOutDate';
 import Appointment from '../../app/models/Appointment';
 import inputHelper from '../../app/helpers/inputHelper';
-import { SD_Statuses } from '../../app/utility/SD';
+import { SD_Roles, SD_Statuses } from '../../app/utility/SD';
+import withAuthorization from '../../app/hoc/withAuthorization';
 interface AppointmentFormProps {
     id?: string;
     data?: Appointment;
@@ -229,4 +230,4 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
         </>
     );
 }
-export default AppointmentForm;
+export default withAuthorization(AppointmentForm ,[ SD_Roles.NURSE]);

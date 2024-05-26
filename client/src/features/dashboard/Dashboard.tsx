@@ -4,6 +4,8 @@ import { Header, SidePanel } from "../../app/layout";
 import Sections from "./components/Sections";
 import LatestAppointments from "./components/LatestAppointments";
 import LatestVisits from "./components/LatestVisits";
+import { SD_Roles } from "../../app/utility/SD";
+import withAuthorization from "../../app/hoc/withAuthorization";
 
 function Dashboard() {
     return (
@@ -56,4 +58,4 @@ const LatestAppointmentsContainer = styled(FlexContainer)`
 //  margin-left: 5px; /* Adjust the margin */
 //`;
 
-export default Dashboard;
+export default withAuthorization(Dashboard, [SD_Roles.ADMINISTRATOR, SD_Roles.DOCTOR, SD_Roles.NURSE]);

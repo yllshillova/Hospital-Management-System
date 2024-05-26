@@ -5,6 +5,8 @@ import { useGetNurseByIdQuery } from '../../app/APIs/nurseApi';
 import MainLoader from '../../app/common/MainLoader';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
+import withAuthorization from '../../app/hoc/withAuthorization';
+import { SD_Roles } from '../../app/utility/SD';
 
 function NurseUpdate() {
     const { id } = useParams<{ id: string }>();
@@ -26,4 +28,4 @@ function NurseUpdate() {
     return <div>No nurse data available.</div>;
 }
 
-export default NurseUpdate;
+export default withAuthorization(NurseUpdate, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

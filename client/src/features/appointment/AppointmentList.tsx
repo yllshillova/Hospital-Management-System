@@ -14,11 +14,11 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import toastNotify from "../../app/helpers/toastNotify";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { useGetPatientsQuery } from "../../app/APIs/patientApi";
-import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from "../../app/utility/SD";
 
 function AppointmentList() {
     const { data: appointmentData, isLoading: isAppointmentLoading, error: appointmentError } = useGetAppointmentsQuery(null);
-    const { data: doctorData, isLoading: isDoctorLoading, error: doctorError } = useGetDoctorsQuery(null);
     const { data: patientData, isLoading: isPatientLoading, error: patientError } = useGetPatientsQuery(null);
     const [deleteAppointment] = useDeleteAppointmentMutation();
     const navigate = useNavigate();
@@ -40,12 +40,12 @@ function AppointmentList() {
         }
     };
 
-    if (isAppointmentLoading  || isDoctorLoading || isPatientLoading)  {
+    if (isAppointmentLoading   || isPatientLoading)  {
         content = <MainLoader />;
-    } else if (appointmentError || doctorError || patientError) {
+    } else if (appointmentError  || patientError) {
         content = (
             <div>
-                {(appointmentError?.data as FetchBaseQueryError) || (doctorError?.data as FetchBaseQueryError) || (patientError?.data as FetchBaseQueryError)}
+                {(appointmentError?.data as FetchBaseQueryError) || (patientError?.data as FetchBaseQueryError)}
             </div>
         );
     } else {
@@ -112,5 +112,4 @@ function AppointmentList() {
     );
 }
 
-export default AppointmentList;
-
+export default withAuthorization(AppointmentList, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);

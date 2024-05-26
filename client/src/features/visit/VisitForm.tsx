@@ -16,6 +16,8 @@ import { useAssignPatientMutation } from "../../app/APIs/roomApi";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBedPulse } from "@fortawesome/free-solid-svg-icons/faBedPulse";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from "../../app/utility/SD";
 
 interface VisitFormProps {
     id?: string;
@@ -315,4 +317,4 @@ const ButtonText = styled.span`
 
 
 
-export default VisitForm;
+export default withAuthorization(VisitForm, [SD_Roles.DOCTOR]);

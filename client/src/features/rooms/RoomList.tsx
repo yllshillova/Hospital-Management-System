@@ -16,6 +16,8 @@ import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
 import Department from "../../app/models/Department";
 import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MiniLoader from "../../app/common/MiniLoader";
+import { SD_Roles } from "../../app/utility/SD";
+import withAuthorization from "../../app/hoc/withAuthorization";
 
 function RoomList() {
 
@@ -123,4 +125,4 @@ function RoomList() {
         </>
     );
 }
-export default RoomList;
+export default withAuthorization(RoomList, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);

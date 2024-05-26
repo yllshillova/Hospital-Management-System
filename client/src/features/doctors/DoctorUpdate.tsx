@@ -5,6 +5,8 @@ import { useGetDoctorByIdQuery } from '../../app/APIs/doctorApi';
 import MainLoader from '../../app/common/MainLoader';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
+import withAuthorization from '../../app/hoc/withAuthorization';
+import { SD_Roles } from '../../app/utility/SD';
 
 function DoctorUpdate() {
     const { id } = useParams<{ id: string }>();
@@ -26,4 +28,4 @@ function DoctorUpdate() {
     return <div>No doctor data available.</div>;
 }
 
-export default DoctorUpdate;
+export default withAuthorization(DoctorUpdate, [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays, faUserInjured, faNewspaper, faAddressCard } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays, faUserInjured, faNewspaper, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 import {
     emptyUserState,
     setLoggedInUser,
@@ -20,10 +20,6 @@ function SidePanel() {
     const userData: User = useSelector(
         (state: RootState) => state.auth
     );
-    console.log(userData);
-
-    
-
     
     const handleNavigation = (path: string) => () => navigate(path);
     const handleProfileNavigation = (role: string) => () => navigate(`/${role}/${userData.id}`);
@@ -41,8 +37,6 @@ function SidePanel() {
         { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
         { icon: faBookMedical, label: 'Visits', onClick: handleNavigation('/visits') },
         { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
-        { icon: faNewspaper, label: 'News', onClick: handleNavigation('/news_chat') },
-        { icon: faCog, label: 'Settings' },
         { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
     ];
 
@@ -57,7 +51,6 @@ function SidePanel() {
             { icon: faAddressCard, label: 'Profile', onClick: handleProfileNavigation('doctor') },
             { icon: faBookMedical, label: 'Visits', onClick: handleNavigation('/visits') },
             { icon: faNewspaper, label: 'News', onClick: handleNavigation('/news_chat') },
-            { icon: faCog, label: 'Settings' },
             { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
         ];
     } else if (userData.role === SD_Roles.NURSE) {
@@ -67,7 +60,6 @@ function SidePanel() {
             { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
             { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
             { icon: faNewspaper, label: 'News', onClick: handleNavigation('/news_chat') },
-            { icon: faCog, label: 'Settings' },
             { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
         ];
     }

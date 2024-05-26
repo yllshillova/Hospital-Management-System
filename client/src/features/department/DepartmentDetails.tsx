@@ -6,6 +6,8 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { Header, SidePanel } from "../../app/layout";
 import { Attribute, Label, LeftContainer, MainContainer, SectionTitle, Value, WrapperContainer } from "../../app/common/styledComponents/details";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from "../../app/utility/SD";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -74,5 +76,5 @@ function DepartmentDetails() {
     return null;
 }
 
-export default DepartmentDetails;
+export default withAuthorization(DepartmentDetails, [SD_Roles.ADMINISTRATOR]);
 

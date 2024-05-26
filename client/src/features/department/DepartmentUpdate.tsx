@@ -5,6 +5,8 @@ import DepartmentForm from './DepartmentForm';
 import { useGetDepartmentByIdQuery } from '../../app/APIs/departmentApi';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import withAuthorization from '../../app/hoc/withAuthorization';
+import { SD_Roles } from '../../app/utility/SD';
 
 function DepartmentUpdate() {
     const { id } = useParams<{ id: string }>();
@@ -25,4 +27,4 @@ function DepartmentUpdate() {
     return <div>No department data available.</div>;
 }
 
-export default DepartmentUpdate;
+export default withAuthorization(DepartmentUpdate, [SD_Roles.ADMINISTRATOR]);
