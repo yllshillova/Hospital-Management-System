@@ -32,11 +32,26 @@ import NurseInsert from '../../features/nurses/NurseInsert';
 import News_Chat from '../../features/news_chat/News_Chat';
 import RoomInsert from '../../features/rooms/RoomInsert';
 import RoomUpdate from '../../features/rooms/RoomUpdate';
+import { useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import { useDispatch } from 'react-redux';
+import User from '../models/User';
+import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
 
 
 function App() {
 
-   
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const localToken = localStorage.getItem("token");
+        if (localToken) {
+            const { id, name, lastName, email, role, jwtToken }: User = jwtDecode(localToken);
+            dispatch(setLoggedInUser({ id, name, lastName, email, role, jwtToken }))
+            dispatch(setToken(localToken));
+        }
+    }, [])
+
 
 
     return (

@@ -68,6 +68,8 @@ function ChatPanel() {
     // Function to handle user item click
     const handleUserItemClick = (user: User) => {
         setSelectedUser(user);
+        // Clear existing messages when a new user is selected
+        setMessages({ [user.id]: [] });
     };
 
     useEffect(() => {
@@ -99,24 +101,6 @@ function ChatPanel() {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
     };
-
-    
-
-    //const handleSearchClick = () => {
-    //    if (users) {
-    //        if (searchTerm === '') {
-    //            setDisplayedUsers(users);
-    //            setUserNotFound(false); // Reset user not found state
-    //        } else {
-    //            const results = users.filter((user: User) =>
-    //                `${user.name} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
-    //            );
-    //            setDisplayedUsers(results);
-    //            setUserNotFound(results.length === 0); // Set user not found state based on search results
-    //        }
-    //    }
-    //};
-
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const searchTerm = e.target.value;

@@ -13,7 +13,6 @@ function Header() {
     const userData: User = useSelector(
         (state: RootState) => state.auth
     );
-    console.log(userData);
 
     let displayName = `${userData.name} ${userData.lastName}`;
     if (userData.role === SD_Roles.DOCTOR) {
