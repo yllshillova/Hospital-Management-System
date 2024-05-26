@@ -12,7 +12,7 @@ import { useDeleteEmergencyContactMutation, useGetEmergencyContactsByPatientIdQu
 import toastNotify from "../../app/helpers/toastNotify";
 /*import { Table, TableRow, TableCell } from "@material-ui/core";*/
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfo, faEdit, faTrashAlt, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrashAlt, faAdd } from "@fortawesome/free-solid-svg-icons";
 import EmergencyContact from "../../app/models/EmergencyContact";
 //import ActionButton from "../../app/common/ActionButton";
 //import MiniLoader from "../../app/common/MiniLoader";
@@ -89,10 +89,6 @@ function PatientDetails() {
                             <TableCell>{emergencyContact.relation}</TableCell>
                             <TableCell>{emergencyContact.phoneNumber}</TableCell>
                           
-
-                            <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/emergencyContact/" + emergencyContact.id)}>
-                                <FontAwesomeIcon icon={faInfo} />
-                            </ActionButton>
                             <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/emergencyContact/update/" + emergencyContact.id)}>
                                 <FontAwesomeIcon icon={faEdit} />
                             </ActionButton>

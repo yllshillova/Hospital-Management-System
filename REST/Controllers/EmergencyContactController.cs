@@ -25,12 +25,12 @@ namespace API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmergencyContact(EmergencyContactDto EmergencyContact)
+        public async Task<IActionResult> CreateEmergencyContact([FromForm] EmergencyContactDto EmergencyContact)
         {
             return HandleResult(await Mediator.Send(new CreateEmergencyContactCommand(EmergencyContact)));
         }
         [HttpPut("{Id}")]
-        public async Task<IActionResult> EditEmergencyContact(Guid Id, EmergencyContactDto EmergencyContact)
+        public async Task<IActionResult> EditEmergencyContact(Guid Id, [FromForm] EmergencyContactDto EmergencyContact)
         {
             EmergencyContact.Id = Id;
             return HandleResult(await Mediator.Send(new UpdateEmergencyContactCommand(EmergencyContact)));

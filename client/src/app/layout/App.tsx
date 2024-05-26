@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from '../../features/dashboard/Dashboard';
 import DepartmentList from '../../features/department/DepartmentList';
-import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
 import PatientList from '../../features/patient/PatientList';
 import PatientDetails from '../../features/patient/PatientDetails';
@@ -30,6 +29,8 @@ import NurseList from '../../features/nurses/NurseList';
 import NurseDetails from '../../features/nurses/NurseDetails';
 import NurseUpdate from '../../features/nurses/NurseUpdate';
 import NurseInsert from '../../features/nurses/NurseInsert';
+import EmergencyContactInsert from '../../features/emergencyContacts/EmergencyContactInsert';
+import EmergencyContactUpdate from '../../features/emergencyContacts/EmergencyContactUpdate';
 
 
 function App() {
@@ -44,7 +45,7 @@ function App() {
                     <Route path="/patient/insert" element={<PatientInsert />}></Route>
                     <Route path="/patient/update/:id" element={<PatientUpdate />}></Route>
                     <Route path="/departments" element={<DepartmentList />}></Route>
-                    <Route path="/department/:id" element={<DepartmentDetails />}></Route>
+                    {/*<Route path="/department/:id" element={<DepartmentDetails />}></Route>*/}
                     <Route path="/department/insert" element={<DepartmentInsert />}></Route>
                     <Route path="/department/update/:id" element={<DepartmentUpdate />}></Route>
                     <Route path="/doctors" element={<DoctorList />}></Route>
@@ -67,6 +68,9 @@ function App() {
                     <Route path="/visit/update/:id" element={<VisitUpdate />}></Route>
                     <Route path="/appointment/insert" element={<AppointmentInsert />}></Route>
                     <Route path="/appointment/update/:id" element={<AppointmentUpdate />}></Route>
+                    {/*<Route path="/emergencyContact/:id" element={<EmergencyContactDetails />}></Route>*/}
+                    <Route path="/emergencyContact/insert" element={<EmergencyContactInsert />}></Route>
+                    <Route path="/emergencyContact/update/:id" element={<EmergencyContactUpdate />}></Route>
                     <Route path="/login" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
                    {/* <Route path="/details" element={<Details />}></Route>*/}

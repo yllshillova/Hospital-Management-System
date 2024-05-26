@@ -56,9 +56,9 @@ function DepartmentList() {
                         <TableCell>{department.isDeleted} </TableCell>
                         <TableCell>{new Date(department.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(department.updatedAt).toLocaleDateString()}</TableCell>
-                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/department/" + department.id)} >
-                            <FontAwesomeIcon icon={faInfo} />
-                        </ActionButton>
+                        {/*<ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/department/" + department.id)} >*/}
+                        {/*    <FontAwesomeIcon icon={faInfo} />*/}
+                        {/*</ActionButton>*/}
                         <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/department/update/" + department.id)} >
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
