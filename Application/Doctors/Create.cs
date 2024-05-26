@@ -13,28 +13,36 @@ namespace Application.Doctors
 
         public class CommandValidator : AbstractValidator<CreateDoctorCommand>
         {
-            public CommandValidator()
+            private readonly IUserRepository _userRepository;
+            public CommandValidator(IUserRepository userRepository)
             {
-                RuleFor(x => x.Doctor).SetValidator(new DoctorValidator());
+                _userRepository = userRepository;
+                RuleFor(x => x.Doctor)
+                    .SetValidator(new DoctorValidator(_userRepository));
             }
         }
 
-        public class CreateDoctorCommandHandler(IDoctorRepository _doctorRepository, IMapper _mapper) : IRequestHandler<CreateDoctorCommand, Result<Unit>>
+        public class CreateDoctorCommandHandler(ITokenRepository _tokenRepository, IUserRepository _userRepository, IMapper _mapper) : IRequestHandler<CreateDoctorCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
             {
-                if (request.Doctor is null) return Result<Unit>.Failure(ErrorType.BadRequest, "Couldn't complete the action! Try again.");
+                if (request.Doctor is null)
+                    return Result<Unit>.Failure(ErrorType.BadRequest, "Couldn't complete the action. Try again.");
 
                 var doctor = _mapper.Map<Doctor>(request.Doctor);
-                if (doctor is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
-
                 doctor.CreatedAt = DateTime.Now;
-                doctor.UpdatedAt = doctor.CreatedAt;
+                doctor.UpdatedAt = DateTime.Now;
 
-                var result = await _doctorRepository.CreateAsync(doctor);
-                if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the doctor! Try again.");
+                var doctorCreation = await _userRepository.CreateUserWithRoleAsync(doctor, request.Doctor.Password, "Doctor");
+                if (!doctorCreation)
+                    return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the doctor.");
+
+                var doctorDto = _mapper.Map<DoctorDto>(doctor);
+                doctorDto.Token = await _tokenRepository.CreateToken(doctor);
+
 
                 return Result<Unit>.Success(Unit.Value);
+
             }
         }
 

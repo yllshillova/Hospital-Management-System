@@ -12,9 +12,12 @@ namespace Application.Nurses
 
         public class UpdateNurseCommandValidator : AbstractValidator<UpdateNurseCommand>
         {
-            public UpdateNurseCommandValidator()
+            private readonly IUserRepository _userRepository;
+            public UpdateNurseCommandValidator(IUserRepository userRepository)
             {
-                RuleFor(x => x.Nurse).SetValidator(new NurseValidator());
+                _userRepository = userRepository;
+
+                RuleFor(x => x.Nurse).SetValidator(new NurseValidator(_userRepository));
             }
         }
 
@@ -25,11 +28,18 @@ namespace Application.Nurses
                 var nurse = await _nurseRepository.GetByIdAsync(request.Nurse.Id);
                 if (nurse is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
+                if (string.IsNullOrWhiteSpace(request.Nurse.Password))
+                {
+                    // If the password is not provided,  the existing password is maintained
+                    request.Nurse.Password = nurse.PasswordHash;
+                }
+
                 _mapper.Map(request.Nurse, nurse);
+                nurse.CreatedAt = request.Nurse.CreatedAt;
                 nurse.UpdatedAt = DateTime.Now;
-                
+
                 var result = await _nurseRepository.UpdateAsync(nurse);
-                if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the doctor! Try again.");
+                if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the nurse! Try again.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

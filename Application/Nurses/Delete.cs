@@ -1,9 +1,6 @@
 ﻿using Application.Core;
-using AutoMapper;
 using Domain.Contracts;
-using Domain.Entities;
 using MediatR;
-using System.Numerics;
 
 namespace Application.Nurses
 {

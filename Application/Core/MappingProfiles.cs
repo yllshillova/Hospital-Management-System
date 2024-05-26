@@ -26,6 +26,8 @@ namespace Application.Core
             CreateMap<Appointment, AppointmentDto>().ReverseMap();
             CreateMap<EmergencyContact, EmergencyContactDto>().ReverseMap();
             CreateMap<AppUser, UserDto>().ReverseMap();
+            CreateMap<AppUser, DoctorDto>().ReverseMap();
+            CreateMap<AppUser, NurseDto>().ReverseMap();
         }
     }
 }

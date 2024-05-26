@@ -22,14 +22,19 @@ interface DoctorFormProps {
 const doctorData: Doctor = {
     name: "",
     lastName: "",
+    userName: "",
     specialization: "",
     address: "",
     residence: "",
     birthday: new Date(),
     gender: "",
     email: "",
+    id: "",
+    createdAt: new Date(),
+    updatedAt: new Date(), 
     isDeleted: false,
-    departmentId: ""
+    departmentId: "",
+    password:""
 };
 
 const genders = [SD_Genders.Male, SD_Genders.Female];
@@ -75,6 +80,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
 
         formData.append("Name", doctorInputs.name);
         formData.append("LastName", doctorInputs.lastName);
+        formData.append("UserName", doctorInputs.userName);
         formData.append("Specialization", doctorInputs.specialization);
         formData.append("Address", doctorInputs.address);
         formData.append("Residence", doctorInputs.residence);
@@ -83,6 +89,10 @@ function DoctorForm({ id, data }: DoctorFormProps) {
         formData.append("Email", doctorInputs.email);
         formData.append("IsDeleted", doctorInputs.isDeleted.toString());
         formData.append("DepartmentId", doctorInputs.departmentId);
+// Only append the password if it's not empty
+        if (doctorInputs.password) {
+            formData.append("Password", doctorInputs.password);
+        }       
 
         const currentLocation = window.location.pathname;
 
@@ -98,7 +108,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
             }
         } else {
             const response = await createDoctor(formData);
-
+            console.log(response);
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
@@ -157,14 +167,45 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Specialization</Label>
+                                <Label>User Name</Label>
                                 <Input
                                     type="text"
-                                    name="specialization"
-                                    value={doctorInputs.specialization}
+                                    name="userName"
+                                    value={doctorInputs.userName}
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
+                            <FormGroup>
+                                <Label>Birthday</Label>
+                                <Input
+                                    type="date"
+                                    name="birthday"
+                                    value={validBirthdayDate(doctorInputs.birthday)}
+                                    onChange={handleDoctorInput}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label>Email</Label>
+                                <Input
+                                    type="text"
+                                    name="email"
+                                    value={doctorInputs.email}
+                                    onChange={handleDoctorInput}
+                                />
+                            </FormGroup>
+
+                            {!id && (
+                                <FormGroup>
+                                    <Label>Password</Label>
+                                    <Input
+                                        type="password"
+                                        name="password"
+                                        value={doctorInputs.password}
+                                        onChange={handleDoctorInput}
+                                    />
+                                </FormGroup>
+                            )}
+                            
                             <FormGroup>
                                 <Label>Address</Label>
                                 <Input
@@ -184,15 +225,19 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Email</Label>
-                                <Input
-                                    type="text"
-                                    name="email"
-                                    value={doctorInputs.email}
+                                <Select
+                                    name="gender"
+                                    value={doctorInputs.gender}
                                     onChange={handleDoctorInput}
-                                />
+                                >
+                                    <option value="">Select Gender</option>
+                                    {genders.map((gender) => (
+                                        <option key={gender} value={gender}>
+                                            {gender}
+                                        </option>
+                                    ))}
+                                </Select>
                             </FormGroup>
-                            
                             <FormGroup>
                                 <Select
                                     name="departmentId"
@@ -209,29 +254,17 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 </Select>
                                 {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
                             </FormGroup>
-                            <FormGroup>
-                                <Select
-                                    name="gender"
-                                    value={doctorInputs.gender}
-                                    onChange={handleDoctorInput}
-                                >
-                                    <option value="">Select Gender</option>
-                                    {genders.map((gender) => (
-                                        <option key={gender} value={gender}>
-                                            {gender}
-                                        </option>
-                                    ))}
-                                </Select>
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Birthday</Label>
+                           
+                             <FormGroup>
+                                <Label>Specialization</Label>
                                 <Input
-                                    type="date"
-                                    name="birthday"
-                                    value={validBirthdayDate(doctorInputs.birthday)}
+                                    type="text"
+                                    name="specialization"
+                                    value={doctorInputs.specialization}
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
+                            
                             
 
                             {id ? <FormGroup>
