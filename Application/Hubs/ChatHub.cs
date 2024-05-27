@@ -16,6 +16,7 @@ namespace Application.Hubs
         {
             var chatMessage = new ChatMessage
             {
+                Id = Guid.NewGuid().ToString(),
                 SenderId = senderId,
                 ReceiverId = receiverId,
                 Content = content,
@@ -25,13 +26,14 @@ namespace Application.Hubs
             await _chatMessageRepository.AddMessageAsync(chatMessage);
 
             // Send the message to the receiver
-            await Clients.User(receiverId).SendAsync("ReceiveMessage", senderId, content);
+            await Clients.User(receiverId).SendAsync("ReceiveMessage", chatMessage.Id, chatMessage.SenderId, chatMessage.ReceiverId, chatMessage.Content);
         }
 
-        public async Task GetMessages(string userId)
+        public async Task<IEnumerable<ChatMessage>> GetMessages(string senderId, string receiverId)
         {
-            var messages = await _chatMessageRepository.GetMessagesAsync(userId);
-            await Clients.User(userId).SendAsync("LoadMessages", messages);
+            var messages = await _chatMessageRepository.GetMessagesAsync(senderId, receiverId);
+            return messages;
         }
+
     }
 }

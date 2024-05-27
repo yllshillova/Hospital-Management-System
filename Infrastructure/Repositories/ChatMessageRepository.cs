@@ -12,10 +12,14 @@ namespace Infrastructure.Repositories
             _chatMessages = context.ChatMessages;
         }
 
-        public async Task<IEnumerable<ChatMessage>> GetMessagesAsync(string userId)
+        public async Task<IEnumerable<ChatMessage>> GetMessagesAsync(string senderId, string receiverId)
         {
-            return await _chatMessages.Find(m => m.SenderId == userId || m.ReceiverId == userId).ToListAsync();
+            var messages = await _chatMessages
+                .Find(m => (m.SenderId == senderId && m.ReceiverId == receiverId) || (m.SenderId == receiverId && m.ReceiverId == senderId))
+                .ToListAsync();
+            return messages;
         }
+
 
         public async Task AddMessageAsync(ChatMessage message)
         {

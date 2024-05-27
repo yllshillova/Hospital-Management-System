@@ -1,5 +1,6 @@
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react'; // Import useState hook
 import { Header, SidePanel } from '../../app/layout';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,9 +9,8 @@ import MainLoader from '../../app/common/MainLoader';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-import { loadMessages, onReceiveMessage, sendMessage } from '../../app/utility/signalrService';
+import { startConnection, sendMessage, onReceiveMessage, loadMessages, onLoadMessages } from '../../app/utility/signalrService';
 import User from '../../app/models/User';
-import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/storage/redux/store';
 import { setSearchTerm } from '../../app/storage/redux/searchSlice';
 import { useGetDoctorsQuery } from '../../app/APIs/doctorApi';
@@ -19,17 +19,11 @@ import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
 import Doctor from '../../app/models/Doctor';
 import Nurse from '../../app/models/Nurse';
 import { faUserNurse } from '@fortawesome/free-solid-svg-icons/faUserNurse';
-
-interface Message {
-    sender: string;
-    content: string;
-    alignment: 'left' | 'right';
-}
-
+import ChatMessage from '../../app/models/ChatMessage';
 
 function ChatPanel() {
 
-    const { data: users, isLoading, error , isError } = useGetStaffQuery(null);
+    const { data: users, isLoading, error, isError } = useGetStaffQuery(null);
     const { data: doctors, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
     const { data: nurses, isLoading: nursesLoading, error: nursesError } = useGetNursesQuery(null);
 
@@ -37,19 +31,14 @@ function ChatPanel() {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    const senderId: string = useSelector(
-        (state: RootState) => state.auth.id
-    );
-    console.log(senderId);
-
-
-    const [selectedUser, setSelectedUser] = useState<User | null>(null); // State to store the selected user
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [displayedUsers, setDisplayedUsers] = useState<User[]>([]);
     const [userNotFound, setUserNotFound] = useState(false);
 
     const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
+    const senderId: string = useSelector((state: RootState) => state.auth.id);
 
-    const [messages, setMessages] = useState<{ [key: string]: Message[] }>({});
+    const [messages, setMessages] = useState<{ [key: string]: ChatMessage[] }>({});
     const [message, setMessage] = useState<string>('');
 
     useEffect(() => {
@@ -58,7 +47,67 @@ function ChatPanel() {
         }
     }, [users]);
 
-    
+    useEffect(() => {
+        startConnection();
+        onReceiveMessage((messageId, senderId, receiverId, content) => {
+            setMessages(prevMessages => {
+                const userMessages = prevMessages[receiverId] || [];
+                return {
+                    ...prevMessages,
+                    [receiverId]: [...userMessages, { id: messageId, senderId, receiverId, content, alignment: senderId === senderId ? 'right' : 'left' }]
+                };
+            });
+        });
+
+        onLoadMessages((loadedMessages: ChatMessage[]) => {
+            if (selectedUser) {
+                setMessages(prevMessages => {
+                    const updatedMessages: ChatMessage[] = loadedMessages.map((msg: ChatMessage) => ({
+                        ...msg,
+                        alignment: msg.senderId === senderId ? 'right' : 'left'
+                    }));
+                    return {
+                        ...prevMessages,
+                        [selectedUser.id]: updatedMessages
+                    };
+                });
+            }
+        });
+    }, [selectedUser, senderId]);
+
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            try {
+                if (selectedUser) {
+                    console.log("Fetching messages for sender:", senderId, "and receiver:", selectedUser.id);
+                    const loadedMessages = await loadMessages(senderId, selectedUser.id);
+                    console.log("Loaded messages:", loadedMessages);
+                    if (loadedMessages) {
+                        console.log("Updating messages state...");
+                        setMessages(prevMessages => ({
+                            ...prevMessages,
+                            [selectedUser.id]: loadedMessages.map((message: ChatMessage) => ({
+                                id: message.id,
+                                senderId: message.senderId,
+                                receiverId: message.receiverId,
+                                content: message.content,
+                                alignment: message.senderId === senderId ? 'right' : 'left'
+                            }))
+                        }));
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching messages: ", err);
+            }
+        };
+
+        fetchMessages();
+    }, [selectedUser, senderId]);
+
+
+
+
     if (isLoading || doctorsLoading || nursesLoading) return <MainLoader />;
 
     if (isError || doctorsError || nursesError) {
@@ -69,39 +118,21 @@ function ChatPanel() {
         return <div>Error loading data</div>;
     }
 
-    // Function to handle user item click
     const handleUserItemClick = async (user: User) => {
         setSelectedUser(user);
-        // Clear existing messages when a new user is selected
-        // Load messages for the selected user
-        await loadMessages(user.id);    };
-
-    useEffect(() => {
-        if (!selectedUser) return;
-
-        // Listen for incoming messages
-        onReceiveMessage((senderId: string, message: string) => {
-            setMessages(prevMessages => {
-                const userMessages = prevMessages[senderId] || [];
-                return {
-                    ...prevMessages,
-                    [senderId]: [...userMessages, { sender: senderId, content: message, alignment: 'left' }]
-                };
-            });
-        });
-    }, [selectedUser]);
-
-
+    };
 
     const handleSendMessage = () => {
         if (message.trim() && selectedUser) {
+            const key = `${senderId}-${selectedUser.id}`;
             setMessages(prevMessages => {
-                const userMessages = prevMessages[selectedUser.id] || [];
+                const userMessages = prevMessages[key] || [];
                 return {
                     ...prevMessages,
-                    [selectedUser.id]: [...userMessages, { sender: 'Me', content: message, alignment: 'right' }]
+                    [key]: [...userMessages, { id: "", senderId, receiverId: selectedUser.id, content: message, alignment: 'right' }]
                 };
             });
+
             sendMessage(senderId, selectedUser.id, message);
             setMessage('');
         }
@@ -116,7 +147,6 @@ function ChatPanel() {
         dispatch(setSearchTerm(searchTerm));
     };
 
-    // Reset displayed users when searchTerm changes
     useEffect(() => {
         if (users) {
             if (searchTerm === '') {
@@ -153,7 +183,8 @@ function ChatPanel() {
                         >
                             Cancel
                         </CancelButton>
-                    )}                </SearchContainer>
+                    )}
+                </SearchContainer>
                 {displayedUsers.map((user: User) => {
                     const isDoctor = doctors.some((doctor: Doctor) => doctor.id === user.id);
                     const isNurse = nurses.some((nurse: Nurse) => nurse.id === user.id);
@@ -167,13 +198,12 @@ function ChatPanel() {
                                 {isDoctor && "Dr. "}
                                 {isNurse && !isDoctor && "Nurse. "}
                                 {user.name} {user.lastName}
-                            </UserName>                        </UserItem>
+                            </UserName>
+                        </UserItem>
                     );
                 })}
-            {userNotFound && <UserNotFoundMessage>User not found</UserNotFoundMessage>}
-
+                {userNotFound && <UserNotFoundMessage>User not found</UserNotFoundMessage>}
             </UserListContainer>
-
 
             {selectedUser && (
                 <ChatBoxContainer>
@@ -186,11 +216,15 @@ function ChatPanel() {
                         </CloseButton>
                     </ChatHeader>
                     <ChatMessages>
-                        {(messages[selectedUser.id] || []).map((msg, index) => (
-                            <Message key={index} alignment={msg.alignment}>
-                                <Sender>{msg.sender}:</Sender> {msg.content}
-                            </Message>
-                        ))}
+                        {messages[selectedUser.id]?.length === 0 ? (
+                            <div>No messages found</div>
+                        ) : (
+                                messages[selectedUser.id]?.map((msg: ChatMessage, index: number) => (
+                                <Message key={index} alignment={msg.alignment}>
+                                    <Sender>{msg.senderId}:</Sender> {msg.content}
+                                </Message>
+                            ))
+                        )}
                     </ChatMessages>
                     <ChatInputContainer>
                         <ChatInput
@@ -205,8 +239,7 @@ function ChatPanel() {
             )}
         </>
     );
-};
-
+}
 
 const UserListContainer = styled.div`
     position: fixed;
