@@ -16,6 +16,9 @@ import Nurse from "../../app/models/Nurse";
 import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MiniLoader from "../../app/common/MiniLoader";
 import Department from "../../app/models/Department";
+import withAuthorization from '../../app/hoc/withAuthorization';
+import { SD_Roles } from "../../app/utility/SD";
+
 function NurseList() {
     const { data, isLoading, error } = useGetNursesQuery(null);
     const { data: departments, isLoading: isDepartmentsLoading } = useGetDepartmentsQuery(null);
@@ -115,4 +118,4 @@ function NurseList() {
     );
 }
 
-export default NurseList;
+export default withAuthorization(NurseList, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

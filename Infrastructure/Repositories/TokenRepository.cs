@@ -24,9 +24,10 @@ namespace Infrastructure.Repositories
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Name),
+                new Claim("name", user.Name),
+                new Claim("lastName", user.LastName),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim("id", user.Id.ToString()),
             };
 
             var roles = await _userManager.GetRolesAsync(user);

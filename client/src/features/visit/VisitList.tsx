@@ -17,6 +17,8 @@ import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 import Visit from "../../app/models/Visit";
 import Patient from "../../app/models/Patient";
 import Doctor from "../../app/models/Doctor";
+import { SD_Roles } from "../../app/utility/SD";
+import withAuthorization from "../../app/hoc/withAuthorization";
 function VisitList() {
     const { data, isLoading, error } = useGetVisitsQuery(null);
     const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
@@ -113,4 +115,4 @@ function VisitList() {
     );
 }
 
-export default VisitList;
+export default withAuthorization(VisitList , [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);

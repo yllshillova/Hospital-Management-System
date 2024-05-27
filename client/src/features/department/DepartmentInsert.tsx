@@ -1,3 +1,5 @@
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from "../../app/utility/SD";
 import DepartmentForm from "./DepartmentForm";
 
 function DepartmentInsert() {
@@ -6,4 +8,4 @@ function DepartmentInsert() {
     );
 }
 
-export default DepartmentInsert;
+export default withAuthorization(DepartmentInsert, [SD_Roles.ADMINISTRATOR]);

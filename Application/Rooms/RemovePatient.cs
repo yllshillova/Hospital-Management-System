@@ -2,7 +2,6 @@
 using Domain.Contracts;
 using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Rooms
 {
@@ -18,7 +17,7 @@ namespace Application.Rooms
             }
         }
 
-        public class RemovePatientCommandHandler(IRoomRepository _roomRepository, ILogger<RemovePatientCommandHandler> _logger) : IRequestHandler<RemovePatientCommand, Result<Unit>>
+        public class RemovePatientCommandHandler(IRoomRepository _roomRepository) : IRequestHandler<RemovePatientCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(RemovePatientCommand request, CancellationToken cancellationToken)
             {

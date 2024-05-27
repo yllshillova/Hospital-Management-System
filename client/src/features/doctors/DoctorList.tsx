@@ -16,6 +16,9 @@ import Doctor from "../../app/models/Doctor";
 import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MiniLoader from "../../app/common/MiniLoader";
 import Department from "../../app/models/Department";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from '../../app/utility/SD';
+
 function DoctorList() {
     const { data, isLoading, error } = useGetDoctorsQuery(null);
     const { data: departments, isLoading: isDepartmentsLoading } = useGetDepartmentsQuery(null);
@@ -131,4 +134,4 @@ function DoctorList() {
     );
 }
 
-export default DoctorList;
+export default withAuthorization(DoctorList, [SD_Roles.ADMINISTRATOR]);

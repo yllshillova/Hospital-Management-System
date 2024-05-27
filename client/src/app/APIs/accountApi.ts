@@ -29,6 +29,12 @@ const accountApi = createApi({
             }),
             invalidatesTags: ["Accounts"],
         }),
+        getStaff: builder.query({
+            query: () => ({
+                url: "accounts/Staff",
+            }),
+            providesTags: ["Accounts"],
+        }),
     }),
 });
 
@@ -37,6 +43,7 @@ export const {
     useGetCurrentUserQuery,
     useRegisterMutation,
     useLoginMutation,
+    useGetStaffQuery,
 } = accountApi;
 
 export default accountApi;

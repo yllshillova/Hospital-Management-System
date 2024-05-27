@@ -20,7 +20,7 @@ namespace Application.Rooms
 
         }
 
-        public class AssignPatientCommandHandler(IRoomRepository _roomRepository, IDoctorRepository _doctorRepository, IPatientRepository _patientRepository, IVisitRepository _visitRepository) : IRequestHandler<AssignPatientCommand, Result<Unit>>
+        public class AssignPatientCommandHandler(IRoomRepository _roomRepository, IDoctorRepository _doctorRepository, IPatientRepository _patientRepository) : IRequestHandler<AssignPatientCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(AssignPatientCommand request, CancellationToken cancellationToken)
             {

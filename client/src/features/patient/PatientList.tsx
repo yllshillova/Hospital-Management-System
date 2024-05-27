@@ -20,7 +20,7 @@ function PatientList() {
     const navigate = useNavigate();
     let content;
 
-    const handlePatientDelete = async (id: number,) => {
+    const handlePatientDelete = async (id: string,) => {
         const result = await deletePatient(id);
 
         if ('data' in result) {
@@ -34,7 +34,6 @@ function PatientList() {
                 useErrorHandler(error, navigate, location.pathname);
             }
         }
-
     };
     if (isLoading) {
         content = <MainLoader />;

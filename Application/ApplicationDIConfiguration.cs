@@ -15,6 +15,7 @@ namespace Application
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
             services.AddValidatorsFromAssemblyContaining<DoctorValidator>();
+            services.AddSignalR();
         }
     }
 }

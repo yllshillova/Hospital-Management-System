@@ -8,11 +8,13 @@ import nurseApi from "../../APIs/nurseApi";
 import visitApi from "../../APIs/visitApi";
 import accountApi from "../../APIs/accountApi";
 import { authReducer } from "./authSlice";
+import searchReducer from './searchSlice';
 import emergencyContactApi from "../../APIs/emergencyContactApi";
 
 const store = configureStore({
     reducer: {
         auth: authReducer,
+        search: searchReducer, 
         [accountApi.reducerPath]: accountApi.reducer,
         [patientApi.reducerPath]: patientApi.reducer,
         [departmentApi.reducerPath]: departmentApi.reducer,

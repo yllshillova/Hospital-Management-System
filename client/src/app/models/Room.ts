@@ -1,15 +1,13 @@
-import Department from "./Department";
 import Patient from "./Patient";
 
 export default interface Room {
     id: string;
-    beds: number;
-    bedsAvailable: number;
+    beds: string ;
+    bedsAvailable: string;
     //isFree: boolean;
     createdAt: Date;
     updatedAt: Date;
-    roomNumber: number;
+    roomNumber: string ;
     patients: Patient[];
-    department: Department;
     departmentId: string;
 }

@@ -16,4 +16,6 @@ export default interface Vist {
     doctor: Doctor;
     patientId: string;
     patient: Patient;
+    type: "visit"; 
+
 }
