@@ -8,7 +8,7 @@ import MainLoader from '../../app/common/MainLoader';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-import { onReceiveMessage, sendMessage } from '../../app/utility/signalrService';
+import { loadMessages, onReceiveMessage, sendMessage } from '../../app/utility/signalrService';
 import User from '../../app/models/User';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/storage/redux/store';
@@ -37,7 +37,11 @@ function ChatPanel() {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    
+    const senderId: string = useSelector(
+        (state: RootState) => state.auth.id
+    );
+    console.log(senderId);
+
 
     const [selectedUser, setSelectedUser] = useState<User | null>(null); // State to store the selected user
     const [displayedUsers, setDisplayedUsers] = useState<User[]>([]);
@@ -66,23 +70,28 @@ function ChatPanel() {
     }
 
     // Function to handle user item click
-    const handleUserItemClick = (user: User) => {
+    const handleUserItemClick = async (user: User) => {
         setSelectedUser(user);
         // Clear existing messages when a new user is selected
-        setMessages({ [user.id]: [] });
-    };
+        // Load messages for the selected user
+        await loadMessages(user.id);    };
 
     useEffect(() => {
-        onReceiveMessage((user: string, message: string) => {
+        if (!selectedUser) return;
+
+        // Listen for incoming messages
+        onReceiveMessage((senderId: string, message: string) => {
             setMessages(prevMessages => {
-                const userMessages = prevMessages[user] || [];
+                const userMessages = prevMessages[senderId] || [];
                 return {
                     ...prevMessages,
-                    [user]: [...userMessages, { sender: user, content: message, alignment: 'left' }]
+                    [senderId]: [...userMessages, { sender: senderId, content: message, alignment: 'left' }]
                 };
             });
         });
-    }, []);
+    }, [selectedUser]);
+
+
 
     const handleSendMessage = () => {
         if (message.trim() && selectedUser) {
@@ -93,7 +102,7 @@ function ChatPanel() {
                     [selectedUser.id]: [...userMessages, { sender: 'Me', content: message, alignment: 'right' }]
                 };
             });
-            sendMessage(selectedUser.id, message);
+            sendMessage(senderId, selectedUser.id, message);
             setMessage('');
         }
     };

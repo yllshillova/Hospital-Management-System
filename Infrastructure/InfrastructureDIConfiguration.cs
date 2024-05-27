@@ -27,6 +27,7 @@ namespace Infrastructure
                 .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<DataContext>();
 
+            services.AddSingleton<MongoContext>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IVisitRepository, VisitRepository>();
             services.AddScoped<IPatientRepository, PatientRepository>();
@@ -37,10 +38,9 @@ namespace Infrastructure
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 
             await MigrateDatabaseAndSeedData(services.BuildServiceProvider());
-
-
         }
 
         private static async Task MigrateDatabaseAndSeedData(IServiceProvider services)

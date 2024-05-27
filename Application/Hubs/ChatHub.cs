@@ -1,40 +1,37 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System.Collections.Concurrent;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Application.Hubs
 {
     public class ChatHub : Hub
     {
-        private static readonly ConcurrentDictionary<string, string> _connections = new ConcurrentDictionary<string, string>();
+        private readonly IChatMessageRepository _chatMessageRepository;
 
-        public override async Task OnConnectedAsync()
+        public ChatHub(IChatMessageRepository chatMessageRepository)
         {
-            var userId = Context.UserIdentifier;
-            if (userId != null)
-            {
-                _connections[userId] = Context.ConnectionId;
-            }
-
-            await base.OnConnectedAsync();
+            _chatMessageRepository = chatMessageRepository;
         }
 
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public async Task SendMessage(string senderId, string receiverId, string content)
         {
-            var userId = Context.UserIdentifier;
-            if (userId != null)
+            var chatMessage = new ChatMessage
             {
-                _connections.TryRemove(userId, out _);
-            }
+                SenderId = senderId,
+                ReceiverId = receiverId,
+                Content = content,
+                Timestamp = DateTime.UtcNow
+            };
 
-            await base.OnDisconnectedAsync(exception);
+            await _chatMessageRepository.AddMessageAsync(chatMessage);
+
+            // Send the message to the receiver
+            await Clients.User(receiverId).SendAsync("ReceiveMessage", senderId, content);
         }
 
-        public async Task SendMessage(string userId, string message)
+        public async Task GetMessages(string userId)
         {
-            if (_connections.TryGetValue(userId, out var connectionId))
-            {
-                await Clients.Client(connectionId).SendAsync("ReceiveMessage", Context.UserIdentifier, message);
-            }
+            var messages = await _chatMessageRepository.GetMessagesAsync(userId);
+            await Clients.User(userId).SendAsync("LoadMessages", messages);
         }
     }
 }

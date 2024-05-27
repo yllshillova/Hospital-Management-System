@@ -26,9 +26,21 @@ export function onReceiveMessage(callback: (user: string, message: string) => vo
     connection.on("ReceiveMessage", callback);
 }
 
-export async function sendMessage(userId: string, message: string) {
+// Function to load messages for a user when a chat is opened
+export async function loadMessages(userId: string) {
     try {
-        await connection.invoke("SendMessage", userId, message);
+        // Invoke the 'GetMessages' method on the server to retrieve messages for the user
+        const messages = await connection.invoke("GetMessages", userId);
+        // Handle received messages (if needed)
+        console.log("Received messages:", messages);
+    } catch (err) {
+        console.error("Error loading messages: ", err);
+    }
+}
+
+export async function sendMessage(senderId: string, receiverId: string, message: string) {
+    try {
+        await connection.invoke("SendMessage", senderId, receiverId, message);
     } catch (err) {
         console.error("Error sending message: ", err);
     }
