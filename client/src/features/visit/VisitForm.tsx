@@ -18,6 +18,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBedPulse } from "@fortawesome/free-solid-svg-icons/faBedPulse";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
+import { useSelector } from "react-redux";
+import User from "../../app/models/User";
+import { RootState } from "../../app/storage/redux/store";
 
 interface VisitFormProps {
     id?: string;
@@ -53,6 +56,9 @@ function VisitForm({ id, data }: VisitFormProps) {
     const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
     const [assignPatientToRoom, { isLoading: assigningPatient }] = useAssignPatientMutation();
 
+    const doctorId: string = useSelector(
+        (state: RootState) => state.auth.id
+    );
     //useEffect(() => {
     //    if (data) {
     //        const tempData = {
@@ -95,7 +101,7 @@ function VisitForm({ id, data }: VisitFormProps) {
         formData.append("RequiredAnalysis", visitInputs.requiredAnalysis);
         formData.append("Advice", visitInputs.advice);
         formData.append("Remarks", visitInputs.remarks);
-        formData.append("DoctorId", visitInputs.doctorId);
+        formData.append("DoctorId", doctorId);
         formData.append("PatientId", visitInputs.patientId);
 
         const currentLocation = window.location.pathname;
@@ -173,22 +179,23 @@ function VisitForm({ id, data }: VisitFormProps) {
                             method="post"
                             encType="multipart/form-data"
                             onSubmit={handleSubmit}
-                            ><FormGroup>
-                                <Select
-                                    name="doctorId"
-                                    value={visitInputs.doctorId}
-                                    onChange={handleVisitInput}
-                                    disabled={doctorsLoading}
-                                >
-                                    <option value="">Select Doctor</option>
-                                    {doctorsData && doctorsData.map((doctor: Doctor) => (
-                                        <option key={doctor.id} value={doctor.id}>
-                                            {doctor.name} {" "} {doctor.lastName}
-                                        </option>
-                                    ))}
-                                </Select>
-                                {doctorsError && <div style={{ color: 'red' }}>Error loading doctors</div>}
-                            </FormGroup>
+                        >
+                            {/*<FormGroup>*/}
+                            {/*    <Select*/}
+                            {/*        name="doctorId"*/}
+                            {/*        value={visitInputs.doctorId}*/}
+                            {/*        onChange={handleVisitInput}*/}
+                            {/*        disabled={doctorsLoading}*/}
+                            {/*    >*/}
+                            {/*        <option value="">Select Doctor</option>*/}
+                            {/*        {doctorsData && doctorsData.map((doctor: Doctor) => (*/}
+                            {/*            <option key={doctor.id} value={doctor.id}>*/}
+                            {/*                {doctor.name} {" "} {doctor.lastName}*/}
+                            {/*            </option>*/}
+                            {/*        ))}*/}
+                            {/*    </Select>*/}
+                            {/*    {doctorsError && <div style={{ color: 'red' }}>Error loading doctors</div>}*/}
+                            {/*</FormGroup>*/}
 
                             <FormGroup>
                                 <Select

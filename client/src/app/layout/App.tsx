@@ -98,12 +98,12 @@ function App() {
                     <Route path="/appointment/insert" element={<AppointmentInsert />}></Route>
                     <Route path="/appointment/update/:id" element={<AppointmentUpdate />}></Route>
                     {/*<Route path="/emergencyContact/:id" element={<EmergencyContactDetails />}></Route>*/}
-                    <Route path="/emergencyContact/insert" element={<EmergencyContactInsert />}></Route>
+                    <Route path="/patient/:patientId/emergencyContact/insert" element={<EmergencyContactInsert />} />
+                    
                     <Route path="/emergencyContact/update/:id" element={<EmergencyContactUpdate />}></Route>
                     <Route path="/login" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
-                    <Route path="/login" element={<Login />}></Route>
-
+                    
                     <Route path="/news_chat" element={<News_Chat />}></Route>
 
                     <Route path="/not-found" element={<NotFound />}></Route>

@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
-import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
+import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 //import { useCreateDoctorMutation, useUpdateDoctorMutation } from "../../app/APIs/doctorApi";
 //import { SD_Genders } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
@@ -16,11 +17,12 @@ import useErrorHandler from '../../app/helpers/useErrorHandler';
 import EmergencyContact from '../../app/models/EmergencyContact';
 import { useCreateEmergencyContactMutation, useUpdateEmergencyContactMutation } from '../../app/APIs/emergencyContactApi';
 import Patient from '../../app/models/Patient';
-import { useGetPatientsQuery } from '../../app/APIs/patientApi';
+//import { useGetPatientsQuery } from '../../app/APIs/patientApi';
 
 interface EmergencyContactFormProps {
     id?: string;
     data?: EmergencyContact;
+    patientId?: string;
 }
 
 const emergencyContactData: EmergencyContact = {
@@ -37,16 +39,23 @@ const emergencyContactData: EmergencyContact = {
 //const genders = [SD_Genders.Male, SD_Genders.Female];
 
 function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
-    const [emergencyContactInputs, setEmergencyContactInputs] = useState<EmergencyContact>(data || emergencyContactData);
+    const { patientId } = useParams<{ patientId: string }>();
+    const [emergencyContactInputs, setEmergencyContactInputs] = useState<EmergencyContact>({ ...emergencyContactData, patientId: patientId || "" });
+    //const [emergencyContactInputs, setEmergencyContactInputs] = useState<EmergencyContact>(data || emergencyContactData);
     const [createEmergencyContact] = useCreateEmergencyContactMutation();
     const [updateEmergencyContact] = useUpdateEmergencyContactMutation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
-    const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
+    //const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
 
-    
+    useEffect(() => {
+        if (data) {
+            setEmergencyContactInputs(data);
+        }
+    }, [data]);
+
     const handleEmergencyContactInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, emergencyContactInputs);
         setEmergencyContactInputs(tempData);
@@ -56,6 +65,8 @@ function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
         e.preventDefault();
         setLoading(true);
         setErrorMessages([]);
+
+       
 
         const formData = new FormData();
 
@@ -147,22 +158,22 @@ function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
                                 />
                             </FormGroup>
                            
-                            <FormGroup>
-                                <Select
-                                    name="patientId"
-                                    value={emergencyContactInputs.patientId}
-                                    onChange={handleEmergencyContactInput}
-                                    disabled={patientsLoading}
-                                >
-                                    <option value="">Select Patient</option>
-                                    {patientsData && patientsData.map((patient: Patient) => (
-                                        <option key={patient.id} value={patient.id}>
-                                            {patient.name}
-                                        </option>
-                                    ))}
-                                </Select>
-                                {patientsError && <div style={{ color: 'red' }}>Error loading patients</div>}
-                            </FormGroup>
+                            {/*<FormGroup>*/}
+                            {/*    <Select*/}
+                            {/*        name="patientId"*/}
+                            {/*        value={emergencyContactInputs.patientId}*/}
+                            {/*        onChange={handleEmergencyContactInput}*/}
+                            {/*        disabled={patientsLoading}*/}
+                            {/*    >*/}
+                            {/*        <option value="">Select Patient</option>*/}
+                            {/*        {patientsData && patientsData.map((patient: Patient) => (*/}
+                            {/*            <option key={patient.id} value={patient.id}>*/}
+                            {/*                {patient.name}*/}
+                            {/*            </option>*/}
+                            {/*        ))}*/}
+                            {/*    </Select>*/}
+                            {/*    {patientsError && <div style={{ color: 'red' }}>Error loading patients</div>}*/}
+                            {/*</FormGroup>*/}
 
                             <ButtonsContainer>
                                 <SubmitButton type="submit">

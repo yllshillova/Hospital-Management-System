@@ -10,18 +10,10 @@ import { Header, SidePanel } from "../../app/layout";
 import { Attribute, Label, LabelsRow, LeftContainer, MainContainer, RightContainer, SectionTitle, Value, ValuesRow, WrapperContainer } from "../../app/common/styledComponents/details";
 import { useDeleteEmergencyContactMutation, useGetEmergencyContactsByPatientIdQuery} from "../../app/APIs/emergencyContactApi";
 import toastNotify from "../../app/helpers/toastNotify";
-/*import { Table, TableRow, TableCell } from "@material-ui/core";*/
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt, faAdd } from "@fortawesome/free-solid-svg-icons";
 import EmergencyContact from "../../app/models/EmergencyContact";
-//import ActionButton from "../../app/common/ActionButton";
-//import MiniLoader from "../../app/common/MiniLoader";
-//import TableNav from "../../app/common/TableNav";
-//import TableHeader from "../../app/common/TableHeader";
-//import TableHead from "../../app/common/TableHead";
-//import TableHeaderCell from "../../app/common/TableHeaderCell";
-//import OrdersTable from "../../app/common/OrdersTable";
-//import AddButton from "../../app/common/AddButton";
+
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -39,8 +31,10 @@ function PatientDetails() {
     const location = useLocation();
     let content;
 
-   
-    
+    const handleAddEmergencyContact = () => {
+        navigate(`/patient/${id}/emergencyContact/insert`);
+    };
+
     const [deleteEmergencyContact] = useDeleteEmergencyContactMutation();
 
     const handleEmergencyContactDelete = async (id: string) => {
@@ -175,7 +169,7 @@ function PatientDetails() {
                 <OrdersTable>
                         <TableNav>
                             <TableHeader>Emergency Contacts </TableHeader>
-                            <AddButton onClick={() => navigate("/emergencyContact/insert")}>
+                        <AddButton onClick={handleAddEmergencyContact}>
                                 <FontAwesomeIcon icon={faAdd} />
                             </AddButton>
                         </TableNav>
