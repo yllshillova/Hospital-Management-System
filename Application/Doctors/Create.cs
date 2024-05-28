@@ -37,9 +37,11 @@ namespace Application.Doctors
                 if (!doctorCreation)
                     return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the doctor.");
 
-                var doctorDto = _mapper.Map<DoctorDto>(doctor);
-                doctorDto.Token = await _tokenRepository.CreateToken(doctor);
+                var (accessToken, refreshToken) = await _tokenRepository.CreateTokens(doctor);
 
+                var doctorDto = _mapper.Map<DoctorDto>(doctor);
+                doctorDto.AccessToken = accessToken;
+                doctorDto.RefreshToken = refreshToken;
 
                 return Result<Unit>.Success(Unit.Value);
 

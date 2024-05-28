@@ -30,14 +30,16 @@ namespace Application.Accounts.Login
 
                 var result = await _userRepository.ValidatePasswordAsync(user, request.Login.Password);
 
-                if (result)
-                {
-                    var userDto = _mapper.Map<UserDto>(user);
-                    userDto.Token = await _tokenRepository.CreateToken(user);
+                if (!result)
+                    return Result<UserDto>.Failure(ErrorType.Unauthorized, "Wrong credentials, try again!");
 
-                    return Result<UserDto>.Success(userDto);
-                }
-                return Result<UserDto>.Failure(ErrorType.Unauthorized, $"Wrong credentials, try again!");
+                var (accessToken, refreshToken) = await _tokenRepository.CreateTokens(user);
+
+                var userDto = _mapper.Map<UserDto>(user);
+                userDto.AccessToken = accessToken;
+                userDto.RefreshToken = refreshToken;
+
+                return Result<UserDto>.Success(userDto);
             }
         }
 

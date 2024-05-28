@@ -13,7 +13,6 @@ import MainLoader from "../../app/common/MainLoader";
 import { useDispatch } from "react-redux";
 import { setLoggedInUser, setToken } from "../../app/storage/redux/authSlice";
 import { jwtDecode } from "jwt-decode";
-import User from "../../app/models/User";
 
 
 
@@ -62,16 +61,16 @@ function Login() {
         console.log(response);
 
         if ('data' in response) {
-            const { token } = response.data;
 
-            const { id, name, lastName ,email, role, jwtToken }: User = jwtDecode(token);
-            console.log('Decoded token:', { id, name, lastName, email, role, jwtToken });
+            const { accessToken, refreshToken } = response.data;
 
-            localStorage.setItem("token", token);
-            console.log(response);
+            const { id, name, lastName, email, role }: User = jwtDecode(accessToken);
 
-            dispatch(setToken(token));
-            dispatch(setLoggedInUser({id, name, lastName, email, role, jwtToken}))
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
+
+            dispatch(setToken({ accessToken, refreshToken }));
+            dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));
 
             toastNotify(`Welcome ${name}`);
             navigate('/');

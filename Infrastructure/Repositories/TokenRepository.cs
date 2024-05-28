@@ -1,54 +1,154 @@
-﻿using Domain.Contracts;
+﻿//using Domain.Contracts;
+//using Domain.Entities;
+//using Microsoft.AspNetCore.Identity;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.IdentityModel.Tokens;
+//using System.IdentityModel.Tokens.Jwt;
+//using System.Security.Claims;
+//using System.Text;
+
+//namespace Infrastructure.Repositories
+//{
+//    public class TokenRepository : ITokenRepository
+//    {
+//        private readonly IConfiguration _config;
+//        private readonly UserManager<AppUser> _userManager;
+
+//        public TokenRepository(IConfiguration config, UserManager<AppUser> userManager)
+//        {
+//            _config = config;
+//            _userManager = userManager;
+//        }
+
+//        public async Task<string> CreateToken(AppUser user)
+//        {
+//            var claims = new List<Claim>
+//            {
+//                new Claim("name", user.Name),
+//                new Claim("lastName", user.LastName),
+//                new Claim(ClaimTypes.Email, user.Email),
+//                new Claim("id", user.Id.ToString()),
+//            };
+
+//            var roles = await _userManager.GetRolesAsync(user);
+//            foreach (var role in roles)
+//            {
+//                claims.Add(new Claim(ClaimTypes.Role, role));
+//            }
+
+//            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
+//            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+//            var tokenDescriptor = new SecurityTokenDescriptor
+//            {
+//                Subject = new ClaimsIdentity(claims),
+//                Expires = DateTime.UtcNow.AddDays(7),
+//                SigningCredentials = creds
+//            };
+//            var tokenHandler = new JwtSecurityTokenHandler();
+//            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+//            return tokenHandler.WriteToken(token);
+//        }
+//    }
+//}
+
+using Domain.Contracts;
 using Domain.Entities;
+using Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
-namespace Infrastructure.Repositories
+public class TokenRepository : ITokenRepository
 {
-    public class TokenRepository : ITokenRepository
+    private readonly IConfiguration _config;
+    private readonly UserManager<AppUser> _userManager;
+    private readonly DataContext _context;
+
+    public TokenRepository(IConfiguration config, UserManager<AppUser> userManager, DataContext context)
     {
-        private readonly IConfiguration _config;
-        private readonly UserManager<AppUser> _userManager;
+        _config = config;
+        _userManager = userManager;
+        _context = context;
+    }
 
-        public TokenRepository(IConfiguration config, UserManager<AppUser> userManager)
+    public async Task<(string accessToken, string refreshToken)> CreateTokens(AppUser user)
+    {
+        var accessToken = await CreateAccessTokenAsync(user);
+        var refreshToken = GenerateRefreshToken();
+        var savedRefreshToken = await SaveRefreshTokenAsync(user.Id, refreshToken);
+
+        return (accessToken.Token, refreshToken);
+    }
+
+    public async Task<AccessToken> CreateAccessTokenAsync(AppUser user)
+    {
+        var claims = new List<Claim>
         {
-            _config = config;
-            _userManager = userManager;
+            new Claim("name", user.Name),
+            new Claim("lastName", user.LastName),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim("id", user.Id.ToString())
+        };
+
+        var roles = await _userManager.GetRolesAsync(user);
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        public async Task<string> CreateToken(AppUser user)
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
-            var claims = new List<Claim>
-            {
-                new Claim("name", user.Name),
-                new Claim("lastName", user.LastName),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim("id", user.Id.ToString()),
-            };
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddMinutes(30),
+            SigningCredentials = creds
+        };
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            var roles = await _userManager.GetRolesAsync(user);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+        return new AccessToken
+        {
+            Token = tokenHandler.WriteToken(token),
+            ExpiryDate = tokenDescriptor.Expires.Value
+        };
+    }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = creds
-            };
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
+    public string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
         }
+    }
+
+    public async Task<RefreshToken> SaveRefreshTokenAsync(Guid userId, string refreshToken)
+    {
+        var token = new RefreshToken
+        {
+            Token = refreshToken,
+            ExpiryDate = DateTime.UtcNow.AddDays(7),
+            UserId = userId
+        };
+
+        _context.RefreshTokens.Add(token);
+        await _context.SaveChangesAsync();
+
+        return token;
+    }
+
+    public async Task<RefreshToken> GetRefreshTokenAsync(string refreshToken)
+    {
+        return await _context.RefreshTokens.SingleOrDefaultAsync(rt => rt.Token == refreshToken);
     }
 }

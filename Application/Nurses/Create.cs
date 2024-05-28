@@ -38,11 +38,13 @@ namespace Application.Nurses
                 if (!nurseCreation)
                     return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the nurse.");
 
+                var (accessToken, refreshToken) = await _tokenRepository.CreateTokens(nurse);
+
                 var nurseDto = _mapper.Map<NurseDto>(nurse);
-                nurseDto.Token = await _tokenRepository.CreateToken(nurse);
-
-
+                nurseDto.AccessToken = accessToken;
+                nurseDto.RefreshToken = refreshToken;
                 return Result<Unit>.Success(Unit.Value);
+
             }
         }
 

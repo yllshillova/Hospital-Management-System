@@ -1,8 +1,9 @@
-export default interface User {
-    id: string;
+interface User {
     name: string;
     lastName: string;
+    id: string;
     email: string;
-    role?: string;
-    jwtToken?: string;
-};
+    role: string;
+    accessToken: string;
+    refreshToken: string;
+}

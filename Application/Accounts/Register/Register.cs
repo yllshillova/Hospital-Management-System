@@ -50,8 +50,8 @@ namespace Application.Accounts.Register
                 if (!addToRole) return Result<UserDto>.Failure(ErrorType.BadRequest, "Failed to promote the registered user as Administrator!");
 
                 var userDto = _mapper.Map<UserDto>(user);
-                userDto.Token = await _tokenRepository.CreateToken(user);
-
+                userDto.AccessToken = null; // Set the AccessToken property to null
+                userDto.RefreshToken = null; // Set the RefreshToken property to null
                 return Result<UserDto>.Success(userDto);
             }
         }
