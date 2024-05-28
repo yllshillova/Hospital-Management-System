@@ -63,8 +63,10 @@ function Login() {
         if ('data' in response) {
 
             const { accessToken, refreshToken } = response.data;
+            console.log(accessToken);
 
             const { id, name, lastName, email, role }: User = jwtDecode(accessToken);
+                        console.log('Decoded token:', { id, name, lastName, email, role });
 
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);

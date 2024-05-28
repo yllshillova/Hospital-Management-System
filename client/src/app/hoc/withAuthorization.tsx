@@ -5,7 +5,7 @@ type Role = SD_Roles;
 
 const withAuthorization = (WrappedComponent: React.ComponentType<any>, allowedRoles: Role[]) => {
     return (props: any) => {
-        const accessToken = localStorage.getItem("token") ?? "";
+        const accessToken = localStorage.getItem("accessToken") ?? "";
         if (accessToken) {
             try {
                 const decode: { role: Role } = jwtDecode(accessToken);
