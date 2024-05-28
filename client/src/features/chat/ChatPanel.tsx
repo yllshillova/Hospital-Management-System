@@ -20,6 +20,7 @@ import Doctor from '../../app/models/Doctor';
 import Nurse from '../../app/models/Nurse';
 import { faUserNurse } from '@fortawesome/free-solid-svg-icons/faUserNurse';
 import ChatMessage from '../../app/models/ChatMessage';
+import toastNotify from '../../app/helpers/toastNotify';
 
 function ChatPanel() {
 
@@ -57,6 +58,11 @@ function ChatPanel() {
                     [receiverId]: [...userMessages, { id: messageId, senderId, receiverId, content, alignment: senderId === senderId ? 'right' : 'left' }]
                 };
             });
+
+            // Trigger toast notification
+            if (receiverId === selectedUser?.id) {
+                toastNotify(`New message from ${senderId}: ${content}`);
+            }
         });
 
         onLoadMessages((loadedMessages: ChatMessage[]) => {
@@ -80,11 +86,8 @@ function ChatPanel() {
         const fetchMessages = async () => {
             try {
                 if (selectedUser) {
-                    console.log("Fetching messages for sender:", senderId, "and receiver:", selectedUser.id);
                     const loadedMessages = await loadMessages(senderId, selectedUser.id);
-                    console.log("Loaded messages:", loadedMessages);
                     if (loadedMessages) {
-                        console.log("Updating messages state...");
                         setMessages(prevMessages => ({
                             ...prevMessages,
                             [selectedUser.id]: loadedMessages.map((message: ChatMessage) => ({
@@ -108,6 +111,7 @@ function ChatPanel() {
 
 
 
+
     if (isLoading || doctorsLoading || nursesLoading) return <MainLoader />;
 
     if (isError || doctorsError || nursesError) {
@@ -124,12 +128,11 @@ function ChatPanel() {
 
     const handleSendMessage = () => {
         if (message.trim() && selectedUser) {
-            const key = `${senderId}-${selectedUser.id}`;
             setMessages(prevMessages => {
-                const userMessages = prevMessages[key] || [];
+                const userMessages = prevMessages[selectedUser.id] || [];
                 return {
                     ...prevMessages,
-                    [key]: [...userMessages, { id: "", senderId, receiverId: selectedUser.id, content: message, alignment: 'right' }]
+                    [selectedUser.id]: [...userMessages, { id: "", senderId, receiverId: selectedUser.id, content: message, alignment: 'right' }]
                 };
             });
 
@@ -137,6 +140,7 @@ function ChatPanel() {
             setMessage('');
         }
     };
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
@@ -217,11 +221,13 @@ function ChatPanel() {
                     </ChatHeader>
                     <ChatMessages>
                         {messages[selectedUser.id]?.length === 0 ? (
-                            <div>No messages found</div>
+                            <MessageNotFound>
+                                Start your chat with {selectedUser.name} {selectedUser.lastName} !
+                            </MessageNotFound>
                         ) : (
                                 messages[selectedUser.id]?.map((msg: ChatMessage, index: number) => (
                                 <Message key={index} alignment={msg.alignment}>
-                                    <Sender>{msg.senderId}:</Sender> {msg.content}
+                                         {msg.content}
                                 </Message>
                             ))
                         )}
@@ -317,14 +323,17 @@ const ChatBoxContainer = styled.div`
     bottom: 0;
     right: 300px;
     width: 300px;
+    height: 350px; /* Set a fixed height */
+    max-height: 80vh; /* Set a maximum height */
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
-    overflow: hidden;
+    overflow: auto; /* Enable vertical scrolling if content exceeds height */
     display: flex;
     flex-direction: column;
 `;
+
 
 const ChatHeader = styled.div`
     color: black;
@@ -345,21 +354,35 @@ const CloseButton = styled.button`
 
 const ChatMessages = styled.div`
     flex: 1;
-    padding: 10px;t
+    padding: 10px;
     overflow-y: auto;
-    overflow-x: hidden; 
-    max-height: 400px; 
+    overflow-x: hidden;
+    max-height: 400px;
     word-break: break-word;
-    overflow-wrap: break-word; 
+    overflow-wrap: break-word;
+    border-top: 1px solid #ddd;
 `;
 const Message = styled.div<{ alignment: 'left' | 'right' }>`
     margin: 5px 0;
-    text-align: ${props => props.alignment};
-    font-size:13.5px;
+    padding: 8px 12px;
+    background-color: ${props => props.alignment === 'right' ? '#F0F8FF' : '#f5f5f5'};
+    border-radius: ${props => props.alignment === 'right' ? '15px 15px 0 15px' : '15px 15px 15px 0'};
+    max-width: 50%;
+    align-self: ${props => props.alignment === 'right' ? 'flex-end' : 'flex-start'};
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    word-break: break-word;
+    text-align: ${props => props.alignment === 'right' ? 'right' : 'left'};
+    /* New styles to adjust bubble position */
+    margin-left: ${props => props.alignment === 'right' ? 'auto' : '0'};
+    margin-right: ${props => props.alignment === 'right' ? '0' : 'auto'};
 `;
-const Sender = styled.span`
-    font-weight: bold;
-`;
+
+
+//const Sender = styled.span`
+//`;
+
 const ChatInputContainer = styled.div`
     display: flex;
     padding: 10px;
@@ -402,6 +425,13 @@ const SearchInput = styled.input`
     ::placeholder {
         font-weight: bold;
     }
+`;
+
+const MessageNotFound = styled.div`
+    font-size: 13.5px;
+    border-radius: 5px; /* Rounded corners */
+    background-color: #F0F8FF; /* Light background color */
+    padding: 10px; /* Add padding for better spacing */
 `;
 
 
