@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from '../../features/dashboard/Dashboard';
 import DepartmentList from '../../features/department/DepartmentList';
-import DepartmentDetails from '../../features/department/DepartmentDetails';
 import NotFound from '../../features/errors/NotFound';
 import PatientList from '../../features/patient/PatientList';
 import PatientDetails from '../../features/patient/PatientDetails';
@@ -29,6 +28,8 @@ import NurseList from '../../features/nurses/NurseList';
 import NurseDetails from '../../features/nurses/NurseDetails';
 import NurseUpdate from '../../features/nurses/NurseUpdate';
 import NurseInsert from '../../features/nurses/NurseInsert';
+import EmergencyContactInsert from '../../features/emergencyContacts/EmergencyContactInsert';
+import EmergencyContactUpdate from '../../features/emergencyContacts/EmergencyContactUpdate';
 import News_Chat from '../../features/news_chat/News_Chat';
 import RoomInsert from '../../features/rooms/RoomInsert';
 import RoomUpdate from '../../features/rooms/RoomUpdate';
@@ -66,7 +67,7 @@ function App() {
                     <Route path="/patient/update/:id" element={<PatientUpdate />}></Route>
 
                     <Route path="/departments" element={<DepartmentList />}></Route>
-                    <Route path="/department/:id" element={<DepartmentDetails />}></Route>
+                    {/*<Route path="/department/:id" element={<DepartmentDetails />}></Route>*/}
                     <Route path="/department/insert" element={<DepartmentInsert />}></Route>
                     <Route path="/department/update/:id" element={<DepartmentUpdate />}></Route>
 
@@ -96,10 +97,13 @@ function App() {
                     <Route path="/appointment/:id" element={<AppointmentDetails />}></Route>
                     <Route path="/appointment/insert" element={<AppointmentInsert />}></Route>
                     <Route path="/appointment/update/:id" element={<AppointmentUpdate />}></Route>
-
+                    {/*<Route path="/emergencyContact/:id" element={<EmergencyContactDetails />}></Route>*/}
+                    <Route path="/patient/:patientId/emergencyContact/insert" element={<EmergencyContactInsert />} />
+                    
+                    <Route path="/emergencyContact/update/:id" element={<EmergencyContactUpdate />}></Route>
+                    <Route path="/login" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
-                    <Route path="/login" element={<Login />}></Route>
-
+                    
                     <Route path="/news_chat" element={<News_Chat />}></Route>
 
                     <Route path="/not-found" element={<NotFound />}></Route>
