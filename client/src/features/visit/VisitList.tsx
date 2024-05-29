@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MainLoader from "../../app/common/MainLoader";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorMessage, BackButton, ErrorTitleRow, ErrorIcon, Message } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -21,10 +21,11 @@ import { SD_Roles } from "../../app/utility/SD";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 function VisitList() {
 
-    const doctorId = useSelector((state: RootState) => state.auth.id);
-    const { data, isLoading, error } = useGetVisitsQuery(doctorId);
+    const userData = useSelector((state: RootState) => state.auth);
+    const { data, isLoading, error } = useGetVisitsQuery(userData.id);
     console.log(data);
     const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); 
@@ -52,14 +53,23 @@ function VisitList() {
 
     };
 
-
     if (isLoading || patientsLoading || doctorsLoading) {
         content = <MainLoader />;
     } else if (error || doctorsError || patientsError) {
-        content = (
-            <div>
-                {(error?.data as FetchBaseQueryError) || (doctorsError?.data as FetchBaseQueryError) || (patientsError?.data as FetchBaseQueryError)}
-            </div>
+        return (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <Message>
+                            {(error?.data as FetchBaseQueryError) || (doctorsError?.data as FetchBaseQueryError) || (patientsError?.data as FetchBaseQueryError)}
+                        </Message>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
         );
     }
     else {
@@ -78,13 +88,18 @@ function VisitList() {
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/visit/" + visit.id)} >
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/visit/update/" + visit.id)} >
-                            <FontAwesomeIcon icon={faEdit} />
-                        </ActionButton>
-                        {/*TODO: add handler for delete*/}
-                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleVisitDelete(visit.id)}>
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                        </ActionButton>
+
+                        {userData.role == SD_Roles.DOCTOR &&
+
+                            <>
+                                <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/visit/update/" + visit.id)} >
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </ActionButton>
+                                <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleVisitDelete(visit.id)}>
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                </ActionButton>
+                            </>
+                     }
                     </TableRow>
                 </tbody>
             );
@@ -98,9 +113,12 @@ function VisitList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Visits List</TableHeader>
+
+                    {userData.role == SD_Roles.NURSE &&
                     <AddButton onClick={() => navigate("/visit/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
-                    </AddButton>
+                        </AddButton>
+                    }
                 </TableNav>
                 <Table>
                     <thead>
@@ -110,7 +128,6 @@ function VisitList() {
                             <TableHeaderCell>Complaints</TableHeaderCell>
                             <TableHeaderCell>Date Created </TableHeaderCell>
                             <TableHeaderCell>Date Updated </TableHeaderCell>
-
                         </TableHead>
                     </thead>
                     {content}

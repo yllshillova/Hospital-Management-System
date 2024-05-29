@@ -67,7 +67,6 @@ function App() {
                     <Route path="/patient/update/:id" element={<PatientUpdate />}></Route>
 
                     <Route path="/departments" element={<DepartmentList />}></Route>
-                    {/*<Route path="/department/:id" element={<DepartmentDetails />}></Route>*/}
                     <Route path="/department/insert" element={<DepartmentInsert />}></Route>
                     <Route path="/department/update/:id" element={<DepartmentUpdate />}></Route>
 
@@ -86,7 +85,6 @@ function App() {
                     <Route path="/nurse/insert" element={<NurseInsert />}></Route>
                     <Route path="/nurse/update/:id" element={<NurseUpdate />}></Route>
 
-                    
 
                     <Route path="/visits" element={<VisitList />}></Route>
                     <Route path="/visit/:id" element={<VisitDetails />}></Route>
@@ -97,7 +95,7 @@ function App() {
                     <Route path="/appointment/:id" element={<AppointmentDetails />}></Route>
                     <Route path="/appointment/insert" element={<AppointmentInsert />}></Route>
                     <Route path="/appointment/update/:id" element={<AppointmentUpdate />}></Route>
-                    {/*<Route path="/emergencyContact/:id" element={<EmergencyContactDetails />}></Route>*/}
+
                     <Route path="/patient/:patientId/emergencyContact/insert" element={<EmergencyContactInsert />} />
                     
                     <Route path="/emergencyContact/update/:id" element={<EmergencyContactUpdate />}></Route>

@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 
 export const OrdersTable = styled.div`
@@ -87,4 +88,90 @@ export const TableNav = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+`;
+
+export const ErrorMessage = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 90px 300px 0 auto; /* Position more to the right of the center */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 3s ease;
+    max-width: 450px; /* Set the desired maximum width */
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    svg {
+        font-size: 30px;
+        margin-bottom: 10px;
+        color: #dc3545;
+        animation: bounce 3s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-5px);
+        }
+        60% {
+            transform: translateY(-2px);
+        }
+    }
+`;
+
+export const BackButton = styled.button`
+    background-color: #721c24;
+    color: #f8d7da;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+
+    &:hover {
+        background-color: #5a1720;
+        transform: scale(1.05);
+    }
+`;
+
+export const ErrorIcon = styled(FontAwesomeIcon)`
+    font-size: 30px;
+    color: #dc3545;
+    margin-right: 10px;
+    margin-top:10px;
+`;
+
+export const ErrorTitleRow = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+`;
+
+export const Message = styled.p`
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 15px;
+    max-width: 450px;
 `;

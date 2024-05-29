@@ -28,4 +28,4 @@ function RoomUpdate() {
     return <div>No doctor data available.</div>;
 }
 
-export default withAuthorization(RoomUpdate, [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);
+export default withAuthorization(RoomUpdate, [SD_Roles.ADMINISTRATOR]);

@@ -211,4 +211,4 @@ const BackButton = styled.button`
     }
 `;
 
-export default withAuthorization(RoomDetails, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);
+export default withAuthorization(RoomDetails, [SD_Roles.NURSE]);

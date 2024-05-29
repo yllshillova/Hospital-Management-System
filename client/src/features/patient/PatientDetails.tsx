@@ -7,7 +7,7 @@ import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { Header, SidePanel } from "../../app/layout";
-import { Attribute, Label, LabelsRow, LeftContainer, MainContainer, RightContainer, SectionTitle, Value, ValuesRow, WrapperContainer } from "../../app/common/styledComponents/details";
+import { Attribute, ErrorMessage, Label, LabelsRow, LeftContainer, MainContainer, RightContainer, SectionTitle, Value, ValuesRow, WrapperContainer } from "../../app/common/styledComponents/details";
 import { useDeleteEmergencyContactMutation, useGetEmergencyContactsByPatientIdQuery} from "../../app/APIs/emergencyContactApi";
 import toastNotify from "../../app/helpers/toastNotify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -261,13 +261,5 @@ function PatientDetails() {
     }
     return null;
 }
-const ErrorMessage = styled.div`
-    font-size: 13.5px;
-    font-weight:bold;
-    border-radius: 5px; /* Rounded corners */
-    background-color: white; /* Light background color */
-    padding: 10px; /* Add padding for better spacing */
-    color:babyBlue;
-    margin: 50px 20px 0 220px;
-`;
+
 export default PatientDetails;

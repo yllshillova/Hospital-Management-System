@@ -5,7 +5,6 @@ import { faHospital } from '@fortawesome/free-solid-svg-icons/faHospital';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../storage/redux/store';
-import User from '../models/User';
 import { SD_Roles } from '../utility/SD';
 
 function Header() {
@@ -31,7 +30,6 @@ function Header() {
                     <Logo onClick={() => navigate('/')} >Dashboard</Logo>
                     <MenuIcon icon={faHospital} />
                 </LogoContainer>
-                {/*<MessageContainer> {nameUser} {" "} {surnameUser}*/}
                 <MessageContainer>
                     {displayName}
                     <UserImage>

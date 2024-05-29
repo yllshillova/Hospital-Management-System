@@ -1,12 +1,12 @@
 ﻿/* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MainLoader from "../../app/common/MainLoader";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
-import { faInfo } from "@fortawesome/free-solid-svg-icons";
+import { faExclamationCircle, faInfo } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import toastNotify from "../../app/helpers/toastNotify";
@@ -18,6 +18,9 @@ import MiniLoader from "../../app/common/MiniLoader";
 import Department from "../../app/models/Department";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from '../../app/utility/SD';
+import { ErrorMessage } from "../../app/common/styledComponents/details";
+import { RootState } from "../../app/storage/redux/store";
+import { useSelector } from "react-redux";
 
 function DoctorList() {
     const { data, isLoading, error } = useGetDoctorsQuery(null);
@@ -37,7 +40,9 @@ function DoctorList() {
     const location = useLocation();
     let content;
 
-
+    const userData: User = useSelector(
+        (state: RootState) => state.auth
+    );
 
     const handleDoctorDelete = async (id: string,) => {
         const result = await deleteDoctor(id);
@@ -59,7 +64,21 @@ function DoctorList() {
     if (isLoading) {
         content = <MainLoader />;
     } else if (error) {
-        content = <div>{(error.data as FetchBaseQueryError)}</div>;
+        return (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <Message>
+                            {(error?.data as FetchBaseQueryError) }
+                        </Message>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
+        );
     }
     else {
         content = data.map((doctor: Doctor) => {
@@ -68,12 +87,6 @@ function DoctorList() {
                     <TableRow>
                         <TableCell>{doctor.name}</TableCell>
                         <TableCell>{doctor.lastName} </TableCell>
-                        {/*<TableCell>{doctor.email} </TableCell>*/}
-                        <TableCell>{doctor.specialization} </TableCell>
-                        {/*<TableCell>{doctor.residence} </TableCell>*/}
-                        {/*<TableCell>{doctor.address} </TableCell>*/}
-                        {/*<TableCell>{doctor.gender} </TableCell>*/}
-                        {/*<TableCell>{new Date(doctor.birthday).toLocaleDateString()}</TableCell>*/}
                         <TableCell>{isDepartmentsLoading ? (
                             <MiniLoader />
                         ) : getDepartmentName(doctor.departmentId)} </TableCell>
@@ -81,16 +94,22 @@ function DoctorList() {
                         <TableCell>{new Date(doctor.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(doctor.updatedAt).toLocaleDateString()}</TableCell>
 
+
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/doctor/" + doctor.id)} >
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/doctor/update/" + doctor.id)} >
-                            <FontAwesomeIcon icon={faEdit} />
-                        </ActionButton>
-                        {/*TODO: add handler for delete*/}
-                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleDoctorDelete(doctor.id)}>
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                        </ActionButton>
+
+                        {userData.role == SD_Roles.ADMINISTRATOR && 
+                            <>
+                                <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/doctor/update/" + doctor.id)} >
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </ActionButton>
+
+                                <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleDoctorDelete(doctor.id)}>
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                </ActionButton>
+                            </>
+                        }
                     </TableRow>
                 </tbody>
             );
@@ -113,15 +132,7 @@ function DoctorList() {
                         <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Last Name</TableHeaderCell>
-                            {/*<TableHeaderCell>Email</TableHeaderCell>*/}
-                            <TableHeaderCell>Specialization</TableHeaderCell>
-                            {/*<TableHeaderCell>Residence</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Address</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Gender</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Birthday</TableHeaderCell>*/}
                             <TableHeaderCell>Department</TableHeaderCell>
-                            {/*<TableHeaderCell>CreatedAt</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>UpdatedAt</TableHeaderCell>*/}
                             <TableHeaderCell>Is Deleted</TableHeaderCell>
                             <TableHeaderCell>Date Created </TableHeaderCell>
                             <TableHeaderCell>Date Updated </TableHeaderCell>
@@ -134,4 +145,4 @@ function DoctorList() {
     );
 }
 
-export default withAuthorization(DoctorList, [SD_Roles.ADMINISTRATOR]);
+export default withAuthorization(DoctorList, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);

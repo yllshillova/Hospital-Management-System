@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteAppointmentMutation, useGetAppointmentsQuery } from "../../app/APIs/appointmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import Appointment from "../../app/models/Appointment";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -16,13 +16,25 @@ import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/storage/redux/store";
+import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
+
 
 function AppointmentList() {
     const { data: appointmentData, isLoading: isAppointmentLoading, error: appointmentError } = useGetAppointmentsQuery(null);
     const { data: patientData, isLoading: isPatientLoading, error: patientError } = useGetPatientsQuery(null);
+    const { data: doctorData, isLoading: isDoctorLoading, error: doctorError } = useGetDoctorsQuery(null);
+
     const [deleteAppointment] = useDeleteAppointmentMutation();
     const navigate = useNavigate();
     const location = useLocation();
+
+    const userData: User = useSelector(
+        (state: RootState) => state.auth
+    );
+
     let content;
 
     const handleAppointmentDelete = async (id: string) => {
@@ -40,43 +52,55 @@ function AppointmentList() {
         }
     };
 
-    if (isAppointmentLoading   || isPatientLoading)  {
+    if (isAppointmentLoading || isPatientLoading || isDoctorLoading)  {
         content = <MainLoader />;
-    } else if (appointmentError  || patientError) {
-        content = (
-            <div>
-                {(appointmentError?.data as FetchBaseQueryError) || (patientError?.data as FetchBaseQueryError)}
-            </div>
+    } else if (appointmentError || patientError || doctorError) {
+        return (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <Message>
+                            {(appointmentError?.data as FetchBaseQueryError) || (patientError?.data as FetchBaseQueryError) || (doctorError?.data as FetchBaseQueryError)}
+                        </Message>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
         );
     } else {
         content = appointmentData.map((appointment: Appointment) => {
             // Find the corresponding doctor and patient data
-            //const doctor = doctorData.find((doc: { id: string; }) => doc.id === appointment.doctorId);
+            const doctor = doctorData.find((doc: { id: string; }) => doc.id === appointment.doctorId);
             const patient = patientData.find((pat: { id: string; }) => pat.id === appointment.patientId);
 
             return (
                 <tbody key={appointment.id}>
                     <TableRow>
 
-                        {/*<TableCell>{doctor.name} {" "} {doctor.lastName}</TableCell>*/}
+                        <TableCell>{doctor.name} {" "} {doctor.lastName}</TableCell>
                         <TableCell>{patient.name} {" "} {patient.lastName}</TableCell>
 
                         <TableCell>{new Date(appointment.checkInDate!).toLocaleString()}</TableCell>
                         <TableCell>{new Date(appointment.checkOutDate!).toLocaleString()}</TableCell>
 
-                        <TableCell>{new Date(appointment.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(appointment.updatedAt).toLocaleDateString()}</TableCell>
 
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/appointment/" + appointment.id)}>
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/appointment/update/" + appointment.id)}>
-                            <FontAwesomeIcon icon={faEdit} />
-                        </ActionButton>
-                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleAppointmentDelete(appointment.id)}>
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                        </ActionButton>
 
+                        {userData.role == SD_Roles.NURSE &&
+                            <>
+                                <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/appointment/update/" + appointment.id)}>
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </ActionButton>
+                                <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleAppointmentDelete(appointment.id)}>
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                </ActionButton>
+                            </>
+                        }
                     </TableRow>
                 </tbody>
             );
@@ -90,19 +114,20 @@ function AppointmentList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Appointments List</TableHeader>
-                    <AddButton onClick={() => navigate("/appointment/insert")}>
-                        <FontAwesomeIcon icon={faAdd} />
-                    </AddButton>
+
+                    {userData.role == SD_Roles.NURSE &&
+                        <AddButton onClick={() => navigate("/appointment/insert")}>
+                            <FontAwesomeIcon icon={faAdd} />
+                        </AddButton>
+                    }
                 </TableNav>
                 <Table>
                     <thead>
                         <TableHead>
-                            {/*<TableHeaderCell>Doctor</TableHeaderCell>*/}
+                            <TableHeaderCell>Doctor</TableHeaderCell>
                             <TableHeaderCell>Patient</TableHeaderCell>
                             <TableHeaderCell>Check In Date</TableHeaderCell>
                             <TableHeaderCell>Check Out Date</TableHeaderCell>
-                            <TableHeaderCell>Date Created </TableHeaderCell>
-                            <TableHeaderCell>Date Updated </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

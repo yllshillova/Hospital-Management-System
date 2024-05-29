@@ -8,4 +8,4 @@ function RoomInsert() {
     );
 }
 
-export default withAuthorization(RoomInsert, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);
+export default withAuthorization(RoomInsert, [SD_Roles.ADMINISTRATOR]);

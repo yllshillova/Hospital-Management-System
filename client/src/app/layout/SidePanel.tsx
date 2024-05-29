@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import toastNotify from '../helpers/toastNotify';
 import { faUserNurse } from '@fortawesome/free-solid-svg-icons/faUserNurse';
 import { RootState } from '../storage/redux/store';
-import User from '../models/User';
 import { SD_Roles } from '../utility/SD';
 
 function SidePanel() {
@@ -25,7 +24,9 @@ function SidePanel() {
     const handleProfileNavigation = (role: string) => () => navigate(`/${role}/${userData.id}`);
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+
         dispatch(setLoggedInUser({ ...emptyUserState }));
         navigate('/login');
         toastNotify('You have been logged out', 'success');
@@ -55,6 +56,8 @@ function SidePanel() {
         ];
     } else if (userData.role === SD_Roles.NURSE) {
         sideBarComponents = [
+            { icon: faUserDoctor, label: 'Doctors', onClick: handleNavigation('/doctors') },
+            { icon: faUserNurse, label: 'Nurses', onClick: handleNavigation('/nurses') },
             { icon: faAddressCard, label: 'Profile', onClick: handleProfileNavigation('nurse') },
             { icon: faUserInjured, label: 'Patients', onClick: handleNavigation('/patients') },
             { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },

@@ -260,9 +260,6 @@ function NurseForm({ id, data }: NurseFormProps) {
                                     onChange={handleNurseInput}
                                 />
                             </FormGroup>
-                            
-                            
-                            
 
                             {id ? <FormGroup>
                                 <Label>

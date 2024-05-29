@@ -165,4 +165,4 @@ function RoomForm({ id, data }: RoomFormProps) {
 }
 
 
-export default withAuthorization(RoomForm, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);
+export default withAuthorization(RoomForm, [SD_Roles.ADMINISTRATOR]);

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteRoomMutation, useGetRoomsQuery } from "../../app/APIs/roomApi";
 import MainLoader from "../../app/common/MainLoader";
 import Room from "../../app/models/Room";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -18,11 +18,16 @@ import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MiniLoader from "../../app/common/MiniLoader";
 import { SD_Roles } from "../../app/utility/SD";
 import withAuthorization from "../../app/hoc/withAuthorization";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/storage/redux/store";
+
 
 function RoomList() {
 
     const { data, isLoading, error } = useGetRoomsQuery(null);
     const { data: departments, isLoading: isDepartmentsLoading } = useGetDepartmentsQuery(null);
+
 
     const departmentMap = new Map<string, string>();
     departments?.forEach((department: Department) => {
@@ -36,16 +41,10 @@ function RoomList() {
     const location = useLocation();
     const [deleteRoom] = useDeleteRoomMutation();
     
-    //const handleRoomDelete = async (id: number) => {
-    //    toast.promise(
-    //        deleteRoom(id),
-    //        {
-    //            pending: "Processing your request...",
-    //            success: "Room Deleted Successfully ??",
-    //            error: "Error displaying",
-    //        }
-    //    );
-    //};
+    const userData: User = useSelector(
+        (state: RootState) => state.auth
+    );
+
 
     const handleRoomDelete = async (id: string,) => {
         const result = await deleteRoom(id);
@@ -69,7 +68,21 @@ function RoomList() {
     if (isLoading /*|| patientsLoading*/) {
         content = <MainLoader />;
     } else if (error/*roomsError || patientsError*/) {
-        content = <div>{(error.data as FetchBaseQueryError)}</div>;
+        return (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <Message>
+                            {(error?.data as FetchBaseQueryError)}
+                        </Message>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
+        );
     } 
     else {
         content = data.map((room: Room) => {
@@ -80,18 +93,26 @@ function RoomList() {
                         <TableCell>{room.bedsAvailable}</TableCell>
                         <TableCell>{isDepartmentsLoading ? (
                             <MiniLoader />
-                        ) : getDepartmentName(room.departmentId)} </TableCell>                        <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
+                        ) : getDepartmentName(room.departmentId)} </TableCell>
+
+                        <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(room.updatedAt).toLocaleDateString()}</TableCell>
+
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/room/" + room.id)} >
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/room/update/" + room.id)} >
-                            <FontAwesomeIcon icon={faEdit} />
-                        </ActionButton>
-                        {/*TODO: add handler for delete*/}
-                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleRoomDelete(room.id)}>
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                        </ActionButton>
+
+                        {userData.role == SD_Roles.ADMINISTRATOR &&
+                            <>
+                                <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/room/update/" + room.id)} >
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </ActionButton>
+
+                                <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleRoomDelete(room.id)}>
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                </ActionButton>
+                            </>
+                        }
                     </TableRow>
                 </tbody>
             );
