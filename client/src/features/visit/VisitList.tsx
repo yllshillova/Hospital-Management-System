@@ -19,8 +19,13 @@ import Patient from "../../app/models/Patient";
 import Doctor from "../../app/models/Doctor";
 import { SD_Roles } from "../../app/utility/SD";
 import withAuthorization from "../../app/hoc/withAuthorization";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/storage/redux/store";
 function VisitList() {
-    const { data, isLoading, error } = useGetVisitsQuery(null);
+
+    const doctorId = useSelector((state: RootState) => state.auth.id);
+    const { data, isLoading, error } = useGetVisitsQuery(doctorId);
+    console.log(data);
     const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); 
 

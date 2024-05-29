@@ -111,7 +111,7 @@ function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
                     <FormContainer >
                         {loading && <MainLoader />}
                         <Title>
-                            {id ? "Edit EmergencyContact" : "Add EmergencyContact"}
+                            {id ? "Edit Emergency Contact" : "Add Emergency Contact"}
                         </Title>
 
                         {/* Display error messages */}
@@ -131,7 +131,7 @@ function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
                             onSubmit={handleSubmit}
                         >
                             <FormGroup>
-                                <Label>ContactName</Label>
+                                <Label> Name and last name</Label>
                                 <Input
                                     type="text"
                                     name="contactName"
@@ -149,7 +149,7 @@ function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>PhoneNumber</Label>
+                                <Label>Phone Number</Label>
                                 <Input
                                     type="text"
                                     name="phoneNumber"
@@ -180,7 +180,7 @@ function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
                                     Submit
                                 </SubmitButton>
                                 <BackToProductsButton onClick={() => navigate("/patient/" + emergencyContactInputs.patientId)}>
-                                    Back to PatientDetails
+                                    Back to Patient Details
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>

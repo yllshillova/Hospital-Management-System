@@ -12,9 +12,9 @@ namespace API.Controllers
     public class VisitsController : BaseApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetVisits()
+        public async Task<IActionResult> GetVisits(Guid? doctorId)
         {
-            return HandleResult(await Mediator.Send(new GetVisitsQuery()));
+            return HandleResult(await Mediator.Send(new GetVisitsQuery(doctorId)));
         }
 
         [HttpGet("{Id}")]

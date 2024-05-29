@@ -53,7 +53,7 @@ function VisitForm({ id, data }: VisitFormProps) {
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
-    const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
+    //const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
     const [assignPatientToRoom, { isLoading: assigningPatient }] = useAssignPatientMutation();
 
     const doctorId: string = useSelector(
@@ -131,13 +131,14 @@ function VisitForm({ id, data }: VisitFormProps) {
     };
 
     const handleAssignToRoom = async (): Promise<void> => {
-        if (!visitInputs.patientId || !visitInputs.doctorId) {
-            toastNotify("Please select a patient and a doctor first", "warning");
+        if (!visitInputs.patientId) {
+            toastNotify("Please select a patient first", "warning");
             return;
         }
 
         try {
-            const response = await assignPatientToRoom({ patientId: visitInputs.patientId, doctorId: visitInputs.doctorId });
+            const response = await assignPatientToRoom({ patientId: visitInputs.patientId, doctorId: doctorId });
+            console.log(response);
             if (response.error) {
                 // Handle error
                 toastNotify("Failed to assign patient to room", "error");

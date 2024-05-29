@@ -156,6 +156,7 @@ function NurseForm({ id, data }: NurseFormProps) {
                                     onChange={handleNurseInput}
                                 />
                             </FormGroup>
+
                             <FormGroup>
                                 <Label>Last Name</Label>
                                 <Input
@@ -165,62 +166,7 @@ function NurseForm({ id, data }: NurseFormProps) {
                                     onChange={handleNurseInput}
                                 />
                             </FormGroup>
-                            <FormGroup>
-                                <Label>User Name</Label>
-                                <Input
-                                    type="text"
-                                    name="userName"
-                                    value={nurseInputs.userName}
-                                    onChange={handleNurseInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Birthday</Label>
-                                <Input
-                                    type="date"
-                                    name="birthday"
-                                    value={validBirthdayDate(nurseInputs.birthday)}
-                                    onChange={handleNurseInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Email</Label>
-                                <Input
-                                    type="text"
-                                    name="email"
-                                    value={nurseInputs.email}
-                                    onChange={handleNurseInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Password</Label>
-                                <Input
-                                    type="password"
-                                    name="password"
-                                    value={nurseInputs.password}
-                                    onChange={handleNurseInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Address</Label>
-                                <Input
-                                    type="text"
-                                    name="address"
-                                    value={nurseInputs.address}
-                                    onChange={handleNurseInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Residence</Label>
-                                <Input
-                                    type="text"
-                                    name="residence"
-                                    value={nurseInputs.residence}
-                                    onChange={handleNurseInput}
-                                />
-                            </FormGroup>
-                            
-                            
+
                             <FormGroup>
                                 <Select
                                     name="gender"
@@ -252,6 +198,71 @@ function NurseForm({ id, data }: NurseFormProps) {
                                 </Select>
                                 {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
                             </FormGroup>
+
+                            <FormGroup>
+                                <Label>User Name</Label>
+                                <Input
+                                    type="text"
+                                    name="userName"
+                                    value={nurseInputs.userName}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label>Birthday</Label>
+                                <Input
+                                    type="date"
+                                    name="birthday"
+                                    value={validBirthdayDate(nurseInputs.birthday)}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label>Email</Label>
+                                <Input
+                                    type="text"
+                                    name="email"
+                                    value={nurseInputs.email}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+
+                            {!id && (
+                            <FormGroup>
+                                <Label>Password</Label>
+                                <Input
+                                    type="password"
+                                    name="password"
+                                    value={nurseInputs.password}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+                            )}
+                            
+                            <FormGroup>
+                                <Label>Address</Label>
+                                <Input
+                                    type="text"
+                                    name="address"
+                                    value={nurseInputs.address}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label>Residence</Label>
+                                <Input
+                                    type="text"
+                                    name="residence"
+                                    value={nurseInputs.residence}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+                            
+                            
+                            
 
                             {id ? <FormGroup>
                                 <Label>

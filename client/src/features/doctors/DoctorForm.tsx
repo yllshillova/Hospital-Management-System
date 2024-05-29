@@ -159,6 +159,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
+
                             <FormGroup>
                                 <Label>Last Name</Label>
                                 <Input
@@ -168,6 +169,39 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
+
+                            <FormGroup>
+                                <Select
+                                    name="gender"
+                                    value={doctorInputs.gender}
+                                    onChange={handleDoctorInput}
+                                >
+                                    <option value="">Select Gender</option>
+                                    {genders.map((gender) => (
+                                        <option key={gender} value={gender}>
+                                            {gender}
+                                        </option>
+                                    ))}
+                                </Select>
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Select
+                                    name="departmentId"
+                                    value={doctorInputs.departmentId}
+                                    onChange={handleDoctorInput}
+                                    disabled={departmentsLoading}
+                                >
+                                    <option value="">Select Department</option>
+                                    {departmentsData && departmentsData.map((department: Department) => (
+                                        <option key={department.id} value={department.id}>
+                                            {department.name}
+                                        </option>
+                                    ))}
+                                </Select>
+                                {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
+                            </FormGroup>
+
                             <FormGroup>
                                 <Label>User Name</Label>
                                 <Input
@@ -177,6 +211,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
+
                             <FormGroup>
                                 <Label>Birthday</Label>
                                 <Input
@@ -186,6 +221,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
+
                             <FormGroup>
                                 <Label>Email</Label>
                                 <Input
@@ -217,6 +253,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
+
                             <FormGroup>
                                 <Label>Residence</Label>
                                 <Input
@@ -226,36 +263,8 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
-                            <FormGroup>
-                                <Select
-                                    name="gender"
-                                    value={doctorInputs.gender}
-                                    onChange={handleDoctorInput}
-                                >
-                                    <option value="">Select Gender</option>
-                                    {genders.map((gender) => (
-                                        <option key={gender} value={gender}>
-                                            {gender}
-                                        </option>
-                                    ))}
-                                </Select>
-                            </FormGroup>
-                            <FormGroup>
-                                <Select
-                                    name="departmentId"
-                                    value={doctorInputs.departmentId}
-                                    onChange={handleDoctorInput}
-                                    disabled={departmentsLoading}
-                                >
-                                    <option value="">Select Department</option>
-                                    {departmentsData && departmentsData.map((department: Department) => (
-                                        <option key={department.id} value={department.id}>
-                                            {department.name}
-                                        </option>
-                                    ))}
-                                </Select>
-                                {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
-                            </FormGroup>
+
+                            
                            
                              <FormGroup>
                                 <Label>Specialization</Label>
@@ -266,7 +275,6 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
-                            
                             
 
                             {id ? <FormGroup>
