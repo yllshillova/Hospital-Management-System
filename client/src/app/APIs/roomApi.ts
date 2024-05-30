@@ -30,7 +30,7 @@ const roomApi = createApi({
         }),
         assignPatient: builder.mutation({
             query: ({ patientId, doctorId }) => ({
-                url: `rooms/AssignPatient?PatientId=${patientId}&&DoctorId=${doctorId}`, // Send both patientId and doctorId as query parameters
+                url: `rooms/AssignPatient?PatientId=${patientId}&&DoctorId=${doctorId}`,  //both patientId and doctorId as query parameters
                 method: "POST",
             }),
             invalidatesTags: ["Rooms"]

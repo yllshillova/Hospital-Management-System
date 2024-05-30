@@ -6,9 +6,9 @@ export const OrdersTable = styled.div`
   margin-left: 200px;
   margin-top: 50px;
   @media screen and (max-width: 768px) {
-    padding: 10px; /* Adjusted padding for smaller screens */
-    margin-left: 0; /* Adjusted margin for smaller screens */
-    margin-top: 30px; /* Adjusted margin-top for smaller screens */
+    padding: 10px; 
+    margin-left: 0; 
+    margin-top: 30px; 
   }
 `;
 
@@ -57,7 +57,7 @@ export const ActionButton = styled.button`
   border: none;
   border-radius: 4px;
   padding: 8px 16px;
-  margin: 15px 5px; /* Adjusted margin */
+  margin: 15px 5px; 
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -74,7 +74,7 @@ export const AddButton = styled.button`
   color: white;
   border: none;
   padding: 8px 16px;
-  margin: 5px; /* Adjusted margin */
+  margin: 5px; 
   border-radius: 5px;
   cursor: pointer;
   transition: ease 0.3s;
@@ -102,10 +102,10 @@ export const ErrorMessage = styled.div`
     border: 1px solid #f5c6cb;
     border-radius: 10px;
     padding: 15px;
-    margin: 90px 300px 0 auto; /* Position more to the right of the center */
+    margin: 90px 300px 0 auto; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     animation: fadeIn 3s ease;
-    max-width: 450px; /* Set the desired maximum width */
+    max-width: 450px; 
 
     @keyframes fadeIn {
         0% {

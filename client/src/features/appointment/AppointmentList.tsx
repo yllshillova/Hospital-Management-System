@@ -20,6 +20,7 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
 import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
+import User from "../../app/models/User";
 
 
 function AppointmentList() {

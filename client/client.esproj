@@ -15,7 +15,6 @@
   <ItemGroup>
     <Folder Include="public\" />
     <Folder Include="src\features\account\" />
-    <Folder Include="src\features\chat\" />
-    <Folder Include="src\features\news\" />
+    <Folder Include="src\features\newss_chat\" />
   </ItemGroup>
 </Project>

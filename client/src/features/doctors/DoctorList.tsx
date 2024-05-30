@@ -21,6 +21,7 @@ import { SD_Roles } from '../../app/utility/SD';
 import { ErrorMessage } from "../../app/common/styledComponents/details";
 import { RootState } from "../../app/storage/redux/store";
 import { useSelector } from "react-redux";
+import User from "../../app/models/User";
 
 function DoctorList() {
     const { data, isLoading, error } = useGetDoctorsQuery(null);
@@ -87,12 +88,15 @@ function DoctorList() {
                     <TableRow>
                         <TableCell>{doctor.name}</TableCell>
                         <TableCell>{doctor.lastName} </TableCell>
+                        <TableCell>{doctor.email} </TableCell>
                         <TableCell>{isDepartmentsLoading ? (
                             <MiniLoader />
                         ) : getDepartmentName(doctor.departmentId)} </TableCell>
-                        <TableCell>{doctor.isDeleted} </TableCell>
-                        <TableCell>{new Date(doctor.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(doctor.updatedAt).toLocaleDateString()}</TableCell>
+                        <TableCell>{doctor.residence} </TableCell>
+
+                        {/*<TableCell>{doctor.isDeleted} </TableCell>*/}
+                        {/*<TableCell>{new Date(doctor.createdAt).toLocaleDateString()}</TableCell>*/}
+                        {/*<TableCell>{new Date(doctor.updatedAt).toLocaleDateString()}</TableCell>*/}
 
 
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/doctor/" + doctor.id)} >
@@ -132,10 +136,14 @@ function DoctorList() {
                         <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Last Name</TableHeaderCell>
+                            <TableHeaderCell>Email</TableHeaderCell>
+
                             <TableHeaderCell>Department</TableHeaderCell>
-                            <TableHeaderCell>Is Deleted</TableHeaderCell>
-                            <TableHeaderCell>Date Created </TableHeaderCell>
-                            <TableHeaderCell>Date Updated </TableHeaderCell>
+                            <TableHeaderCell>Residence</TableHeaderCell>
+
+                            {/*<TableHeaderCell>Is Deleted</TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Date Created </TableHeaderCell>*/}
+                            {/*<TableHeaderCell>Date Updated </TableHeaderCell>*/}
                         </TableHead>
                     </thead>
                     {content}

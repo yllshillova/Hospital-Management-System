@@ -68,7 +68,7 @@ function Register() {
 
         if ('data' in response) {
             toastNotify("User created successfully", "success");
-            navigate('/');
+            navigate('/login');
         } else if ('error' in response) {
 
             const error = response.error as FetchBaseQueryError;
@@ -246,15 +246,15 @@ const FormControl = styled.div`
 const InputBox = styled.div`
     display: flex;
     align-items: center;
-    margin: 0 70px; /* Added margin */
+    margin: 0 70px; 
 `;
 
 const Input = styled.input`
     flex: 1;
     border: none;
     border-bottom: 1px solid silver;
-    padding: 8px; /* Adjusted padding */
-    font-size: 0.9rem; /* Adjusted font size */
+    padding: 8px; 
+    font-size: 0.9rem; 
     outline: none;
 `;
 

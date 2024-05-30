@@ -11,11 +11,11 @@ import { useGetPatientsQuery } from '../../app/APIs/patientApi';
 import { useGetDoctorsQuery } from '../../app/APIs/doctorApi';
 import Patient from '../../app/models/Patient';
 import Doctor from '../../app/models/Doctor';
-import { validCheckInOutDate } from '../../app/utility/validCheckInOutDate';
 import Appointment from '../../app/models/Appointment';
 import inputHelper from '../../app/helpers/inputHelper';
 import { SD_Roles, SD_Statuses } from '../../app/utility/SD';
 import withAuthorization from '../../app/hoc/withAuthorization';
+import { formatDateTimeLocal } from '../../app/utility/formatDate';
 interface AppointmentFormProps {
     id?: string;
     data?: Appointment;
@@ -166,7 +166,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                 <Input
                                     type="datetime-local"
                                     name="checkInDate"
-                                    value={validCheckInOutDate(appointmentInputs.checkInDate)}
+                                    value={formatDateTimeLocal(appointmentInputs.checkInDate)}
                                     onChange={handleAppointmentInput}
                                 />
                             </FormGroup>
@@ -175,7 +175,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
                                 <Input
                                     type="datetime-local"
                                     name="checkOutDate"
-                                    value={validCheckInOutDate(appointmentInputs.checkOutDate)}
+                                    value={formatDateTimeLocal(appointmentInputs.checkOutDate)}
                                     onChange={handleAppointmentInput}
                                 />
                             </FormGroup>

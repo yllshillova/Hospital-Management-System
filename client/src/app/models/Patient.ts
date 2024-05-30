@@ -8,7 +8,7 @@
      address: string;
      residence: string;
      birthday: Date;
-     bloodgroup: string;
+     bloodGroup: string;
      gender: string;
      email: string;
      phoneNumber: string;

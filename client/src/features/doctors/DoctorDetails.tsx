@@ -124,37 +124,10 @@ function DoctorDetails() {
                                 <Value>{doctor.gender}</Value>
                                 <Value>{formatDate(doctor.birthday)}</Value>
                             </ValuesRow>
-                            <LabelsRow>
-                                {/*<Label>Allergies</Label>*/}
-                                <Label>Created At</Label>
-                                <Label>Updated At</Label>
-                            </LabelsRow>
-                            <ValuesRow>
-                                {/*<Value>Lactose , Paracetamol Lactose</Value>*/}
-                                <Value>{formatDate(doctor.createdAt)}</Value>
-                                <Value>{formatDate(doctor.updatedAt)}</Value>
-                            </ValuesRow>
-
                         </RightContainer>
                     </WrapperContainer>
 
-                    {/*<AdditionalInfoContainer>*/}
-                    {/*    <SectionTitle>Additional Information</SectionTitle>*/}
-                    {/*    <LabelsRow>*/}
-                    {/*        <Label>Created At</Label>*/}
-                    {/*        <Label></Label>*/}
-                    {/*        <Label></Label>*/}
-                    {/*        <Label>Updated At</Label>*/}
-                    {/*    </LabelsRow>*/}
-                    {/*    <ValuesRow>*/}
-                    {/*        <Value>{formatDate(doctor.createdAt)}</Value>*/}
-                    {/*        <Value></Value>*/}
-                    {/*        <Value></Value>*/}
-                    {/*        <Value></Value>*/}
-                    {/*        <Value></Value>*/}
-                    {/*        <Value>{formatDate(doctor.updatedAt)}</Value>*/}
-                    {/*    </ValuesRow>*/}
-                    {/*</AdditionalInfoContainer>*/}
+                    
                 </MainContainer>
             </>
         );

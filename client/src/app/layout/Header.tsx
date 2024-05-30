@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../storage/redux/store';
 import { SD_Roles } from '../utility/SD';
+import User from '../models/User';
 
 function Header() {
     const navigate = useNavigate();

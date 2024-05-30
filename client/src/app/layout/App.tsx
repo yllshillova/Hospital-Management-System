@@ -37,6 +37,7 @@ import { useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
+import User from '../models/User';
 
 
 function App() {

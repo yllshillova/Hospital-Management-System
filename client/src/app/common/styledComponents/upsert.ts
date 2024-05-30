@@ -46,7 +46,7 @@ margin-left:7px;
 `;
 
 export const Input = styled.input`
-  width: 100%; /* Take full width */
+  width: 100%; 
   padding: 8px;
   font-size: 14px;
   border: none;
@@ -56,7 +56,7 @@ export const Input = styled.input`
 `;
 
 export const Select = styled.select`
-  width: 100%; /* Take full width */
+  width: 100%; 
   padding: 8px;
   font-size: 14px;
   border: none;

@@ -21,6 +21,7 @@ import { SD_Roles } from "../../app/utility/SD";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { RootState } from "../../app/storage/redux/store";
 import { useSelector } from "react-redux";
+import User from "../../app/models/User";
 
 function NurseList() {
     const { data, isLoading, error } = useGetNursesQuery(null);
@@ -87,13 +88,15 @@ function NurseList() {
                     <TableRow>
                         <TableCell>{nurse.name}</TableCell>
                         <TableCell>{nurse.lastName} </TableCell>
+                        <TableCell>{nurse.email} </TableCell>
+
                         <TableCell>{isDepartmentsLoading ? (
                             <MiniLoader />
                         ) : getDepartmentName(nurse.departmentId)} </TableCell>
-
-                        <TableCell>{nurse.isDeleted} </TableCell>
-                        <TableCell>{new Date(nurse.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(nurse.updatedAt).toLocaleDateString()}</TableCell>
+                        <TableCell>{nurse.residence} </TableCell>
+                        {/*<TableCell>{nurse.isDeleted} </TableCell>*/}
+                        {/*<TableCell>{new Date(nurse.createdAt).toLocaleDateString()}</TableCell>*/}
+                        {/*<TableCell>{new Date(nurse.updatedAt).toLocaleDateString()}</TableCell>*/}
 
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/nurse/" + nurse.id)} >
                             <FontAwesomeIcon icon={faInfo} />
@@ -130,10 +133,9 @@ function NurseList() {
                         <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Last Name</TableHeaderCell>
+                            <TableHeaderCell>Email</TableHeaderCell>
                             <TableHeaderCell>Department</TableHeaderCell>
-                            <TableHeaderCell>Is Deleted</TableHeaderCell>
-                            <TableHeaderCell>Date Created </TableHeaderCell>
-                            <TableHeaderCell>Date Updated </TableHeaderCell>
+                            <TableHeaderCell>Residence </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

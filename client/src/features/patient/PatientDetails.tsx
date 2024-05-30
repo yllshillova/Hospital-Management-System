@@ -14,6 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt, faAdd } from "@fortawesome/free-solid-svg-icons";
 import EmergencyContact from "../../app/models/EmergencyContact";
 import styled from "styled-components";
+import { SD_Roles } from "../../app/utility/SD";
+import withAuthorization from "../../app/hoc/withAuthorization";
 
 
 function isValidGuid(guid: string): boolean {
@@ -262,4 +264,4 @@ function PatientDetails() {
     return null;
 }
 
-export default PatientDetails;
+export default withAuthorization(PatientDetails, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

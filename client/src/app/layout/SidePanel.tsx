@@ -11,6 +11,7 @@ import toastNotify from '../helpers/toastNotify';
 import { faUserNurse } from '@fortawesome/free-solid-svg-icons/faUserNurse';
 import { RootState } from '../storage/redux/store';
 import { SD_Roles } from '../utility/SD';
+import User from '../models/User';
 
 function SidePanel() {
     const dispatch = useDispatch();
@@ -56,9 +57,9 @@ function SidePanel() {
         ];
     } else if (userData.role === SD_Roles.NURSE) {
         sideBarComponents = [
+            { icon: faAddressCard, label: 'Profile', onClick: handleProfileNavigation('nurse') },
             { icon: faUserDoctor, label: 'Doctors', onClick: handleNavigation('/doctors') },
             { icon: faUserNurse, label: 'Nurses', onClick: handleNavigation('/nurses') },
-            { icon: faAddressCard, label: 'Profile', onClick: handleProfileNavigation('nurse') },
             { icon: faUserInjured, label: 'Patients', onClick: handleNavigation('/patients') },
             { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
             { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },

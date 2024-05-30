@@ -26,7 +26,6 @@ function VisitList() {
 
     const userData = useSelector((state: RootState) => state.auth);
     const { data, isLoading, error } = useGetVisitsQuery(userData.id);
-    console.log(data);
     const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); 
 
@@ -82,8 +81,10 @@ function VisitList() {
                         <TableCell>{doctor.name} {" "} {doctor.lastName}</TableCell>
                         <TableCell>{patient.name} {" "} {patient.lastName}</TableCell>
                         <TableCell>{visit.complaints}</TableCell>
-                        <TableCell>{new Date(visit.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(visit.updatedAt).toLocaleDateString()}</TableCell>
+                        <TableCell>{visit.diagnosis}</TableCell>
+
+                        {/*<TableCell>{new Date(visit.createdAt).toLocaleDateString()}</TableCell>*/}
+                        {/*<TableCell>{new Date(visit.updatedAt).toLocaleDateString()}</TableCell>*/}
 
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/visit/" + visit.id)} >
                             <FontAwesomeIcon icon={faInfo} />
@@ -114,7 +115,7 @@ function VisitList() {
                 <TableNav>
                     <TableHeader>Visits List</TableHeader>
 
-                    {userData.role == SD_Roles.NURSE &&
+                    {userData.role == SD_Roles.DOCTOR &&
                     <AddButton onClick={() => navigate("/visit/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
                         </AddButton>
@@ -126,8 +127,7 @@ function VisitList() {
                             <TableHeaderCell>Doctor</TableHeaderCell>
                             <TableHeaderCell>Patient</TableHeaderCell>
                             <TableHeaderCell>Complaints</TableHeaderCell>
-                            <TableHeaderCell>Date Created </TableHeaderCell>
-                            <TableHeaderCell>Date Updated </TableHeaderCell>
+                            <TableHeaderCell>Diagnosis </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

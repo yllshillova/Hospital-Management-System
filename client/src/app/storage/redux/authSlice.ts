@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import User from "../../models/User";
 
 export const emptyUserState: User = {
     name: "",

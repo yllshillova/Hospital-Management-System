@@ -1,8 +1,8 @@
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { Header, SidePanel } from "../../app/layout";
 import { SD_Roles } from "../../app/utility/SD";
-import ChatPanel from "../chat/ChatPanel";
-import NewsSection from "../news/NewsSection";
+import ChatPanel from "./components/ChatPanel";
+import NewsSection from "./components/NewsSection";
 
 function News_Chat() {
     return (

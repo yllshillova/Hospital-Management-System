@@ -6,10 +6,11 @@ import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { useCreatePatientMutation, useUpdatePatientMutation } from "../../app/APIs/patientApi";
-import { SD_Genders, SD_Bloodgroups } from "../../app/utility/SD";
+import { SD_Genders, SD_Bloodgroups, SD_Roles } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
+import withAuthorization from '../../app/hoc/withAuthorization';
 
 interface PatientData {
     name: string,
@@ -49,7 +50,7 @@ const patientData: PatientData = {
     occupation: "",
     allergies: ""
 };
-const bloodgroups = [
+const bloodGroups = [
     SD_Bloodgroups.O_Positive,
     SD_Bloodgroups.O_Negative,
     SD_Bloodgroups.A_Positive,
@@ -268,9 +269,9 @@ function PatientForm({ id, data }: PatientFormProps) {
                                     onChange={handlePatientInput}
                                 >
                                     <option value="">Select Blood Group</option>
-                                    {bloodgroups.map((bloodgroup) => (
-                                        <option key={bloodgroup} value={bloodgroup}>
-                                            {bloodgroup}
+                                    {bloodGroups.map((bloodGroup) => (
+                                        <option key={bloodGroup} value={bloodGroup}>
+                                            {bloodGroup}
                                         </option>
                                     ))}
                                 </Select>
@@ -328,4 +329,4 @@ function PatientForm({ id, data }: PatientFormProps) {
     );
 }
 
-export default PatientForm;
+export default withAuthorization(PatientForm, [SD_Roles.NURSE]);

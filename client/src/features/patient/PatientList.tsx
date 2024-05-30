@@ -71,10 +71,14 @@ function PatientList() {
                         <TableCell>{patient.name}</TableCell>
                         <TableCell>{patient.lastName}</TableCell>
                         <TableCell>{patient.parentName}</TableCell>
+                        <TableCell>{patient.email}</TableCell>
                         <TableCell>{patient.phoneNumber}</TableCell>
-                        <TableCell>{patient.isDeleted} </TableCell>
-                        <TableCell>{new Date(patient.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(patient.updatedAt).toLocaleDateString()}</TableCell>
+                        <TableCell>{patient.residence}</TableCell>
+                        <TableCell>{patient.bloodGroup}</TableCell>
+
+                        {/*<TableCell>{patient.isDeleted} </TableCell>*/}
+                        {/*<TableCell>{new Date(patient.createdAt).toLocaleDateString()}</TableCell>*/}
+                        {/*<TableCell>{new Date(patient.updatedAt).toLocaleDateString()}</TableCell>*/}
 
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/patient/" + patient.id)} >
                             <FontAwesomeIcon icon={faInfo} />
@@ -117,10 +121,10 @@ function PatientList() {
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Last Name</TableHeaderCell>
                             <TableHeaderCell>Parent Name</TableHeaderCell>
+                            <TableHeaderCell>Email</TableHeaderCell>
                             <TableHeaderCell>Phone Number</TableHeaderCell>
-                            <TableHeaderCell>Is Deleted</TableHeaderCell>
-                            <TableHeaderCell>Date Created </TableHeaderCell>
-                            <TableHeaderCell>Date Updated </TableHeaderCell>
+                            <TableHeaderCell>Residence </TableHeaderCell>
+                            <TableHeaderCell>Blood Group </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}

@@ -21,6 +21,7 @@ import withAuthorization from "../../app/hoc/withAuthorization";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
+import User from "../../app/models/User";
 
 
 function RoomList() {
@@ -95,12 +96,17 @@ function RoomList() {
                             <MiniLoader />
                         ) : getDepartmentName(room.departmentId)} </TableCell>
 
-                        <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(room.updatedAt).toLocaleDateString()}</TableCell>
+                        {/*<TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>*/}
+                        {/*<TableCell>{new Date(room.updatedAt).toLocaleDateString()}</TableCell>*/}
+                        <TableCell></TableCell>
+
+                        {userData.role == SD_Roles.NURSE &&
+                            
 
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/room/" + room.id)} >
                             <FontAwesomeIcon icon={faInfo} />
-                        </ActionButton>
+                            </ActionButton>
+                        }
 
                         {userData.role == SD_Roles.ADMINISTRATOR &&
                             <>
@@ -136,8 +142,8 @@ function RoomList() {
                             <TableHeaderCell>Number</TableHeaderCell>
                             <TableHeaderCell>Beds Available</TableHeaderCell>
                             <TableHeaderCell>Department</TableHeaderCell>
-                            <TableHeaderCell>Date Created </TableHeaderCell>
-                            <TableHeaderCell>Date Updated </TableHeaderCell>
+
+                            
                         </TableHead>
                     </thead>
                     {content}

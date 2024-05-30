@@ -6,7 +6,7 @@ import toastNotify from "../../app/helpers/toastNotify";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { Header, SidePanel } from "../../app/layout";
 import MainLoader from "../../app/common/MainLoader";
-import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
+//import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 import Doctor from "../../app/models/Doctor";
 import Patient from "../../app/models/Patient";
 import { useState } from "react";
@@ -19,7 +19,6 @@ import { faBedPulse } from "@fortawesome/free-solid-svg-icons/faBedPulse";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
 import { useSelector } from "react-redux";
-import User from "../../app/models/User";
 import { RootState } from "../../app/storage/redux/store";
 
 interface VisitFormProps {

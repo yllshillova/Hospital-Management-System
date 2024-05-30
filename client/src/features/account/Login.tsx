@@ -9,11 +9,11 @@ import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
-import MainLoader from "../../app/common/MainLoader";
 import { useDispatch } from "react-redux";
 import { setLoggedInUser, setToken } from "../../app/storage/redux/authSlice";
 import { jwtDecode } from "jwt-decode";
-
+import User from "../../app/models/User";
+import BarLoader from "react-spinners/BarLoader";
 
 
 const loginData = {
@@ -58,15 +58,12 @@ function Login() {
         const currentLocation = window.location.pathname;
 
         const response = await loginUser(formData);
-        console.log(response);
 
         if ('data' in response) {
 
             const { accessToken, refreshToken } = response.data;
-            console.log(accessToken);
 
             const { id, name, lastName, email, role }: User = jwtDecode(accessToken);
-                        console.log('Decoded token:', { id, name, lastName, email, role });
 
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
@@ -84,7 +81,6 @@ function Login() {
             }
 
             const { status } = error;
-            console.log(response.error);
             if (status) {
                 useErrorHandler(error, navigate, currentLocation, setErrorMessages);
             }
@@ -95,7 +91,7 @@ function Login() {
     return (
         <>
             <LoginContainer>
-                {loading && <MainLoader />}
+                {loading && <BarLoader color="#355070" />}
                 <Title>Login</Title>
                 {errorMessages.length > 0 && (
                     <div style={{ color: 'red' }}>
@@ -161,10 +157,10 @@ const LoginContainer = styled.div`
   margin: 20px auto;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  position: absolute; /* Change from relative to absolute */
+  position: absolute;
   top: 40%; /* Add top 50% */
   left: 50%; /* Add left 50% */
-  transform: translate(-45%, -40%); /* Center the container */
+  transform: translate(-45%, -40%);
   z-index: 1;
 `;
 

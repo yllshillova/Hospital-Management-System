@@ -2,7 +2,10 @@ import * as signalR from '@microsoft/signalr';
 import ChatMessage from '../models/ChatMessage';
 
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:5000/chatHub")
+    .withUrl("http://localhost:5000/chatHub", {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets
+    })
     .withAutomaticReconnect()
     .configureLogging(signalR.LogLevel.Information)
     .build();
@@ -11,19 +14,19 @@ export async function startConnection() {
     try {
         if (connection.state === signalR.HubConnectionState.Disconnected) {
             await connection.start();
-           // console.log("SignalR Connected.");
+            console.log("SignalR Connected.");
         } else {
-            //console.log("SignalR connection is not in the Disconnected state. Current state:", connection.state);
+            console.log("SignalR connection is not in the Disconnected state. Current state:", connection.state);
         }
     } catch (err) {
-        //console.log("Error while starting connection: ", err);
+        console.log("Error while starting connection: ", err);
         setTimeout(startConnection, 5000);
     }
 }
 
 // Reconnect on close
 connection.onclose(async () => {
-    //console.log("Connection closed, attempting to reconnect...");
+    console.log("Connection closed, attempting to reconnect...");
     await startConnection();
 });
 

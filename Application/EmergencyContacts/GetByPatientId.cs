@@ -30,7 +30,7 @@ namespace Application.EmergencyContacts
                 var emergencyContacts = await _emergencyContactRepository.GetByPatientIdAsync(request.PatientId);
                 if (emergencyContacts == null || !emergencyContacts.Any())
                 {
-                    return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.NotFound, "No emergency contacts found for the given patient ID.");
+                    return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.NotFound, "No emergency contacts found");
                 }
 
                 var emergencyContactDtos = _mapper.Map<IEnumerable<EmergencyContactDto>>(emergencyContacts);

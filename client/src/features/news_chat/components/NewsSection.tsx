@@ -1,9 +1,8 @@
-import { useGetLatestAppointmentsQuery } from "../../app/APIs/appointmentApi";
-import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
-import { useGetLatestPatientsQuery, useGetPatientsQuery } from "../../app/APIs/patientApi";
-import { useGetLatestVisitsQuery } from "../../app/APIs/visitApi";
 import styled from 'styled-components';
-
+import { useGetLatestVisitsQuery } from '../../../app/APIs/visitApi';
+import { useGetLatestAppointmentsQuery } from '../../../app/APIs/appointmentApi';
+import { useGetDoctorsQuery } from '../../../app/APIs/doctorApi';
+import { useGetLatestPatientsQuery, useGetPatientsQuery } from '../../../app/APIs/patientApi';
 
 function NewsSection() {
 
@@ -16,7 +15,6 @@ function NewsSection() {
     const news = [...(latestAppointments || []), ...(latestVisits || []), ...(latestPatients || [])];
     news.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
-    console.log("Sorted news:", news);
 
     if (appointmentsLoading || visitsLoading || doctorsLoading || patientsLoading || latestpatientsLoading) {
         return <Container>Loading...</Container>;
