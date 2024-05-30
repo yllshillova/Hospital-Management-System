@@ -56,7 +56,7 @@ export default function useErrorHandler(
                 break;
             default:
                 toastNotify("An unexpected error occurred", "error");
-                navigate('/');
+                navigate('/Dashboard');
                 return;
         }
 
@@ -64,6 +64,6 @@ export default function useErrorHandler(
 
     } else {
         toastNotify("An unexpected error occurred", "error");
-        navigate('/');
+        navigate('/Dashboard');
     }
 }

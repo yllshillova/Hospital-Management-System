@@ -60,7 +60,7 @@ function App() {
         <div>
             <div>
                 <Routes>
-                    <Route path="/" element={<Dashboard />}></Route>
+                    <Route path="/dashboard" element={<Dashboard />}></Route>
 
                     <Route path="/patients" element={<PatientList />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>
@@ -100,7 +100,7 @@ function App() {
                     <Route path="/patient/:patientId/emergencyContact/insert" element={<EmergencyContactInsert />} />
                     
                     <Route path="/emergencyContact/update/:id" element={<EmergencyContactUpdate />}></Route>
-                    <Route path="/login" element={<Login/>}></Route>
+                    <Route path="/" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
                     
                     <Route path="/news_chat" element={<News_Chat />}></Route>

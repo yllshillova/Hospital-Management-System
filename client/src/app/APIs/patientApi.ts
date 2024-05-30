@@ -1,14 +1,17 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { RootState } from "../storage/redux/store";
 const patientApi = createApi({
     reducerPath: "patientSlice",
     baseQuery: fetchBaseQuery({
         baseUrl: "http://localhost:5000/api/",
-
-        // logic when making API request , we have to send a token back to the request
-        //prepareHeaders: (headers: Headers, api) => {
-        //    const token = localStorage.getItem("token");
-        //    token && headers.append("Authorization", "Bearer " + token);     // authorization is the header that has to be set when the API is called
-        //},
+        prepareHeaders: (headers, { getState }) => {
+            const state = getState() as RootState;
+            const token = state.auth.accessToken || localStorage.getItem('accessToken');
+            if (token) {
+                headers.set('Authorization', `Bearer ${token}`);
+            }
+            return headers;
+        },
     }),
     tagTypes: ["Patients"],
     endpoints: (builder) => ({

@@ -58,27 +58,6 @@ function VisitForm({ id, data }: VisitFormProps) {
     const doctorId: string = useSelector(
         (state: RootState) => state.auth.id
     );
-    //useEffect(() => {
-    //    if (data) {
-    //        const tempData = {
-    //            complaints: data.complaints || "",
-    //            diagnosis: data.diagnosis || "",
-    //            examinations: data.examinations || "",
-    //            therapy: data.therapy || "",
-    //            requiredAnalysis: data.requiredAnalysis || "",
-    //            advice: data.advice || "",
-    //            remarks: data.remarks || "",
-    //            doctorId: data.doctorId || "",
-    //            patientId: data.patientId || "",
-    //            id: data.id || "",
-    //            createdAt: data.createdAt || new Date(),
-    //            updatedAt: data.updatedAt || new Date(),
-    //            doctor: data.doctor || {} as Doctor,
-    //            patient: data.patient || {} as Patient
-    //        };
-    //        setVisitInputs(tempData);
-    //    }
-    //}, [data]);
 
     const handleVisitInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, visitInputs);
@@ -112,7 +91,7 @@ function VisitForm({ id, data }: VisitFormProps) {
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Visit updated successfully", "success");
+                toastNotify("Visit has been updated", "success");
                 navigate('/visits');
             }
         } else {
@@ -121,7 +100,7 @@ function VisitForm({ id, data }: VisitFormProps) {
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Visit created successfully", "success");
+                toastNotify("Visit has been created", "success");
                 navigate('/visits');
             }
 
@@ -143,7 +122,7 @@ function VisitForm({ id, data }: VisitFormProps) {
                 toastNotify("Failed to assign patient to room", "error");
             } else {
                 // Handle success
-                toastNotify("Patient assigned to room successfully", "success");
+                toastNotify("Patient has been assigned to room", "success");
             }
         } catch (error) {
             // Handle error

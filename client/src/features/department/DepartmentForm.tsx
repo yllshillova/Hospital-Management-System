@@ -79,7 +79,7 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
                 // Use error handler
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Department updated successfully", "success");
+                toastNotify("Department has been updated", "success");
                 navigate('/departments');
             }
         } else {
@@ -89,7 +89,7 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
                 // Use error handler
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Department created successfully", "success");
+                toastNotify("Department has been created", "success");
                 navigate('/departments');
             }
         }

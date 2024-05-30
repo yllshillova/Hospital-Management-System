@@ -62,18 +62,14 @@ function RoomForm({ id, data }: RoomFormProps) {
 
         if (id) {
             formData.append("Id", id);
-            console.log("Update room data :", Object.fromEntries(formData.entries()));
 
             response = await updateRoom({ data: formData, id });
 
-            console.log("Update room Response: ", response);
 
-            toastNotify("Room updated successfully", "success");
+            toastNotify("Room has been updated", "success");
         } else {
-            console.log("Create Room Data:", Object.fromEntries(formData.entries()));
             response = await createRoom(formData);
-            console.log("Create Room response : ", response);
-            toastNotify("Room created successfully", "success");
+            toastNotify("Room has been created", "success");
         }
 
         if (response) {

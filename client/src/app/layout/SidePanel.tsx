@@ -29,7 +29,7 @@ function SidePanel() {
         localStorage.removeItem('refreshToken');
 
         dispatch(setLoggedInUser({ ...emptyUserState }));
-        navigate('/login');
+        navigate('/');
         toastNotify('You have been logged out', 'success');
     };
 

@@ -105,7 +105,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Doctor updated successfully", "success");
+                toastNotify("Doctor has been updated ", "success");
                 navigate('/doctors');
             }
         } else {
@@ -114,7 +114,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Doctor created successfully", "success");
+                toastNotify("Doctor has been created", "success");
                 navigate('/doctors');
             }
         }

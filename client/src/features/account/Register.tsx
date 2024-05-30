@@ -68,7 +68,7 @@ function Register() {
 
         if ('data' in response) {
             toastNotify("User created successfully", "success");
-            navigate('/login');
+            navigate('/Dashboard');
         } else if ('error' in response) {
 
             const error = response.error as FetchBaseQueryError;
@@ -177,7 +177,7 @@ function Register() {
                             <Button> Register </Button>
                             <LinksContainer>
                                 <Text>Already have an account? </Text>
-                                <Link onClick={() => navigate(`/Login`)}>Login here!</Link>
+                                <Link onClick={() => navigate(`/`)}>Login here!</Link>
                             </LinksContainer>
                         </Form>
                     </RightSide>

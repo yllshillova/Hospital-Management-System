@@ -85,7 +85,7 @@ function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("EmergencyContact updated successfully", "success");
+                toastNotify("EmergencyContact has been updated", "success");
                 navigate("/patient/" + emergencyContactInputs.patientId);
             }
         } else {
@@ -94,7 +94,7 @@ function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("EmergencyContact created successfully", "success");
+                toastNotify("EmergencyContact has been created", "success");
                 navigate("/patient/" + emergencyContactInputs.patientId);
             }
         }

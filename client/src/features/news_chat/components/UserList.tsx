@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserDoctor, faUserNurse } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationCircle, faUserDoctor, faUserNurse } from '@fortawesome/free-solid-svg-icons';
 import { CancelButton, SearchContainer, SearchInput, UserIcon, UserItem, UserListContainer, UserName, UserNotFoundMessage } from '../../../app/common/styledComponents/chat';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -14,6 +14,9 @@ import useErrorHandler from '../../../app/helpers/useErrorHandler';
 import { setSearchTerm } from '../../../app/storage/redux/searchSlice';
 import Doctor from '../../../app/models/Doctor';
 import Nurse from '../../../app/models/Nurse';
+import MainLoader from '../../../app/common/MainLoader';
+import { Header, SidePanel } from '../../../app/layout';
+import { BackButton, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from '../../../app/common/styledComponents/table';
 
 function UserList({ setSelectedUser }: { setSelectedUser: (user: User | null) => void }) {
     const { data: users, isLoading, error, isError } = useGetStaffQuery(null);
@@ -55,9 +58,23 @@ function UserList({ setSelectedUser }: { setSelectedUser: (user: User | null) =>
         const fbDoctorsError = doctorsError as FetchBaseQueryError;
         const fbNursesError = nursesError as FetchBaseQueryError;
         useErrorHandler(fbError || fbDoctorsError || fbNursesError, navigate, location.pathname);
-        return <div>Error loading data</div>;
+        return <MainLoader/>;
     } 
-    if (isError || doctorsError || nursesError) return <div>Error loading data</div>;
+    else if (isError || doctorsError || nursesError) return (
+        <>
+            <Header />
+            <SidePanel />
+            <ErrorMessage>
+                <ErrorTitleRow>
+                    <ErrorIcon icon={faExclamationCircle} />
+                    <Message>
+                        {(isError?.data as FetchBaseQueryError) || (doctorsError?.data as FetchBaseQueryError) || (nursesError?.data as FetchBaseQueryError)}
+                    </Message>
+                </ErrorTitleRow>
+                <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+            </ErrorMessage>
+        </>
+    );
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const searchTerm = e.target.value;
