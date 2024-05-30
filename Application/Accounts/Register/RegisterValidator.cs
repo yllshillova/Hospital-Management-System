@@ -30,19 +30,18 @@ namespace Application.Accounts.Register
                 .Must(BeUniqueEmail).WithMessage("Email is taken. Try another one!");
 
             RuleFor(d => d.Password)
-                .SetValidator(new NotNullValidator<RegisterDto, string>())
-                .Matches(IsPasswordComplex());
+            .SetValidator(new NotNullValidator<RegisterDto, string>())
+            .Matches(IsPasswordComplex()).WithMessage("Password must be at least 8 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.");
+
         }
 
         private bool BeUniqueEmail(string email)
         {
-            // Use the synchronous method from the user repository
             return !_userRepository.IsEmailTaken(email);
         }
 
         private bool BeUniqueUsername(string username)
         {
-            // Use the synchronous method from the user repository
             return !_userRepository.IsUsernameTaken(username);
         }
 
