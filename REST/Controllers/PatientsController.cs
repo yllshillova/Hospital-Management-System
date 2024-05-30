@@ -4,6 +4,7 @@ using static Application.Patients.Create;
 using static Application.Patients.Delete;
 using static Application.Patients.Details;
 using static Application.Patients.Edit;
+using static Application.Patients.GetLatestPatients;
 using static Application.Patients.GetPatientsCount;
 using static Application.Patients.List;
 
@@ -27,6 +28,12 @@ namespace API.Controllers
         public async Task<IActionResult> GetPatientsCount()
         {
             return HandleResult(await Mediator.Send(new GetPatientsCountQuery()));
+        }
+
+        [HttpGet("Latest")]
+        public async Task<IActionResult> GetLatestPatients()
+        {
+            return HandleResult(await Mediator.Send(new GetLatestPatientsQuery()));
         }
 
         [HttpPost]

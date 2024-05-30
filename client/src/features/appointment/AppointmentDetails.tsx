@@ -13,6 +13,8 @@ import Doctor from "../../app/models/Doctor";
 import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 import { formatDateTimeLocal } from "../../app/utility/formatDate";
+import { SD_Roles } from "../../app/utility/SD";
+import withAuthorization from "../../app/hoc/withAuthorization";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -53,7 +55,7 @@ function AppointmentDetails() {
                         <FormContainer >
                             {isLoading && <MainLoader />}
                             <Title>
-                                Details of Appointment X
+                                Appointment for {patient.name} {patient.lastName}
                             </Title>
 
                             <Form>
@@ -112,7 +114,7 @@ function AppointmentDetails() {
                                 </FormGroup>
 
                                 <ButtonsContainer>
-                                    <BackToProductsButton onClick={() => navigate("/visits")}>
+                                    <BackToProductsButton onClick={() => navigate("/appointments")}>
                                         Back to Appointments
                                     </BackToProductsButton>
                                 </ButtonsContainer>
@@ -128,4 +130,4 @@ function AppointmentDetails() {
     return null;
 }
 
-export default AppointmentDetails;
+export default withAuthorization(AppointmentDetails, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);

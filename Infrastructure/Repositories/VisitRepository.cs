@@ -31,7 +31,6 @@ namespace Infrastructure.Repositories
 
             return visits;
         }
-
     }
 
 }

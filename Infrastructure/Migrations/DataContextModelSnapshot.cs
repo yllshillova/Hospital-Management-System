@@ -285,6 +285,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Residence")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -300,6 +303,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoomId");
+
                     b.ToTable("Patients", (string)null);
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
@@ -314,57 +319,57 @@ namespace Infrastructure.Migrations
                             }));
                 });
 
+            modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Domain.Entities.Room", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Capacity")
+                    b.Property<int>("Beds")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BedsAvailable")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsFree")
-                        .HasColumnType("bit");
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Number")
+                    b.Property<int>("RoomNumber")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Rooms");
-                });
-
-            modelBuilder.Entity("Domain.Entities.RoomPatient", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PatientId");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("RoomPatients");
                 });
 
             modelBuilder.Entity("Domain.Entities.Visit", b =>
@@ -624,23 +629,36 @@ namespace Infrastructure.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RoomPatient", b =>
+            modelBuilder.Entity("Domain.Entities.Patient", b =>
                 {
-                    b.HasOne("Domain.Entities.Patient", "Patient")
-                        .WithMany("RoomPatients")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Room", "Room")
-                        .WithMany("RoomPatients")
+                        .WithMany("Patients")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Patient");
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("Domain.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Room", b =>
+                {
+                    b.HasOne("Domain.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Domain.Entities.Visit", b =>
@@ -750,13 +768,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Patient", b =>
                 {
                     b.Navigation("Appointments");
-
-                    b.Navigation("RoomPatients");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>
                 {
-                    b.Navigation("RoomPatients");
+                    b.Navigation("Patients");
                 });
 
             modelBuilder.Entity("Domain.Entities.Doctor", b =>

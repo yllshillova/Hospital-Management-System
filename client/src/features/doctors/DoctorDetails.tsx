@@ -9,6 +9,8 @@ import { formatDate } from "../../app/utility/formatDate";
 import { useGetDepartmentByIdQuery } from "../../app/APIs/departmentApi";
 import MiniLoader from "../../app/common/MiniLoader";
 import { Attribute, Label, LabelsRow, LeftContainer, MainContainer, RightContainer, SectionTitle, Value, ValuesRow, WrapperContainer } from "../../app/common/styledComponents/details";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from "../../app/utility/SD";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -122,37 +124,10 @@ function DoctorDetails() {
                                 <Value>{doctor.gender}</Value>
                                 <Value>{formatDate(doctor.birthday)}</Value>
                             </ValuesRow>
-                            <LabelsRow>
-                                {/*<Label>Allergies</Label>*/}
-                                <Label>Created At</Label>
-                                <Label>Updated At</Label>
-                            </LabelsRow>
-                            <ValuesRow>
-                                {/*<Value>Lactose , Paracetamol Lactose</Value>*/}
-                                <Value>{formatDate(doctor.createdAt)}</Value>
-                                <Value>{formatDate(doctor.updatedAt)}</Value>
-                            </ValuesRow>
-
                         </RightContainer>
                     </WrapperContainer>
 
-                    {/*<AdditionalInfoContainer>*/}
-                    {/*    <SectionTitle>Additional Information</SectionTitle>*/}
-                    {/*    <LabelsRow>*/}
-                    {/*        <Label>Created At</Label>*/}
-                    {/*        <Label></Label>*/}
-                    {/*        <Label></Label>*/}
-                    {/*        <Label>Updated At</Label>*/}
-                    {/*    </LabelsRow>*/}
-                    {/*    <ValuesRow>*/}
-                    {/*        <Value>{formatDate(doctor.createdAt)}</Value>*/}
-                    {/*        <Value></Value>*/}
-                    {/*        <Value></Value>*/}
-                    {/*        <Value></Value>*/}
-                    {/*        <Value></Value>*/}
-                    {/*        <Value>{formatDate(doctor.updatedAt)}</Value>*/}
-                    {/*    </ValuesRow>*/}
-                    {/*</AdditionalInfoContainer>*/}
+                    
                 </MainContainer>
             </>
         );
@@ -162,4 +137,4 @@ function DoctorDetails() {
     return null;
 }
 
-export default DoctorDetails;
+export default withAuthorization(DoctorDetails, [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);

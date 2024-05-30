@@ -1,60 +1,92 @@
-import { useNavigate, useParams } from "react-router-dom";
-import MainLoader from "../../app/common/MainLoader";
-import {  AddButton, OrdersTable, Table, TableCell, TableHeader, TableHeaderCell, TableNav, TableRow } from "../../app/common/styledComponents/table";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
+//import patientInBed from "../../app/layout/Images/patientInRoom.jpg";
 import { Header, SidePanel } from "../../app/layout";
-import { useGetRoomPatientsQuery } from "../../app/APIs/roomApi";
-//import Patient from "../../app/models/Patient";
-//import RoomPatient from "../../app/models/RoomPatient";
-//import toastNotify from "../../app/helpers/toastNotify";
-//import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-//import useErrorHandler from "../../app/helpers/useErrorHandler";
-export interface patientName{
-    firstName: string;
-    lastName: string;
-
-}
+import { OrdersTable, TableHeader } from "../../app/common/styledComponents/table";
+import { useGetRoomByIdQuery, useRemovePatientMutation } from "../../app/APIs/roomApi";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import Patient from "../../app/models/Patient";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import useErrorHandler from "../../app/helpers/useErrorHandler";
+import MainLoader from "../../app/common/MainLoader";
+import { useGetVisitsQuery } from "../../app/APIs/visitApi";
+import Visit from "../../app/models/Visit";
+import toastNotify from "../../app/helpers/toastNotify";
+import manInHb from "../../app/layout/Images/manInHB.jpg";
+import womanInHB from "../../app/layout/Images/womanInHB.jpg";
+import emptyBed from "../../app/layout/Images/emptyBed.jpg";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from "../../app/utility/SD";
 function RoomDetails() {
-    const { id } = useParams();
-    const { data, isLoading: patientsLoading, error: patientsError } = useGetRoomPatientsQuery(id); // Merr lista e pacient�ve p�r dhom�n me ID t� caktuar
-    const navigate = useNavigate();
-    console.log(data)
-    let content;
+    const { id } = useParams<string>();
+    const { data: roomsData, isLoading: roomsLoading, error: roomsError, isError: roomsIsError } = useGetRoomByIdQuery(id);
+    const { data: visitsData, isLoading: visitsLoading, error: visitsError, isError: visitsIsError } = useGetVisitsQuery(undefined);
+    console.log(visitsData);
+    const [removePatient, { isLoading: removingPatient }] = useRemovePatientMutation(); // useRemovePatientMutation hook
 
-    if (patientsLoading) {
-        content = <MainLoader />; // N�se t� dh�nat jan� ende duke u ngarkuar, shfaq nj� ikon� ngarkimi
-    } else if (patientsError) {
-        content = <div>Error loading patients.</div>; // N�se ka ndodhur nj� gabim gjat� ngarkimit t� pacient�ve, shfaq nj� mesazh gabimi
+    const navigate = useNavigate();
+    const location = useLocation();
+    const patients: Patient[] = roomsData?.patients || [];
+
+    const roomsfbError = roomsError as FetchBaseQueryError;
+    const visitsfbError = visitsError as FetchBaseQueryError;
+
+    if (roomsIsError || visitsIsError) {
+        useErrorHandler(roomsfbError || visitsfbError, navigate, location.pathname);
+    }
+    if (roomsLoading || visitsLoading) return <MainLoader />;
+
+    //array of visits for all patients
+    const visits = visitsData?.filter((visit: Visit) => patients.some(patient => patient.id === visit.patientId));
+
+
+    const handleRemovePatient = async (patientId: string): Promise<void> => {
+        try {
+            const response = await removePatient(patientId);
+            console.log(patientId);
+            console.log(response);
+            if (response.error) {
+                // Handle error
+                toastNotify("Failed to remove patient from room", "error");
+            } else {
+                // Handle success
+                toastNotify("Patient removed from room", "success");
+            }
+        } catch (error) {
+            // Handle error
+            toastNotify("An error occurred while removing patient from room", "error");
+        }
+    };
+
+
+    let content;
+    if (patients.length === 0) {
+        content = (
+            <EmptyRoomContainer>
+                <EmptyRoomTitle>No patient found in room #{roomsData?.roomNumber}</EmptyRoomTitle>
+                <EmptyBedImage src={emptyBed} alt="Empty Bed" />
+            </EmptyRoomContainer>
+
+        );
     } else {
-        data.map((roomPatient: patientName) => (
-            console.log(roomPatient)
-        ))
-        // Filtroni pacient�t p�r t� marr� vet�m ato q� jan� n� dhom�n me ID e caktuar
-       // const roomPatients = data.filter((roomPatient: RoomPatient) => roomPatient.roomId === id);
-        //   content = roomPatients.map((roomPatient: RoomPatient) => (
-       content = data.map((roomPatient: patientName ) => (
-            <tbody key={0}>
-                <TableRow>
-                    <TableCell>{roomPatient.firstName}</TableCell>
-                    <TableCell>{roomPatient.lastName}</TableCell>
-                    {/*<TableCell>{roomPatient.patient.parentName}</TableCell>*/}
-                    {/*<TableCell>{roomPatient.patient.phoneNumber}</TableCell>*/}
-                    {/*<TableCell>{roomPatient.patient.isDeleted}</TableCell>*/}
-                    {/*<TableCell>{new Date(roomPatient.patient.createdAt).toLocaleDateString()}</TableCell>*/}
-                    {/*<TableCell>{new Date(roomPatient.patient.updatedAt).toLocaleDateString()}</TableCell>*/}
-                    {/*<ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/patient/" + roomPatient.patientId)}>*/}
-                    {/*    <FontAwesomeIcon icon={faInfo} />*/}
-                    {/*</ActionButton>*/}
-                    {/*<ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/patient/update/" + roomPatient.patientId)}>*/}
-                    {/*    <FontAwesomeIcon icon={faEdit} />*/}
-                    {/*</ActionButton>*/}
-                    {/*<ActionButton style={{ backgroundColor: "red" }} >*/}{/*onClick={() => handleDeletePatient(roomPatient.patientId)}*/}
-                    {/*    <FontAwesomeIcon icon={faTrashAlt} />*/}
-                    {/*</ActionButton>*/}
-                </TableRow>
-            </tbody>
-));
+        content = patients.map(patient => {
+            // returns the specific visit for the patient
+            const patientVisit = visits.find((visit: Visit) => visit?.patientId === patient.id);
+            return (
+
+                <PatientCard key={patient.id}>
+                    <RemovePatientButton onClick={() => handleRemovePatient(patient.id)} disabled={removingPatient}>Remove Patient</RemovePatientButton>
+                    <ImageContainer>
+                        <Image src={patient.gender === 'Male' ? manInHb : womanInHB} alt="Patient in bed" />
+                    </ImageContainer>
+                    <PatientData>
+                        <p>Name <strong>{patient.name} {" "} {patient.lastName}</strong> </p>
+                        <p>Diagnosis <strong>{patientVisit?.diagnosis}</strong></p>
+                        <p>Therapy <strong>{patientVisit?.therapy}</strong> </p>
+                        <p>Remarks <strong>{patientVisit?.remarks}</strong></p>
+                    </PatientData>
+                </PatientCard>
+            );
+        });
     }
 
     return (
@@ -62,29 +94,121 @@ function RoomDetails() {
             <Header />
             <SidePanel />
             <OrdersTable>
-                <TableNav>
-                    <TableHeader>Patients List in room </TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate( `/addPatientToRoom?${id}`)}>
-                        <FontAwesomeIcon icon={faAdd} />
-                    </AddButton>
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableRow>
-                            <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>Last Name</TableHeaderCell>
-                            {/*<TableHeaderCell>Parent Name</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Phone Number</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Is Deleted</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Created At</TableHeaderCell>*/}
-                            {/*<TableHeaderCell>Updated At</TableHeaderCell>*/}
-                        </TableRow>
-                    </thead>
+                {patients.length > 0 &&
+                    <TableHeader>Room #{roomsData?.roomNumber}</TableHeader>}
+                <RoomContainer>
                     {content}
-                </Table>
+                </RoomContainer>
+                <BackButton onClick={() => navigate('/rooms')}>Back to Rooms</BackButton>
             </OrdersTable>
         </>
     );
 }
+const RoomContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 9px;
+    justify-content: space-between;
+`;
 
-export default RoomDetails;
+const EmptyRoomContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-left: 180px;
+    margin-top:10px;
+`;
+
+const EmptyRoomTitle = styled.h2`
+    font-size: 18px;
+`;
+
+const EmptyBedImage = styled.img`
+    width: 580px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+`;
+
+const PatientCard = styled.div`
+    background-color: #fff;
+    border-radius: 8px;
+    display: flex;
+    flex: 0 0 calc(50% - 20px); /* Two cards per row with 20px gap */
+    max-width: calc(50% - 20px); /* Two cards per row with 20px gap */
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    position: relative; /* added to position the remove button */
+    &:hover {
+        transform: translateY(-5px);
+    }
+
+    @media (max-width: 700px) {
+        flex-basis: calc(100% - 20px); /* One card per row with 20px gap */
+        max-width: calc(100% - 20px); /* One card per row with 20px gap */
+    }
+`;
+
+const ImageContainer = styled.div`
+    position: relative;
+    margin-top:15px;
+`;
+
+const Image = styled.img`
+    width: 160px;
+    margin-top:10px;
+    height: 110px;
+    margin-left:10px;
+    object-fit: fit; /* Ensures the image maintains its aspect ratio */
+
+`;
+
+const PatientData = styled.div`
+    flex: 1;
+    padding: 20px;
+
+    p {
+        margin: 10px 0;
+        font-size: 13.5px; /* Adjust font size */
+    }
+`;
+
+const RemovePatientButton = styled.button`
+    position: absolute;
+    //margin-top: 5px;
+    //margin-left: 360px; /* Adjusted for better alignment */
+    margin: 5px 0 0 355px ;
+    background-color: crimson;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 13.5px;
+    transition: ease 0.3s;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+`;
+
+const BackButton = styled.button`
+    position: absolute;
+    bottom: 60px;
+    right: 47px;
+    background-color: #002147;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 13.5px;
+    transition: ease 0.3s;
+    font-weight: bold;
+    &:hover {
+        transform: scale(1.1);
+    }
+`;
+
+export default withAuthorization(RoomDetails, [SD_Roles.NURSE]);

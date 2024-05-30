@@ -3,58 +3,56 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteRoomMutation, useGetRoomsQuery } from "../../app/APIs/roomApi";
 import MainLoader from "../../app/common/MainLoader";
 import Room from "../../app/models/Room";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
 import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import { useLocation, useNavigate } from "react-router-dom";
-//import { useEffect, useState } from "react";
-//import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 import toastNotify from "../../app/helpers/toastNotify";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
+import Department from "../../app/models/Department";
+import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
+import MiniLoader from "../../app/common/MiniLoader";
+import { SD_Roles } from "../../app/utility/SD";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/storage/redux/store";
+import User from "../../app/models/User";
+
+
 function RoomList() {
+
     const { data, isLoading, error } = useGetRoomsQuery(null);
-    /*const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomsQuery(null);*/
-   /* const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); */
+    const { data: departments, isLoading: isDepartmentsLoading } = useGetDepartmentsQuery(null);
+
+
+    const departmentMap = new Map<string, string>();
+    departments?.forEach((department: Department) => {
+        departmentMap.set(department.id, department.name);
+    });
+
+    const getDepartmentName = (departmentId: string) => {
+        return departmentMap.get(departmentId) || "Department not found!";
+    };
     const navigate = useNavigate();
     const location = useLocation();
-    /*const [rooms, setRooms] = useState<Room[]>([]);*/
     const [deleteRoom] = useDeleteRoomMutation();
+    
+    const userData: User = useSelector(
+        (state: RootState) => state.auth
+    );
 
 
-    //useEffect(() => {
-    //    if (roomsData && patientsData) {
-    //        const roomsWithPatients = roomsData.map((room: Room) => ({
-    //            ...room,
-    //            patientName: patientsData.find((patient: { id: number; }) => patient.id === room.patientId)?.name || 'Unknown', // Use patient's name or 'Unknown' if not found
-    //        }));
-    //        setRooms(roomsWithPatients);
-    //    }
-    //}, [roomsData, patientsData]);
-
-
-    let content;
-
-
-    //const handleRoomDelete = async (id: number) => {
-    //    toast.promise(
-    //        deleteRoom(id),
-    //        {
-    //            pending: "Processing your request...",
-    //            success: "Room Deleted Successfully ??",
-    //            error: "Error displaying",
-    //        }
-    //    );
-    //};
-
-    const handleRoomDelete = async (id: number,) => {
+    const handleRoomDelete = async (id: string,) => {
         const result = await deleteRoom(id);
 
         if ('data' in result) {
-            toastNotify("Room Deleted Successfully", "success");
+            toastNotify("Room has been deleted ", "success");
+            navigate('/rooms');
         }
         else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
@@ -66,34 +64,61 @@ function RoomList() {
         }
 
     };
- 
+    let content;
 
     if (isLoading /*|| patientsLoading*/) {
         content = <MainLoader />;
     } else if (error/*roomsError || patientsError*/) {
-        content = <div>{(error.data as FetchBaseQueryError)}</div>;
+        return (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <Message>
+                            {(error?.data as FetchBaseQueryError)}
+                        </Message>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
+        );
     } 
     else {
         content = data.map((room: Room) => {
             return (
                 <tbody key={room.id}>
                     <TableRow>
-                        <TableCell>{room.number}</TableCell>
-                        <TableCell>{room.capacity}</TableCell>
-                        <TableCell>{room.isFree === false ? "Occupied" : "Free"}</TableCell>
-                       
-                        <TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(room.updatedAt).toLocaleDateString()}</TableCell>
+                        <TableCell>#{room.roomNumber}</TableCell>
+                        <TableCell>{room.bedsAvailable}</TableCell>
+                        <TableCell>{isDepartmentsLoading ? (
+                            <MiniLoader />
+                        ) : getDepartmentName(room.departmentId)} </TableCell>
+
+                        {/*<TableCell>{new Date(room.createdAt).toLocaleDateString()}</TableCell>*/}
+                        {/*<TableCell>{new Date(room.updatedAt).toLocaleDateString()}</TableCell>*/}
+                        <TableCell></TableCell>
+
+                        {userData.role == SD_Roles.NURSE &&
+                            
+
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/room/" + room.id)} >
                             <FontAwesomeIcon icon={faInfo} />
-                        </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/room/update/" + room.id)} >
-                            <FontAwesomeIcon icon={faEdit} />
-                        </ActionButton>
-                        {/*TODO: add handler for delete*/}
-                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleRoomDelete(room.id)}>
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                        </ActionButton>
+                            </ActionButton>
+                        }
+
+                        {userData.role == SD_Roles.ADMINISTRATOR &&
+                            <>
+                                <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/room/update/" + room.id)} >
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </ActionButton>
+
+                                <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleRoomDelete(room.id)}>
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                </ActionButton>
+                            </>
+                        }
                     </TableRow>
                 </tbody>
             );
@@ -115,11 +140,10 @@ function RoomList() {
                     <thead>
                         <TableHead>
                             <TableHeaderCell>Number</TableHeaderCell>
-                            <TableHeaderCell>Capacity</TableHeaderCell>
-                            <TableHeaderCell>Status</TableHeaderCell>
-                          
-                            <TableHeaderCell>Created At</TableHeaderCell>
-                            <TableHeaderCell>Updated At</TableHeaderCell>
+                            <TableHeaderCell>Beds Available</TableHeaderCell>
+                            <TableHeaderCell>Department</TableHeaderCell>
+
+                            
                         </TableHead>
                     </thead>
                     {content}
@@ -128,5 +152,4 @@ function RoomList() {
         </>
     );
 }
-
-export default RoomList;
+export default withAuthorization(RoomList, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);

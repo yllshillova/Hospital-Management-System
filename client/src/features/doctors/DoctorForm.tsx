@@ -6,13 +6,14 @@ import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { useCreateDoctorMutation, useUpdateDoctorMutation } from "../../app/APIs/doctorApi";
-import { SD_Genders } from "../../app/utility/SD";
+import { SD_Genders, SD_Roles } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
 import { useGetDepartmentsQuery } from '../../app/APIs/departmentApi';
 import Department from '../../app/models/Department';
 import Doctor from '../../app/models/Doctor';
+import withAuthorization from "../../app/hoc/withAuthorization";
 
 interface DoctorFormProps {
     id?: string;
@@ -22,19 +23,25 @@ interface DoctorFormProps {
 const doctorData: Doctor = {
     name: "",
     lastName: "",
+    userName: "",
     specialization: "",
     address: "",
     residence: "",
     birthday: new Date(),
     gender: "",
     email: "",
+    id: "",
+    createdAt: new Date(),
+    updatedAt: new Date(), 
     isDeleted: false,
-    departmentId: ""
+    departmentId: "",
+    password:""
 };
 
 const genders = [SD_Genders.Male, SD_Genders.Female];
 
 function DoctorForm({ id, data }: DoctorFormProps) {
+
     const [doctorInputs, setDoctorInputs] = useState<Doctor>(data || doctorData);
     const [createDoctor] = useCreateDoctorMutation();
     const [updateDoctor] = useUpdateDoctorMutation();
@@ -75,6 +82,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
 
         formData.append("Name", doctorInputs.name);
         formData.append("LastName", doctorInputs.lastName);
+        formData.append("UserName", doctorInputs.userName);
         formData.append("Specialization", doctorInputs.specialization);
         formData.append("Address", doctorInputs.address);
         formData.append("Residence", doctorInputs.residence);
@@ -83,6 +91,10 @@ function DoctorForm({ id, data }: DoctorFormProps) {
         formData.append("Email", doctorInputs.email);
         formData.append("IsDeleted", doctorInputs.isDeleted.toString());
         formData.append("DepartmentId", doctorInputs.departmentId);
+// Only append the password if it's not empty
+        if (doctorInputs.password) {
+            formData.append("Password", doctorInputs.password);
+        }       
 
         const currentLocation = window.location.pathname;
 
@@ -98,7 +110,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
             }
         } else {
             const response = await createDoctor(formData);
-
+            console.log(response);
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
@@ -147,6 +159,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
+
                             <FormGroup>
                                 <Label>Last Name</Label>
                                 <Input
@@ -156,43 +169,22 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
+
                             <FormGroup>
-                                <Label>Specialization</Label>
-                                <Input
-                                    type="text"
-                                    name="specialization"
-                                    value={doctorInputs.specialization}
+                                <Select
+                                    name="gender"
+                                    value={doctorInputs.gender}
                                     onChange={handleDoctorInput}
-                                />
+                                >
+                                    <option value="">Select Gender</option>
+                                    {genders.map((gender) => (
+                                        <option key={gender} value={gender}>
+                                            {gender}
+                                        </option>
+                                    ))}
+                                </Select>
                             </FormGroup>
-                            <FormGroup>
-                                <Label>Address</Label>
-                                <Input
-                                    type="text"
-                                    name="address"
-                                    value={doctorInputs.address}
-                                    onChange={handleDoctorInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Residence</Label>
-                                <Input
-                                    type="text"
-                                    name="residence"
-                                    value={doctorInputs.residence}
-                                    onChange={handleDoctorInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Email</Label>
-                                <Input
-                                    type="text"
-                                    name="email"
-                                    value={doctorInputs.email}
-                                    onChange={handleDoctorInput}
-                                />
-                            </FormGroup>
-                            
+
                             <FormGroup>
                                 <Select
                                     name="departmentId"
@@ -209,26 +201,77 @@ function DoctorForm({ id, data }: DoctorFormProps) {
                                 </Select>
                                 {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
                             </FormGroup>
+
                             <FormGroup>
-                                <Select
-                                    name="gender"
-                                    value={doctorInputs.gender}
+                                <Label>User Name</Label>
+                                <Input
+                                    type="text"
+                                    name="userName"
+                                    value={doctorInputs.userName}
                                     onChange={handleDoctorInput}
-                                >
-                                    <option value="">Select Gender</option>
-                                    {genders.map((gender) => (
-                                        <option key={gender} value={gender}>
-                                            {gender}
-                                        </option>
-                                    ))}
-                                </Select>
+                                />
                             </FormGroup>
+
                             <FormGroup>
                                 <Label>Birthday</Label>
                                 <Input
                                     type="date"
                                     name="birthday"
                                     value={validBirthdayDate(doctorInputs.birthday)}
+                                    onChange={handleDoctorInput}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label>Email</Label>
+                                <Input
+                                    type="text"
+                                    name="email"
+                                    value={doctorInputs.email}
+                                    onChange={handleDoctorInput}
+                                />
+                            </FormGroup>
+
+                            {!id && (
+                                <FormGroup>
+                                    <Label>Password</Label>
+                                    <Input
+                                        type="password"
+                                        name="password"
+                                        value={doctorInputs.password}
+                                        onChange={handleDoctorInput}
+                                    />
+                                </FormGroup>
+                            )}
+                            
+                            <FormGroup>
+                                <Label>Address</Label>
+                                <Input
+                                    type="text"
+                                    name="address"
+                                    value={doctorInputs.address}
+                                    onChange={handleDoctorInput}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label>Residence</Label>
+                                <Input
+                                    type="text"
+                                    name="residence"
+                                    value={doctorInputs.residence}
+                                    onChange={handleDoctorInput}
+                                />
+                            </FormGroup>
+
+                            
+                           
+                             <FormGroup>
+                                <Label>Specialization</Label>
+                                <Input
+                                    type="text"
+                                    name="specialization"
+                                    value={doctorInputs.specialization}
                                     onChange={handleDoctorInput}
                                 />
                             </FormGroup>
@@ -262,4 +305,4 @@ function DoctorForm({ id, data }: DoctorFormProps) {
     );
 }
 
-export default DoctorForm;
+export default withAuthorization(DoctorForm, [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);

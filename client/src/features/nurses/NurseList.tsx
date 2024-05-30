@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MainLoader from "../../app/common/MainLoader";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -16,9 +16,20 @@ import Nurse from "../../app/models/Nurse";
 import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MiniLoader from "../../app/common/MiniLoader";
 import Department from "../../app/models/Department";
+import withAuthorization from '../../app/hoc/withAuthorization';
+import { SD_Roles } from "../../app/utility/SD";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { RootState } from "../../app/storage/redux/store";
+import { useSelector } from "react-redux";
+import User from "../../app/models/User";
+
 function NurseList() {
     const { data, isLoading, error } = useGetNursesQuery(null);
     const { data: departments, isLoading: isDepartmentsLoading } = useGetDepartmentsQuery(null);
+
+    const userData: User = useSelector(
+        (state: RootState) => state.auth
+    );
 
     const departmentMap = new Map<string, string>();
     departments?.forEach((department: Department) => {
@@ -33,8 +44,6 @@ function NurseList() {
     const navigate = useNavigate();
     const location = useLocation();
     let content;
-
-
 
     const handleNurseDelete = async (id: string,) => {
         const result = await deleteNurse(id);
@@ -56,7 +65,21 @@ function NurseList() {
     if (isLoading) {
         content = <MainLoader />;
     } else if (error) {
-        content = <div>{(error.data as FetchBaseQueryError)}</div>;
+        return (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <Message>
+                            {(error?.data as FetchBaseQueryError)}
+                        </Message>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
+        );
     }
     else {
         content = data.map((nurse: Nurse) => {
@@ -65,19 +88,29 @@ function NurseList() {
                     <TableRow>
                         <TableCell>{nurse.name}</TableCell>
                         <TableCell>{nurse.lastName} </TableCell>
+                        <TableCell>{nurse.email} </TableCell>
+
                         <TableCell>{isDepartmentsLoading ? (
                             <MiniLoader />
                         ) : getDepartmentName(nurse.departmentId)} </TableCell>
-                        <TableCell>{nurse.isDeleted} </TableCell>
+                        <TableCell>{nurse.residence} </TableCell>
+                        {/*<TableCell>{nurse.isDeleted} </TableCell>*/}
+                        {/*<TableCell>{new Date(nurse.createdAt).toLocaleDateString()}</TableCell>*/}
+                        {/*<TableCell>{new Date(nurse.updatedAt).toLocaleDateString()}</TableCell>*/}
+
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/nurse/" + nurse.id)} >
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/nurse/update/" + nurse.id)} >
-                            <FontAwesomeIcon icon={faEdit} />
-                        </ActionButton>
-                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleNurseDelete(nurse.id)}>
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                        </ActionButton>
+                        {userData.role == SD_Roles.ADMINISTRATOR && 
+                                <>
+                                <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/nurse/update/" + nurse.id)} >
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </ActionButton>
+                                <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleNurseDelete(nurse.id)}>
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                </ActionButton>
+                            </>
+                        }
                     </TableRow>
                 </tbody>
             );
@@ -100,8 +133,9 @@ function NurseList() {
                         <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
                             <TableHeaderCell>Last Name</TableHeaderCell>
+                            <TableHeaderCell>Email</TableHeaderCell>
                             <TableHeaderCell>Department</TableHeaderCell>
-                            <TableHeaderCell>Is Deleted</TableHeaderCell>
+                            <TableHeaderCell>Residence </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}
@@ -110,5 +144,4 @@ function NurseList() {
         </>
     );
 }
-
-export default NurseList;
+export default withAuthorization(NurseList, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

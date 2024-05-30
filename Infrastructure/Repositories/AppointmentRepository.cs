@@ -46,5 +46,19 @@ namespace Infrastructure.Repositories
             return false;
         }
 
+        public async Task<Appointment> GetIntersectingAppointment(Guid patientId, Guid doctorId)
+        {
+            // Retrieve appointments for the patient and doctor
+            var patientAppointments = await GetAppointmentsByPatientId(patientId);
+            var doctorAppointments = await GetAppointmentsByDoctorId(doctorId);
+
+            // Find the intersecting appointment
+            var intersectingAppointment = patientAppointments.FirstOrDefault(pa => doctorAppointments.Any(da => da.Id == pa.Id));
+
+            return intersectingAppointment;
+        }
+
+
+
     }
 }

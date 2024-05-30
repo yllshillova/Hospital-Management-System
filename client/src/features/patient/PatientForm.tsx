@@ -6,10 +6,11 @@ import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { useCreatePatientMutation, useUpdatePatientMutation } from "../../app/APIs/patientApi";
-import { SD_Genders, SD_Bloodgroups } from "../../app/utility/SD";
+import { SD_Genders, SD_Bloodgroups, SD_Roles } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
+import withAuthorization from '../../app/hoc/withAuthorization';
 
 interface PatientData {
     name: string,
@@ -49,7 +50,7 @@ const patientData: PatientData = {
     occupation: "",
     allergies: ""
 };
-const bloodgroups = [
+const bloodGroups = [
     SD_Bloodgroups.O_Positive,
     SD_Bloodgroups.O_Negative,
     SD_Bloodgroups.A_Positive,
@@ -170,7 +171,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Name</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="name"
                                     value={patientInputs.name}
                                     onChange={handlePatientInput}
@@ -180,7 +180,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Last Name</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="lastName"
                                     value={patientInputs.lastName}
                                     onChange={handlePatientInput}
@@ -190,7 +189,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Parent Name</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="parentName"
                                     value={patientInputs.parentName}
                                     onChange={handlePatientInput}
@@ -200,7 +198,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Personal Number</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="personalNumber"
                                     value={patientInputs.personalNumber}
                                     onChange={handlePatientInput}
@@ -211,7 +208,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Address</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="address"
                                     value={patientInputs.address}
                                     onChange={handlePatientInput}
@@ -221,7 +217,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Residence</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="residence"
                                     value={patientInputs.residence}
                                     onChange={handlePatientInput}
@@ -232,7 +227,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Email</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="email"
                                     value={patientInputs.email}
                                     onChange={handlePatientInput}
@@ -242,7 +236,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Phone Number</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="phoneNumber"
                                     value={patientInputs.phoneNumber}
                                     onChange={handlePatientInput}
@@ -252,7 +245,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                                 <Label>Occupation</Label>
                                 <Input
                                     type="text"
-                                    required
                                     name="occupation"
                                     value={patientInputs.occupation}
                                     onChange={handlePatientInput}
@@ -272,13 +264,14 @@ function PatientForm({ id, data }: PatientFormProps) {
                             <FormGroup>
                                 <Select
                                     name="bloodGroup"
+                                    required
                                     value={patientInputs.bloodGroup}
                                     onChange={handlePatientInput}
                                 >
                                     <option value="">Select Blood Group</option>
-                                    {bloodgroups.map((bloodgroup) => (
-                                        <option key={bloodgroup} value={bloodgroup}>
-                                            {bloodgroup}
+                                    {bloodGroups.map((bloodGroup) => (
+                                        <option key={bloodGroup} value={bloodGroup}>
+                                            {bloodGroup}
                                         </option>
                                     ))}
                                 </Select>
@@ -286,6 +279,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                             <FormGroup>
                                 <Select
                                     name="gender"
+                                    required
                                     value={patientInputs.gender}
                                     onChange={handlePatientInput}
                                 >
@@ -335,4 +329,4 @@ function PatientForm({ id, data }: PatientFormProps) {
     );
 }
 
-export default PatientForm;
+export default withAuthorization(PatientForm, [SD_Roles.NURSE]);

@@ -1,16 +1,13 @@
-//import Patient from "./Patient";
-
-import RoomPatient from "./RoomPatient";
+import Patient from "./Patient";
 
 export default interface Room {
-    id: number;
-    capacity: number;
-    isFree: boolean;
-    //patientId: number;
-    //patient: Patient;
-    //patientName: string;
+    id: string;
+    beds: string ;
+    bedsAvailable: string;
+    //isFree: boolean;
     createdAt: Date;
     updatedAt: Date;
-    number: number;
-    roomPatients: RoomPatient[];
+    roomNumber: string ;
+    patients: Patient[];
+    departmentId: string;
 }

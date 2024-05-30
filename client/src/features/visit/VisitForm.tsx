@@ -6,12 +6,20 @@ import toastNotify from "../../app/helpers/toastNotify";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { Header, SidePanel } from "../../app/layout";
 import MainLoader from "../../app/common/MainLoader";
-import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
+//import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 import Doctor from "../../app/models/Doctor";
 import Patient from "../../app/models/Patient";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import inputHelper from "../../app/helpers/inputHelper";
 import { useNavigate } from "react-router-dom";
+import { useAssignPatientMutation } from "../../app/APIs/roomApi";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBedPulse } from "@fortawesome/free-solid-svg-icons/faBedPulse";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { SD_Roles } from "../../app/utility/SD";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/storage/redux/store";
 
 interface VisitFormProps {
     id?: string;
@@ -44,8 +52,12 @@ function VisitForm({ id, data }: VisitFormProps) {
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
-    const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
+    //const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
+    const [assignPatientToRoom, { isLoading: assigningPatient }] = useAssignPatientMutation();
 
+    const doctorId: string = useSelector(
+        (state: RootState) => state.auth.id
+    );
     //useEffect(() => {
     //    if (data) {
     //        const tempData = {
@@ -88,7 +100,7 @@ function VisitForm({ id, data }: VisitFormProps) {
         formData.append("RequiredAnalysis", visitInputs.requiredAnalysis);
         formData.append("Advice", visitInputs.advice);
         formData.append("Remarks", visitInputs.remarks);
-        formData.append("DoctorId", visitInputs.doctorId);
+        formData.append("DoctorId", doctorId);
         formData.append("PatientId", visitInputs.patientId);
 
         const currentLocation = window.location.pathname;
@@ -117,6 +129,29 @@ function VisitForm({ id, data }: VisitFormProps) {
         setLoading(false);
     };
 
+    const handleAssignToRoom = async (): Promise<void> => {
+        if (!visitInputs.patientId) {
+            toastNotify("Please select a patient first", "warning");
+            return;
+        }
+
+        try {
+            const response = await assignPatientToRoom({ patientId: visitInputs.patientId, doctorId: doctorId });
+            console.log(response);
+            if (response.error) {
+                // Handle error
+                toastNotify("Failed to assign patient to room", "error");
+            } else {
+                // Handle success
+                toastNotify("Patient assigned to room successfully", "success");
+            }
+        } catch (error) {
+            // Handle error
+            toastNotify("An error occurred while assigning patient to room", "error");
+        }
+    };
+
+
     return (
         <>
             <Header />
@@ -144,22 +179,23 @@ function VisitForm({ id, data }: VisitFormProps) {
                             method="post"
                             encType="multipart/form-data"
                             onSubmit={handleSubmit}
-                            ><FormGroup>
-                                <Select
-                                    name="doctorId"
-                                    value={visitInputs.doctorId}
-                                    onChange={handleVisitInput}
-                                    disabled={doctorsLoading}
-                                >
-                                    <option value="">Select Doctor</option>
-                                    {doctorsData && doctorsData.map((doctor: Doctor) => (
-                                        <option key={doctor.id} value={doctor.id}>
-                                            {doctor.name} {" "} {doctor.lastName}
-                                        </option>
-                                    ))}
-                                </Select>
-                                {doctorsError && <div style={{ color: 'red' }}>Error loading doctors</div>}
-                            </FormGroup>
+                        >
+                            {/*<FormGroup>*/}
+                            {/*    <Select*/}
+                            {/*        name="doctorId"*/}
+                            {/*        value={visitInputs.doctorId}*/}
+                            {/*        onChange={handleVisitInput}*/}
+                            {/*        disabled={doctorsLoading}*/}
+                            {/*    >*/}
+                            {/*        <option value="">Select Doctor</option>*/}
+                            {/*        {doctorsData && doctorsData.map((doctor: Doctor) => (*/}
+                            {/*            <option key={doctor.id} value={doctor.id}>*/}
+                            {/*                {doctor.name} {" "} {doctor.lastName}*/}
+                            {/*            </option>*/}
+                            {/*        ))}*/}
+                            {/*    </Select>*/}
+                            {/*    {doctorsError && <div style={{ color: 'red' }}>Error loading doctors</div>}*/}
+                            {/*</FormGroup>*/}
 
                             <FormGroup>
                                 <Select
@@ -242,6 +278,11 @@ function VisitForm({ id, data }: VisitFormProps) {
                             </FormGroup>
                             
 
+                            <AssignToRoomButton onClick={handleAssignToRoom} disabled={assigningPatient}>
+                                <FontAwesomeIcon icon={faBedPulse}/>
+                                <ButtonText>Assign to Room</ButtonText>
+                            </AssignToRoomButton>
+
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit
@@ -257,4 +298,30 @@ function VisitForm({ id, data }: VisitFormProps) {
         </>
     );
 }
-export default VisitForm;
+const AssignToRoomButton = styled.button`
+    background-color: #002147;
+    color: #fff;
+    border-radius: 5px;
+    padding: 8px ; /* Adjusted padding to reduce height */
+    cursor: pointer;
+    font-size: 14px; /* Adjusted font size to reduce height */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 85px; /* Adjusted margin to push it more to the left */
+    margin-top:5px;
+    margin-bottom:19px;
+    transition: ease 0.3s;
+    &:hover {
+        transform: scale(1.1);
+    } 
+`;
+
+const ButtonText = styled.span`
+    margin-right: 5px;
+      font-weight: 600;
+`;
+
+
+
+export default withAuthorization(VisitForm, [SD_Roles.DOCTOR]);

@@ -1,4 +1,3 @@
-import RoomPatient from "./RoomPatient";
 
  export default interface Patient{
      id: string;
@@ -9,7 +8,7 @@ import RoomPatient from "./RoomPatient";
      address: string;
      residence: string;
      birthday: Date;
-     bloodgroup: string;
+     bloodGroup: string;
      gender: string;
      email: string;
      phoneNumber: string;
@@ -18,5 +17,4 @@ import RoomPatient from "./RoomPatient";
      isDeleted: boolean;
      occupation: string;
      allergies: string;
-     roomPatients: RoomPatient[];
 }

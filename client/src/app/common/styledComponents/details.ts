@@ -50,7 +50,7 @@ export const Attribute = styled.div`
     margin-bottom: 15px;
 `;
 export const Label = styled.span`
-    color: #696969	; 
+    color: #696969; 
     margin-right: 10px; 
     width: 120px;
     margin-bottom: 5px;
@@ -60,4 +60,11 @@ export const Value = styled.span`
     font-weight:bold;
     margin-bottom: 5px;
 `;
-
+export const ErrorMessage = styled.span`
+    font-size: 15px;
+    border-radius: 10px; 
+    background-color: white;
+    padding: 10px 20px; 
+    color: #696969; 
+    margin: 50px 20px 0 220px;
+`;

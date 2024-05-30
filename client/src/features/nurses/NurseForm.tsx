@@ -6,46 +6,42 @@ import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { useCreateNurseMutation, useUpdateNurseMutation } from "../../app/APIs/nurseApi";
-import { SD_Genders } from "../../app/utility/SD";
+import { SD_Genders, SD_Roles } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
 import { useGetDepartmentsQuery } from '../../app/APIs/departmentApi';
 import Department from '../../app/models/Department';
+import Nurse from '../../app/models/Nurse';
+import withAuthorization from '../../app/hoc/withAuthorization';
 
-interface NurseData {
-    name: string;
-    lastName: string;
-    address: string;
-    residence: string;
-    birthday: string;
-    gender: string;
-    email: string;
-    isDeleted: boolean;
-    departmentId: string;
-}
 
 interface NurseFormProps {
     id?: string;
-    data?: NurseData;
+    data?: Nurse;
 }
 
-const nurseData: NurseData = {
+const nurseData: Nurse = {
     name: "",
     lastName: "",
+    userName:"",
     address: "",
     residence: "",
-    birthday: "",
+    birthday: new Date(),
     gender: "",
     email: "",
+    id: "",
+    createdAt: new Date(),
+    updatedAt: new Date(), 
     isDeleted: false,
-    departmentId: ""
+    departmentId: "",
+    password: ""
 };
 
 const genders = [SD_Genders.Male, SD_Genders.Female];
 
 function NurseForm({ id, data }: NurseFormProps) {
-    const [nurseInputs, setNurseInputs] = useState<NurseData>(data || nurseData);
+    const [nurseInputs, setNurseInputs] = useState<Nurse>(data || nurseData);
     const [createNurse] = useCreateNurseMutation();
     const [updateNurse] = useUpdateNurseMutation();
     const navigate = useNavigate();
@@ -85,13 +81,18 @@ function NurseForm({ id, data }: NurseFormProps) {
 
         formData.append("Name", nurseInputs.name);
         formData.append("LastName", nurseInputs.lastName);
+        formData.append("UserName", nurseInputs.userName);
         formData.append("Address", nurseInputs.address);
         formData.append("Residence", nurseInputs.residence);
-        formData.append("Birthday", nurseInputs.birthday);
+        formData.append("Birthday", nurseInputs.birthday.toString());
         formData.append("Gender", nurseInputs.gender);
         formData.append("Email", nurseInputs.email);
         formData.append("IsDeleted", nurseInputs.isDeleted.toString());
         formData.append("DepartmentId", nurseInputs.departmentId);
+
+        if (nurseInputs.password) {
+            formData.append("Password", nurseInputs.password);
+        }
 
         const currentLocation = window.location.pathname;
 
@@ -107,7 +108,7 @@ function NurseForm({ id, data }: NurseFormProps) {
             }
         } else {
             const response = await createNurse(formData);
-
+            console.log(response);
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
@@ -155,6 +156,7 @@ function NurseForm({ id, data }: NurseFormProps) {
                                     onChange={handleNurseInput}
                                 />
                             </FormGroup>
+
                             <FormGroup>
                                 <Label>Last Name</Label>
                                 <Input
@@ -164,42 +166,7 @@ function NurseForm({ id, data }: NurseFormProps) {
                                     onChange={handleNurseInput}
                                 />
                             </FormGroup>
-                            <FormGroup>
-                                <Label>Address</Label>
-                                <Input
-                                    type="text"
-                                    name="address"
-                                    value={nurseInputs.address}
-                                    onChange={handleNurseInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Residence</Label>
-                                <Input
-                                    type="text"
-                                    name="residence"
-                                    value={nurseInputs.residence}
-                                    onChange={handleNurseInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Email</Label>
-                                <Input
-                                    type="text"
-                                    name="email"
-                                    value={nurseInputs.email}
-                                    onChange={handleNurseInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Birthday</Label>
-                                <Input
-                                    type="date"
-                                    name="birthday"
-                                    value={validBirthdayDate(nurseInputs.birthday)}
-                                    onChange={handleNurseInput}
-                                />
-                            </FormGroup>
+
                             <FormGroup>
                                 <Select
                                     name="gender"
@@ -232,6 +199,68 @@ function NurseForm({ id, data }: NurseFormProps) {
                                 {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
                             </FormGroup>
 
+                            <FormGroup>
+                                <Label>User Name</Label>
+                                <Input
+                                    type="text"
+                                    name="userName"
+                                    value={nurseInputs.userName}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label>Birthday</Label>
+                                <Input
+                                    type="date"
+                                    name="birthday"
+                                    value={validBirthdayDate(nurseInputs.birthday)}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label>Email</Label>
+                                <Input
+                                    type="text"
+                                    name="email"
+                                    value={nurseInputs.email}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+
+                            {!id && (
+                            <FormGroup>
+                                <Label>Password</Label>
+                                <Input
+                                    type="password"
+                                    name="password"
+                                    value={nurseInputs.password}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+                            )}
+                            
+                            <FormGroup>
+                                <Label>Address</Label>
+                                <Input
+                                    type="text"
+                                    name="address"
+                                    value={nurseInputs.address}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label>Residence</Label>
+                                <Input
+                                    type="text"
+                                    name="residence"
+                                    value={nurseInputs.residence}
+                                    onChange={handleNurseInput}
+                                />
+                            </FormGroup>
+
                             {id ? <FormGroup>
                                 <Label>
                                     Is Deleted{" "}
@@ -260,4 +289,4 @@ function NurseForm({ id, data }: NurseFormProps) {
     );
 }
 
-export default NurseForm;
+export default withAuthorization(NurseForm, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

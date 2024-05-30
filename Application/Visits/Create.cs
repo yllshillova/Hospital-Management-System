@@ -1,5 +1,4 @@
 ﻿using Application.Core;
-using Application.BaseValidators;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
@@ -20,7 +19,7 @@ namespace Application.Visits
             }
         }
 
-        public class CreateVisitCommandHandler(IVisitRepository _visitRepository, IMapper _mapper) : IRequestHandler<CreateVisitCommand, Result<Unit>>
+        public class CreateVisitCommandHandler(IVisitRepository _visitRepository, IAppointmentRepository _appointmentRepository, IMapper _mapper) : IRequestHandler<CreateVisitCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(CreateVisitCommand request, CancellationToken cancellationToken)
             {
@@ -31,7 +30,15 @@ namespace Application.Visits
 
                 visit.CreatedAt = DateTime.Now;
                 visit.UpdatedAt = visit.CreatedAt;
-                
+
+                var intersectingAppointment = await _appointmentRepository.GetIntersectingAppointment(visit.PatientId, visit.DoctorId);
+                if (intersectingAppointment == null) return Result<Unit>.Failure(ErrorType.NotFound, "Appointment associated with the visit not found!");
+
+                intersectingAppointment.Status = "Completed";
+                var appointmentUpdateResult = await _appointmentRepository.UpdateAsync(intersectingAppointment);
+
+                if (!appointmentUpdateResult) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update appointment status! Try again.");
+
                 var result = await _visitRepository.CreateAsync(visit);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the visit report! Try again.");
 

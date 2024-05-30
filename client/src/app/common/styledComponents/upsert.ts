@@ -46,7 +46,7 @@ margin-left:7px;
 `;
 
 export const Input = styled.input`
-  width: 100%; /* Take full width */
+  width: 100%; 
   padding: 8px;
   font-size: 14px;
   border: none;
@@ -56,7 +56,7 @@ export const Input = styled.input`
 `;
 
 export const Select = styled.select`
-  width: 100%; /* Take full width */
+  width: 100%; 
   padding: 8px;
   font-size: 14px;
   border: none;
@@ -67,8 +67,8 @@ export const Select = styled.select`
 
 export const SubmitButton = styled.button`
   width: 48%;
-  padding: 8px;
-  background-color: #002147;;
+  padding: 13px ;
+  background-color: #002147;
   color: white;
   border: none;
   border-radius: 5px;
@@ -84,7 +84,7 @@ export const SubmitButton = styled.button`
 
 export const BackToProductsButton = styled.button`
   width: 48%;
-  padding: 8px;
+  padding: 13px;
   background-color: white;
   color: black;
   border: 1px solid black;
@@ -103,5 +103,6 @@ export const BackToProductsButton = styled.button`
 export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  margin-left:160px;
+  width: 60%;
 `;

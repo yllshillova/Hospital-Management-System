@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Infrastructure
 {
@@ -28,6 +27,7 @@ namespace Infrastructure
                 .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<DataContext>();
 
+            services.AddSingleton<MongoContext>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IVisitRepository, VisitRepository>();
             services.AddScoped<IPatientRepository, PatientRepository>();
@@ -37,12 +37,10 @@ namespace Infrastructure
             services.AddScoped<IEmergencyContactRepository, EmergencyContactRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
-            services.AddScoped<IRoomPatientRepository, RoomPatientRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 
             await MigrateDatabaseAndSeedData(services.BuildServiceProvider());
-
-
         }
 
         private static async Task MigrateDatabaseAndSeedData(IServiceProvider services)

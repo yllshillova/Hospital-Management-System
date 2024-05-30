@@ -25,7 +25,7 @@ namespace Application.Rooms
 
                 _mapper.Map(request.Room, room);
                 room.UpdatedAt = DateTime.Now;
-               
+
                 var result = await _roomRepository.UpdateAsync(room);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update the room. Try again!");
 

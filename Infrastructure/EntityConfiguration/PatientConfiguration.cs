@@ -10,6 +10,11 @@ namespace Infrastructure.EntityConfiguration
         {
             builder.HasMany(x => x.Appointments)
                    .WithOne(x => x.Patient);
+            builder.HasOne(x => x.Room)
+                    .WithMany(x => x.Patients)
+                    .HasForeignKey(a => a.RoomId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
 
             builder.ToTable("Patients", builder => builder.IsTemporal(x =>
             {

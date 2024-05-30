@@ -14,4 +14,5 @@ export default interface Appointment {
     doctor: Doctor;
     patientId: string;
     patient: Patient;
+
 }

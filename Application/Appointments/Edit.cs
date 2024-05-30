@@ -24,7 +24,7 @@ namespace Application.Appointments
             {
                 var appointment = await _appointmentRepository.GetByIdAsync(request.Appointment.Id);
                 if (appointment is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
-                
+
                 var isValidAppointment = await _appointmentRepository.IsValidAppointment(request.Appointment.CheckInDate, request.Appointment.CheckOutDate, request.Appointment.DoctorId);
 
                 if (!isValidAppointment) return Result<Unit>.Failure(ErrorType.BadRequest, "Update failed! The doctor is not available for the selected time. Please select another convenience!");

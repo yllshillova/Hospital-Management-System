@@ -5,6 +5,8 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { useGetVisitByIdQuery } from '../../app/APIs/visitApi';
 import VisitForm from '../visit/VisitForm';
+import withAuthorization from '../../app/hoc/withAuthorization';
+import { SD_Roles } from '../../app/utility/SD';
 
 function VisitUpdate() {
     const { id } = useParams<{ id: string }>();
@@ -25,4 +27,4 @@ function VisitUpdate() {
     return <div>No visit data available.</div>;
 }
 
-export default VisitUpdate;
+export default  withAuthorization( VisitUpdate , [SD_Roles.DOCTOR]);

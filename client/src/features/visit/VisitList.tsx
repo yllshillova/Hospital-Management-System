@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MainLoader from "../../app/common/MainLoader";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorMessage, BackButton, ErrorTitleRow, ErrorIcon, Message } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -17,8 +17,15 @@ import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 import Visit from "../../app/models/Visit";
 import Patient from "../../app/models/Patient";
 import Doctor from "../../app/models/Doctor";
+import { SD_Roles } from "../../app/utility/SD";
+import withAuthorization from "../../app/hoc/withAuthorization";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/storage/redux/store";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 function VisitList() {
-    const { data, isLoading, error } = useGetVisitsQuery(null);
+
+    const userData = useSelector((state: RootState) => state.auth);
+    const { data, isLoading, error } = useGetVisitsQuery(userData.id);
     const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); 
 
@@ -45,14 +52,23 @@ function VisitList() {
 
     };
 
-
     if (isLoading || patientsLoading || doctorsLoading) {
         content = <MainLoader />;
     } else if (error || doctorsError || patientsError) {
-        content = (
-            <div>
-                {(error?.data as FetchBaseQueryError) || (doctorsError?.data as FetchBaseQueryError) || (patientsError?.data as FetchBaseQueryError)}
-            </div>
+        return (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <Message>
+                            {(error?.data as FetchBaseQueryError) || (doctorsError?.data as FetchBaseQueryError) || (patientsError?.data as FetchBaseQueryError)}
+                        </Message>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
         );
     }
     else {
@@ -65,19 +81,26 @@ function VisitList() {
                         <TableCell>{doctor.name} {" "} {doctor.lastName}</TableCell>
                         <TableCell>{patient.name} {" "} {patient.lastName}</TableCell>
                         <TableCell>{visit.complaints}</TableCell>
-                        <TableCell>{new Date(visit.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell>{new Date(visit.updatedAt).toLocaleDateString()}</TableCell>
+                        <TableCell>{visit.diagnosis}</TableCell>
+
+                        {/*<TableCell>{new Date(visit.createdAt).toLocaleDateString()}</TableCell>*/}
+                        {/*<TableCell>{new Date(visit.updatedAt).toLocaleDateString()}</TableCell>*/}
 
                         <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/visit/" + visit.id)} >
                             <FontAwesomeIcon icon={faInfo} />
                         </ActionButton>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/visit/update/" + visit.id)} >
-                            <FontAwesomeIcon icon={faEdit} />
-                        </ActionButton>
-                        {/*TODO: add handler for delete*/}
-                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleVisitDelete(visit.id)}>
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                        </ActionButton>
+
+                        {userData.role == SD_Roles.DOCTOR &&
+
+                            <>
+                                <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/visit/update/" + visit.id)} >
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </ActionButton>
+                                <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleVisitDelete(visit.id)}>
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                </ActionButton>
+                            </>
+                     }
                     </TableRow>
                 </tbody>
             );
@@ -91,9 +114,12 @@ function VisitList() {
             <OrdersTable>
                 <TableNav>
                     <TableHeader>Visits List</TableHeader>
+
+                    {userData.role == SD_Roles.DOCTOR &&
                     <AddButton onClick={() => navigate("/visit/insert")}  >
                         <FontAwesomeIcon icon={faAdd} />
-                    </AddButton>
+                        </AddButton>
+                    }
                 </TableNav>
                 <Table>
                     <thead>
@@ -101,9 +127,7 @@ function VisitList() {
                             <TableHeaderCell>Doctor</TableHeaderCell>
                             <TableHeaderCell>Patient</TableHeaderCell>
                             <TableHeaderCell>Complaints</TableHeaderCell>
-                            <TableHeaderCell>CreatedAt</TableHeaderCell>
-                            <TableHeaderCell>UpdatedAt</TableHeaderCell>
-
+                            <TableHeaderCell>Diagnosis </TableHeaderCell>
                         </TableHead>
                     </thead>
                     {content}
@@ -113,4 +137,4 @@ function VisitList() {
     );
 }
 
-export default VisitList;
+export default withAuthorization(VisitList , [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);

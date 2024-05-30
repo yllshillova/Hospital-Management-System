@@ -3,19 +3,26 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHospital } from '@fortawesome/free-solid-svg-icons/faHospital';
 import { useNavigate } from 'react-router-dom';
-//import { faGaugeHigh } from '@fortawesome/free-solid-svg-icons';
-//import { userModel } from '../../Interfaces';
-//import { useSelector } from 'react-redux';
-//import { RootState } from '../../Storage/Redux/store';
+import { useSelector } from 'react-redux';
+import { RootState } from '../storage/redux/store';
+import { SD_Roles } from '../utility/SD';
+import User from '../models/User';
 
 function Header() {
     const navigate = useNavigate();
-    //const userData: userModel = useSelector(
-    //    (state: RootState) => state.userAuthStore
-    //);
+    const userData: User = useSelector(
+        (state: RootState) => state.auth
+    );
 
-    //const nameUser = userData.name;
-    //const surnameUser = userData.surname;
+    let displayName = `${userData.name} ${userData.lastName}`;
+    if (userData.role === SD_Roles.DOCTOR) {
+        displayName = `Dr. ${userData.name} ${userData.lastName}`;
+    } else if (userData.role === SD_Roles.NURSE) {
+        displayName = `Nurse ${userData.name} ${userData.lastName}`;
+    }
+    else {
+        displayName = `Admin. ${userData.name} ${userData.lastName}`;
+    }
 
     return (
         <StickyHeader>
@@ -24,8 +31,8 @@ function Header() {
                     <Logo onClick={() => navigate('/')} >Dashboard</Logo>
                     <MenuIcon icon={faHospital} />
                 </LogoContainer>
-                {/*<MessageContainer> {nameUser} {" "} {surnameUser}*/}
-                <MessageContainer> {"Name Surname"}
+                <MessageContainer>
+                    {displayName}
                     <UserImage>
                         <img
                             src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"

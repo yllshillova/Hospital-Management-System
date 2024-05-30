@@ -27,10 +27,11 @@ namespace Application.Rooms
 
                 var room = _mapper.Map<Room>(request.Room);
                 if (room is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto.");
-                
+
                 room.CreatedAt = DateTime.Now;
                 room.UpdatedAt = room.CreatedAt;
-                
+                room.BedsAvailable = room.Beds;
+
                 var result = await _roomRepository.CreateAsync(room);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the room. Try again!");
 

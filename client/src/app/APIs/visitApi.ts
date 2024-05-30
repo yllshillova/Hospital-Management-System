@@ -8,8 +8,11 @@ const visitApi = createApi({
     tagTypes: ["Visits"],
     endpoints: (builder) => ({
         getVisits: builder.query({
-            query: () => ({
+            query: (doctorId?: string) => ({
                 url: "visits",
+                params: {
+                    ...(doctorId && { doctorId }),
+                },
             }),
             providesTags: ["Visits"],
         }),

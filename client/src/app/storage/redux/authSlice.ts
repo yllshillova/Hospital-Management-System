@@ -1,30 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import User from "../../models/User";
 
-export interface AuthState {
-    token: string | null;
-    isAuthenticated: boolean;
-}
-
-const initialState: AuthState = {
-    token: null,
-    isAuthenticated: false,
+export const emptyUserState: User = {
+    name: "",
+    lastName: "",
+    id: "",
+    email: "",
+    role: "",
+    accessToken: "",
+    refreshToken: "",
 };
+
 
 const authSlice = createSlice({
     name: "auth",
-    initialState,
+    initialState: emptyUserState,
     reducers: {
-        setToken(state, action) {
-            state.token = action.payload;
-            state.isAuthenticated = true;
+        setLoggedInUser: (state, action: PayloadAction<{ id: string; name: string; lastName: string; email: string; role: string; accessToken: string }>) => {
+            state.id = action.payload.id;
+            state.name = action.payload.name;
+            state.lastName = action.payload.lastName;
+            state.email = action.payload.email;
+            state.role = action.payload.role;
+        },
+        setToken(state, action: PayloadAction<{ accessToken: string; refreshToken: string }>) {
+            state.accessToken = action.payload.accessToken;
+            state.refreshToken = action.payload.refreshToken;
         },
         clearToken(state) {
-            state.token = null;
-            state.isAuthenticated = false;
+            state.accessToken = "";
+            state.refreshToken = "";
         },
     },
 });
 
-export const { setToken, clearToken } = authSlice.actions;
+export const { setToken, clearToken, setLoggedInUser } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

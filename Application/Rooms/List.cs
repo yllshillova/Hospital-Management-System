@@ -13,14 +13,17 @@ namespace Application.Rooms
         {
             public async Task<Result<IEnumerable<RoomDto>>> Handle(GetRoomsQuery request, CancellationToken cancellation)
             {
-                var rooms = await _roomRepository.GetAllAsync();
-                if (rooms is null || !rooms.Any()) return Result<IEnumerable<RoomDto>>.Failure(ErrorType.NotFound, "No records could be found.");
+                var rooms = await _roomRepository.GetAllAsync(r => r.Patients);
+                if (rooms is null) return Result<IEnumerable<RoomDto>>.Failure(ErrorType.BadRequest, "Failed to retrieve rooms.");
+
+                if (!rooms.Any()) return Result<IEnumerable<RoomDto>>.Failure(ErrorType.NotFound, "No records could be found.");
 
                 var roomDtos = _mapper.Map<IEnumerable<RoomDto>>(rooms);
                 if (roomDtos is null) return Result<IEnumerable<RoomDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto.");
 
                 return Result<IEnumerable<RoomDto>>.Success(roomDtos);
             }
+
         }
     }
 }

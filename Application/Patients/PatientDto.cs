@@ -20,5 +20,6 @@ namespace Application.Patients
         public string? Allergies { get; set; }
         public string IsDeleted { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
+        public Guid? RoomId { get; set; }
     }
 }

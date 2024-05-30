@@ -1,7 +1,6 @@
 ﻿using Application.Accounts.Users;
 using Application.Core;
 using AutoMapper;
-using Domain.Contracts;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
@@ -24,7 +23,7 @@ namespace Application.Accounts.Register
 
         }
 
-        public class RegisterCommandHandler(IUserRepository _userRepository, ITokenRepository _tokenRepository, IMapper _mapper)
+        public class RegisterCommandHandler(IUserRepository _userRepository, IMapper _mapper)
             : IRequestHandler<RegisterCommand, Result<UserDto>>
         {
             public async Task<Result<UserDto>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -50,8 +49,8 @@ namespace Application.Accounts.Register
                 if (!addToRole) return Result<UserDto>.Failure(ErrorType.BadRequest, "Failed to promote the registered user as Administrator!");
 
                 var userDto = _mapper.Map<UserDto>(user);
-                userDto.Token = await _tokenRepository.CreateToken(user);
-
+                userDto.AccessToken = null; // the AccessToken property to null
+                userDto.RefreshToken = null; //  the RefreshToken property to null
                 return Result<UserDto>.Success(userDto);
             }
         }

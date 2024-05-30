@@ -9,6 +9,8 @@ import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
 import { useCreateDepartmentMutation, useUpdateDepartmentMutation } from '../../app/APIs/departmentApi';
+import withAuthorization from '../../app/hoc/withAuthorization';
+import { SD_Roles } from '../../app/utility/SD';
 
 interface DepartmentData {
     name: string;
@@ -161,4 +163,4 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
     );
 }
 
-export default DepartmentForm;
+export default withAuthorization(DepartmentForm, [SD_Roles.ADMINISTRATOR]);

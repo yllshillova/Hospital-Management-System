@@ -1,83 +1,72 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays, faUserInjured } from '@fortawesome/free-solid-svg-icons';
-//import { useDispatch } from 'react-redux';
-//import {
-//    emptyUserState,
-//    setLoggedInUser,
-//} from "../../Storage/Redux/userAuthSlice";
+import { faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays, faUserInjured, faNewspaper, faAddressCard } from '@fortawesome/free-solid-svg-icons';
+import {
+    emptyUserState,
+    setLoggedInUser,
+} from "../storage/redux/authSlice";
 import { useNavigate } from 'react-router-dom';
-import { AuthState, clearToken } from '../storage/redux/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import toastNotify from '../helpers/toastNotify';
 import { faUserNurse } from '@fortawesome/free-solid-svg-icons/faUserNurse';
-import { RootState } from '@reduxjs/toolkit/query';
+import { RootState } from '../storage/redux/store';
+import { SD_Roles } from '../utility/SD';
+import User from '../models/User';
 
 function SidePanel() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const userData: AuthState = useSelector(
+    const userData: User = useSelector(
         (state: RootState) => state.auth
     );
+    
+    const handleNavigation = (path: string) => () => navigate(path);
+    const handleProfileNavigation = (role: string) => () => navigate(`/${role}/${userData.id}`);
 
-    //const handleLogout = () => {
-    //    localStorage.removeItem("authToken");
-    //    dispatch(setLoggedInUser({ ...emptyUserState })); //reseting the user , spreading out the emptyUserState
-    //    navigate("/Login");
-    //};
-
-    //const handleHome = () => {
-    //    navigate('/');
-    //}
-
-    const handlePatientList = () => {
-        navigate('/patients');
-    }
-
-    const handleDepartmentsList = () => {
-        navigate('/departments');
-    }
-
-    const handleRoomsList = () => {
-        navigate('/rooms');
-    }
-
-    const handleDoctorsList = () => {
-        navigate('/doctors');
-    }
-
-    const handleAppointmentsList = () => {
-        navigate('/appointments');
-    }
-
-    const handleVisitsList = () => {
-        navigate('/visits');
-    }
-    const handleNursesList = () => {
-       navigate('/nurses');
-    }
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
 
-        dispatch(clearToken());
+        dispatch(setLoggedInUser({ ...emptyUserState }));
         navigate('/login');
+        toastNotify('You have been logged out', 'success');
+    };
 
-        // Optionally, you can display a logout confirmation message using a toast notification
-         toastNotify('Logged out successfully', 'success');
-    }
-    const sideBarComponents = [
-        { icon: faUserDoctor, label: 'Doctors', onClick: handleDoctorsList },
-        { icon: faUserNurse, label: 'Nurses', onClick: handleNursesList },
-        { icon: faUserInjured, label: 'Patients', onClick: handlePatientList },
-        { icon: faFolderTree, label: 'Departments', onClick: handleDepartmentsList },
-        { icon: faCalendarDays, label: 'Appointments', onClick: handleAppointmentsList },
-        { icon: faBookMedical, label: 'Visits', onClick: handleVisitsList },
-        { icon: faBedPulse, label: 'Rooms', onClick: handleRoomsList },
-        { icon: faCog, label: 'Settings' },
-        { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout },
-
+    let sideBarComponents = [
+        { icon: faUserInjured, label: 'Patients', onClick: handleNavigation('/patients') },
+        { icon: faFolderTree, label: 'Departments', onClick: handleNavigation('/departments') },
+        { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
+        { icon: faBookMedical, label: 'Visits', onClick: handleNavigation('/visits') },
+        { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
+        { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
     ];
+
+    if (userData.role === SD_Roles.ADMINISTRATOR) {
+        sideBarComponents = [
+            { icon: faUserDoctor, label: 'Doctors', onClick: handleNavigation('/doctors') },
+            { icon: faUserNurse, label: 'Nurses', onClick: handleNavigation('/nurses') },
+            ...sideBarComponents
+        ];
+    } else if (userData.role === SD_Roles.DOCTOR) {
+        sideBarComponents = [
+            { icon: faAddressCard, label: 'Profile', onClick: handleProfileNavigation('doctor') },
+            { icon: faBookMedical, label: 'Visits', onClick: handleNavigation('/visits') },
+            { icon: faNewspaper, label: 'News', onClick: handleNavigation('/news_chat') },
+            { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
+        ];
+    } else if (userData.role === SD_Roles.NURSE) {
+        sideBarComponents = [
+            { icon: faAddressCard, label: 'Profile', onClick: handleProfileNavigation('nurse') },
+            { icon: faUserDoctor, label: 'Doctors', onClick: handleNavigation('/doctors') },
+            { icon: faUserNurse, label: 'Nurses', onClick: handleNavigation('/nurses') },
+            { icon: faUserInjured, label: 'Patients', onClick: handleNavigation('/patients') },
+            { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
+            { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
+            { icon: faNewspaper, label: 'News', onClick: handleNavigation('/news_chat') },
+            { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
+        ];
+    }
 
     return (
         <SidePanelContainer>
