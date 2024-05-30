@@ -1,16 +1,16 @@
 ﻿using Application.Core;
 using AutoMapper;
 using Domain.Contracts;
+using Domain.Entities;
 using MediatR;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Departments
 {
     public class Details
     {
         public record GetDepartmentByIdQuery(Guid Id) : IRequest<Result<DepartmentDto>>;
-
-        public class GetDepartmentByIdQueryHandler(IDepartmentRepository _departmentRepository, IMapper _mapper) : IRequestHandler<GetDepartmentByIdQuery, Result<DepartmentDto>>
+        public class GetDepartmentByIdQueryHandler(IDepartmentRepository _departmentRepository, IDoctorRepository _doctorRepository,
+            INurseRepository _nurseRepository, IMapper _mapper) : IRequestHandler<GetDepartmentByIdQuery, Result<DepartmentDto>>
         {
             public async Task<Result<DepartmentDto>> Handle(GetDepartmentByIdQuery request, CancellationToken cancellationToken)
             {
@@ -19,8 +19,25 @@ namespace Application.Departments
                     var department = await _departmentRepository.GetByIdAsync(request.Id);
                     if (department is null) return Result<DepartmentDto>.Failure(ErrorType.NotFound, "No records could be found.");
 
-                    var departmentDto = _mapper.Map<DepartmentDto>(department);
-                    if (departmentDto is null) return Result<DepartmentDto>.Failure(ErrorType.NotFound, "Problem while mapping between entities/dto");
+                    var doctors = await _doctorRepository.GetDoctorsByDepartmentIdAsync(request.Id);
+                    var nurses = await _nurseRepository.GetNursesByDepartmentIdAsync(request.Id);
+
+                    if ((doctors == null || !doctors.Any()) && (nurses == null || !nurses.Any()))
+                    {
+                        return Result<DepartmentDto>.Failure(ErrorType.NotFound, "No doctors or nurses found.");
+                    }
+
+                    var staff = new List<AppUser>();
+                    if (doctors != null) staff.AddRange(doctors);
+                    if (nurses != null) staff.AddRange(nurses);
+
+                    var departmentDto = new DepartmentDto
+                    {
+                        Id = department.Id,
+                        Name = department.Name,
+                        IsDeleted = department.IsDeleted,
+                        Staff = staff
+                    };
 
                     return Result<DepartmentDto>.Success(departmentDto);
 

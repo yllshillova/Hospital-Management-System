@@ -38,6 +38,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
 import User from '../models/User';
+import DepartmentDetails from '../../features/department/DepartmentDetails';
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
                     <Route path="/departments" element={<DepartmentList />}></Route>
                     <Route path="/department/insert" element={<DepartmentInsert />}></Route>
                     <Route path="/department/update/:id" element={<DepartmentUpdate />}></Route>
+                    <Route path="/department/:id" element={<DepartmentDetails />}></Route>
 
                     <Route path="/doctors" element={<DoctorList />}></Route>
                     <Route path="/doctor/:id" element={<DoctorDetails />}></Route>

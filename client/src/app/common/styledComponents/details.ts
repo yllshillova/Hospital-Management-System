@@ -68,3 +68,21 @@ export const ErrorMessage = styled.span`
     color: #696969; 
     margin: 50px 20px 0 220px;
 `;
+
+export  const BackButton = styled.button`
+    position: absolute;
+    bottom: 60px;
+    right: 47px;
+    background-color: #002147;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 13.5px;
+    transition: ease 0.3s;
+    font-weight: bold;
+    &:hover {
+        transform: scale(1.1);
+    }
+`;

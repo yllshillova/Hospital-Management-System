@@ -15,9 +15,12 @@ import useErrorHandler from "../../app/helpers/useErrorHandler";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
 
 function DepartmentList() {
+
     const { data, isLoading, error } = useGetDepartmentsQuery(null);
+    console.log(data);
     const [deleteDepartment] = useDeleteDepartmentMutation();
     const navigate = useNavigate();
     const location = useLocation();
@@ -29,7 +32,7 @@ function DepartmentList() {
         const result = await deleteDepartment(id);
 
         if ('data' in result) {
-            toastNotify("Department Deleted Successfully", "success");
+            toastNotify("Department has been deleted ", "success");
         }
         else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
@@ -41,8 +44,6 @@ function DepartmentList() {
         }
 
     };
-
-
 
 
     if (isLoading) {
@@ -70,19 +71,19 @@ function DepartmentList() {
                 <tbody key={department.id}>
                     <TableRow>
                         <TableCell>{department.name}</TableCell>
-                        <TableCell>{department.isDeleted} </TableCell>
                         <TableCell>{new Date(department.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>{new Date(department.updatedAt).toLocaleDateString()}</TableCell>
-                        {/*<ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/department/" + department.id)} >*/}
-                        {/*    <FontAwesomeIcon icon={faInfo} />*/}
-                        {/*</ActionButton>*/}
+
+                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/department/" + department.id)} >
+                            <FontAwesomeIcon icon={faInfo} />
+                        </ActionButton>
                         <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/department/update/" + department.id)} >
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
-                        {/*TODO: add handler for delete*/}
                         <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleDepartmentDelete(department.id) }>
                             <FontAwesomeIcon icon={faTrashAlt} />
                         </ActionButton>
+
                     </TableRow>
                 </tbody>
             );
@@ -104,7 +105,6 @@ function DepartmentList() {
                     <thead>
                         <TableHead>
                             <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>Is Deleted</TableHeaderCell>
                             <TableHeaderCell>Date Created </TableHeaderCell>
                             <TableHeaderCell>Date Updated </TableHeaderCell>
                         </TableHead>
