@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Contracts;
+using Domain.Entities;
 using MongoDB.Driver;
 
 namespace Infrastructure.Repositories

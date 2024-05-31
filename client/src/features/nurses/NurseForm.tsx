@@ -103,7 +103,7 @@ function NurseForm({ id, data }: NurseFormProps) {
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Nurse updated successfully", "success");
+                toastNotify("Nurse has been updated ", "success");
                 navigate('/nurses');
             }
         } else {
@@ -112,7 +112,7 @@ function NurseForm({ id, data }: NurseFormProps) {
             if (response.error) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Nurse created successfully", "success");
+                toastNotify("Nurse has been created ", "success");
                 navigate('/nurses');
             }
         }

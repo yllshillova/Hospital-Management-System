@@ -193,7 +193,7 @@ const RemovePatientButton = styled.button`
     }
 `;
 
-const BackButton = styled.button`
+const  BackButton = styled.button`
     position: absolute;
     bottom: 60px;
     right: 47px;

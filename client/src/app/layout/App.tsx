@@ -38,6 +38,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
 import User from '../models/User';
+import DepartmentDetails from '../../features/department/DepartmentDetails';
 
 
 function App() {
@@ -60,7 +61,7 @@ function App() {
         <div>
             <div>
                 <Routes>
-                    <Route path="/" element={<Dashboard />}></Route>
+                    <Route path="/dashboard" element={<Dashboard />}></Route>
 
                     <Route path="/patients" element={<PatientList />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>
@@ -70,6 +71,7 @@ function App() {
                     <Route path="/departments" element={<DepartmentList />}></Route>
                     <Route path="/department/insert" element={<DepartmentInsert />}></Route>
                     <Route path="/department/update/:id" element={<DepartmentUpdate />}></Route>
+                    <Route path="/department/:id" element={<DepartmentDetails />}></Route>
 
                     <Route path="/doctors" element={<DoctorList />}></Route>
                     <Route path="/doctor/:id" element={<DoctorDetails />}></Route>
@@ -100,7 +102,7 @@ function App() {
                     <Route path="/patient/:patientId/emergencyContact/insert" element={<EmergencyContactInsert />} />
                     
                     <Route path="/emergencyContact/update/:id" element={<EmergencyContactUpdate />}></Route>
-                    <Route path="/login" element={<Login/>}></Route>
+                    <Route path="/" element={<Login/>}></Route>
                     <Route path="/register" element={<Register />}></Route>
                     
                     <Route path="/news_chat" element={<News_Chat />}></Route>

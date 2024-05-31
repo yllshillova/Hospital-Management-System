@@ -114,7 +114,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                 // Use error handler
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Patient updated successfully", "success");
+                toastNotify("Patient has been updated", "success");
                 navigate('/patients');
             }
         } else {
@@ -124,7 +124,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                 // Use error handler
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Patient created successfully", "success");
+                toastNotify("Patient has been created", "success");
                 navigate('/patients');
             }
         }

@@ -72,7 +72,7 @@ function Login() {
             dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));
 
             toastNotify(`Welcome ${name}`);
-            navigate('/');
+            navigate('/dashboard');
         } else if ('error' in response) {
 
             const error = response.error as FetchBaseQueryError;

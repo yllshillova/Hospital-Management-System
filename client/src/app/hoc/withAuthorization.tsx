@@ -14,11 +14,11 @@ const withAuthorization = (WrappedComponent: React.ComponentType<any>, allowedRo
                     return null;
                 }
             } catch (error) {
-                window.location.replace("/login");
+                window.location.replace("/");
                 return null;
             }
         } else {
-            window.location.replace("/login");
+            window.location.replace("/");
             return null;
         }
 
