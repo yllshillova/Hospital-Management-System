@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Contracts;
+using Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Application.Hubs

@@ -72,7 +72,6 @@ function PatientList() {
                         <TableCell>{patient.lastName}</TableCell>
                         <TableCell>{patient.parentName}</TableCell>
                         <TableCell>{patient.email}</TableCell>
-                        <TableCell>{patient.phoneNumber}</TableCell>
                         <TableCell>{patient.residence}</TableCell>
                         <TableCell>{patient.bloodGroup}</TableCell>
 
@@ -122,7 +121,6 @@ function PatientList() {
                             <TableHeaderCell>Last Name</TableHeaderCell>
                             <TableHeaderCell>Parent Name</TableHeaderCell>
                             <TableHeaderCell>Email</TableHeaderCell>
-                            <TableHeaderCell>Phone Number</TableHeaderCell>
                             <TableHeaderCell>Residence </TableHeaderCell>
                             <TableHeaderCell>Blood Group </TableHeaderCell>
                         </TableHead>

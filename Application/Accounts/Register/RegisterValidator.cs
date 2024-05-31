@@ -1,4 +1,5 @@
 ﻿using Application.BaseValidators;
+using Domain.Contracts;
 using FluentValidation;
 
 namespace Application.Accounts.Register

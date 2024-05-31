@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Contracts;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
