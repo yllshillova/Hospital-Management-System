@@ -5,6 +5,7 @@ using static Application.Appointments.Delete;
 using static Application.Appointments.Details;
 using static Application.Appointments.Edit;
 using static Application.Appointments.GetLatestAppointments;
+using static Application.Appointments.GetScheduledAppointments;
 using static Application.Appointments.List;
 
 namespace API.Controllers
@@ -30,6 +31,13 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new GetLatestAppointmentsQuery()));
         }
+
+        [HttpGet("Scheduled")]
+        public async Task<IActionResult> GetScheduledAppointments()
+        {
+            return HandleResult(await Mediator.Send(new GetScheduledAppointmentsQuery()));
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateAppointment([FromForm] AppointmentDto Appointment)

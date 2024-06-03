@@ -9,37 +9,32 @@ function LatestAppointments() {
     const { data: latestAppointments , isLoading, error } = useGetLatestAppointmentsQuery(null); 
     const { data: patientsData , isLoading : patientsLoading, error: patientsError} = useGetPatientsQuery(null);
 
-    let content;
-
     if (isLoading || patientsLoading) {
-        content = <MiniLoader />;
-    
-    } else if (error || patientsError) {
-        content = (
+        return <MiniLoader />;
+    }
+
+    if (error || patientsError) {
+        return (
             <div>
-                {(error?.data as FetchBaseQueryError) || (patientsError?.data as FetchBaseQueryError)}
+                {error?.data as FetchBaseQueryError}
+                {patientsError?.data as FetchBaseQueryError}
             </div>
         );
     }
-    else {
-        content = latestAppointments?.map((appointment: Appointment, index: number) => {
-            const patient = patientsData?.find((patient: Patient) => patient.id === appointment.patientId);
-            return (
-                <tbody>
-                    <TableRow key={index}>
-                        <TableCell>{patient.name}</TableCell>
-                        <TableCell>{patient.lastName}</TableCell>
-                        <TableCell>{new Date(appointment.checkInDate!).toLocaleString()}</TableCell>
-                        <TableCell>{new Date(appointment.checkOutDate!).toLocaleString()}</TableCell>
-                        <TableCell>{appointment.reason}</TableCell>
-                        </TableRow>
-                </tbody>
 
-            );
-        });
+    const content = latestAppointments?.map((appointment: Appointment) => {
+        const patient = patientsData?.find((patient: Patient) => patient.id === appointment.patientId);
 
-    }
-
+        return (
+            <TableRow key={appointment.id}>
+                <TableCell>{patient?.name}</TableCell>
+                <TableCell>{patient?.lastName}</TableCell>
+                <TableCell>{new Date(appointment.checkInDate!).toLocaleString()}</TableCell>
+                <TableCell>{new Date(appointment.checkOutDate!).toLocaleString()}</TableCell>
+                <TableCell>{appointment.reason}</TableCell>
+            </TableRow>
+        );
+    });
 
     return (
         <Container flex={2}>
@@ -47,20 +42,22 @@ function LatestAppointments() {
             <TableContainer>
                 <Table>
                     <thead>
-                        <TableHead>
+                        <TableRow>
                             <TableHeader>Name</TableHeader>
                             <TableHeader>Last Name</TableHeader>
                             <TableHeader>Check In</TableHeader>
                             <TableHeader>Check Out</TableHeader>
                             <TableHeader>Reason</TableHeader>
-                        </TableHead>
+                        </TableRow>
                     </thead>
-                    {content}
+                    <tbody>
+                        {content}
+                    </tbody>
                 </Table>
             </TableContainer>
         </Container>
     );
-};
+}
 
 export default LatestAppointments;
 

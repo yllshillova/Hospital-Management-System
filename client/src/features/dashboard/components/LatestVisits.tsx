@@ -13,40 +13,36 @@ function LatestVisits() {
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
     const { data: doctorData, isLoading: doctorsLoading, error: docError } = useGetDoctorsQuery(null);
 
-    let content;
-
     if (isLoading || patientsLoading || doctorsLoading) {
-        content = <MiniLoader />;
-    } else if (error || docError || patientsError) {
-        content = (
+        return <MiniLoader />;
+    }
+
+    if (error || docError || patientsError) {
+        return (
             <div>
-                {(error?.data as FetchBaseQueryError) || (patientsError?.data as FetchBaseQueryError) || (docError?.data as FetchBaseQueryError)}
+                {error?.data as FetchBaseQueryError}
+                {patientsError?.data as FetchBaseQueryError}
+                {docError?.data as FetchBaseQueryError}
             </div>
         );
     }
-    else {
-        content = latestVisits?.map((visit: Visit, index: number) => {
-            const patient = patientsData?.find((patient: Patient) => patient.id === visit.patientId);
-            const doctor = doctorData?.find((doctor: Doctor) => doctor.id === visit.doctorId);
 
-            return (
-                <tbody>
-                    <TableRow key={index}>
-                        <TableCell>{doctor.name} {" "} {doctor.lastName}</TableCell>
-                        <TableCell>{patient.name} {" "} {patient.lastName}</TableCell>
-                        <TableCell>{visit.complaints}</TableCell>
-                        <TableCell>{visit.diagnosis}</TableCell>
+    const content = latestVisits?.map((visit: Visit) => {
+        const patient = patientsData?.find((patient: Patient) => patient.id === visit.patientId);
+        const doctor = doctorData?.find((doctor: Doctor) => doctor.id === visit.doctorId);
 
-                    </TableRow>
-                </tbody>
-
-            );
-        });
-
-    }
+        return (
+            <TableRow key={visit.id}>
+                <TableCell>{doctor?.name} {doctor?.lastName}</TableCell>
+                <TableCell>{patient?.name} {patient?.lastName}</TableCell>
+                <TableCell>{visit.complaints}</TableCell>
+                <TableCell>{visit.diagnosis}</TableCell>
+            </TableRow>
+        );
+    });
 
     return (
-        <Container >
+        <Container>
             <Title>Latest Visits</Title>
             <TableContainer>
                 <Table>
@@ -58,12 +54,14 @@ function LatestVisits() {
                             <TableHeader>Diagnosis</TableHeader>
                         </TableRow>
                     </thead>
-                    {content}
+                    <tbody>
+                        {content}
+                    </tbody>
                 </Table>
             </TableContainer>
         </Container>
     );
-};
+}
 
 export default LatestVisits;
 

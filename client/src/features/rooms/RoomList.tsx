@@ -66,9 +66,11 @@ function RoomList() {
     };
     let content;
 
-    if (isLoading /*|| patientsLoading*/) {
+    if (isLoading ) {
         content = <MainLoader />;
-    } else if (error/*roomsError || patientsError*/) {
+    } else if (error) {
+        const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
+
         return (
             <>
                 <Header />
@@ -76,9 +78,7 @@ function RoomList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>
-                            {(error?.data as FetchBaseQueryError)}
-                        </Message>
+                        <Message>{errorMessage}</Message>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>

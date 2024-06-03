@@ -33,7 +33,6 @@ function VisitList() {
     const location = useLocation();
     const [deleteVisit] = useDeleteVisitMutation();
 
-    let content;
 
     const handleVisitDelete = async (id: string,) => {
         const result = await deleteVisit(id);
@@ -52,9 +51,21 @@ function VisitList() {
 
     };
 
+    let content;
+
     if (isLoading || patientsLoading || doctorsLoading) {
-        content = <MainLoader />;
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
     } else if (error || doctorsError || patientsError) {
+        const errorMessage = ((error as FetchBaseQueryError)?.data || (patientsError as FetchBaseQueryError)?.data || (doctorsError as FetchBaseQueryError)?.data) as string;
+
         return (
             <>
                 <Header />
@@ -62,9 +73,7 @@ function VisitList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>
-                            {(error?.data as FetchBaseQueryError) || (doctorsError?.data as FetchBaseQueryError) || (patientsError?.data as FetchBaseQueryError)}
-                        </Message>
+                        <Message>{errorMessage}</Message>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>
@@ -72,39 +81,38 @@ function VisitList() {
         );
     }
     else {
-        content = data.map((visit: Visit, index: number) => {
-            const patient = patientsData?.find((patient: Patient) => patient.id === visit.patientId);
-            const doctor = doctorsData?.find((doctor: Doctor) => doctor.id === visit.doctorId);
-            return (
-                <tbody key={visit.id}>
-                    <TableRow key={index}>
-                        <TableCell>{doctor.name} {" "} {doctor.lastName}</TableCell>
-                        <TableCell>{patient.name} {" "} {patient.lastName}</TableCell>
-                        <TableCell>{visit.complaints}</TableCell>
-                        <TableCell>{visit.diagnosis}</TableCell>
+        content = (
+            <tbody>
+                {data.map((visit: Visit) => {
+                    const patient = patientsData?.find((patient: Patient) => patient.id === visit.patientId);
+                    const doctor = doctorsData?.find((doctor: Doctor) => doctor.id === visit.doctorId);
+                    return (
+                        <TableRow key={visit.id}>
+                            <TableCell>{doctor.name} {" "} {doctor.lastName}</TableCell>
+                            <TableCell>{patient.name} {" "} {patient.lastName}</TableCell>
+                            <TableCell>{visit.complaints}</TableCell>
+                            <TableCell>{visit.diagnosis}</TableCell>
 
-                        {/*<TableCell>{new Date(visit.createdAt).toLocaleDateString()}</TableCell>*/}
-                        {/*<TableCell>{new Date(visit.updatedAt).toLocaleDateString()}</TableCell>*/}
-
-                        <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/visit/" + visit.id)} >
-                            <FontAwesomeIcon icon={faInfo} />
-                        </ActionButton>
-
-                        {userData.role == SD_Roles.DOCTOR &&
-
-                            <>
-                                <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/visit/update/" + visit.id)} >
-                                    <FontAwesomeIcon icon={faEdit} />
+                            <TableCell>
+                                <ActionButton style={{ backgroundColor: "teal" }} onClick={() => navigate("/visit/" + visit.id)} >
+                                    <FontAwesomeIcon icon={faInfo} />
                                 </ActionButton>
-                                <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleVisitDelete(visit.id)}>
-                                    <FontAwesomeIcon icon={faTrashAlt} />
-                                </ActionButton>
-                            </>
-                     }
-                    </TableRow>
-                </tbody>
-            );
-        });
+                                {userData.role === SD_Roles.DOCTOR &&
+                                    <>
+                                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/visit/update/" + visit.id)} >
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </ActionButton>
+                                        <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleVisitDelete(visit.id)}>
+                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                        </ActionButton>
+                                    </>
+                                }
+                            </TableCell>
+                        </TableRow>
+                    );
+                })}
+            </tbody>
+        );
     }
 
     return (
