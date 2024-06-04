@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserDoctor, faFolderTree, faUserNurse, faUserInjured } from '@fortawesome/free-solid-svg-icons';
+import { faUserDoctor, faFolderTree, faUserNurse, faUserInjured, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { useGetDepartmentsCountQuery } from '../../../app/APIs/departmentApi';
 import { useGetDoctorsCountQuery } from '../../../app/APIs/doctorApi';
 import { useGetPatientsCountQuery } from '../../../app/APIs/patientApi';
-import MiniLoader from '../../../app/common/MiniLoader';
 import { useGetNursesCountQuery } from '../../../app/APIs/nurseApi';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import MainLoader from '../../../app/common/MainLoader';
+import { BackButton, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../../app/common/styledComponents/table";
+import { useNavigate } from 'react-router-dom';
 
 function Sections() {
 
@@ -22,12 +24,37 @@ function Sections() {
         { icon: faUserInjured, label: 'Patients', value: patientsCount || "No", color: '#002147;' },
 
     ];
+
+    const navigate = useNavigate();
     let content;
 
     if (departmentsLoading || doctorsLoading || patientsLoading) {
-        content = <MiniLoader />;
-    } else if (depError || docError || patError) {
-        content = <div>{(depError?.data as FetchBaseQueryError) || (docError?.data as FetchBaseQueryError) || (patError?.data as FetchBaseQueryError)}</div>;
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
+
+    else if (depError || docError || patError) {
+        const errorMessage = ((depError as FetchBaseQueryError)?.data ||
+            (patError as FetchBaseQueryError)?.data ||
+            (docError as FetchBaseQueryError)?.data) as string;
+
+        content = (
+            <ErrorMessage>
+                <ErrorTitleRow>
+                    <ErrorIcon icon={faExclamationCircle} />
+                    <Message>{errorMessage}</Message>
+                </ErrorTitleRow>
+                <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+            </ErrorMessage>
+        );
+
     }
     else {
         content = sectionsData.map((section, index) => (

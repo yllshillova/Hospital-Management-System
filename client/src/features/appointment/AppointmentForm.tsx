@@ -77,8 +77,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
 
             const response = await updateAppointment({ data: formData, id });
 
-            if (response.error) {
-                console.log(response.error);
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Appointment has been  updated ", "success");
@@ -88,7 +87,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
             const response = await createAppointment(formData);
             console.log(response);
 
-            if (response.error) {
+            if ('error' in response) {
                 console.log(response);
 
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);

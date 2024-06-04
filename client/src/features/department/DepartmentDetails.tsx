@@ -1,8 +1,7 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetDepartmentByIdQuery } from "../../app/APIs/departmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { Header, SidePanel } from "../../app/layout";
 import { TableCell, TableRow, OrdersTable, TableNav, TableHeader, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, ErrorMessage } from "../../app/common/styledComponents/table";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
@@ -19,10 +18,9 @@ function isValidGuid(guid: string): boolean {
 function DepartmentDetails() {
 
     const { id } = useParams();
-    const { data, isLoading, error, isError } = useGetDepartmentByIdQuery(id);
-    console.log(data);
+    const { data, isLoading, error } = useGetDepartmentByIdQuery(id);
     const navigate = useNavigate();
-    const location = useLocation();
+
     let content;
 
     const staff: StaffMember[] = data?.staff || [];
@@ -31,15 +29,20 @@ function DepartmentDetails() {
         navigate('/not-found');
         return;
     }
-    const fbError = error as FetchBaseQueryError;
-
-    if (isError) {
-        useErrorHandler(fbError, navigate, location.pathname);
-    }
 
     if (isLoading) {
-        content = <MainLoader />;
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
     } else if (error) {
+        const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
+
         return (
             <>
                 <Header />
@@ -47,9 +50,7 @@ function DepartmentDetails() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>
-                            {(error?.data as FetchBaseQueryError)}
-                        </Message>
+                        <Message>{errorMessage}</Message>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>

@@ -135,7 +135,15 @@ function VisitForm({ id, data }: VisitFormProps) {
     let content;
 
     if (appointmentsLoading || patientsLoading) {
-        content = <MainLoader />;
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
     } else if (appointmentsError || patientsError) {
         const errorMessage = ((appointmentsError as FetchBaseQueryError)?.data || (patientsError as FetchBaseQueryError)?.data) as string;
 

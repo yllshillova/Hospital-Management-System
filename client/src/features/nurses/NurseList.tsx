@@ -43,7 +43,6 @@ function NurseList() {
     const [deleteNurse] = useDeleteNurseMutation();
     const navigate = useNavigate();
     const location = useLocation();
-    let content;
 
     const handleNurseDelete = async (id: string,) => {
         const result = await deleteNurse(id);
@@ -60,11 +59,23 @@ function NurseList() {
         }
     };
 
-
+    let content;
 
     if (isLoading) {
-        content = <MainLoader />;
-    } else if (error) {
+
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
+    else if (error) {
+
+        const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
         return (
             <>
                 <Header />
@@ -72,9 +83,7 @@ function NurseList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>
-                            {(error?.data as FetchBaseQueryError)}
-                        </Message>
+                        <Message>{errorMessage}</Message>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>
@@ -82,6 +91,7 @@ function NurseList() {
         );
     }
     else {
+
         content = data.map((nurse: Nurse) => {
             return (
                 <tbody key={nurse.id}>

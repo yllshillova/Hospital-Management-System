@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { useGetDoctorByIdQuery } from "../../app/APIs/doctorApi";
 import { Header, SidePanel } from "../../app/layout";
 import { formatDate } from "../../app/utility/formatDate";
@@ -11,6 +10,8 @@ import MiniLoader from "../../app/common/MiniLoader";
 import { Attribute, Label, LabelsRow, LeftContainer, MainContainer, RightContainer, SectionTitle, Value, ValuesRow, WrapperContainer } from "../../app/common/styledComponents/details";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
+import { BackButton, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../app/common/styledComponents/table";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -19,29 +20,48 @@ function isValidGuid(guid: string): boolean {
 
 function DoctorDetails() {
     const { id } = useParams<string>();
-    const { data: doctor, isLoading, error, isError } = useGetDoctorByIdQuery(id);
+    const { data: doctor, isLoading, error} = useGetDoctorByIdQuery(id);
     const { data: departmentData, isLoading: departmentLoader, error: departmentError }
         = useGetDepartmentByIdQuery(doctor?.departmentId|| "");
     const navigate = useNavigate();
-    const location = useLocation();
 
 
     if (!isValidGuid(id as string)) {
         navigate('/not-found');
         return;
     }
-    const fbError = error as FetchBaseQueryError;
 
-    if (isError) {
-        useErrorHandler(fbError, navigate, location.pathname);
+    if (isLoading || departmentLoader) {
+        return (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
     }
 
-    if (isLoading) return <MainLoader />;
+    else if (error || departmentError) {
+        const errorMessage = ((error as FetchBaseQueryError)?.data || (departmentError as FetchBaseQueryError)?.data) as string;
 
+        return (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <Message>{errorMessage}</Message>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
+        );
+    }
 
-
-
-    if (doctor && doctor.departmentId) {
+    else {
         return (
             <>
                 <Header />
@@ -73,37 +93,13 @@ function DoctorDetails() {
                             </Attribute>
                             <Attribute>
                                 <Label>Department</Label>
-                                <Value> {departmentLoader ? (
-                                    <MiniLoader />
-                                ) : departmentData ? (
-                                    departmentData.name
-                                ) : departmentError ? (
-                                    departmentError.data
-                                ) : (
-                                    "Department not found!"
-                                )}</Value>
+                                <Value>
+                                    {departmentLoader ? (<MiniLoader />) : departmentData ? (departmentData.name) :
+                                        ("Department not found!")}
+                                </Value>
                             </Attribute>
                         </LeftContainer>
 
-
-
-                        {/*<>*/}
-                        {/*    <div>*/}
-                        {/*        <h2>Doctor Details</h2>*/}
-                        {/*        <p>Id: {doctor.id}</p>*/}
-                        {/*        <p>Name: {doctor.name}</p>*/}
-                        {/*        <p>Last Name: {doctor.lastName}</p>*/}
-                        {/*        <p>Specialization: {doctor.specialization}</p>*/}
-                        {/*        <p>Residence: {doctor.residence}</p>*/}
-                        {/*        <p>Address: {doctor.address}</p>*/}
-                        {/*        <p>Gender: {doctor.gender}</p>*/}
-                        {/*        <p>Birthday: {new Date(doctor.birthday).toLocaleDateString()}</p>*/}
-                        {/*        <p>DepartmentId: {doctor.departmentId}</p>*/}
-                        {/*        <p>Created At: {new Date(doctor.createdAt).toLocaleDateString()}</p>*/}
-                        {/*        <p>Updated At: {new Date(doctor.updatedAt).toLocaleDateString()}</p>*/}
-                        {/*        <p>IsDeleted: {doctor.isDeleted}</p>*/}
-                        {/*    </div>*/}
-                        {/*</>*/}
 
                         <RightContainer>
                             <SectionTitle>Personal Information</SectionTitle>
@@ -131,10 +127,7 @@ function DoctorDetails() {
                 </MainContainer>
             </>
         );
-
-
     }
-    return null;
 }
 
 export default withAuthorization(DoctorDetails, [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);

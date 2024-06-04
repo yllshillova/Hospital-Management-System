@@ -13,7 +13,6 @@ import toastNotify from "../../app/helpers/toastNotify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt, faAdd } from "@fortawesome/free-solid-svg-icons";
 import EmergencyContact from "../../app/models/EmergencyContact";
-import styled from "styled-components";
 import { SD_Roles } from "../../app/utility/SD";
 import withAuthorization from "../../app/hoc/withAuthorization";
 
@@ -65,7 +64,17 @@ function PatientDetails() {
         useErrorHandler(fbError, navigate, location.pathname);
     }
 
-    if (isLoading) return <MainLoader />;
+    if (isLoading) {
+        return (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
 
     if (patientData) {
         const patient = patientData;
@@ -74,6 +83,8 @@ function PatientDetails() {
             <label style={{ fontWeight: "bold", color: "#009F6B" }}>Active </label>;
 
         if (emergencyError) {
+            const errorMessage = ((emergencyError as FetchBaseQueryError)?.data) as string;
+
             return (
                 <>
                     <Header />
@@ -141,7 +152,7 @@ function PatientDetails() {
                             </RightContainer>
                         </WrapperContainer>
                     </MainContainer>
-                    <ErrorMessage>{(emergencyError.data as FetchBaseQueryError)}</ErrorMessage>
+                    <ErrorMessage>{errorMessage}</ErrorMessage>
                 </>
             );
         }

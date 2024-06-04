@@ -1,11 +1,15 @@
 import styled from "styled-components";
-import MiniLoader from "../../../app/common/MiniLoader";
 import Visit from "../../../app/models/Visit";
 import Patient from "../../../app/models/Patient";
 import { useGetPatientsQuery } from "../../../app/APIs/patientApi";
 import Doctor from "../../../app/models/Doctor";
 import { useGetLatestVisitsQuery } from "../../../app/APIs/visitApi";
 import { useGetDoctorsQuery } from "../../../app/APIs/doctorApi";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { BackButton, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../../app/common/styledComponents/table";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import MainLoader from "../../../app/common/MainLoader";
 
 function LatestVisits() {
 
@@ -13,33 +17,49 @@ function LatestVisits() {
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
     const { data: doctorData, isLoading: doctorsLoading, error: docError } = useGetDoctorsQuery(null);
 
+    const navigate = useNavigate();
+    let content;
+
     if (isLoading || patientsLoading || doctorsLoading) {
-        return <MiniLoader />;
-    }
-
-    if (error || docError || patientsError) {
-        return (
-            <div>
-                {error?.data as FetchBaseQueryError}
-                {patientsError?.data as FetchBaseQueryError}
-                {docError?.data as FetchBaseQueryError}
-            </div>
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
         );
     }
+    else if (error || patientsError || docError) {
+        const errorMessage = ((error as FetchBaseQueryError)?.data ||
+            (patientsError as FetchBaseQueryError)?.data ||
+            (docError as FetchBaseQueryError)?.data) as string;
 
-    const content = latestVisits?.map((visit: Visit) => {
-        const patient = patientsData?.find((patient: Patient) => patient.id === visit.patientId);
-        const doctor = doctorData?.find((doctor: Doctor) => doctor.id === visit.doctorId);
-
-        return (
-            <TableRow key={visit.id}>
-                <TableCell>{doctor?.name} {doctor?.lastName}</TableCell>
-                <TableCell>{patient?.name} {patient?.lastName}</TableCell>
-                <TableCell>{visit.complaints}</TableCell>
-                <TableCell>{visit.diagnosis}</TableCell>
-            </TableRow>
+        content = (
+            <ErrorMessage>
+                <ErrorTitleRow>
+                    <ErrorIcon icon={faExclamationCircle} />
+                    <Message>{errorMessage}</Message>
+                </ErrorTitleRow>
+                <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+            </ErrorMessage>
         );
-    });
+    } else {
+        content = latestVisits?.map((visit: Visit) => {
+            const patient = patientsData?.find((patient: Patient) => patient.id === visit.patientId);
+            const doctor = doctorData?.find((doctor: Doctor) => doctor.id === visit.doctorId);
+
+            return (
+                <TableRow key={visit.id}>
+                    <TableCell>{doctor?.name} {doctor?.lastName}</TableCell>
+                    <TableCell>{patient?.name} {patient?.lastName}</TableCell>
+                    <TableCell>{visit.complaints}</TableCell>
+                    <TableCell>{visit.diagnosis}</TableCell>
+                </TableRow>
+            );
+        });
+    }
 
     return (
         <Container>
@@ -113,11 +133,3 @@ const TableCell = styled.td`
   padding: 10px;
 `;
 
-//const ProductImage = styled.img`
-//  width: 50px; 
-//  height: 50px; 
-//  border-radius: 50%; 
-//  border : 1px solid silver;
-//  margin-right: 10px; 
-//  object-fit:contain;
-//`;

@@ -110,8 +110,7 @@ function PatientForm({ id, data }: PatientFormProps) {
             formData.append("Id", id);
             const response = await updatePatient({ data: formData, id });
 
-            if (response.error) {
-                // Use error handler
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Patient has been updated", "success");
@@ -120,8 +119,7 @@ function PatientForm({ id, data }: PatientFormProps) {
         } else {
             const response = await createPatient(formData);
 
-            if (response.error) {
-                // Use error handler
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Patient has been created", "success");

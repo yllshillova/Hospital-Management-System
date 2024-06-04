@@ -33,7 +33,7 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
     const [updateDepartment] = useUpdateDepartmentMutation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [errorMessages, setErrorMessages] = useState<string[]>([]); // State for error messages
+    const [errorMessages, setErrorMessages] = useState<string[]>([]); 
 
 
     useEffect(() => {
@@ -62,21 +62,20 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         setLoading(true);
-        setErrorMessages([]); // Clear previous error messages
+        setErrorMessages([]); 
 
         const formData = new FormData();
 
         formData.append("Name", departmentInputs.name);
         formData.append("IsDeleted", departmentInputs.isDeleted.toString());
 
-        const currentLocation = window.location.pathname; // Capture the current URL
+        const currentLocation = window.location.pathname; 
 
         if (id) {
             formData.append("Id", id);
             const response = await updateDepartment({ data: formData, id });
 
-            if (response.error) {
-                // Use error handler
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Department has been updated", "success");
@@ -85,8 +84,7 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
         } else {
             const response = await createDepartment(formData);
 
-            if (response.error) {
-                // Use error handler
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Department has been created", "success");

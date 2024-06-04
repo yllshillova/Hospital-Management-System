@@ -100,7 +100,7 @@ function NurseForm({ id, data }: NurseFormProps) {
             formData.append("Id", id);
             const response = await updateNurse({ data: formData, id });
 
-            if (response.error) {
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Nurse has been updated ", "success");
@@ -108,8 +108,7 @@ function NurseForm({ id, data }: NurseFormProps) {
             }
         } else {
             const response = await createNurse(formData);
-            console.log(response);
-            if (response.error) {
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Nurse has been created ", "success");

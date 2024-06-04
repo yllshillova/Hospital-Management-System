@@ -54,8 +54,18 @@ function AppointmentList() {
     };
 
     if (isAppointmentLoading || isPatientLoading || isDoctorLoading)  {
-        content = <MainLoader />;
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
     } else if (appointmentError || patientError || doctorError) {
+        const errorMessage = ((appointmentError as FetchBaseQueryError)?.data || (patientError as FetchBaseQueryError)?.data || (doctorError as FetchBaseQueryError)?.data) as string;
+
         return (
             <>
                 <Header />
@@ -63,9 +73,7 @@ function AppointmentList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>
-                            {(appointmentError?.data as FetchBaseQueryError) || (patientError?.data as FetchBaseQueryError) || (doctorError?.data as FetchBaseQueryError)}
-                        </Message>
+                        <Message>{errorMessage}</Message>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>

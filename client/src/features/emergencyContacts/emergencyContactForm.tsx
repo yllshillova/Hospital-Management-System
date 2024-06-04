@@ -6,18 +6,11 @@ import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
-//import { useCreateDoctorMutation, useUpdateDoctorMutation } from "../../app/APIs/doctorApi";
-//import { SD_Genders } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-//import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
-//import { useGetDepartmentsQuery } from '../../app/APIs/departmentApi';
-//import Department from '../../app/models/Department';
-//import Doctor from '../../app/models/Doctor';
 import EmergencyContact from '../../app/models/EmergencyContact';
 import { useCreateEmergencyContactMutation, useUpdateEmergencyContactMutation } from '../../app/APIs/emergencyContactApi';
 import Patient from '../../app/models/Patient';
-//import { useGetPatientsQuery } from '../../app/APIs/patientApi';
 
 interface EmergencyContactFormProps {
     id?: string;
@@ -41,14 +34,12 @@ const emergencyContactData: EmergencyContact = {
 function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
     const { patientId } = useParams<{ patientId: string }>();
     const [emergencyContactInputs, setEmergencyContactInputs] = useState<EmergencyContact>({ ...emergencyContactData, patientId: patientId || "" });
-    //const [emergencyContactInputs, setEmergencyContactInputs] = useState<EmergencyContact>(data || emergencyContactData);
     const [createEmergencyContact] = useCreateEmergencyContactMutation();
     const [updateEmergencyContact] = useUpdateEmergencyContactMutation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
-    //const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
 
     useEffect(() => {
         if (data) {
@@ -82,7 +73,7 @@ function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
             formData.append("Id", id);
             const response = await updateEmergencyContact({ data: formData, id });
 
-            if (response.error) {
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("EmergencyContact has been updated", "success");
@@ -90,8 +81,7 @@ function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
             }
         } else {
             const response = await createEmergencyContact(formData);
-            console.log(response);
-            if (response.error) {
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("EmergencyContact has been created", "success");

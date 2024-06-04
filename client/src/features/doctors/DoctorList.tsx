@@ -63,8 +63,21 @@ function DoctorList() {
 
 
     if (isLoading) {
-        content = <MainLoader />;
-    } else if (error) {
+
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
+    else if (error) {
+        const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
+
+
         return (
             <>
                 <Header />
@@ -72,9 +85,7 @@ function DoctorList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>
-                            {(error?.data as FetchBaseQueryError) }
-                        </Message>
+                        <Message>{errorMessage}</Message>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>
@@ -82,6 +93,7 @@ function DoctorList() {
         );
     }
     else {
+
         content = data.map((doctor: Doctor) => {
             return (
                 <tbody key={doctor.id}>
