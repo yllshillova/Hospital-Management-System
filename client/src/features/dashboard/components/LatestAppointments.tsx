@@ -4,16 +4,14 @@ import Appointment from "../../../app/models/Appointment";
 import { useGetPatientsQuery } from "../../../app/APIs/patientApi";
 import Patient from "../../../app/models/Patient";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { BackButton, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../../app/common/styledComponents/table";
+import {  ErrorCard, ErrorDescription, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../../app/common/styledComponents/table";
 import MainLoader from "../../../app/common/MainLoader";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 function LatestAppointments() {
 
     const { data: latestAppointments , isLoading, error } = useGetLatestAppointmentsQuery(null); 
     const { data: patientsData , isLoading : patientsLoading, error: patientsError} = useGetPatientsQuery(null);
 
-    const navigate = useNavigate();
     let content;
 
     if (isLoading || patientsLoading) {
@@ -33,15 +31,24 @@ function LatestAppointments() {
             (patientsError as FetchBaseQueryError)?.data) as string;
 
         content = (
-            <ErrorMessage>
+            <ErrorCard>
                 <ErrorTitleRow>
                     <ErrorIcon icon={faExclamationCircle} />
-                    <Message>{errorMessage}</Message>
+                    <ErrorDescription>{errorMessage || "An error occurred while fetching the latest appointments data."}</ErrorDescription>
                 </ErrorTitleRow>
-                <BackButton onClick={() => navigate(-1)}>Back</BackButton>
-            </ErrorMessage>
+            </ErrorCard>
         );
-    }
+    } 
+    else if (latestAppointments.length === 0) {
+            content = (
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <Message>No appointments found.</Message>
+                    </ErrorTitleRow>
+                </ErrorMessage>
+            );
+        }
 
     else {
         content = latestAppointments?.map((appointment: Appointment) => {
@@ -57,40 +64,43 @@ function LatestAppointments() {
                 </TableRow>
             );
         });
+        content = (
+
+            <Container>
+                <Title>Latest Appointments</Title>
+                <TableContainer>
+                    <Table>
+                        <thead>
+                            <TableRow>
+                                <TableHeader>Name</TableHeader>
+                                <TableHeader>Last Name</TableHeader>
+                                <TableHeader>Check In</TableHeader>
+                                <TableHeader>Check Out</TableHeader>
+                                <TableHeader>Reason</TableHeader>
+                            </TableRow>
+                        </thead>
+                        <tbody>
+                            {content}
+                        </tbody>
+                    </Table>
+                </TableContainer>
+            </Container>
+        );
     }
 
-    return (
-        <Container flex={2}>
-            <Title>Latest Appointments</Title>
-            <TableContainer>
-                <Table>
-                    <thead>
-                        <TableRow>
-                            <TableHeader>Name</TableHeader>
-                            <TableHeader>Last Name</TableHeader>
-                            <TableHeader>Check In</TableHeader>
-                            <TableHeader>Check Out</TableHeader>
-                            <TableHeader>Reason</TableHeader>
-                        </TableRow>
-                    </thead>
-                    <tbody>
-                        {content}
-                    </tbody>
-                </Table>
-            </TableContainer>
-        </Container>
-    );
+    return content;
+
 }
 
 export default LatestAppointments;
 
-const Container = styled.div<{ flex: number }>`
+
+const Container = styled.div`
   border: 1px  #ddd;
   border-radius: 15px;
   padding: 15px;
   background-color: white;
   margin-left:  5px; 
-  flex: ${({ flex }) => flex};
 `;
 
 const Title = styled.div`

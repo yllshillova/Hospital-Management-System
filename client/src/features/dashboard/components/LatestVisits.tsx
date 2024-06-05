@@ -6,18 +6,16 @@ import Doctor from "../../../app/models/Doctor";
 import { useGetLatestVisitsQuery } from "../../../app/APIs/visitApi";
 import { useGetDoctorsQuery } from "../../../app/APIs/doctorApi";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { BackButton, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../../app/common/styledComponents/table";
+import { ErrorCard, ErrorDescription, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../../app/common/styledComponents/table";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 import MainLoader from "../../../app/common/MainLoader";
 
 function LatestVisits() {
 
     const { data: latestVisits, isLoading, error } = useGetLatestVisitsQuery(null);
     const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
-    const { data: doctorData, isLoading: doctorsLoading, error: docError } = useGetDoctorsQuery(null);
+    const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError } = useGetDoctorsQuery(null);
 
-    const navigate = useNavigate();
     let content;
 
     if (isLoading || patientsLoading || doctorsLoading) {
@@ -30,25 +28,32 @@ function LatestVisits() {
                 </tr>
             </tbody>
         );
-    }
-    else if (error || patientsError || docError) {
+    } else if (error || patientsError || doctorsError) {
         const errorMessage = ((error as FetchBaseQueryError)?.data ||
             (patientsError as FetchBaseQueryError)?.data ||
-            (docError as FetchBaseQueryError)?.data) as string;
+            (doctorsError as FetchBaseQueryError)?.data) as string;
 
+        content = (
+            <ErrorCard>
+                <ErrorTitleRow>
+                    <ErrorIcon icon={faExclamationCircle} />
+                    <ErrorDescription>{errorMessage || "An error occurred while fetching the latest visits data."}</ErrorDescription>
+                </ErrorTitleRow>
+            </ErrorCard>
+        );
+    } else if (latestVisits.length === 0) {
         content = (
             <ErrorMessage>
                 <ErrorTitleRow>
                     <ErrorIcon icon={faExclamationCircle} />
-                    <Message>{errorMessage}</Message>
+                    <Message>No visits found.</Message>
                 </ErrorTitleRow>
-                <BackButton onClick={() => navigate(-1)}>Back</BackButton>
             </ErrorMessage>
         );
     } else {
         content = latestVisits?.map((visit: Visit) => {
             const patient = patientsData?.find((patient: Patient) => patient.id === visit.patientId);
-            const doctor = doctorData?.find((doctor: Doctor) => doctor.id === visit.doctorId);
+            const doctor = doctorsData?.find((doctor: Doctor) => doctor.id === visit.doctorId);
 
             return (
                 <TableRow key={visit.id}>
@@ -59,39 +64,41 @@ function LatestVisits() {
                 </TableRow>
             );
         });
+        content = (
+            <Container>
+                <Title>Latest Visits</Title>
+                <TableContainer>
+                    <Table>
+                        <thead>
+                            <TableRow>
+                                <TableHeader>Doctor</TableHeader>
+                                <TableHeader>Patient</TableHeader>
+                                <TableHeader>Complaints</TableHeader>
+                                <TableHeader>Diagnosis</TableHeader>
+                            </TableRow>
+                        </thead>
+                        <tbody>
+                            {content}
+                        </tbody>
+                    </Table>
+                </TableContainer>
+            </Container>
+        );
     }
 
-    return (
-        <Container>
-            <Title>Latest Visits</Title>
-            <TableContainer>
-                <Table>
-                    <thead>
-                        <TableRow>
-                            <TableHeader>Doctor</TableHeader>
-                            <TableHeader>Patient</TableHeader>
-                            <TableHeader>Complaints</TableHeader>
-                            <TableHeader>Diagnosis</TableHeader>
-                        </TableRow>
-                    </thead>
-                    <tbody>
-                        {content}
-                    </tbody>
-                </Table>
-            </TableContainer>
-        </Container>
-    );
+    return content;
 }
 
 export default LatestVisits;
+
+
 
 const Container = styled.div`
   border: 1px  #ddd;
   border-radius: 15px;
   padding: 15px;
   background-color: white;
-  margin: 35px 62px;
-  
+  margin-left:  5px; 
 `;
 
 const Title = styled.div`
@@ -132,4 +139,3 @@ const TableHeader = styled.th`
 const TableCell = styled.td`
   padding: 10px;
 `;
-

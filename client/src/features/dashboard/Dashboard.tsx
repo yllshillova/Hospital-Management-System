@@ -18,11 +18,12 @@ function Dashboard() {
                     <LatestAppointmentsContainer>
                         <LatestAppointments />
                     </LatestAppointmentsContainer>
-                    {/*<RecentYContainer>*/}
-                    {/*    <RecentZ />*/}
-                    {/*</RecentYContainer>*/}
-                </InlineContainer>{" "}
-                <LatestVisits />
+                </InlineContainer>
+                <InlineContainer>
+                    <LatestAppointmentsContainer>
+                        <LatestVisits />
+                    </LatestAppointmentsContainer>
+                </InlineContainer>
             </MainContent>
         </>
     );
@@ -33,7 +34,7 @@ const MainContent = styled.div`
   padding: 20px;
   display: flex;
   flex-direction: column;
-  min-height: 92vh; /* Set minimum height to 100% of the viewport height */
+  min-height: 92vh; 
   margin-top: 50px;
 `;
 
@@ -45,7 +46,7 @@ const InlineContainer = styled.div`
 
 const FlexContainer = styled.div`
   flex: 1;
-  align-self: stretch; /* Make components stretch to the same height */
+  align-self: stretch; 
 `;
 
 const LatestAppointmentsContainer = styled(FlexContainer)`

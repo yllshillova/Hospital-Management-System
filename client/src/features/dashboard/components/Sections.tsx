@@ -44,8 +44,9 @@ function Sections() {
         const errorMessage = ((depError as FetchBaseQueryError)?.data ||
             (patError as FetchBaseQueryError)?.data ||
             (docError as FetchBaseQueryError)?.data) as string;
+        console.log(errorMessage);
 
-        content = (
+        return (
             <ErrorMessage>
                 <ErrorTitleRow>
                     <ErrorIcon icon={faExclamationCircle} />

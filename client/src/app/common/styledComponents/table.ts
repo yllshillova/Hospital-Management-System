@@ -159,13 +159,13 @@ export const ErrorIcon = styled(FontAwesomeIcon)`
     font-size: 30px;
     color: #dc3545;
     margin-right: 10px;
-    margin-top:10px;
+    margin-top:5px;
 `;
 
 export const ErrorTitleRow = styled.div`
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: left;
+    justify-content: left;
     margin-bottom: 5px;
 `;
 
@@ -174,4 +174,25 @@ export const Message = styled.p`
     color: #666;
     margin-bottom: 15px;
     max-width: 450px;
+`;
+
+export const ErrorCard = styled.div`
+    width: 500px; /* Adjust the width as needed */
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    margin-bottom: 8px;
+    transition: transform 0.3s ease-in-out;
+    &:hover {
+        transform: scale(1.02);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+    }
+`;
+
+export const ErrorDescription = styled.p`
+    font-size: 13.5px;
+    margin: 0;
+    font-weight:bold;
+    margin-top:10px;
 `;
