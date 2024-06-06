@@ -9,6 +9,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { ErrorCard, ErrorDescription, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../../app/common/styledComponents/table";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import MainLoader from "../../../app/common/MainLoader";
+import { connectionError } from "../../../app/utility/connectionError";
 
 function LatestVisits() {
 
@@ -28,7 +29,9 @@ function LatestVisits() {
                 </tr>
             </tbody>
         );
-    } else if (error || patientsError || doctorsError) {
+    }
+
+    else if (error || patientsError || doctorsError) {
         const errorMessage = ((error as FetchBaseQueryError)?.data ||
             (patientsError as FetchBaseQueryError)?.data ||
             (doctorsError as FetchBaseQueryError)?.data) as string;
@@ -37,11 +40,13 @@ function LatestVisits() {
             <ErrorCard>
                 <ErrorTitleRow>
                     <ErrorIcon icon={faExclamationCircle} />
-                    <ErrorDescription>{errorMessage || "An error occurred while fetching the latest visits data."}</ErrorDescription>
+                    <ErrorDescription>{connectionError("latest visits") || errorMessage}</ErrorDescription>
                 </ErrorTitleRow>
             </ErrorCard>
         );
-    } else if (latestVisits.length === 0) {
+    }
+
+    else if (latestVisits.length === 0) {
         content = (
             <ErrorMessage>
                 <ErrorTitleRow>
@@ -50,7 +55,9 @@ function LatestVisits() {
                 </ErrorTitleRow>
             </ErrorMessage>
         );
-    } else {
+    }
+
+    else {
         content = latestVisits?.map((visit: Visit) => {
             const patient = patientsData?.find((patient: Patient) => patient.id === visit.patientId);
             const doctor = doctorsData?.find((doctor: Doctor) => doctor.id === visit.doctorId);
@@ -70,12 +77,12 @@ function LatestVisits() {
                 <TableContainer>
                     <Table>
                         <thead>
-                            <TableRow>
+                            <TableHead>
                                 <TableHeader>Doctor</TableHeader>
                                 <TableHeader>Patient</TableHeader>
                                 <TableHeader>Complaints</TableHeader>
                                 <TableHeader>Diagnosis</TableHeader>
-                            </TableRow>
+                            </TableHead>
                         </thead>
                         <tbody>
                             {content}

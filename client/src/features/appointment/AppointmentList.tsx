@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteAppointmentMutation, useGetAppointmentsQuery } from "../../app/APIs/appointmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import Appointment from "../../app/models/Appointment";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
 import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 import User from "../../app/models/User";
+import { connectionError } from "../../app/utility/connectionError";
 
 
 function AppointmentList() {
@@ -73,7 +74,7 @@ function AppointmentList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>{errorMessage}</Message>
+                        <ErrorDescription>{connectionError("appointments") || errorMessage}</ErrorDescription>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>

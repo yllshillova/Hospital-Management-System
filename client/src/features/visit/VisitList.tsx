@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MainLoader from "../../app/common/MainLoader";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorMessage, BackButton, ErrorTitleRow, ErrorIcon, Message } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorMessage, BackButton, ErrorTitleRow, ErrorIcon, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -22,6 +22,7 @@ import withAuthorization from "../../app/hoc/withAuthorization";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { connectionError } from "../../app/utility/connectionError";
 function VisitList() {
 
     const userData = useSelector((state: RootState) => state.auth);
@@ -66,15 +67,15 @@ function VisitList() {
     }
     else if (error || doctorsError || patientsError) {
         const errorMessage = ((error as FetchBaseQueryError)?.data || (patientsError as FetchBaseQueryError)?.data || (doctorsError as FetchBaseQueryError)?.data) as string;
-        console.log(errorMessage);
-        return (
+
+        content = (
             <>
                 <Header />
                 <SidePanel />
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>{errorMessage}</Message>
+                        <ErrorDescription>{connectionError("visits") || errorMessage}</ErrorDescription>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>
@@ -111,36 +112,39 @@ function VisitList() {
                 </tbody>
             );
         });
+
+        content = (
+             <>
+                <Header />
+                <SidePanel />
+                <OrdersTable>
+                    <TableNav>
+                        <TableHeader>Visits List</TableHeader>
+
+                        {userData.role == SD_Roles.DOCTOR &&
+                        <AddButton onClick={() => navigate("/visit/insert")}  >
+                            <FontAwesomeIcon icon={faAdd} />
+                            </AddButton>
+                        }
+                    </TableNav>
+                    <Table>
+                        <thead>
+                            <TableHead>
+                                <TableHeaderCell>Doctor</TableHeaderCell>
+                                <TableHeaderCell>Patient</TableHeaderCell>
+                                <TableHeaderCell>Complaints</TableHeaderCell>
+                                <TableHeaderCell>Diagnosis </TableHeaderCell>
+                            </TableHead>
+                        </thead>
+                        {content}
+                    </Table>
+                </OrdersTable>
+            </>
+        );
     }
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OrdersTable>
-                <TableNav>
-                    <TableHeader>Visits List</TableHeader>
+    return content;
 
-                    {userData.role == SD_Roles.DOCTOR &&
-                    <AddButton onClick={() => navigate("/visit/insert")}  >
-                        <FontAwesomeIcon icon={faAdd} />
-                        </AddButton>
-                    }
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableHead>
-                            <TableHeaderCell>Doctor</TableHeaderCell>
-                            <TableHeaderCell>Patient</TableHeaderCell>
-                            <TableHeaderCell>Complaints</TableHeaderCell>
-                            <TableHeaderCell>Diagnosis </TableHeaderCell>
-                        </TableHead>
-                    </thead>
-                    {content}
-                </Table>
-            </OrdersTable>
-        </>
-    );
 }
 
 export default withAuthorization(VisitList , [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);

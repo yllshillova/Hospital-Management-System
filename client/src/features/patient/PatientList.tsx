@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeletePatientMutation, useGetPatientsQuery } from "../../app/APIs/patientApi";
 import MainLoader from "../../app/common/MainLoader";
 import Patient from "../../app/models/Patient";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon,  BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -18,6 +18,7 @@ import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
+import { connectionError } from "../../app/utility/connectionError";
 
 function PatientList() {
     const { data, isLoading, error } = useGetPatientsQuery(null);
@@ -58,14 +59,14 @@ function PatientList() {
     } else if (error) {
         const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
 
-        return (
+        content = (
             <>
                 <Header />
                 <SidePanel />
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>{errorMessage}</Message>
+                        <ErrorDescription>{connectionError("patients") || errorMessage}</ErrorDescription>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>
@@ -106,38 +107,38 @@ function PatientList() {
                 </tbody>
             );
         });
+            <>
+                        <Header />
+                        <SidePanel />
+                        <OrdersTable>
+                            <TableNav>
+                                <TableHeader>Patients List</TableHeader>
+
+                                {userData.role == SD_Roles.NURSE &&
+
+                                <AddButton onClick={() => navigate("/patient/insert")}>
+                                    <FontAwesomeIcon icon={faAdd} />
+                                    </AddButton>
+                                }
+                            </TableNav>
+                            <Table>
+                                <thead>
+                                    <TableHead>
+                                        <TableHeaderCell>Name</TableHeaderCell>
+                                        <TableHeaderCell>Last Name</TableHeaderCell>
+                                        <TableHeaderCell>Parent Name</TableHeaderCell>
+                                        <TableHeaderCell>Email</TableHeaderCell>
+                                        <TableHeaderCell>Residence </TableHeaderCell>
+                                        <TableHeaderCell>Blood Group </TableHeaderCell>
+                                    </TableHead>
+                                </thead>
+                                {content}
+                            </Table>
+                        </OrdersTable>
+            </>
+
     }
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OrdersTable>
-                <TableNav>
-                    <TableHeader>Patients List</TableHeader>
-
-                    {userData.role == SD_Roles.NURSE &&
-
-                    <AddButton onClick={() => navigate("/patient/insert")}>
-                        <FontAwesomeIcon icon={faAdd} />
-                        </AddButton>
-                    }
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableHead>
-                            <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>Last Name</TableHeaderCell>
-                            <TableHeaderCell>Parent Name</TableHeaderCell>
-                            <TableHeaderCell>Email</TableHeaderCell>
-                            <TableHeaderCell>Residence </TableHeaderCell>
-                            <TableHeaderCell>Blood Group </TableHeaderCell>
-                        </TableHead>
-                    </thead>
-                    {content}
-                </Table>
-            </OrdersTable>
-        </>
-    );
+    return content;
 }
 export default withAuthorization(PatientList, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

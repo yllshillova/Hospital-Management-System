@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteDepartmentMutation, useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import Department from "../../app/models/Department";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon,  BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -16,6 +16,7 @@ import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
+import { connectionError } from "../../app/utility/connectionError";
 
 function DepartmentList() {
 
@@ -61,14 +62,14 @@ function DepartmentList() {
     else if (error) {
         const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
 
-        return (
+        content = (
             <>
                 <Header />
                 <SidePanel />
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>{errorMessage}</Message>
+                        <ErrorDescription>{connectionError("departments") || errorMessage}</ErrorDescription>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>
@@ -98,32 +99,31 @@ function DepartmentList() {
                 </tbody>
             );
         });
+        <>
+                    <Header />
+                    <SidePanel />
+                    <OrdersTable>
+                        <TableNav>
+                            <TableHeader>Departments List</TableHeader>
+                            <AddButton onClick={() => navigate("/department/insert")}  >
+                                <FontAwesomeIcon icon={faAdd} />
+                            </AddButton>
+                        </TableNav>
+                        <Table>
+                            <thead>
+                                <TableHead>
+                                    <TableHeaderCell>Name</TableHeaderCell>
+                                    <TableHeaderCell>Date Created </TableHeaderCell>
+                                    <TableHeaderCell>Date Updated </TableHeaderCell>
+                                </TableHead>
+                            </thead>
+                            {content}
+                        </Table>
+                    </OrdersTable>
+                </>
     }
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OrdersTable>
-                <TableNav>
-                    <TableHeader>Departments List</TableHeader>
-                    <AddButton onClick={() => navigate("/department/insert")}  >
-                        <FontAwesomeIcon icon={faAdd} />
-                    </AddButton>
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableHead>
-                            <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>Date Created </TableHeaderCell>
-                            <TableHeaderCell>Date Updated </TableHeaderCell>
-                        </TableHead>
-                    </thead>
-                    {content}
-                </Table>
-            </OrdersTable>
-        </>
-    );
+    return content;
 }
 
 export default withAuthorization(DepartmentList, [SD_Roles.ADMINISTRATOR]);

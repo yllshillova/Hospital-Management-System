@@ -4,9 +4,11 @@ import Appointment from "../../../app/models/Appointment";
 import { useGetPatientsQuery } from "../../../app/APIs/patientApi";
 import Patient from "../../../app/models/Patient";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import {  ErrorCard, ErrorDescription, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../../app/common/styledComponents/table";
+import {  ErrorCard, ErrorDescription, ErrorIcon, ErrorTitleRow } from "../../../app/common/styledComponents/table";
 import MainLoader from "../../../app/common/MainLoader";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { connectionError } from "../../../app/utility/connectionError";
+
 function LatestAppointments() {
 
     const { data: latestAppointments , isLoading, error } = useGetLatestAppointmentsQuery(null); 
@@ -34,19 +36,19 @@ function LatestAppointments() {
             <ErrorCard>
                 <ErrorTitleRow>
                     <ErrorIcon icon={faExclamationCircle} />
-                    <ErrorDescription>{errorMessage || "An error occurred while fetching the latest appointments data."}</ErrorDescription>
+                    <ErrorDescription>{connectionError("latest appointments") || errorMessage}</ErrorDescription>
                 </ErrorTitleRow>
             </ErrorCard>
         );
     } 
     else if (latestAppointments.length === 0) {
             content = (
-                <ErrorMessage>
+                <ErrorCard>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>No appointments found.</Message>
+                        <ErrorDescription>No appointments found.</ErrorDescription>
                     </ErrorTitleRow>
-                </ErrorMessage>
+                </ErrorCard>
             );
         }
 
@@ -71,13 +73,13 @@ function LatestAppointments() {
                 <TableContainer>
                     <Table>
                         <thead>
-                            <TableRow>
+                            <TableHead>
                                 <TableHeader>Name</TableHeader>
                                 <TableHeader>Last Name</TableHeader>
                                 <TableHeader>Check In</TableHeader>
                                 <TableHeader>Check Out</TableHeader>
                                 <TableHeader>Reason</TableHeader>
-                            </TableRow>
+                            </TableHead>
                         </thead>
                         <tbody>
                             {content}

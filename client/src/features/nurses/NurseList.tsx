@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MainLoader from "../../app/common/MainLoader";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -22,6 +22,7 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { RootState } from "../../app/storage/redux/store";
 import { useSelector } from "react-redux";
 import User from "../../app/models/User";
+import { connectionError } from "../../app/utility/connectionError";
 
 function NurseList() {
     const { data, isLoading, error } = useGetNursesQuery(null);
@@ -76,14 +77,14 @@ function NurseList() {
     else if (error) {
 
         const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
-        return (
+        content = (
             <>
                 <Header />
                 <SidePanel />
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>{errorMessage}</Message>
+                        <ErrorDescription>{connectionError("nurses") || errorMessage}</ErrorDescription>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>
@@ -125,33 +126,36 @@ function NurseList() {
                 </tbody>
             );
         });
+
+         <>
+                    <Header />
+                    <SidePanel />
+                    <OrdersTable>
+                        <TableNav>
+                            <TableHeader>Nurses List</TableHeader>
+                            <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/nurse/insert")}  >
+                                <FontAwesomeIcon icon={faAdd} />
+                            </AddButton>
+                        </TableNav>
+                        <Table>
+                            <thead>
+                                <TableHead>
+                                    <TableHeaderCell>Name</TableHeaderCell>
+                                    <TableHeaderCell>Last Name</TableHeaderCell>
+                                    <TableHeaderCell>Email</TableHeaderCell>
+                                    <TableHeaderCell>Department</TableHeaderCell>
+                                    <TableHeaderCell>Residence </TableHeaderCell>
+                                </TableHead>
+                            </thead>
+                            {content}
+                        </Table>
+                    </OrdersTable>
+                </>
+
+
     }
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OrdersTable>
-                <TableNav>
-                    <TableHeader>Nurses List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/nurse/insert")}  >
-                        <FontAwesomeIcon icon={faAdd} />
-                    </AddButton>
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableHead>
-                            <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>Last Name</TableHeaderCell>
-                            <TableHeaderCell>Email</TableHeaderCell>
-                            <TableHeaderCell>Department</TableHeaderCell>
-                            <TableHeaderCell>Residence </TableHeaderCell>
-                        </TableHead>
-                    </thead>
-                    {content}
-                </Table>
-            </OrdersTable>
-        </>
-    );
+    return content;
+
 }
 export default withAuthorization(NurseList, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

@@ -7,8 +7,8 @@ import { useGetPatientsCountQuery } from '../../../app/APIs/patientApi';
 import { useGetNursesCountQuery } from '../../../app/APIs/nurseApi';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import MainLoader from '../../../app/common/MainLoader';
-import { BackButton, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../../app/common/styledComponents/table";
-import { useNavigate } from 'react-router-dom';
+import {  ErrorCard, ErrorDescription, ErrorIcon, ErrorTitleRow } from "../../../app/common/styledComponents/table";
+import { connectionError } from "../../../app/utility/connectionError";
 
 function Sections() {
 
@@ -25,7 +25,6 @@ function Sections() {
 
     ];
 
-    const navigate = useNavigate();
     let content;
 
     if (departmentsLoading || doctorsLoading || patientsLoading) {
@@ -44,16 +43,14 @@ function Sections() {
         const errorMessage = ((depError as FetchBaseQueryError)?.data ||
             (patError as FetchBaseQueryError)?.data ||
             (docError as FetchBaseQueryError)?.data) as string;
-        console.log(errorMessage);
 
-        return (
-            <ErrorMessage>
+        content = (
+            <ErrorCard>
                 <ErrorTitleRow>
                     <ErrorIcon icon={faExclamationCircle} />
-                    <Message>{errorMessage}</Message>
+                    <ErrorDescription>{connectionError("sections") || errorMessage}</ErrorDescription>
                 </ErrorTitleRow>
-                <BackButton onClick={() => navigate(-1)}>Back</BackButton>
-            </ErrorMessage>
+            </ErrorCard>
         );
 
     }
