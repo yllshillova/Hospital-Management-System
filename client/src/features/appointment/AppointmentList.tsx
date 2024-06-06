@@ -67,7 +67,7 @@ function AppointmentList() {
     } else if (appointmentError || patientError || doctorError) {
         const errorMessage = ((appointmentError as FetchBaseQueryError)?.data || (patientError as FetchBaseQueryError)?.data || (doctorError as FetchBaseQueryError)?.data) as string;
 
-        return (
+        content = (
             <>
                 <Header />
                 <SidePanel />
@@ -115,36 +115,36 @@ function AppointmentList() {
                 </tbody>
             );
         });
+            <>
+                        <Header />
+                        <SidePanel />
+                        <OrdersTable>
+                            <TableNav>
+                                <TableHeader>Appointments List</TableHeader>
+
+                                {userData.role == SD_Roles.NURSE &&
+                                    <AddButton onClick={() => navigate("/appointment/insert")}>
+                                        <FontAwesomeIcon icon={faAdd} />
+                                    </AddButton>
+                                }
+                            </TableNav>
+                            <Table>
+                                <thead>
+                                    <TableHead>
+                                        <TableHeaderCell>Doctor</TableHeaderCell>
+                                        <TableHeaderCell>Patient</TableHeaderCell>
+                                        <TableHeaderCell>Check In Date</TableHeaderCell>
+                                        <TableHeaderCell>Check Out Date</TableHeaderCell>
+                                    </TableHead>
+                                </thead>
+                                {content}
+                            </Table>
+                        </OrdersTable>
+                    </>
+
     }
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OrdersTable>
-                <TableNav>
-                    <TableHeader>Appointments List</TableHeader>
-
-                    {userData.role == SD_Roles.NURSE &&
-                        <AddButton onClick={() => navigate("/appointment/insert")}>
-                            <FontAwesomeIcon icon={faAdd} />
-                        </AddButton>
-                    }
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableHead>
-                            <TableHeaderCell>Doctor</TableHeaderCell>
-                            <TableHeaderCell>Patient</TableHeaderCell>
-                            <TableHeaderCell>Check In Date</TableHeaderCell>
-                            <TableHeaderCell>Check Out Date</TableHeaderCell>
-                        </TableHead>
-                    </thead>
-                    {content}
-                </Table>
-            </OrdersTable>
-        </>
-    );
+    return content;
 }
 
 export default withAuthorization(AppointmentList, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);
