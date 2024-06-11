@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useGetPatientByIdQuery } from "../../app/APIs/patientApi";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, ErrorDescription, BackButton } from "../../app/common/styledComponents/table";
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import useErrorHandler from "../../app/helpers/useErrorHandler";
@@ -11,10 +11,11 @@ import { Attribute, ErrorMessage, Label, LabelsRow, LeftContainer, MainContainer
 import { useDeleteEmergencyContactMutation, useGetEmergencyContactsByPatientIdQuery} from "../../app/APIs/emergencyContactApi";
 import toastNotify from "../../app/helpers/toastNotify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrashAlt, faAdd, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import EmergencyContact from "../../app/models/EmergencyContact";
 import { SD_Roles } from "../../app/utility/SD";
 import withAuthorization from "../../app/hoc/withAuthorization";
+import { connectionError } from "../../app/utility/connectionError";
 
 
 function isValidGuid(guid: string): boolean {
@@ -24,11 +25,9 @@ function isValidGuid(guid: string): boolean {
 
 function PatientDetails() {
     const { id } = useParams<{ id: string }>();
-    //const { id } = useParams();
-    const { data: patientData, isLoading, error, isError } = useGetPatientByIdQuery(id);
+    const { data: patientData, isLoading, error } = useGetPatientByIdQuery(id);
 
     const { data: emergencyData, isLoading: emergencyLoading, error: emergencyError } = useGetEmergencyContactsByPatientIdQuery(id);
-    console.log(emergencyData);
     const navigate = useNavigate();
     const location = useLocation();
     let content;
@@ -58,13 +57,9 @@ function PatientDetails() {
         navigate('/not-found');
         return;
     }
-    const fbError = error as FetchBaseQueryError;
+    
 
-    if (isError) {
-        useErrorHandler(fbError, navigate, location.pathname);
-    }
-
-    if (isLoading) {
+    if (isLoading || emergencyLoading) {
         return (
             <tbody>
                 <tr>
@@ -76,15 +71,36 @@ function PatientDetails() {
         );
     }
 
-    if (patientData) {
+    else if (error) {
+
+        const fetchError = error as FetchBaseQueryError;
+        const errorMessage = (fetchError?.data as string);
+
+        content = (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <ErrorDescription>{errorMessage || connectionError("patient")}</ErrorDescription>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
+        );
+    }
+
+
+    else if (patientData) {
         const patient = patientData;
         const statusLabel = patient.isDeleted === "True" ?
             <label style={{ fontWeight: "bold", color: "#DC143C" }}>Passive </label> :
             <label style={{ fontWeight: "bold", color: "#009F6B" }}>Active </label>;
 
         if (emergencyError) {
-            const errorMessage = ((emergencyError as FetchBaseQueryError)?.data) as string;
-
+            const fetchError = emergencyError as FetchBaseQueryError;
+            const errorMessage = (fetchError?.data as string) || connectionError("emergency contacts");
             return (
                 <>
                     <Header />
@@ -158,8 +174,18 @@ function PatientDetails() {
         }
 
         if (emergencyLoading) {
-            content = <MainLoader />;
-        } else {
+            content = (
+                <tbody>
+                    <tr>
+                        <td colSpan={4}>
+                            <MainLoader />
+                        </td>
+                    </tr>
+                </tbody>
+            );
+        }
+
+        else {
             content = emergencyData.map((emergencyContact: EmergencyContact) => {
                 return (
                     <tbody key={emergencyContact.id}>
@@ -247,7 +273,6 @@ function PatientDetails() {
                         </RightContainer>
                     </WrapperContainer>
 
-                    
 
                 </MainContainer>
                 <OrdersTable>

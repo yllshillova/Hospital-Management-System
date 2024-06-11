@@ -14,7 +14,7 @@ namespace Application.Doctors
             public async Task<Result<IEnumerable<DoctorDto>>> Handle(GetDoctorsQuery request, CancellationToken cancellationToken)
             {
                 var doctors = await _doctorRepository.GetAllAsync();
-                if (doctors is null || !doctors.Any()) return Result<IEnumerable<DoctorDto>>.Failure(ErrorType.NotFound, "No records could be found!");
+                if (doctors is null || !doctors.Any()) return Result<IEnumerable<DoctorDto>>.Failure(ErrorType.NotFound, "No doctor records found in the hospital");
 
                 var doctorDtos = _mapper.Map<IEnumerable<DoctorDto>>(doctors);
                 if (doctorDtos is null) return Result<IEnumerable<DoctorDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");

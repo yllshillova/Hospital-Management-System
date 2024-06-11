@@ -12,6 +12,7 @@ import { SD_Roles } from "../../app/utility/SD";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { BackButton, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../app/common/styledComponents/table";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { connectionError } from "../../app/utility/connectionError";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -45,7 +46,8 @@ function NurseDetails() {
     }
 
     else if (error || departmentError) {
-        const errorMessage = ((error as FetchBaseQueryError)?.data || (departmentError as FetchBaseQueryError)?.data ) as string;
+        const fetchError = (error as FetchBaseQueryError) || (departmentError as FetchBaseQueryError);
+        const errorMessage = fetchError?.data as string;
 
         return (
             <>
@@ -54,7 +56,7 @@ function NurseDetails() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>{errorMessage}</Message>
+                        <Message>{errorMessage || connectionError("nurse")}</Message>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>

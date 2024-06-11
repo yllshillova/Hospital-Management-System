@@ -3,12 +3,13 @@ import { useGetDepartmentByIdQuery } from "../../app/APIs/departmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { Header, SidePanel } from "../../app/layout";
-import { TableCell, TableRow, OrdersTable, TableNav, TableHeader, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, ErrorMessage } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, OrdersTable, TableNav, TableHeader, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import StaffMember from "../../app/models/StaffMember";
 import { BackButton } from "../../app/common/styledComponents/details";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
+import { connectionError } from "../../app/utility/connectionError";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -40,23 +41,28 @@ function DepartmentDetails() {
                 </tr>
             </tbody>
         );
-    } else if (error) {
-        const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
+    }
 
-        return (
+    else if (error) {
+
+        const fetchError = error as FetchBaseQueryError;
+        const errorMessage = (fetchError?.data as string);
+
+        content = (
             <>
                 <Header />
                 <SidePanel />
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>{errorMessage}</Message>
+                        <ErrorDescription>{errorMessage || connectionError("department")}</ErrorDescription>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>
             </>
         );
     }
+
     else {
         content = (
             <>
@@ -76,34 +82,35 @@ function DepartmentDetails() {
                 </tbody>
             </>
         );
+        content = (
+            <>
+                <Header />
+                <SidePanel />
+                <OrdersTable>
+                    <TableNav>
+                        <TableHeader>Staff of {data?.name} </TableHeader>
+                    </TableNav>
+                    <Table>
+                        <thead>
+                            <TableHead>
+                                <TableHeaderCell>Name</TableHeaderCell>
+                                <TableHeaderCell>Last Name</TableHeaderCell>
+                                <TableHeaderCell>Email</TableHeaderCell>
+                                <TableHeaderCell>Residence</TableHeaderCell>
+                            </TableHead>
+                        </thead>
+                        {content}
+                    </Table>
+                    <BackButton
+                        onClick={() => navigate("/departments")}>
+                        Back to Departments
+                    </BackButton>
+                </OrdersTable>
+
+            </>
+        );
     }
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OrdersTable>
-                <TableNav>
-                    <TableHeader>Staff of {data?.name} </TableHeader>
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableHead>
-                            <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>Last Name</TableHeaderCell>
-                            <TableHeaderCell>Email</TableHeaderCell>
-                            <TableHeaderCell>Residence</TableHeaderCell>
-                        </TableHead>
-                    </thead>
-                    {content}
-                </Table>
-                <BackButton
-                    onClick={() => navigate("/departments")}>
-                    Back to Departments
-                </BackButton>
-            </OrdersTable>
-
-        </>
-    );
+    return content;
 }
 export default withAuthorization(DepartmentDetails, [SD_Roles.ADMINISTRATOR]);

@@ -46,7 +46,7 @@ function NurseForm({ id, data }: NurseFormProps) {
     const [updateNurse] = useUpdateNurseMutation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [errorMessages, setErrorMessages] = useState<string[]>([]); // State for error messages
+    const [errorMessages, setErrorMessages] = useState<string[]>([]); 
 
     const { data: departmentsData, isLoading: departmentsLoading, error: departmentsError } = useGetDepartmentsQuery(null);
 
@@ -63,12 +63,6 @@ function NurseForm({ id, data }: NurseFormProps) {
 
     const handleNurseInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, nurseInputs);
-        if (e.target.name === 'birthday') {
-            const formattedBirthday = validBirthdayDate(tempData.birthday);
-            if (formattedBirthday !== undefined) {
-                tempData.birthday = formattedBirthday;
-            }
-        }
         setNurseInputs(tempData);
     };
 
@@ -117,6 +111,13 @@ function NurseForm({ id, data }: NurseFormProps) {
         }
 
         setLoading(false);
+    };
+
+    const toggleIsDeleted = () => {
+        setNurseInputs((prevInputs) => ({
+            ...prevInputs,
+            isDeleted: !prevInputs.isDeleted,
+        }));
     };
 
     return (
@@ -266,8 +267,8 @@ function NurseForm({ id, data }: NurseFormProps) {
                                     <input
                                         type="checkbox"
                                         name="isDeleted"
-                                        checked={nurseInputs.isDeleted}
-                                        onChange={handleNurseInput}
+                                        checked={nurseInputs.isDeleted.toString() === "true"}
+                                        onChange={toggleIsDeleted}
                                     />
                                 </Label>
                             </FormGroup> : ""

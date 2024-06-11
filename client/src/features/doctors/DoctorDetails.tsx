@@ -10,8 +10,9 @@ import MiniLoader from "../../app/common/MiniLoader";
 import { Attribute, Label, LabelsRow, LeftContainer, MainContainer, RightContainer, SectionTitle, Value, ValuesRow, WrapperContainer } from "../../app/common/styledComponents/details";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
-import { BackButton, ErrorIcon, ErrorMessage, ErrorTitleRow, Message } from "../../app/common/styledComponents/table";
+import { BackButton, ErrorDescription, ErrorIcon, ErrorMessage, ErrorTitleRow } from "../../app/common/styledComponents/table";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { connectionError } from "../../app/utility/connectionError";
 
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
@@ -44,7 +45,11 @@ function DoctorDetails() {
     }
 
     else if (error || departmentError) {
-        const errorMessage = ((error as FetchBaseQueryError)?.data || (departmentError as FetchBaseQueryError)?.data) as string;
+
+        const fetchError = (error as FetchBaseQueryError) ||
+            (departmentError as FetchBaseQueryError);
+
+        const errorMessage = fetchError?.data as string;
 
         return (
             <>
@@ -53,7 +58,7 @@ function DoctorDetails() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>{errorMessage}</Message>
+                        <ErrorDescription>{connectionError("doctor") || errorMessage}</ErrorDescription>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>
@@ -71,7 +76,7 @@ function DoctorDetails() {
                     <WrapperContainer>
 
                         <LeftContainer>
-                            <SectionTitle>Details of : {doctor.name}</SectionTitle>
+                            <SectionTitle>Details of : {doctor.name} {" "} {doctor.lastName}</SectionTitle>
                             <Attribute>
                                 <label style={{ fontWeight: "bold", color: "#009F6B" }}>{doctor.isDeleted === "True" ? "Passive" : "Active"} </label>
                             </Attribute>

@@ -11,8 +11,9 @@ import { useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import Room from "../../app/models/Room";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
-
-
+import { ErrorMessage, BackButton, ErrorTitleRow, ErrorIcon, ErrorDescription } from "../../app/common/styledComponents/table";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 interface RoomFormProps {
     id?: string;
@@ -28,7 +29,6 @@ const roomData: Room = {
     createdAt: new Date(),
     updatedAt: new Date(),
     patients: [], 
-
 };
 
 function RoomForm({ id, data }: RoomFormProps) {
@@ -54,7 +54,6 @@ function RoomForm({ id, data }: RoomFormProps) {
 
         formData.append("Beds", roomInputs.beds);
         formData.append("RoomNumber", roomInputs.roomNumber);
-        //formData.append("BedsAvailable", roomInputs.bedsAvailable);
         formData.append("DepartmentId", roomInputs.departmentId);
 
         let response;
@@ -87,78 +86,112 @@ function RoomForm({ id, data }: RoomFormProps) {
     //    }));
     //};
 
+    let content;
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OuterContainer>
-                <Container>
-                    <FormContainer >
-                        {loading && <MainLoader />}
-                        {<Title>
-                            {id ? "Edit Room" : "Add Room"}
-                        </Title>}
+    if (departmentsError) {
+        const fetchError = departmentsError as FetchBaseQueryError;
+        const errorMessage = fetchError?.data as string;
 
-                        <Form
-                            method="post"
-                            encType="multipart/form-data"
-                            onSubmit={handleSubmit}
-                        >
-                            <FormGroup>
-                                <Label>Number:</Label>
-                                <Input
-                                    type="number"
-                                    required
-                                    name="roomNumber"
-                                    value={roomInputs.roomNumber}
-                                    onChange={handleRoomInput}
-                                />
-                            </FormGroup>
+        content = (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <ErrorDescription>{errorMessage}</ErrorDescription>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
+        );
+    }
 
-                            <FormGroup>
-                                <Label>Beds:</Label>
-                                <Input
-                                    type="number"
-                                    required
-                                    name="beds"
-                                    value={roomInputs.beds}
-                                    onChange={handleRoomInput}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Select
-                                    name="departmentId"
-                                    value={roomInputs.departmentId}
-                                    onChange={handleRoomInput}
-                                    disabled={departmentsLoading}
-                                >
-                                    <option value="">Select Department</option>
-                                    {departmentsData && departmentsData.map((department: Department) => (
-                                        <option key={department.id} value={department.id}>
-                                            {department.name}
-                                        </option>
-                                    ))}
-                                </Select>
-                                {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
-                            </FormGroup>
-                            
+    if (departmentsLoading) {
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
 
-                            <ButtonsContainer>
-                                <SubmitButton type="submit">
-                                    Submit
-                                </SubmitButton>
-                                <BackToProductsButton onClick={() => navigate("/rooms")}>
-                                    Back to Rooms
-                                </BackToProductsButton>
-                            </ButtonsContainer>
-                        </Form>
-                    </FormContainer>
-                </Container>
-            </OuterContainer>
-        </>
-    );
+    else {
+
+        content = (
+            <>
+                <Header />
+                <SidePanel />
+                <OuterContainer>
+                    <Container>
+                        <FormContainer >
+                            {loading && <MainLoader />}
+                            {<Title>
+                                {id ? "Edit Room" : "Add Room"}
+                            </Title>}
+
+                            <Form
+                                method="post"
+                                encType="multipart/form-data"
+                                onSubmit={handleSubmit}
+                            >
+                                <FormGroup>
+                                    <Label>Number:</Label>
+                                    <Input
+                                        type="number"
+                                        required
+                                        name="roomNumber"
+                                        value={roomInputs.roomNumber}
+                                        onChange={handleRoomInput}
+                                    />
+                                </FormGroup>
+
+                                <FormGroup>
+                                    <Label>Beds:</Label>
+                                    <Input
+                                        type="number"
+                                        required
+                                        name="beds"
+                                        value={roomInputs.beds}
+                                        onChange={handleRoomInput}
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Select
+                                        name="departmentId"
+                                        value={roomInputs.departmentId}
+                                        onChange={handleRoomInput}
+                                        disabled={departmentsLoading}
+                                    >
+                                        <option value="">Select Department</option>
+                                        {departmentsData && departmentsData.map((department: Department) => (
+                                            <option key={department.id} value={department.id}>
+                                                {department.name}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                    {departmentsError && <div style={{ color: 'red' }}>Error loading departments</div>}
+                                </FormGroup>
+
+
+                                <ButtonsContainer>
+                                    <SubmitButton type="submit">
+                                        Submit
+                                    </SubmitButton>
+                                    <BackToProductsButton onClick={() => navigate("/rooms")}>
+                                        Back to Rooms
+                                    </BackToProductsButton>
+                                </ButtonsContainer>
+                            </Form>
+                        </FormContainer>
+                    </Container>
+                </OuterContainer>
+            </>
+        );
+        return content;
+    }
 }
-
-
 export default withAuthorization(RoomForm, [SD_Roles.ADMINISTRATOR]);

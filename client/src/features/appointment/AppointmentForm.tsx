@@ -80,7 +80,7 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
             if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Appointment has been  updated ", "success");
+                toastNotify("Appointment has been updated ", "success");
                 navigate('/appointments');
             }
         } else {

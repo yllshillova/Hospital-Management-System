@@ -57,8 +57,8 @@ function PatientList() {
             </tbody>
         );
     } else if (error) {
-        const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
-
+        const fetchError = error as FetchBaseQueryError;
+        const errorMessage = fetchError?.data as string;
         content = (
             <>
                 <Header />
@@ -66,9 +66,15 @@ function PatientList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <ErrorDescription>{connectionError("patients") || errorMessage}</ErrorDescription>
+                        <ErrorDescription>{errorMessage || connectionError("patients")}</ErrorDescription>
                     </ErrorTitleRow>
-                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    {errorMessage && userData.role === SD_Roles.NURSE ? (
+                        <BackButton style={{ backgroundColor: "#002147" }}
+                            onClick={() => navigate("/patient/insert")}>Insert a patient </BackButton>
+
+                    ) : (
+                        <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    )}
                 </ErrorMessage>
             </>
         );
@@ -107,6 +113,8 @@ function PatientList() {
                 </tbody>
             );
         });
+
+        content = (
             <>
                         <Header />
                         <SidePanel />
@@ -134,11 +142,10 @@ function PatientList() {
                                 </thead>
                                 {content}
                             </Table>
-                        </OrdersTable>
+                        </OrdersTable>     
             </>
-
+        );
     }
-
     return content;
 }
 export default withAuthorization(PatientList, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

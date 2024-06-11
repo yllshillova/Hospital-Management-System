@@ -7,20 +7,26 @@ namespace Application.Appointments
 {
     public class GetScheduledAppointments
     {
-        public record GetScheduledAppointmentsQuery : IRequest<Result<IEnumerable<AppointmentDto>>>;
+        public record GetScheduledAppointmentsQuery(Guid doctorId) : IRequest<Result<IEnumerable<AppointmentDto>>>;
 
         public class GetScheduledAppointmentsQueryHandler(IAppointmentRepository _appointmentRepository, IMapper _mapper) :
             IRequestHandler<GetScheduledAppointmentsQuery, Result<IEnumerable<AppointmentDto>>>
         {
             public async Task<Result<IEnumerable<AppointmentDto>>> Handle(GetScheduledAppointmentsQuery request, CancellationToken cancellationToken)
             {
-                var scheduledAppointments = await _appointmentRepository.GetScheduledAppointments();
-                if (scheduledAppointments == null || !scheduledAppointments.Any()) return Result<IEnumerable<AppointmentDto>>.Failure(ErrorType.NotFound, "No scheduled appointments found.");
+                if (request.doctorId != Guid.Empty)
+                {
 
-                var appointmentDtos = _mapper.Map<IEnumerable<AppointmentDto>>(scheduledAppointments);
-                if (appointmentDtos is null) return Result<IEnumerable<AppointmentDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
+                    var scheduledAppointments = await _appointmentRepository.GetScheduledAppointments(request.doctorId);
+                    if (scheduledAppointments == null || !scheduledAppointments.Any()) return Result<IEnumerable<AppointmentDto>>.Failure(ErrorType.NotFound, "No scheduled appointments record found for any patient");
 
-                return Result<IEnumerable<AppointmentDto>>.Success(appointmentDtos);
+                    var appointmentDtos = _mapper.Map<IEnumerable<AppointmentDto>>(scheduledAppointments);
+                    if (appointmentDtos is null) return Result<IEnumerable<AppointmentDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto");
+
+                    return Result<IEnumerable<AppointmentDto>>.Success(appointmentDtos);
+                }
+                return Result<IEnumerable<AppointmentDto>>.Failure(ErrorType.BadRequest, "Something went wrong, the request couldn't be processed");
+
             }
         }
     }

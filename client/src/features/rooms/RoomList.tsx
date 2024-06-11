@@ -68,11 +68,19 @@ function RoomList() {
     let content;
 
     if (isLoading ) {
-        content = <MainLoader />;
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
     }
     else if (error) {
-        const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
-
+        const fetchError = error as FetchBaseQueryError;
+        const errorMessage = fetchError?.data as string;
         content = (
             <>
                 <Header />
@@ -80,9 +88,15 @@ function RoomList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <ErrorDescription>{connectionError("rooms") || errorMessage}</ErrorDescription>
+                        <ErrorDescription>{errorMessage || connectionError("rooms")}</ErrorDescription>
                     </ErrorTitleRow>
-                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    {errorMessage && userData.role === SD_Roles.ADMINISTRATOR ? (
+                        <BackButton style={{ backgroundColor: "#002147" }}
+                            onClick={() => navigate("/room/insert")}>Insert a room </BackButton>
+
+                    ) : (
+                        <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    )}
                 </ErrorMessage>
             </>
         );
@@ -125,6 +139,8 @@ function RoomList() {
                 </tbody>
             );
         });
+
+        content = (
             <>
                 <Header />
                 <SidePanel />
@@ -147,6 +163,8 @@ function RoomList() {
                     </Table>
                 </OrdersTable>
             </>
+        );
+            
     }
 
     return content;

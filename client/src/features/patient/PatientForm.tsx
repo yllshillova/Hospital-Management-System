@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
@@ -11,37 +11,24 @@ import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
 import withAuthorization from '../../app/hoc/withAuthorization';
-
-interface PatientData {
-    name: string,
-    lastName: string,
-    parentName: string,
-    personalNumber: string,
-    address: string,
-    residence: string,
-    birthday: string,
-    bloodGroup: string,
-    gender: string,
-    email: string,
-    phoneNumber: string,
-    isDeleted: boolean,
-    occupation: string,
-    allergies: string
-}
+import Patient from '../../app/models/Patient';
 
 interface PatientFormProps {
     id?: string;
-    data?: PatientData;
+    data?: Patient;
 }
 
-const patientData: PatientData = {
+const patientData: Patient = {
+    id: "",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     name: "",
     lastName: "",
     parentName: "",
     personalNumber: "",
     address: "",
     residence: "",
-    birthday: "",
+    birthday: new Date(),
     bloodGroup: "",
     gender: "",
     email: "",
@@ -64,28 +51,32 @@ const bloodGroups = [
 const genders = [SD_Genders.Male, SD_Genders.Female];
 
 function PatientForm({ id, data }: PatientFormProps) { 
-    const [patientInputs, setPatientInputs] = useState<PatientData>(data || patientData);
+    const [patientInputs, setPatientInputs] = useState<Patient>(data || patientData);
     const [createPatient] = useCreatePatientMutation();
     const [updatePatient] = useUpdatePatientMutation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [errorMessages, setErrorMessages] = useState<string[]>([]); // State for error messages
+    const [errorMessages, setErrorMessages] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (data) {
+            const tempData = {
+                ...patientInputs,
+                isDeleted: data.isDeleted.toString() === "True",
+            }
+            setPatientInputs(tempData);
+        }
+    }, [data]);
 
     const handlePatientInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, patientInputs);
-        if (e.target.name === 'birthday') {
-            const formattedBirthday = validBirthdayDate(tempData.birthday);
-            if (formattedBirthday !== undefined) {
-                tempData.birthday = formattedBirthday;
-            }
-        }
         setPatientInputs(tempData);
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         setLoading(true);
-        setErrorMessages([]); // Clear previous error messages
+        setErrorMessages([]); 
 
         const formData = new FormData();
 
@@ -95,7 +86,7 @@ function PatientForm({ id, data }: PatientFormProps) {
         formData.append("PersonalNumber", patientInputs.personalNumber);
         formData.append("Address", patientInputs.address);
         formData.append("Residence", patientInputs.residence);
-        formData.append("Birthday", patientInputs.birthday);
+        formData.append("Birthday", patientInputs.birthday.toString());
         formData.append("BloodGroup", patientInputs.bloodGroup);
         formData.append("Gender", patientInputs.gender);
         formData.append("Email", patientInputs.email);
@@ -104,7 +95,7 @@ function PatientForm({ id, data }: PatientFormProps) {
         formData.append("Occupation", patientInputs.occupation);
         formData.append("Allergies", patientInputs.allergies);
 
-        const currentLocation = window.location.pathname; // Capture the current URL
+        const currentLocation = window.location.pathname; 
 
         if (id) {
             formData.append("Id", id);
@@ -149,7 +140,6 @@ function PatientForm({ id, data }: PatientFormProps) {
                             {id ? "Edit Patient" : "Add Patient"}
                         </Title>
 
-                        {/* Display error messages */}
                         {errorMessages.length > 0 && (
                             <div style={{ color: 'red' }}>
                                 <ul>
@@ -305,7 +295,7 @@ function PatientForm({ id, data }: PatientFormProps) {
                                     <input
                                         type="checkbox"
                                         name="isDeleted"
-                                        checked={patientInputs.isDeleted}
+                                        checked={patientInputs.isDeleted.toString() === "true"}
                                         onChange={toggleIsDeleted}
                                     />
 

@@ -17,14 +17,17 @@ import { SD_Roles } from "../../app/utility/SD";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
 import { connectionError } from "../../app/utility/connectionError";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/storage/redux/store";
 
 function DepartmentList() {
 
     const { data, isLoading, error } = useGetDepartmentsQuery(null);
-    console.log(data);
     const [deleteDepartment] = useDeleteDepartmentMutation();
     const navigate = useNavigate();
     const location = useLocation();
+    const userData = useSelector((state: RootState) => state.auth);
+
     let content;
 
 
@@ -60,8 +63,9 @@ function DepartmentList() {
         );
     }
     else if (error) {
-        const errorMessage = ((error as FetchBaseQueryError)?.data) as string;
 
+        const fetchError = error as FetchBaseQueryError;
+        const errorMessage = fetchError?.data as string;
         content = (
             <>
                 <Header />
@@ -69,9 +73,14 @@ function DepartmentList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <ErrorDescription>{connectionError("departments") || errorMessage}</ErrorDescription>
+                        <ErrorDescription>{errorMessage ||  connectionError("departments")} </ErrorDescription>
                     </ErrorTitleRow>
-                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    {errorMessage && userData.role === SD_Roles.ADMINISTRATOR ? (
+                        <BackButton style={{ backgroundColor: "#002147" }}
+                            onClick={() => navigate("/department/insert")}>Insert a department </BackButton>
+                    ) : (
+                        <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    )}
                 </ErrorMessage>
             </>
         );
@@ -99,7 +108,9 @@ function DepartmentList() {
                 </tbody>
             );
         });
-        <>
+
+        content = (
+            <>
                     <Header />
                     <SidePanel />
                     <OrdersTable>
@@ -120,9 +131,9 @@ function DepartmentList() {
                             {content}
                         </Table>
                     </OrdersTable>
-                </>
+            </>
+        );
     }
-
     return content;
 }
 

@@ -32,10 +32,10 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetLatestAppointmentsQuery()));
         }
 
-        [HttpGet("Scheduled")]
-        public async Task<IActionResult> GetScheduledAppointments()
+        [HttpGet("Scheduled/{DoctorId}")]
+        public async Task<IActionResult> GetScheduledAppointments(Guid DoctorId)
         {
-            return HandleResult(await Mediator.Send(new GetScheduledAppointmentsQuery()));
+            return HandleResult(await Mediator.Send(new GetScheduledAppointmentsQuery(DoctorId)));
         }
 
 

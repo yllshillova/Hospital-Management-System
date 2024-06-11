@@ -39,7 +39,7 @@ function VisitList() {
         const result = await deleteVisit(id);
 
         if ('data' in result) {
-            toastNotify("Visit Deleted Successfully", "success");
+            toastNotify("Visit has been deleted", "success");
         }
         else if ('error' in result) {
             const error = result.error as FetchBaseQueryError;
@@ -65,23 +65,32 @@ function VisitList() {
             </tbody>
         );
     }
-    else if (error || doctorsError || patientsError) {
-        const errorMessage = ((error as FetchBaseQueryError)?.data || (patientsError as FetchBaseQueryError)?.data || (doctorsError as FetchBaseQueryError)?.data) as string;
 
-        content = (
-            <>
-                <Header />
-                <SidePanel />
-                <ErrorMessage>
-                    <ErrorTitleRow>
-                        <ErrorIcon icon={faExclamationCircle} />
-                        <ErrorDescription>{connectionError("visits") || errorMessage}</ErrorDescription>
-                    </ErrorTitleRow>
-                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
-                </ErrorMessage>
-            </>
-        );
+    else if (error || doctorsError || patientsError) {
+         const fetchError = (error as FetchBaseQueryError) || (patientsError as FetchBaseQueryError) || (doctorsError as FetchBaseQueryError) ;
+         const errorMessage = fetchError?.data as string ;
+
+         content = (
+                <>
+                    <Header />
+                    <SidePanel />
+                    <ErrorMessage>
+                        <ErrorTitleRow>
+                            <ErrorIcon icon={faExclamationCircle} />
+                            <ErrorDescription>{errorMessage || connectionError("visits")}</ErrorDescription>
+                     </ErrorTitleRow>
+
+                     {errorMessage && userData.role === SD_Roles.DOCTOR ? (
+                         <BackButton style={{ backgroundColor: "#002147" }}
+                             onClick={() => navigate("/visit/insert")}>Insert a visit </BackButton>
+                     ) : (
+                         <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                     )}
+                    </ErrorMessage>
+                </>
+            );   
     }
+
     else {
         content = data.map((visit: Visit) => {
             const patient = patientsData?.find((patient: Patient) => patient.id === visit.patientId);
@@ -142,9 +151,7 @@ function VisitList() {
             </>
         );
     }
-
     return content;
-
 }
 
 export default withAuthorization(VisitList , [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);

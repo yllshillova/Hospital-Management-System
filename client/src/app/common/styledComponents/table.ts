@@ -31,10 +31,7 @@ export const TableHead = styled.tr`
 `;
 
 export const TableRow = styled.tr`
-  border-bottom: 1px solid #d3d3d3;
-  &:nth-last-child(2) {
-    border-bottom: none;
-  }
+  
   &:hover {
     background-color: #f5f5f5;
   }

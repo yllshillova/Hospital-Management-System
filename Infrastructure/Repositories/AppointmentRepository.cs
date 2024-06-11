@@ -58,9 +58,9 @@ namespace Infrastructure.Repositories
             return intersectingAppointment;
         }
 
-        public async Task<IEnumerable<Appointment>> GetScheduledAppointments()
+        public async Task<IEnumerable<Appointment>> GetScheduledAppointments(Guid doctorId)
         {
-            var scheduledAppointments = await _context.Appointments.Where(a => a.Status == "Scheduled").AsNoTracking().ToListAsync();
+            var scheduledAppointments = await _context.Appointments.Where(a => a.Status == "Scheduled" && a.DoctorId == doctorId).AsNoTracking().ToListAsync();
             return scheduledAppointments;
         }
 

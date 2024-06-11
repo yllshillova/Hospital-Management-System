@@ -29,7 +29,6 @@ const emergencyContactData: EmergencyContact = {
     patient: {} as Patient
 };
 
-//const genders = [SD_Genders.Male, SD_Genders.Female];
 
 function EmergencyContactForm({ id, data }: EmergencyContactFormProps) {
     const { patientId } = useParams<{ patientId: string }>();

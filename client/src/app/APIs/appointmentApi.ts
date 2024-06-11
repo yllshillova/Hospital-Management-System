@@ -35,8 +35,8 @@ const appointmentApi = createApi({
             providesTags: ["Appointment"],
         }),
         getScheduledAppointments: builder.query({
-            query: () => ({
-                url: "appointments/Scheduled"
+            query: (doctorId) => ({
+                url: "appointments/Scheduled/" + doctorId,
             }),
             providesTags: ["Appointment"],
         }),

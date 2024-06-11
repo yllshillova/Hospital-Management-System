@@ -14,7 +14,7 @@ namespace Application.Departments
             public async Task<Result<IEnumerable<DepartmentDto>>> Handle(GetDepartmentsQuery request, CancellationToken cancellationToken)
             {
                 var departments = await _departmentRepository.GetAllAsync();
-                if (departments is null || !departments.Any()) return Result<IEnumerable<DepartmentDto>>.Failure(ErrorType.NotFound, "No records could be found.");
+                if (departments is null || !departments.Any()) return Result<IEnumerable<DepartmentDto>>.Failure(ErrorType.NotFound, "No department records found in the hospital");
 
                 var departmentDtos = _mapper.Map<IEnumerable<DepartmentDto>>(departments);
                 if (departmentDtos is null) return Result<IEnumerable<DepartmentDto>>.Failure(ErrorType.BadRequest, "Problem while mapping between entity/dto.");

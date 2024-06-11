@@ -40,9 +40,10 @@ function Sections() {
     }
 
     else if (depError || docError || patError) {
-        const errorMessage = ((depError as FetchBaseQueryError)?.data ||
-            (patError as FetchBaseQueryError)?.data ||
-            (docError as FetchBaseQueryError)?.data) as string;
+        const fetchError = (depError as FetchBaseQueryError) ||
+            (patError as FetchBaseQueryError) ||
+            (docError as FetchBaseQueryError);
+        const errorMessage = fetchError?.data as string;        
 
         content = (
             <ErrorCard>

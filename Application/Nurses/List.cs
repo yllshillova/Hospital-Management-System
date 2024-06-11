@@ -14,10 +14,10 @@ namespace Application.Nurses
             public async Task<Result<IEnumerable<NurseDto>>> Handle(GetNursesQuery request, CancellationToken cancellationToken)
             {
                 var nurses = await _nurseRepository.GetAllAsync();
-                if (nurses is null || !nurses.Any()) return Result<IEnumerable<NurseDto>>.Failure(ErrorType.NotFound, "No records could be found!");
+                if (nurses is null || !nurses.Any()) return Result<IEnumerable<NurseDto>>.Failure(ErrorType.NotFound, "No nurse records found in the hospital");
 
                 var nurseDtos = _mapper.Map<IEnumerable<NurseDto>>(nurses);
-                if (nurseDtos is null) return Result<IEnumerable<NurseDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
+                if (nurseDtos is null) return Result<IEnumerable<NurseDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto");
 
                 return Result<IEnumerable<NurseDto>>.Success(nurseDtos);
             }

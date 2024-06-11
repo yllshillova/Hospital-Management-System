@@ -29,8 +29,9 @@ function LatestAppointments() {
     }
 
     else if (error || patientsError) {
-        const errorMessage = ((error as FetchBaseQueryError)?.data ||
-            (patientsError as FetchBaseQueryError)?.data) as string;
+        const fetchError = (error as FetchBaseQueryError) ||
+            (patientsError as FetchBaseQueryError);
+        const errorMessage = fetchError?.data as string;
 
         content = (
             <ErrorCard>
@@ -125,10 +126,6 @@ export const TableHead = styled.tr`
 `;
 
 export const TableRow = styled.tr`
-  border-bottom: 1px solid #d3d3d3;
-  &:nth-last-child(2) {
-    border-bottom: none;
-  }
   &:hover {
     background-color: #f5f5f5;
   }

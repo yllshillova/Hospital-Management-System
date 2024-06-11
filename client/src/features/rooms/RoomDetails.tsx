@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { Header, SidePanel } from "../../app/layout";
-import { OrdersTable, TableHeader } from "../../app/common/styledComponents/table";
+import { ErrorDescription, OrdersTable, TableHeader } from "../../app/common/styledComponents/table";
 import { useGetRoomByIdQuery, useRemovePatientMutation } from "../../app/APIs/roomApi";
 import {  useNavigate, useParams } from "react-router-dom";
 import Patient from "../../app/models/Patient";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { ErrorMessage, ErrorTitleRow, ErrorIcon, Message } from "../../app/common/styledComponents/table";
+import { ErrorMessage, ErrorTitleRow, ErrorIcon } from "../../app/common/styledComponents/table";
 import MainLoader from "../../app/common/MainLoader";
 import { useGetVisitsQuery } from "../../app/APIs/visitApi";
 import Visit from "../../app/models/Visit";
@@ -16,6 +16,7 @@ import emptyBed from "../../app/layout/Images/emptyBed.jpg";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { connectionError } from "../../app/utility/connectionError";
 function RoomDetails() {
     const { id } = useParams<string>();
     const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomByIdQuery(id);
@@ -68,8 +69,8 @@ function RoomDetails() {
         );
     }
     else if (roomsError || visitsError) {
-        const errorMessage = ((roomsError as FetchBaseQueryError)?.data || (visitsError as FetchBaseQueryError)?.data) as string;
-
+        const errorMessage = ((roomsError as FetchBaseQueryError)?.data ||
+            (visitsError as FetchBaseQueryError)?.data)  as string;
         return (
             <>
                 <Header />
@@ -77,7 +78,7 @@ function RoomDetails() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>{errorMessage}</Message>
+                        <ErrorDescription>{connectionError("room") || errorMessage}</ErrorDescription>
                     </ErrorTitleRow>
                     <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                 </ErrorMessage>
@@ -87,7 +88,6 @@ function RoomDetails() {
 
     else {
         content = patients.map(patient => {
-            // returns the specific visit for the patient
             const patientVisit = visits.find((visit: Visit) => visit?.patientId === patient.id);
             return (
 

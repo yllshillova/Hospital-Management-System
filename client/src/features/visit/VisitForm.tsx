@@ -17,12 +17,12 @@ import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
-import { useGetScheduledAppointmentsQuery } from "../../app/APIs/appointmentApi";
-import { ErrorMessage, BackButton, ErrorTitleRow, ErrorIcon, Message } from "../../app/common/styledComponents/table";
+import { ErrorMessage, BackButton, ErrorTitleRow, ErrorIcon, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useGetPatientsQuery } from "../../app/APIs/patientApi";
 import Appointment from "../../app/models/Appointment";
+import { useGetScheduledAppointmentsQuery } from "../../app/APIs/appointmentApi";
 interface VisitFormProps {
     id?: string;
     data?: Visit;
@@ -46,6 +46,13 @@ const visitData: Visit = {
 };
 
 function VisitForm({ id, data }: VisitFormProps) {
+
+    const doctorId = useSelector((state: RootState) => state.auth.id);
+
+    const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
+    const { data: appointmentsData, isLoading: appointmentsLoading, error: appointmentsError } = useGetScheduledAppointmentsQuery(doctorId);
+
+
     const [visitInputs, setVisitInputs] = useState<Visit>(data || visitData);
     const [createVisit] = useCreateVisitMutation();
     const [updateVisit] = useUpdateVisitMutation();
@@ -53,18 +60,11 @@ function VisitForm({ id, data }: VisitFormProps) {
     const [loading, setLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
-    const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null);
-    const { data: appointmentsData, isLoading: appointmentsLoading, error: appointmentsError } = useGetScheduledAppointmentsQuery(null);
-    console.log(appointmentsData);
-
+   
     const scheduledPatientIds = appointmentsData?.map((appointment: Appointment) => appointment.patientId) || [];
     const scheduledPatients = patientsData?.filter((patient: Patient) => scheduledPatientIds.includes(patient.id)) || [];
 
     const [assignPatientToRoom, { isLoading: assigningPatient }] = useAssignPatientMutation();
-
-    const doctorId: string = useSelector(
-        (state: RootState) => state.auth.id
-    );
 
     const handleVisitInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, visitInputs);
@@ -134,34 +134,36 @@ function VisitForm({ id, data }: VisitFormProps) {
 
     let content;
 
+    if (appointmentsError || patientsError) {
+            const fetchError = (appointmentsError as FetchBaseQueryError) || (patientsError as FetchBaseQueryError);
+            const errorMessage = fetchError?.data as string;
+
+            content = (
+                <>
+                    <Header />
+                    <SidePanel />
+                    <ErrorMessage>
+                        <ErrorTitleRow>
+                            <ErrorIcon icon={faExclamationCircle} />
+                        <ErrorDescription>{errorMessage}</ErrorDescription>
+                        </ErrorTitleRow>
+                        <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    </ErrorMessage>
+                </>
+            );
+        }
+     
     if (appointmentsLoading || patientsLoading) {
-        content = (
-            <tbody>
-                <tr>
-                    <td colSpan={4}>
-                        <MainLoader />
-                    </td>
-                </tr>
-            </tbody>
-        );
-    } else if (appointmentsError || patientsError) {
-        const errorMessage = ((appointmentsError as FetchBaseQueryError)?.data || (patientsError as FetchBaseQueryError)?.data) as string;
-
-        return (
-            <>
-                <Header />
-                <SidePanel />
-                <ErrorMessage>
-                    <ErrorTitleRow>
-                        <ErrorIcon icon={faExclamationCircle} />
-                        <Message>{errorMessage}</Message>
-                    </ErrorTitleRow>
-                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
-                </ErrorMessage>
-            </>
-        );
+            content = (
+                <tbody>
+                    <tr>
+                        <td colSpan={4}>
+                            <MainLoader />
+                        </td>
+                    </tr>
+                </tbody>
+            );
     }
-
 
     else {
         content = (
@@ -192,23 +194,21 @@ function VisitForm({ id, data }: VisitFormProps) {
                                 encType="multipart/form-data"
                                 onSubmit={handleSubmit}
                             >
-
-
                                 <FormGroup>
-                                    <Select
-                                        name="patientId"
-                                        value={visitInputs.patientId}
-                                        onChange={handleVisitInput}
-                                        disabled={patientsLoading}
-                                    >
+                                    {appointmentsError ? <div style={{ color: 'red' }}>No patient made any appointment</div>
+                                        : <Select
+                                            name="patientId"
+                                            value={visitInputs.patientId}
+                                            onChange={handleVisitInput}
+                                            disabled={patientsLoading}
+                                        >
                                         <option value="">Select Patient</option>
                                         {scheduledPatients && scheduledPatients.map((patient: Patient) => (
                                             <option key={patient.id} value={patient.id}>
                                                 {patient.name} {" "} {patient.lastName}
                                             </option>
                                         ))}
-                                    </Select>
-                                    {patientsError && <div style={{ color: 'red' }}>Error loading patients</div>}
+                                    </Select>}
                                 </FormGroup>
                                 <FormGroup>
                                     <Label>Complaints</Label>
@@ -294,6 +294,8 @@ function VisitForm({ id, data }: VisitFormProps) {
                 </OuterContainer>
             </>
         );
+
+        return content;
     }
 }
 export default withAuthorization(VisitForm, [SD_Roles.DOCTOR]);

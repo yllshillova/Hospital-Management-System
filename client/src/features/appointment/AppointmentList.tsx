@@ -64,8 +64,11 @@ function AppointmentList() {
                 </tr>
             </tbody>
         );
-    } else if (appointmentError || patientError || doctorError) {
-        const errorMessage = ((appointmentError as FetchBaseQueryError)?.data || (patientError as FetchBaseQueryError)?.data || (doctorError as FetchBaseQueryError)?.data) as string;
+    }
+    else if (appointmentError || patientError || doctorError) {
+
+        const fetchError = (appointmentError as FetchBaseQueryError) || (patientError as FetchBaseQueryError) || (doctorError as FetchBaseQueryError);
+        const errorMessage = fetchError?.data as string;
 
         content = (
             <>
@@ -74,13 +77,19 @@ function AppointmentList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <ErrorDescription>{connectionError("appointments") || errorMessage}</ErrorDescription>
+                        <ErrorDescription>{errorMessage || connectionError("appointments")}</ErrorDescription>
                     </ErrorTitleRow>
-                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    {errorMessage && userData.role === SD_Roles.NURSE ? (
+                        <BackButton style={{ backgroundColor: "#002147" }}
+                            onClick={() => navigate("/appointment/insert")}>Insert an appointment </BackButton>
+                    ) : (
+                        <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    )}
                 </ErrorMessage>
             </>
         );
-    } else {
+    }
+    else {
         content = appointmentData.map((appointment: Appointment) => {
             // Find the corresponding doctor and patient data
             const doctor = doctorData.find((doc: { id: string; }) => doc.id === appointment.doctorId);
@@ -115,32 +124,35 @@ function AppointmentList() {
                 </tbody>
             );
         });
-            <>
-                        <Header />
-                        <SidePanel />
-                        <OrdersTable>
-                            <TableNav>
-                                <TableHeader>Appointments List</TableHeader>
 
-                                {userData.role == SD_Roles.NURSE &&
-                                    <AddButton onClick={() => navigate("/appointment/insert")}>
-                                        <FontAwesomeIcon icon={faAdd} />
-                                    </AddButton>
-                                }
-                            </TableNav>
-                            <Table>
-                                <thead>
-                                    <TableHead>
-                                        <TableHeaderCell>Doctor</TableHeaderCell>
-                                        <TableHeaderCell>Patient</TableHeaderCell>
-                                        <TableHeaderCell>Check In Date</TableHeaderCell>
-                                        <TableHeaderCell>Check Out Date</TableHeaderCell>
-                                    </TableHead>
-                                </thead>
-                                {content}
-                            </Table>
-                        </OrdersTable>
-                    </>
+        content = (
+            <>
+                <Header />
+                <SidePanel />
+                <OrdersTable>
+                    <TableNav>
+                        <TableHeader>Appointments List</TableHeader>
+
+                        {userData.role == SD_Roles.NURSE &&
+                            <AddButton onClick={() => navigate("/appointment/insert")}>
+                                <FontAwesomeIcon icon={faAdd} />
+                            </AddButton>
+                        }
+                    </TableNav>
+                    <Table>
+                        <thead>
+                            <TableHead>
+                                <TableHeaderCell>Doctor</TableHeaderCell>
+                                <TableHeaderCell>Patient</TableHeaderCell>
+                                <TableHeaderCell>Check In Date</TableHeaderCell>
+                                <TableHeaderCell>Check Out Date</TableHeaderCell>
+                            </TableHead>
+                        </thead>
+                        {content}
+                    </Table>
+                </OrdersTable>
+            </>
+        );
 
     }
 
