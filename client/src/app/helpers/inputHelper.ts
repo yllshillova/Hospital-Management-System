@@ -1,4 +1,5 @@
 import React from "react";
+import { validBirthdayDate } from "../utility/validBirthdayDate";
 
 const inputHelper = (
     e: React.ChangeEvent<
@@ -20,6 +21,14 @@ const inputHelper = (
         const formattedDateTime = localDateTime.toISOString().slice(0, 19); // Extract YYYY-MM-DDTHH:mm:ss part
 
         tempData[e.target.name] = formattedDateTime;
+    } else if (e.target.name === 'birthday') {
+        // For birthday input, format the date
+        const formattedBirthday = validBirthdayDate(e.target.value);
+        if (formattedBirthday !== undefined) {
+            tempData.birthday = formattedBirthday;
+        } else {
+            tempData[e.target.name] = e.target.value;
+        }
     } else {
         // For other input types, simply update the state with the input value
         tempData[e.target.name] = e.target.value;

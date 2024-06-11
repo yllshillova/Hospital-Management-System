@@ -34,11 +34,11 @@ namespace Application.Visits
                 }
 
                 if (visits is null || !visits.Any())
-                    return Result<IEnumerable<VisitDto>>.Failure(ErrorType.NotFound, "No records could be found!");
+                    return Result<IEnumerable<VisitDto>>.Failure(ErrorType.NotFound, "No visit records found for any patient");
 
                 var visitDtos = _mapper.Map<IEnumerable<VisitDto>>(visits);
                 if (visitDtos is null)
-                    return Result<IEnumerable<VisitDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");
+                    return Result<IEnumerable<VisitDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto");
 
                 return Result<IEnumerable<VisitDto>>.Success(visitDtos);
             }

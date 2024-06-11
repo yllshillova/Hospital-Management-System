@@ -7,33 +7,34 @@ import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
 import { useCreateDepartmentMutation, useUpdateDepartmentMutation } from '../../app/APIs/departmentApi';
 import withAuthorization from '../../app/hoc/withAuthorization';
 import { SD_Roles } from '../../app/utility/SD';
+import Department from '../../app/models/Department';
 
-interface DepartmentData {
-    name: string;
-    isDeleted: boolean;
-}
+
 
 interface DepartmentFormProps {
     id?: string;
-    data?: DepartmentData;
+    data?: Department;
 }
 
-const departmentData: DepartmentData = {
+const departmentData: Department = {
     name: "",
-    isDeleted: false
+    id: "",
+    createdAt: new Date(),
+    updatedAt: new Date(), 
+    isDeleted: false,
+    staff:[]
 };
 
 function DepartmentForm({ id, data }: DepartmentFormProps) {
-    const [departmentInputs, setDepartmentInputs] = useState<DepartmentData>(data || departmentData);
+    const [departmentInputs, setDepartmentInputs] = useState<Department>(data || departmentData);
     const [createDepartment] = useCreateDepartmentMutation();
     const [updateDepartment] = useUpdateDepartmentMutation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [errorMessages, setErrorMessages] = useState<string[]>([]); // State for error messages
+    const [errorMessages, setErrorMessages] = useState<string[]>([]); 
 
 
     useEffect(() => {
@@ -49,12 +50,6 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
 
     const handleDepartmentInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const tempData = inputHelper(e, departmentInputs);
-        if (e.target.name === 'birthday') {
-            const formattedBirthday = validBirthdayDate(tempData.birthday);
-            if (formattedBirthday !== undefined) {
-                tempData.birthday = formattedBirthday;
-            }
-        }
         setDepartmentInputs(tempData);
     };
 
@@ -62,21 +57,20 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         setLoading(true);
-        setErrorMessages([]); // Clear previous error messages
+        setErrorMessages([]); 
 
         const formData = new FormData();
 
         formData.append("Name", departmentInputs.name);
         formData.append("IsDeleted", departmentInputs.isDeleted.toString());
 
-        const currentLocation = window.location.pathname; // Capture the current URL
+        const currentLocation = window.location.pathname; 
 
         if (id) {
             formData.append("Id", id);
             const response = await updateDepartment({ data: formData, id });
 
-            if (response.error) {
-                // Use error handler
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Department has been updated", "success");
@@ -85,8 +79,7 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
         } else {
             const response = await createDepartment(formData);
 
-            if (response.error) {
-                // Use error handler
+            if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
                 toastNotify("Department has been created", "success");
@@ -97,6 +90,12 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
         setLoading(false);
     };
 
+    const toggleIsDeleted = () => {
+        setDepartmentInputs((prevInputs) => ({
+            ...prevInputs,
+            isDeleted: !prevInputs.isDeleted,
+        }));
+    };
 
     return (
         <>
@@ -141,8 +140,8 @@ function DepartmentForm({ id, data }: DepartmentFormProps) {
                                     <input
                                         type="checkbox"
                                         name="isDeleted"
-                                        checked={departmentInputs.isDeleted}
-                                        onChange={handleDepartmentInput}
+                                        checked={departmentInputs.isDeleted.toString() === "true"}
+                                        onChange={toggleIsDeleted}
                                     />
                                 </Label>
                             </FormGroup>

@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams } from "react-router-dom";
 import MainLoader from "../../app/common/MainLoader";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import useErrorHandler from "../../app/helpers/useErrorHandler";
 import { Header, SidePanel } from "../../app/layout";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer,Title } from "../../app/common/styledComponents/upsert";
 import { useGetVisitByIdQuery } from "../../app/APIs/visitApi";
@@ -12,6 +11,10 @@ import Doctor from "../../app/models/Doctor";
 import Patient from "../../app/models/Patient";
 import { SD_Roles } from "../../app/utility/SD";
 import withAuthorization from "../../app/hoc/withAuthorization";
+import { BackButton, ErrorDescription, ErrorIcon, ErrorMessage, ErrorTitleRow } from "../../app/common/styledComponents/table";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons/faExclamationCircle";
+import { connectionError } from "../../app/utility/connectionError";
+
 function isValidGuid(guid: string): boolean {
     const guidRegex = /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
     return guidRegex.test(guid);
@@ -19,25 +22,53 @@ function isValidGuid(guid: string): boolean {
 
 function VisitDetails() {
     const { id } = useParams<string>();
-    const { data, isLoading, error, isError } = useGetVisitByIdQuery(id);
-    const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError , isError: doctorsIsError } = useGetDoctorsQuery(null);
-    const { data: patientsData, isLoading: patientsLoading, error: patientsError, isError: patientsIsError } = useGetPatientsQuery(null); 
+    const { data, isLoading, error } = useGetVisitByIdQuery(id);
+    const { data: doctorsData, isLoading: doctorsLoading, error: doctorsError  } = useGetDoctorsQuery(null);
+    const { data: patientsData, isLoading: patientsLoading, error: patientsError } = useGetPatientsQuery(null); 
     const navigate = useNavigate();
-    const location = useLocation();
 
 
     if (!isValidGuid(id as string)) {
         navigate('/not-found');
         return;
     }
-    const fbError = error as FetchBaseQueryError;
 
-    if (isError || doctorsIsError || patientsIsError) {
-        useErrorHandler(fbError, navigate, location.pathname);
+    
+
+    if (isLoading || patientsLoading || doctorsLoading) {
+        return (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
     }
 
-    if (isLoading || patientsLoading || doctorsLoading)  return <MainLoader />;
+    else if (error || doctorsError || patientsError) {
 
+        const fetchError = (error as FetchBaseQueryError) ||
+            (doctorsError as FetchBaseQueryError) ||
+            (patientsError as FetchBaseQueryError);
+
+        const errorMessage = fetchError?.data as string;
+
+        return (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <ErrorDescription>{connectionError("appointment") || errorMessage}</ErrorDescription>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
+        );
+    }
 
     if (data) {
         const patient = patientsData?.find((patient: Patient) => patient.id === data.patientId);

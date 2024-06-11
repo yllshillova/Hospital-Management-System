@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteDepartmentMutation, useGetDepartmentsQuery } from "../../app/APIs/departmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import Department from "../../app/models/Department";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon,  BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -16,14 +16,18 @@ import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
+import { connectionError } from "../../app/utility/connectionError";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/storage/redux/store";
 
 function DepartmentList() {
 
     const { data, isLoading, error } = useGetDepartmentsQuery(null);
-    console.log(data);
     const [deleteDepartment] = useDeleteDepartmentMutation();
     const navigate = useNavigate();
     const location = useLocation();
+    const userData = useSelector((state: RootState) => state.auth);
+
     let content;
 
 
@@ -47,20 +51,36 @@ function DepartmentList() {
 
 
     if (isLoading) {
-        content = <MainLoader />;
-    } else if (error) {
-        return (
+
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
+    else if (error) {
+
+        const fetchError = error as FetchBaseQueryError;
+        const errorMessage = fetchError?.data as string;
+        content = (
             <>
                 <Header />
                 <SidePanel />
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>
-                            {(error?.data as FetchBaseQueryError)}
-                        </Message>
+                        <ErrorDescription>{errorMessage ||  connectionError("departments")} </ErrorDescription>
                     </ErrorTitleRow>
-                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    {errorMessage && userData.role === SD_Roles.ADMINISTRATOR ? (
+                        <BackButton style={{ backgroundColor: "#002147" }}
+                            onClick={() => navigate("/department/insert")}>Insert a department </BackButton>
+                    ) : (
+                        <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    )}
                 </ErrorMessage>
             </>
         );
@@ -88,32 +108,33 @@ function DepartmentList() {
                 </tbody>
             );
         });
-    }
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OrdersTable>
-                <TableNav>
-                    <TableHeader>Departments List</TableHeader>
-                    <AddButton onClick={() => navigate("/department/insert")}  >
-                        <FontAwesomeIcon icon={faAdd} />
-                    </AddButton>
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableHead>
-                            <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>Date Created </TableHeaderCell>
-                            <TableHeaderCell>Date Updated </TableHeaderCell>
-                        </TableHead>
-                    </thead>
-                    {content}
-                </Table>
-            </OrdersTable>
-        </>
-    );
+        content = (
+            <>
+                    <Header />
+                    <SidePanel />
+                    <OrdersTable>
+                        <TableNav>
+                            <TableHeader>Departments List</TableHeader>
+                            <AddButton onClick={() => navigate("/department/insert")}  >
+                                <FontAwesomeIcon icon={faAdd} />
+                            </AddButton>
+                        </TableNav>
+                        <Table>
+                            <thead>
+                                <TableHead>
+                                    <TableHeaderCell>Name</TableHeaderCell>
+                                    <TableHeaderCell>Date Created </TableHeaderCell>
+                                    <TableHeaderCell>Date Updated </TableHeaderCell>
+                                </TableHead>
+                            </thead>
+                            {content}
+                        </Table>
+                    </OrdersTable>
+            </>
+        );
+    }
+    return content;
 }
 
 export default withAuthorization(DepartmentList, [SD_Roles.ADMINISTRATOR]);

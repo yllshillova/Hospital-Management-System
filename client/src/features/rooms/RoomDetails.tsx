@@ -1,12 +1,11 @@
 import styled from "styled-components";
-//import patientInBed from "../../app/layout/Images/patientInRoom.jpg";
 import { Header, SidePanel } from "../../app/layout";
-import { OrdersTable, TableHeader } from "../../app/common/styledComponents/table";
+import { ErrorDescription, OrdersTable, TableHeader } from "../../app/common/styledComponents/table";
 import { useGetRoomByIdQuery, useRemovePatientMutation } from "../../app/APIs/roomApi";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import Patient from "../../app/models/Patient";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import useErrorHandler from "../../app/helpers/useErrorHandler";
+import { ErrorMessage, ErrorTitleRow, ErrorIcon } from "../../app/common/styledComponents/table";
 import MainLoader from "../../app/common/MainLoader";
 import { useGetVisitsQuery } from "../../app/APIs/visitApi";
 import Visit from "../../app/models/Visit";
@@ -16,25 +15,18 @@ import womanInHB from "../../app/layout/Images/womanInHB.jpg";
 import emptyBed from "../../app/layout/Images/emptyBed.jpg";
 import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { connectionError } from "../../app/utility/connectionError";
 function RoomDetails() {
     const { id } = useParams<string>();
-    const { data: roomsData, isLoading: roomsLoading, error: roomsError, isError: roomsIsError } = useGetRoomByIdQuery(id);
-    const { data: visitsData, isLoading: visitsLoading, error: visitsError, isError: visitsIsError } = useGetVisitsQuery(undefined);
+    const { data: roomsData, isLoading: roomsLoading, error: roomsError } = useGetRoomByIdQuery(id);
+    const { data: visitsData, isLoading: visitsLoading, error: visitsError } = useGetVisitsQuery(undefined);
     console.log(visitsData);
-    const [removePatient, { isLoading: removingPatient }] = useRemovePatientMutation(); // useRemovePatientMutation hook
+    const [removePatient, { isLoading: removingPatient }] = useRemovePatientMutation(); 
 
     const navigate = useNavigate();
-    const location = useLocation();
     const patients: Patient[] = roomsData?.patients || [];
-
-    const roomsfbError = roomsError as FetchBaseQueryError;
-    const visitsfbError = visitsError as FetchBaseQueryError;
-
-    if (roomsIsError || visitsIsError) {
-        useErrorHandler(roomsfbError || visitsfbError, navigate, location.pathname);
-    }
-    if (roomsLoading || visitsLoading) return <MainLoader />;
-
+    
     //array of visits for all patients
     const visits = visitsData?.filter((visit: Visit) => patients.some(patient => patient.id === visit.patientId));
 
@@ -42,24 +34,32 @@ function RoomDetails() {
     const handleRemovePatient = async (patientId: string): Promise<void> => {
         try {
             const response = await removePatient(patientId);
-            console.log(patientId);
-            console.log(response);
-            if (response.error) {
-                // Handle error
+            if ('error' in response) {
                 toastNotify("Failed to remove patient from room", "error");
             } else {
-                // Handle success
-                toastNotify("Patient removed from room", "success");
+                toastNotify("Patient has been removed from room", "success");
             }
         } catch (error) {
-            // Handle error
             toastNotify("An error occurred while removing patient from room", "error");
         }
     };
 
 
     let content;
-    if (patients.length === 0) {
+
+
+    if (roomsLoading || visitsLoading) {
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
+    else if (patients.length === 0) {
         content = (
             <EmptyRoomContainer>
                 <EmptyRoomTitle>No patient found in room #{roomsData?.roomNumber}</EmptyRoomTitle>
@@ -67,9 +67,27 @@ function RoomDetails() {
             </EmptyRoomContainer>
 
         );
-    } else {
+    }
+    else if (roomsError || visitsError) {
+        const errorMessage = ((roomsError as FetchBaseQueryError)?.data ||
+            (visitsError as FetchBaseQueryError)?.data)  as string;
+        return (
+            <>
+                <Header />
+                <SidePanel />
+                <ErrorMessage>
+                    <ErrorTitleRow>
+                        <ErrorIcon icon={faExclamationCircle} />
+                        <ErrorDescription>{connectionError("room") || errorMessage}</ErrorDescription>
+                    </ErrorTitleRow>
+                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                </ErrorMessage>
+            </>
+        );
+    }
+
+    else {
         content = patients.map(patient => {
-            // returns the specific visit for the patient
             const patientVisit = visits.find((visit: Visit) => visit?.patientId === patient.id);
             return (
 

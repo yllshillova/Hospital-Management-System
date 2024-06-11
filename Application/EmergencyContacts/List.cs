@@ -14,7 +14,7 @@ namespace Application.EmergencyContacts
             public async Task<Result<IEnumerable<EmergencyContactDto>>> Handle(GetEmergencyContactsQuery request, CancellationToken cancellationToken)
             {
                 var emergencyContacts = await _emergencyContactRepository.GetAllAsync();
-                if (emergencyContacts is null || !emergencyContacts.Any()) return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.NotFound, "No records could be found!");
+                if (emergencyContacts is null || !emergencyContacts.Any()) return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.NotFound, "No emergency contact records found for any patient");
 
                 var emergencyContactDtos = _mapper.Map<IEnumerable<EmergencyContactDto>>(emergencyContacts);
                 if (emergencyContactDtos is null) return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");

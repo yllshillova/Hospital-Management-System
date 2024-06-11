@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MainLoader from "../../app/common/MainLoader";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -22,6 +22,7 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { RootState } from "../../app/storage/redux/store";
 import { useSelector } from "react-redux";
 import User from "../../app/models/User";
+import { connectionError } from "../../app/utility/connectionError";
 
 function NurseList() {
     const { data, isLoading, error } = useGetNursesQuery(null);
@@ -43,7 +44,6 @@ function NurseList() {
     const [deleteNurse] = useDeleteNurseMutation();
     const navigate = useNavigate();
     const location = useLocation();
-    let content;
 
     const handleNurseDelete = async (id: string,) => {
         const result = await deleteNurse(id);
@@ -60,28 +60,45 @@ function NurseList() {
         }
     };
 
-
+    let content;
 
     if (isLoading) {
-        content = <MainLoader />;
-    } else if (error) {
-        return (
+
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
+    else if (error) {
+
+        const fetchError = error as FetchBaseQueryError;
+        const errorMessage = fetchError?.data as string ;
+        content = (
             <>
                 <Header />
                 <SidePanel />
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>
-                            {(error?.data as FetchBaseQueryError)}
-                        </Message>
+                        <ErrorDescription>{errorMessage || connectionError("nurses")}</ErrorDescription>
                     </ErrorTitleRow>
-                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    {errorMessage && userData.role === SD_Roles.ADMINISTRATOR ? (
+                        <BackButton style={{ backgroundColor: "#002147" }}
+                            onClick={() => navigate("/nurse/insert")}>Insert a nurse </BackButton>
+                    ) : (
+                        <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    )}
                 </ErrorMessage>
             </>
         );
     }
     else {
+
         content = data.map((nurse: Nurse) => {
             return (
                 <tbody key={nurse.id}>
@@ -115,33 +132,34 @@ function NurseList() {
                 </tbody>
             );
         });
-    }
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OrdersTable>
-                <TableNav>
-                    <TableHeader>Nurses List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/nurse/insert")}  >
-                        <FontAwesomeIcon icon={faAdd} />
-                    </AddButton>
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableHead>
-                            <TableHeaderCell>Name</TableHeaderCell>
-                            <TableHeaderCell>Last Name</TableHeaderCell>
-                            <TableHeaderCell>Email</TableHeaderCell>
-                            <TableHeaderCell>Department</TableHeaderCell>
-                            <TableHeaderCell>Residence </TableHeaderCell>
-                        </TableHead>
-                    </thead>
-                    {content}
-                </Table>
-            </OrdersTable>
-        </>
-    );
+        content = (
+            <>
+                    <Header />
+                    <SidePanel />
+                    <OrdersTable>
+                        <TableNav>
+                            <TableHeader>Nurses List</TableHeader>
+                            <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/nurse/insert")}  >
+                                <FontAwesomeIcon icon={faAdd} />
+                            </AddButton>
+                        </TableNav>
+                        <Table>
+                            <thead>
+                                <TableHead>
+                                    <TableHeaderCell>Name</TableHeaderCell>
+                                    <TableHeaderCell>Last Name</TableHeaderCell>
+                                    <TableHeaderCell>Email</TableHeaderCell>
+                                    <TableHeaderCell>Department</TableHeaderCell>
+                                    <TableHeaderCell>Residence </TableHeaderCell>
+                                </TableHead>
+                            </thead>
+                            {content}
+                        </Table>
+                    </OrdersTable>
+             </>
+        );
+    }
+    return content;
 }
 export default withAuthorization(NurseList, [SD_Roles.NURSE, SD_Roles.ADMINISTRATOR]);

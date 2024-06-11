@@ -14,7 +14,7 @@ namespace Application.Appointments
             public async Task<Result<IEnumerable<AppointmentDto>>> Handle(GetAppointmentsQuery request, CancellationToken cancellationToken)
             {
                 var appointments = await _appointmentRepository.GetAllAsync();
-                if (appointments is null || !appointments.Any()) return Result<IEnumerable<AppointmentDto>>.Failure(ErrorType.NotFound, "No records could be found.");
+                if (appointments is null || !appointments.Any()) return Result<IEnumerable<AppointmentDto>>.Failure(ErrorType.NotFound, "No appointment records has been made for any patient");
 
                 var appointmentDtos = _mapper.Map<IEnumerable<AppointmentDto>>(appointments);
                 if (appointmentDtos is null) return Result<IEnumerable<AppointmentDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");

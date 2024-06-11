@@ -106,3 +106,28 @@ export const ButtonsContainer = styled.div`
   margin-left:160px;
   width: 60%;
 `;
+
+export const AssignToRoomButton = styled.button`
+    background-color: #002147;
+    color: #fff;
+    border-radius: 5px;
+    padding: 8px ; 
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 85px; 
+    margin-top:5px;
+    margin-bottom:19px;
+    transition: ease 0.3s;
+    &:hover {
+        transform: scale(1.1);
+    } 
+`;
+
+export const ButtonText = styled.span`
+    margin-right: 5px;
+    font-weight: 600;
+`;
+

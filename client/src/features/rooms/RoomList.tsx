@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteRoomMutation, useGetRoomsQuery } from "../../app/APIs/roomApi";
 import MainLoader from "../../app/common/MainLoader";
 import Room from "../../app/models/Room";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -22,6 +22,7 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
 import User from "../../app/models/User";
+import { connectionError } from "../../app/utility/connectionError";
 
 
 function RoomList() {
@@ -66,21 +67,36 @@ function RoomList() {
     };
     let content;
 
-    if (isLoading /*|| patientsLoading*/) {
-        content = <MainLoader />;
-    } else if (error/*roomsError || patientsError*/) {
-        return (
+    if (isLoading ) {
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
+    else if (error) {
+        const fetchError = error as FetchBaseQueryError;
+        const errorMessage = fetchError?.data as string;
+        content = (
             <>
                 <Header />
                 <SidePanel />
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>
-                            {(error?.data as FetchBaseQueryError)}
-                        </Message>
+                        <ErrorDescription>{errorMessage || connectionError("rooms")}</ErrorDescription>
                     </ErrorTitleRow>
-                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    {errorMessage && userData.role === SD_Roles.ADMINISTRATOR ? (
+                        <BackButton style={{ backgroundColor: "#002147" }}
+                            onClick={() => navigate("/room/insert")}>Insert a room </BackButton>
+
+                    ) : (
+                        <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    )}
                 </ErrorMessage>
             </>
         );
@@ -123,33 +139,35 @@ function RoomList() {
                 </tbody>
             );
         });
+
+        content = (
+            <>
+                <Header />
+                <SidePanel />
+                <OrdersTable>
+                    <TableNav>
+                        <TableHeader>Rooms List</TableHeader>
+                        <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/room/insert")}  >
+                            <FontAwesomeIcon icon={faAdd} />
+                        </AddButton>
+                    </TableNav>
+                    <Table>
+                        <thead>
+                            <TableHead>
+                                <TableHeaderCell>Number</TableHeaderCell>
+                                <TableHeaderCell>Beds Available</TableHeaderCell>
+                                <TableHeaderCell>Department</TableHeaderCell>
+                            </TableHead>
+                        </thead>
+                        {content}
+                    </Table>
+                </OrdersTable>
+            </>
+        );
+            
     }
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OrdersTable>
-                <TableNav>
-                    <TableHeader>Rooms List</TableHeader>
-                    <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/room/insert")}  >
-                        <FontAwesomeIcon icon={faAdd} />
-                    </AddButton>
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableHead>
-                            <TableHeaderCell>Number</TableHeaderCell>
-                            <TableHeaderCell>Beds Available</TableHeaderCell>
-                            <TableHeaderCell>Department</TableHeaderCell>
+    return content;
 
-                            
-                        </TableHead>
-                    </thead>
-                    {content}
-                </Table>
-            </OrdersTable>
-        </>
-    );
 }
 export default withAuthorization(RoomList, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);

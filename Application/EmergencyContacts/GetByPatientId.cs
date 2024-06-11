@@ -24,19 +24,19 @@ namespace Application.EmergencyContacts
             {
                 if (request.PatientId == Guid.Empty)
                 {
-                    return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.BadRequest, "Invalid patient ID.");
+                    return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.BadRequest, "Invalid patient ID");
                 }
 
                 var emergencyContacts = await _emergencyContactRepository.GetByPatientIdAsync(request.PatientId);
                 if (emergencyContacts == null || !emergencyContacts.Any())
                 {
-                    return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.NotFound, "No emergency contacts found");
+                    return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.NotFound, "No emergency contact records found for any patient");
                 }
 
                 var emergencyContactDtos = _mapper.Map<IEnumerable<EmergencyContactDto>>(emergencyContacts);
                 if (emergencyContactDtos == null || !emergencyContactDtos.Any())
                 {
-                    return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.BadRequest, "Error mapping emergency contacts to DTOs.");
+                    return Result<IEnumerable<EmergencyContactDto>>.Failure(ErrorType.BadRequest, "Error mapping emergency contacts to DTOs");
                 }
 
                 return Result<IEnumerable<EmergencyContactDto>>.Success(emergencyContactDtos);

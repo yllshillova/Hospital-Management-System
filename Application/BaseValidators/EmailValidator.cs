@@ -13,7 +13,7 @@ namespace Application.BaseValidators
         {
             if (value == null)
             {
-                return false; 
+                return false;
             }
 
             if (value is string emailValue)

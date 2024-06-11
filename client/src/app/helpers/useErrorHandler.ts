@@ -1,9 +1,15 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { NavigateFunction } from "react-router-dom";
 import toastNotify from "./toastNotify";
+import { SerializedError } from "@reduxjs/toolkit";
+
+type CustomErrorData = {
+    message?: string;
+    errors?: { [key: string]: string[] };
+};
 
 export default function useErrorHandler(
-    error: FetchBaseQueryError,
+    error: FetchBaseQueryError | SerializedError,
     navigate: NavigateFunction,
     currentLocation: string,
     setErrorMessages?: React.Dispatch<React.SetStateAction<string[]>>
@@ -13,28 +19,31 @@ export default function useErrorHandler(
         return;
     }
 
-    const { status, data } = error;
+    if ("status" in error) {
+        const { status, data } = error as FetchBaseQueryError;
 
-    if (status) {
         let errorMessage: string[] = [];
 
-        if (data && typeof data === 'object' && 'errors' in data) {
-            // Extract errors from data object if it contains an 'errors' field
-            const errors = data.errors;
-            console.log(errors);
-            errorMessage= Object.values(errors).flat();
-        
-        } else if (typeof data === 'string') { // Check if data is a string
-            errorMessage = [data]; // Assign the error message directly
+        if (data && typeof data === 'object') {
+            const customErrorData = data as CustomErrorData;
+
+            if (customErrorData.errors) {
+                const errors = customErrorData.errors;
+                console.log(errors);
+                errorMessage = Object.values(errors).flat();
+            } else if (customErrorData.message) {
+                errorMessage = [customErrorData.message];
+            }
+        } else if (typeof data === 'string') {
+            errorMessage = [data];
         }
-        // Set error messages if provided
+
         if (setErrorMessages) {
             console.log(errorMessage);
             setErrorMessages(errorMessage);
             return;
         }
 
-        // Handle different error statuses
         switch (status) {
             case 400:
                 toastNotify("Bad Request", "error");
@@ -62,6 +71,10 @@ export default function useErrorHandler(
 
         navigate(currentLocation);
 
+    } else if ("message" in error) {
+        const { message } = error as SerializedError;
+        toastNotify(message ?? "An unexpected error occurred", "error");
+        navigate(currentLocation);
     } else {
         toastNotify("An unexpected error occurred", "error");
         navigate('/Dashboard');

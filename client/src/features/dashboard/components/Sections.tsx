@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserDoctor, faFolderTree, faUserNurse, faUserInjured } from '@fortawesome/free-solid-svg-icons';
+import { faUserDoctor, faFolderTree, faUserNurse, faUserInjured, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { useGetDepartmentsCountQuery } from '../../../app/APIs/departmentApi';
 import { useGetDoctorsCountQuery } from '../../../app/APIs/doctorApi';
 import { useGetPatientsCountQuery } from '../../../app/APIs/patientApi';
-import MiniLoader from '../../../app/common/MiniLoader';
 import { useGetNursesCountQuery } from '../../../app/APIs/nurseApi';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import MainLoader from '../../../app/common/MainLoader';
+import {  ErrorCard, ErrorDescription, ErrorIcon, ErrorTitleRow } from "../../../app/common/styledComponents/table";
+import { connectionError } from "../../../app/utility/connectionError";
 
 function Sections() {
 
@@ -22,12 +24,36 @@ function Sections() {
         { icon: faUserInjured, label: 'Patients', value: patientsCount || "No", color: '#002147;' },
 
     ];
+
     let content;
 
     if (departmentsLoading || doctorsLoading || patientsLoading) {
-        content = <MiniLoader />;
-    } else if (depError || docError || patError) {
-        content = <div>{(depError?.data as FetchBaseQueryError) || (docError?.data as FetchBaseQueryError) || (patError?.data as FetchBaseQueryError)}</div>;
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
+
+    else if (depError || docError || patError) {
+        const fetchError = (depError as FetchBaseQueryError) ||
+            (patError as FetchBaseQueryError) ||
+            (docError as FetchBaseQueryError);
+        const errorMessage = fetchError?.data as string;        
+
+        content = (
+            <ErrorCard>
+                <ErrorTitleRow>
+                    <ErrorIcon icon={faExclamationCircle} />
+                    <ErrorDescription>{connectionError("sections") || errorMessage}</ErrorDescription>
+                </ErrorTitleRow>
+            </ErrorCard>
+        );
+
     }
     else {
         content = sectionsData.map((section, index) => (

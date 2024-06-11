@@ -30,6 +30,7 @@ function Register() {
 
     const data = registerUser.data;
 
+
     useEffect(() => {
         if (data) {
             const tempData = {

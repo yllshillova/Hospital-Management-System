@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteAppointmentMutation, useGetAppointmentsQuery } from "../../app/APIs/appointmentApi";
 import MainLoader from "../../app/common/MainLoader";
 import Appointment from "../../app/models/Appointment";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, Message, BackButton, ErrorMessage } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons/faTrashAlt";
 import { Header, SidePanel } from "../../app/layout";
@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
 import { useGetDoctorsQuery } from "../../app/APIs/doctorApi";
 import User from "../../app/models/User";
+import { connectionError } from "../../app/utility/connectionError";
 
 
 function AppointmentList() {
@@ -54,24 +55,41 @@ function AppointmentList() {
     };
 
     if (isAppointmentLoading || isPatientLoading || isDoctorLoading)  {
-        content = <MainLoader />;
-    } else if (appointmentError || patientError || doctorError) {
-        return (
+        content = (
+            <tbody>
+                <tr>
+                    <td colSpan={4}>
+                        <MainLoader />
+                    </td>
+                </tr>
+            </tbody>
+        );
+    }
+    else if (appointmentError || patientError || doctorError) {
+
+        const fetchError = (appointmentError as FetchBaseQueryError) || (patientError as FetchBaseQueryError) || (doctorError as FetchBaseQueryError);
+        const errorMessage = fetchError?.data as string;
+
+        content = (
             <>
                 <Header />
                 <SidePanel />
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <Message>
-                            {(appointmentError?.data as FetchBaseQueryError) || (patientError?.data as FetchBaseQueryError) || (doctorError?.data as FetchBaseQueryError)}
-                        </Message>
+                        <ErrorDescription>{errorMessage || connectionError("appointments")}</ErrorDescription>
                     </ErrorTitleRow>
-                    <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    {errorMessage && userData.role === SD_Roles.NURSE ? (
+                        <BackButton style={{ backgroundColor: "#002147" }}
+                            onClick={() => navigate("/appointment/insert")}>Insert an appointment </BackButton>
+                    ) : (
+                        <BackButton onClick={() => navigate(-1)}>Back</BackButton>
+                    )}
                 </ErrorMessage>
             </>
         );
-    } else {
+    }
+    else {
         content = appointmentData.map((appointment: Appointment) => {
             // Find the corresponding doctor and patient data
             const doctor = doctorData.find((doc: { id: string; }) => doc.id === appointment.doctorId);
@@ -106,36 +124,39 @@ function AppointmentList() {
                 </tbody>
             );
         });
+
+        content = (
+            <>
+                <Header />
+                <SidePanel />
+                <OrdersTable>
+                    <TableNav>
+                        <TableHeader>Appointments List</TableHeader>
+
+                        {userData.role == SD_Roles.NURSE &&
+                            <AddButton onClick={() => navigate("/appointment/insert")}>
+                                <FontAwesomeIcon icon={faAdd} />
+                            </AddButton>
+                        }
+                    </TableNav>
+                    <Table>
+                        <thead>
+                            <TableHead>
+                                <TableHeaderCell>Doctor</TableHeaderCell>
+                                <TableHeaderCell>Patient</TableHeaderCell>
+                                <TableHeaderCell>Check In Date</TableHeaderCell>
+                                <TableHeaderCell>Check Out Date</TableHeaderCell>
+                            </TableHead>
+                        </thead>
+                        {content}
+                    </Table>
+                </OrdersTable>
+            </>
+        );
+
     }
 
-    return (
-        <>
-            <Header />
-            <SidePanel />
-            <OrdersTable>
-                <TableNav>
-                    <TableHeader>Appointments List</TableHeader>
-
-                    {userData.role == SD_Roles.NURSE &&
-                        <AddButton onClick={() => navigate("/appointment/insert")}>
-                            <FontAwesomeIcon icon={faAdd} />
-                        </AddButton>
-                    }
-                </TableNav>
-                <Table>
-                    <thead>
-                        <TableHead>
-                            <TableHeaderCell>Doctor</TableHeaderCell>
-                            <TableHeaderCell>Patient</TableHeaderCell>
-                            <TableHeaderCell>Check In Date</TableHeaderCell>
-                            <TableHeaderCell>Check Out Date</TableHeaderCell>
-                        </TableHead>
-                    </thead>
-                    {content}
-                </Table>
-            </OrdersTable>
-        </>
-    );
+    return content;
 }
 
 export default withAuthorization(AppointmentList, [SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);
