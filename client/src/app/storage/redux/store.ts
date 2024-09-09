@@ -8,13 +8,24 @@ import nurseApi from "../../APIs/nurseApi";
 import visitApi from "../../APIs/visitApi";
 import accountApi from "../../APIs/accountApi";
 import { authReducer } from "./authSlice";
-import searchReducer from './searchSlice';
 import emergencyContactApi from "../../APIs/emergencyContactApi";
+import contractApi from "../../APIs/contractApi";
+import employeeApi from "../../APIs/employeeApi";
+import searchSlice from "./searchSlice";
+import planetApi from "../../APIs/planetApi";
+import satelliteApi from "../../APIs/satelliteApi";
+import orderApi from "../../APIs/orderApi";
+import productApi from "../../APIs/productApi";
+import renovationApi from "../../APIs/renovationApi";
+import buildingApi from "../../APIs/buildingApi";
+import chatReducer from "./chatSlice"; // Import the chat reducer
 
 const store = configureStore({
     reducer: {
         auth: authReducer,
-        search: searchReducer, 
+        search: searchSlice,
+        chat: chatReducer,
+
         [accountApi.reducerPath]: accountApi.reducer,
         [patientApi.reducerPath]: patientApi.reducer,
         [departmentApi.reducerPath]: departmentApi.reducer,
@@ -24,6 +35,15 @@ const store = configureStore({
         [nurseApi.reducerPath]: nurseApi.reducer,
         [visitApi.reducerPath]: visitApi.reducer,
         [emergencyContactApi.reducerPath]: emergencyContactApi.reducer,
+        [contractApi.reducerPath]: contractApi.reducer,
+        [employeeApi.reducerPath]: employeeApi.reducer,
+        [planetApi.reducerPath]: planetApi.reducer,
+        [satelliteApi.reducerPath]: satelliteApi.reducer,
+        [orderApi.reducerPath]: orderApi.reducer,
+        [productApi.reducerPath]: productApi.reducer,
+        [buildingApi.reducerPath]: buildingApi.reducer,
+        [renovationApi.reducerPath]: renovationApi.reducer,
+
     },
 
     middleware: (getDefaultMiddleware) =>
@@ -37,6 +57,16 @@ const store = configureStore({
             .concat(visitApi.middleware)
             .concat(accountApi.middleware)
             .concat(emergencyContactApi.middleware)
+            .concat(employeeApi.middleware)
+            .concat(contractApi.middleware)
+            .concat(planetApi.middleware)
+            .concat(satelliteApi.middleware)
+            .concat(orderApi.middleware)
+            .concat(productApi.middleware)
+            .concat(buildingApi.middleware)
+            .concat(renovationApi.middleware)
+
+
 });
 
 //exporting the root state

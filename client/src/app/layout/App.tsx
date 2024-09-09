@@ -39,27 +39,70 @@ import { useDispatch } from 'react-redux';
 import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
 import User from '../models/User';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
+import EmployeeList from '../../features/employees/EmployeeList';
+import EmployeeInsert from '../../features/employees/EmployeeInsert';
+import ContractList from '../../features/contracts/ContractList';
+import ContractInsert from '../../features/contracts/ContractInsert';
+import ContractUpdate from '../../features/contracts/ContractUpdate';
+import PlanetList from '../../features/planets/PlanetList';
+import PlanetInsert from '../../features/planets/PlanetInsert';
+import PlanetUpdate from '../../features/planets/PlanetUpdate';
+import SatelliteInsert from '../../features/satellites/SatelliteInsert';
+import SatelliteList from '../../features/satellites/SatelliteList';
+import ProductList from '../../features/products/ProductList';
+import ProductInsert from '../../features/products/ProductInsert';
+import OrderList from '../../features/orders/OrderList';
+import OrderInsert from '../../features/orders/OrderInsert';
+import OrderUpdate from '../../features/orders/OrderUpdate';
+import AuthorList from '../../features/authors/AuthorList';
+import AuthorInsert from '../../features/authors/AuthorInsert';
+import BookList from '../../features/books/BookList';
+import BookInsert from '../../features/books/BookInsert';
+import BookUpdate from '../../features/books/BookUpdate';
+import BuildingList from '../../features/buildings/BuildingList';
+import BuildingInsert from '../../features/buildings/BuildingInsert';
+import RenovationList from '../../features/renovations/RenovationList';
+import RenovationInsert from '../../features/renovations/RenovationInsert';
+//import { RootState } from '../storage/redux/store';
+import { startNotificationsConnection } from '../utility/notificationService';
+import TokenRefreshManager from '../utility/useTokenRefresh';
+
 
 
 function App() {
 
     const dispatch = useDispatch();
+    //const userId = useSelector((state: RootState) => state.auth.id); 
 
     useEffect(() => {
         const localToken = localStorage.getItem("accessToken");
         const refreshToken = localStorage.getItem("refreshToken");
         if (localToken && refreshToken) {
             //const { id, name, lastName, email, role, jwtToken }: User = jwtDecode(localToken);
-            const { id, name, lastName, email, role , accessToken }: User = jwtDecode(localToken);
+            const { id, name, lastName, email, role, accessToken }: User = jwtDecode(localToken);
             dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));
-            dispatch(setToken({ accessToken, refreshToken }));        }
-    }, [])
+            dispatch(setToken({ accessToken, refreshToken }));
+
+        }
+    }, []);
 
 
+    useEffect(() => {
+        const initializeNotificationsHub = async () => {
+            try {
+                await startNotificationsConnection(); // Ensure connection is established}
+                console.log('notifications connection Established');
+            } catch (error) {
+                console.error('Error initializing chat:', error);
+            }
+        };
 
+        initializeNotificationsHub();
+    }, []);
     return (
+
         <div>
-            <div>
+        <TokenRefreshManager/>
                 <Routes>
                     <Route path="/dashboard" element={<Dashboard />}></Route>
 
@@ -109,9 +152,45 @@ function App() {
 
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
+
+                    <Route path="/employees" element={<EmployeeList />}></Route>
+                    <Route path="/employee/insert" element={<EmployeeInsert />}></Route>
+
+                    <Route path="/contracts" element={<ContractList />}></Route>
+                    <Route path="/contract/insert" element={<ContractInsert />}></Route>
+                    <Route path="/contract/update/:id" element={<ContractUpdate />}></Route>
+
+                    <Route path="/planets" element={<PlanetList />}></Route>
+                    <Route path="/planet/insert" element={<PlanetInsert />}></Route>
+                    <Route path="/planet/update/:id" element={<PlanetUpdate />}></Route>
+
+                    <Route path="/satellites" element={<SatelliteList />}></Route>
+                    <Route path="/satellite/insert" element={<SatelliteInsert />}></Route>
+
+                    <Route path="/products" element={<ProductList />}></Route>
+                    <Route path="/product/insert" element={<ProductInsert />}></Route>
+
+                    <Route path="/orders" element={<OrderList />}></Route>
+                    <Route path="/order/insert" element={<OrderInsert />}></Route>
+                    <Route path="/order/update/:id" element={<OrderUpdate />}></Route>
+
+                    <Route path="/authors" element={<AuthorList />}></Route>
+                    <Route path="/author/insert" element={<AuthorInsert />}></Route>
+
+                    <Route path="/books" element={<BookList />}></Route>
+                    <Route path="/book/insert" element={<BookInsert />}></Route>
+                    <Route path="/book/update/:id" element={<BookUpdate />}></Route>
+
+
+                    <Route path="/buildings" element={<BuildingList />}></Route>
+                    <Route path="/building/insert" element={<BuildingInsert />}></Route>
+
+                    <Route path="/renovations" element={<RenovationList />}></Route>
+                    <Route path="/renovation/insert" element={<RenovationInsert />}></Route>
+
+
                 </Routes>
             </div>
-        </div>
     );
 }
 

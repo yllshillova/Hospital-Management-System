@@ -24,7 +24,7 @@ namespace Application.Accounts.Register
 
         }
 
-        public class RegisterCommandHandler(IUserRepository _userRepository, IMapper _mapper)
+        public class RegisterCommandHandler(IUserRepository _userRepository, ITokenRepository _tokenRepository, IMapper _mapper)
             : IRequestHandler<RegisterCommand, Result<UserDto>>
         {
             public async Task<Result<UserDto>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -49,9 +49,11 @@ namespace Application.Accounts.Register
 
                 if (!addToRole) return Result<UserDto>.Failure(ErrorType.BadRequest, "Failed to promote the registered user as Administrator!");
 
+                var (accessToken, refreshToken) = await _tokenRepository.CreateTokens(user);
+
                 var userDto = _mapper.Map<UserDto>(user);
-                userDto.AccessToken = null; // the AccessToken property to null
-                userDto.RefreshToken = null; //  the RefreshToken property to null
+                userDto.AccessToken = accessToken;
+                userDto.RefreshToken = refreshToken;
                 return Result<UserDto>.Success(userDto);
             }
         }

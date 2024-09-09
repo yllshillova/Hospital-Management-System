@@ -2,6 +2,7 @@
 using Domain.Contracts;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Application.Rooms
 {
@@ -17,7 +18,7 @@ namespace Application.Rooms
             }
         }
 
-        public class RemovePatientCommandHandler(IRoomRepository _roomRepository) : IRequestHandler<RemovePatientCommand, Result<Unit>>
+        public class RemovePatientCommandHandler(IRoomRepository _roomRepository, IHubContext<NotificationHub> _notificationHub) : IRequestHandler<RemovePatientCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(RemovePatientCommand request, CancellationToken cancellationToken)
             {
@@ -34,6 +35,19 @@ namespace Application.Rooms
 
                         room.Patients.Remove(patientToRemove);
                         room.BedsAvailable++;
+
+                        string message = $"Patient {patientToRemove.Name} {patientToRemove.LastName} has been removed from room #{room.RoomNumber}";
+
+                        try
+                        {
+                            // Send notification
+                            await _notificationHub.Clients.All.SendAsync("ReceiveNotification", message, "info");
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log exception and handle notification send failure
+                            return Result<Unit>.Failure(ErrorType.NotFound, $"Failed to send notification: {ex.Message}");
+                        }
 
                         var result = await _roomRepository.UpdateAsync(room);
                         if (!result)

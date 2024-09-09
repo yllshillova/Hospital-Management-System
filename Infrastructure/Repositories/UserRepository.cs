@@ -19,6 +19,12 @@ namespace Infrastructure.Repositories
             _logger = logger;
         }
 
+        public async Task<AppUser> GetUserByIdAsync(Guid id)
+        {
+            return await _userManager.Users
+                .FirstOrDefaultAsync(user => user.Id == id);
+        }
+
         public async Task<AppUser> GetUserByEmailAsync(string email)
         {
             return await _userManager.Users

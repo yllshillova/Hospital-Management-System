@@ -68,8 +68,12 @@ function Register() {
         const response = await registerUser(formData);
 
         if ('data' in response) {
+            const { accessToken, refreshToken } = response.data;
+            // Store the tokens in the application state or local storage
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
             toastNotify("User created successfully", "success");
-            navigate('/Dashboard');
+            navigate('/dashboard');
         } else if ('error' in response) {
 
             const error = response.error as FetchBaseQueryError;

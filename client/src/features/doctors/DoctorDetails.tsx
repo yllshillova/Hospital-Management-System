@@ -135,4 +135,4 @@ function DoctorDetails() {
     }
 }
 
-export default withAuthorization(DoctorDetails, [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR]);
+export default withAuthorization(DoctorDetails, [SD_Roles.DOCTOR, SD_Roles.ADMINISTRATOR, SD_Roles.NURSE]);

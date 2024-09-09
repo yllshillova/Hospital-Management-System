@@ -27,6 +27,7 @@ function SidePanel() {
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('loginDateTime');
 
         dispatch(setLoggedInUser({ ...emptyUserState }));
         navigate('/');
@@ -39,7 +40,16 @@ function SidePanel() {
         { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
         { icon: faBookMedical, label: 'Visits', onClick: handleNavigation('/visits') },
         { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
+        //{ icon: faSignOutAlt, label: 'Employees', onClick: handleNavigation('/employees') },
+        //{ icon: faSignOutAlt, label: 'Contracts', onClick: handleNavigation('/contracts') },
+        //{ icon: faSignOutAlt, label: 'Planets', onClick: handleNavigation('/planets') },
+        //{ icon: faSignOutAlt, label: 'Satellites', onClick: handleNavigation('/satellites') },
+       // { icon: faSignOutAlt, label: 'Products', onClick: handleNavigation('/products') },
+        //{ icon: faSignOutAlt, label: 'Orders', onClick: handleNavigation('/orders') },
+        //{ icon: faSignOutAlt, label: 'Buildings', onClick: handleNavigation('/buildings') },
+        //{ icon: faSignOutAlt, label: 'Renovations', onClick: handleNavigation('/renovations') },
         { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
+
     ];
 
     if (userData.role === SD_Roles.ADMINISTRATOR) {

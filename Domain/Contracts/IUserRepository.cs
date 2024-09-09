@@ -4,6 +4,7 @@ namespace Domain.Contracts
 {
     public interface IUserRepository
     {
+        Task<AppUser> GetUserByIdAsync(Guid id);
         Task<AppUser> GetUserByEmailAsync(string email);
         bool IsEmailTaken(string email);
         Task<bool> CreateUserAsync(AppUser user, string password);

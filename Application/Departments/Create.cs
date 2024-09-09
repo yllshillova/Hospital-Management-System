@@ -1,5 +1,4 @@
 ﻿using Application.Core;
-using Application.BaseValidators;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;

@@ -44,6 +44,14 @@ const accountApi = createApi({
             }),
             providesTags: ["Accounts"],
         }),
+        refreshToken: builder.mutation({
+            query: (userId: string) => ({
+                url: `accounts/refresh-token?userId=${userId}`,
+                method: "POST"
+            }),
+            invalidatesTags: ["Accounts"],
+        }),
+        
     }),
 });
 
@@ -53,6 +61,7 @@ export const {
     useRegisterMutation,
     useLoginMutation,
     useGetStaffQuery,
+    useRefreshTokenMutation,
 } = accountApi;
 
 export default accountApi;

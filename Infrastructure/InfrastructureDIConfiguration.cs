@@ -39,6 +39,16 @@ namespace Infrastructure
             services.AddScoped<ITokenRepository, TokenRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
+            services.AddScoped<IContractRepository, ContractRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IPlanetRepository, PlanetRepository>();
+            services.AddScoped<ISatelliteRepository, SatelliteRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IBuildingRepository, BuildingRepository>();
+            services.AddScoped<IRenovationRepository, RenovationRepository>();
 
             await MigrateDatabaseAndSeedData(services.BuildServiceProvider());
         }

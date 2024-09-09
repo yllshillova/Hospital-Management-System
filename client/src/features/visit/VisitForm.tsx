@@ -107,7 +107,6 @@ function VisitForm({ id, data }: VisitFormProps) {
             if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Visit has been created", "success");
                 navigate('/visits');
             }
         }
@@ -121,12 +120,8 @@ function VisitForm({ id, data }: VisitFormProps) {
         }
 
         try {
-            const response = await assignPatientToRoom({ patientId: visitInputs.patientId, doctorId: doctorId });
-            if ('error' in response) {
-                toastNotify("Failed to assign patient to room", "error");
-            } else {
-                toastNotify("Patient has been assigned to room", "success");
-            }
+             await assignPatientToRoom({ patientId: visitInputs.patientId, doctorId: doctorId });
+            
         } catch (error) {
             toastNotify("An error occurred while assigning patient to room", "error");
         }

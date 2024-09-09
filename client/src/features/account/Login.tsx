@@ -14,6 +14,7 @@ import { setLoggedInUser, setToken } from "../../app/storage/redux/authSlice";
 import { jwtDecode } from "jwt-decode";
 import User from "../../app/models/User";
 import BarLoader from "react-spinners/BarLoader";
+import { formatDateTimeComplete } from "../../app/utility/formatDate";
 
 
 const loginData = {
@@ -67,6 +68,12 @@ function Login() {
 
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
+
+            // Set loginDateTime only after successful login
+            const loginDateTime = formatDateTimeComplete(new Date()) as string;
+            localStorage.setItem("loginDateTime", loginDateTime);
+            console.log("Login time set to:", loginDateTime);
+
 
             dispatch(setToken({ accessToken, refreshToken }));
             dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));

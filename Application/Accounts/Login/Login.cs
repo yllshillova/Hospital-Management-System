@@ -33,7 +33,29 @@ namespace Application.Accounts.Login
                 if (!result)
                     return Result<UserDto>.Failure(ErrorType.Unauthorized, "Wrong credentials, try again!");
 
-                var (accessToken, refreshToken) = await _tokenRepository.CreateTokens(user);
+                string accessToken;
+                string refreshToken;
+
+                // Check for a valid refresh token
+                var existingRefreshToken = await _tokenRepository.GetRefreshTokenAsync(user.Id);
+
+                if (existingRefreshToken == null)
+                {
+                    // If no valid refresh token exists, check and delete any expired refresh tokens
+                    await _tokenRepository.DeleteExpiredRefreshTokenAsync(user.Id);
+
+                    // Create a new refresh token
+                    refreshToken = _tokenRepository.GenerateRefreshToken();
+                    await _tokenRepository.SaveRefreshTokenAsync(user.Id, refreshToken);
+                }
+                else
+                {
+                    // Reuse the existing valid refresh token
+                    refreshToken = existingRefreshToken.Token;
+                }
+
+                var accessTokenResult = await _tokenRepository.CreateAccessTokenAsync(user);
+                accessToken = accessTokenResult.Token;
 
                 var userDto = _mapper.Map<UserDto>(user);
                 userDto.AccessToken = accessToken;
@@ -42,7 +64,5 @@ namespace Application.Accounts.Login
                 return Result<UserDto>.Success(userDto);
             }
         }
-
-
     }
 }
