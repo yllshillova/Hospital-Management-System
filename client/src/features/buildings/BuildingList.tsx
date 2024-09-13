@@ -1,23 +1,19 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import MainLoader from "../../app/common/MainLoader";
 import { Header, SidePanel } from "../../app/layout";
-import { TableCell, TableRow, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
-import { faAdd, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
+import { faAdd, faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
 import { connectionError } from "../../app/utility/connectionError";
-import { SD_Roles } from "../../app/utility/SD";
-import { RootState } from "../../app/storage/redux/store";
-import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
-import withAuthorization from "../../app/hoc/withAuthorization";
-import Building from "../../app/models/Building";
+import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { useGetBuildingsQuery } from "../../app/APIs/buildingApi";
+import Building from "../../app/models/Building";
 
 function BuildingList() {
 
     const { data, isLoading, error } = useGetBuildingsQuery(null);
 
-    const userData = useSelector((state: RootState) => state.auth);
     const navigate = useNavigate();
 
     let content;
@@ -40,6 +36,7 @@ function BuildingList() {
 
         const fetchError = error as FetchBaseQueryError;
         const errorMessage = fetchError?.data as string;
+        console.log(errorMessage);
         content = (
             <>
                 <Header />
@@ -48,8 +45,9 @@ function BuildingList() {
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
                         <ErrorDescription>{errorMessage || connectionError("buildings")} </ErrorDescription>
+
                     </ErrorTitleRow>
-                    {errorMessage && userData.role === SD_Roles.ADMINISTRATOR ? (
+                    {errorMessage ? (
                         <BackButton style={{ backgroundColor: "#002147" }}
                             onClick={() => navigate("/building/insert")}>Insert a building </BackButton>
                     ) : (
@@ -67,6 +65,7 @@ function BuildingList() {
                     <TableRow>
                         <TableCell>{building.name}</TableCell>
                         <TableCell>{building.location}</TableCell>
+                        
                     </TableRow>
                 </tbody>
             );
@@ -86,8 +85,8 @@ function BuildingList() {
                     <Table>
                         <thead>
                             <TableHead>
-                                <TableHeaderCell>Name</TableHeaderCell>
-                                <TableHeaderCell>Location </TableHeaderCell>
+                                <TableHeaderCell> Name</TableHeaderCell>
+                                <TableHeaderCell> Location</TableHeaderCell>
                             </TableHead>
                         </thead>
                         {content}
@@ -98,4 +97,4 @@ function BuildingList() {
     }
     return content;
 }
-export default withAuthorization(BuildingList, [SD_Roles.ADMINISTRATOR]);
+export default BuildingList;

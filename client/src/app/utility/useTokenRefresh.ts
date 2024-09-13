@@ -27,16 +27,6 @@ const isTokenExpired = (token: string): boolean => {
     }
 };
 
-const getExpirationTime = (token: string): number | null => {
-    if (!token) return null;
-    try {
-        const decoded: DecodedToken = jwtDecode(token);
-        return decoded.exp * 1000; // Convert to milliseconds
-    } catch (error) {
-        console.error("Failed to decode token:", error);
-        return null;
-    }
-};
 
 
 
@@ -59,22 +49,6 @@ function TokenRefreshManager  ()  {
 
 
     const checkAndRefreshToken = useCallback(async () => {
-
-        const refreshTokenExpiryTime = getExpirationTime(refreshToken);
-
-        if (refreshTokenExpiryTime === null) {
-            console.error("Unable to determine refresh token expiration time.");
-            return;
-        }
-
-        // If the refresh token has expired or is about to expire, log the user out
-        if (refreshTokenExpiryTime < Date.now()) {
-            console.log("Refresh token has expired.");
-            logoutUser();
-            return;
-        }
-
-        
 
         if (isTokenExpired(accessToken) && refreshToken) {
             try {
@@ -135,22 +109,26 @@ function TokenRefreshManager  ()  {
             console.log("Login time already set in localStorage:", loginDateTime);
         }
 
-        // Set up a timeout to log out exactly when the refresh token expires
-        const refreshTokenExpiryTime = getExpirationTime(refreshToken);
-        if (refreshTokenExpiryTime !== null) {
-            const timeUntilExpiration = refreshTokenExpiryTime - Date.now();
+        // Set up the token refresh interval
+        const intervalId = setInterval(() => {
+            console.log("Token refresh interval triggered.");
+            checkAndRefreshToken();
+        }, 300000); // Every 5 minutes
 
-            const expirationTimeoutId = setTimeout(logoutUser, timeUntilExpiration);
+        // Start an initial timeout to delay the first token refresh
+        const timeoutId = setTimeout(() => {
+            console.log("Initial timeout completed, starting token refresh.");
+            checkAndRefreshToken(); // Initial check
+        }, 300000); // Wait for 5 minutes before the first refresh
 
-            // Set up an interval to check and refresh the access token every 5 minutes
-            const refreshIntervalId = setInterval(checkAndRefreshToken, 300000); // 5 minutes
+        // Cleanup function to clear the interval and timeout
+        return () => {
+            console.log("Cleaning up timeout and interval.");
+            clearTimeout(timeoutId); // Clear the initial timeout
+            clearInterval(intervalId); // Clear the refresh interval
+            console.log("Timeout and interval cleared.");
+        };
 
-            // Cleanup on unmount or if tokens change
-            return () => {
-                clearTimeout(expirationTimeoutId);
-                clearInterval(refreshIntervalId);
-            };
-        }
     }, [accessToken, refreshToken, checkAndRefreshToken]);
 
     // Effect to update loginDateTime whenever tokens are updated

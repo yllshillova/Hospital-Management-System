@@ -31,8 +31,14 @@ namespace Infrastructure
         public DbSet<Book> Books { get; set; }
 
         public DbSet<Building> Buildings { get; set; }
-
         public DbSet<Renovation> Renovations { get; set; }
+        public DbSet<Sculptor> Sculptors { get; set; }
+        public DbSet<Sculpture> Sculptures { get; set; }
+
+        public DbSet<Group> Groups { get; set; }
+
+        public DbSet<Member> Members { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

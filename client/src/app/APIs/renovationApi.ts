@@ -14,39 +14,50 @@ const renovationApi = createApi({
             return headers;
         },
     }),
-    tagTypes: ["Renovations"],
+    tagTypes: ["Renovation"],
     endpoints: (builder) => ({
         getRenovations: builder.query({
-            query: () => ({
-                url: "renovations"
+            query: (location?: string) => ({
+                url: "Renovations",
+                params: {
+                    ...(location && {location}),
+                },
             }),
-            providesTags: ["Renovations"],
+            providesTags: ["Renovation"],
         }),
+        getRenovationById: builder.query({
+            query: (id) => ({
+                url: `Renovations/${id}`,
+            }),
+            providesTags: ["Renovation"],
+        }),
+        
         
         createRenovation: builder.mutation({
             query: (data) => ({
-                url: "renovations",
+                url: "Renovations",
                 method: "POST",
                 body: data
             }),
-            invalidatesTags: ["Renovations"],
-        }),
-        deleteRenovation: builder.mutation({
-            query: (id) => ({
-                url: "renovations/" + id,
-                method: "DELETE",
-            }),
-            invalidatesTags: ["Renovations"],
+            invalidatesTags: ["Renovation"],
         }),
         
+        deleteRenovation: builder.mutation({
+            query: (id) => ({
+                url: "Renovations/" + id,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["Renovation"],
+        }),
     }),
 });
 
 
 export const {
     useGetRenovationsQuery,
+    useGetRenovationByIdQuery,
     useCreateRenovationMutation,
-    useDeleteRenovationMutation,
+    useDeleteRenovationMutation
 } = renovationApi;
 
 export default renovationApi;

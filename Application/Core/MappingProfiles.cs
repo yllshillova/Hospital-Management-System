@@ -7,12 +7,16 @@ using Application.Departments;
 using Application.Doctors;
 using Application.EmergencyContacts;
 using Application.Employees;
+using Application.Groups;
+using Application.Members;
 using Application.Nurses;
 using Application.Patients;
 using Application.Planets;
 using Application.Renovations;
 using Application.Rooms;
 using Application.Satellites;
+using Application.Sculptors;
+using Application.Sculptures;
 using Application.Visits;
 using AutoMapper;
 using Domain.Entities;
@@ -45,6 +49,10 @@ namespace Application.Core
             CreateMap<Book, BookDto>().ReverseMap();
             CreateMap<Building, BuildingDto>().ReverseMap();
             CreateMap<Renovation, RenovationDto>().ReverseMap();
+            CreateMap<Sculpture, SculptureDto>().ReverseMap();
+            CreateMap<Sculptor, SculptorDto>().ReverseMap();
+            CreateMap<Member, MemberDto>().ReverseMap();
+            CreateMap<Group, GroupDto>().ReverseMap();
 
 
         }

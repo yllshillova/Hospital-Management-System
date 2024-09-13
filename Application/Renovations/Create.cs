@@ -19,19 +19,19 @@ namespace Application.Renovations
             }
         }
 
-        public class CreateRenovationCommandHandler(IRenovationRepository _renovationRepository, IMapper _mapper) : IRequestHandler<CreateRenovationCommand, Result<Unit>>
+        public class CreateRenovationCommandHandler(IRenovationRepository _RenovationRepository, IMapper _mapper) : IRequestHandler<CreateRenovationCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(CreateRenovationCommand request, CancellationToken cancellationToken)
             {
                 if (request.Renovation is null) return Result<Unit>.Failure(ErrorType.BadRequest, "Couldn't complete the action! Try again!");
 
-                var renovation = _mapper.Map<Renovation>(request.Renovation);
-                if (renovation is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto.");
+                var Renovation = _mapper.Map<Renovation>(request.Renovation);
+                if (Renovation is null) return Result<Unit>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto.");
 
-                renovation.CreatedAt = DateTime.Now;
-                renovation.UpdatedAt = renovation.CreatedAt;
+                Renovation.CreatedAt = DateTime.Now;
+                Renovation.UpdatedAt = Renovation.CreatedAt;
 
-                var result = await _renovationRepository.CreateAsync(renovation);
+                var result = await _RenovationRepository.CreateAsync(Renovation);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the Renovation! Try again!");
 
                 return Result<Unit>.Success(Unit.Value);

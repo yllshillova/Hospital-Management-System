@@ -47,8 +47,13 @@ namespace Infrastructure
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
-            services.AddScoped<IBuildingRepository, BuildingRepository>();
             services.AddScoped<IRenovationRepository, RenovationRepository>();
+            services.AddScoped<IBuildingRepository, BuildingRepository>();
+            services.AddScoped<ISculptorRepository, SculptorRepository>();
+            services.AddScoped<ISculptureRepository, SculptureRepository>();
+            services.AddScoped<IMemberRepository, MemberRepository>();
+            services.AddScoped<IGroupRepository, GroupRepository>();
+
 
             await MigrateDatabaseAndSeedData(services.BuildServiceProvider());
         }

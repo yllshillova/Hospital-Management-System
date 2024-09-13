@@ -1,6 +1,7 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
 using Infrastructure.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -12,6 +13,12 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<Renovation>> GetByLocationAsync(string location)
+        {
+            var renovations = await _context.Renovations.Include(r => r.Building)
+                .Where(r => r.Building.Location == location).ToListAsync();
+            return renovations;
+        }
 
     }
 }

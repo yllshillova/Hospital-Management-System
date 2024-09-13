@@ -98,4 +98,4 @@ function EmployeeList() {
     }
     return content;
 }
-export default withAuthorization(EmployeeList, [SD_Roles.ADMINISTRATOR]);
+export default EmployeeList;

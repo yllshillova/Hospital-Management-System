@@ -5,25 +5,23 @@ import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
-import {SD_Roles } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-import withAuthorization from '../../app/hoc/withAuthorization';
 import Renovation from '../../app/models/Renovation';
-import Building from '../../app/models/Building';
 import { useCreateRenovationMutation } from '../../app/APIs/renovationApi';
+import Building from '../../app/models/Building';
 import { useGetBuildingsQuery } from '../../app/APIs/buildingApi';
 
 interface RenovationFormProps {
     data?: Renovation;
 }
 
-const renovationData: Renovation = {
+const RenovationData: Renovation = {
     id: "",
     createdAt: new Date(),
     updatedAt: new Date(),
     description: "",
-    cost: 0,
+    cost : 0,
     buildingID: "",
     building: {} as Building
 };
@@ -31,7 +29,7 @@ const renovationData: Renovation = {
 
 
 function RenovationForm({ data }: RenovationFormProps) { 
-    const [renovationInputs, setRenovationInputs] = useState<Renovation>(data || renovationData);
+    const [RenovationInputs, setRenovationInputs] = useState<Renovation>(data || RenovationData);
     const [createRenovation] = useCreateRenovationMutation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -42,7 +40,7 @@ function RenovationForm({ data }: RenovationFormProps) {
 
 
     const handleRenovationInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-        const tempData = inputHelper(e, renovationInputs);
+        const tempData = inputHelper(e, RenovationInputs);
         setRenovationInputs(tempData);
     };
 
@@ -53,12 +51,12 @@ function RenovationForm({ data }: RenovationFormProps) {
 
         const formData = new FormData();
 
-        formData.append("Description", renovationInputs.description);
-        formData.append("Cost", renovationInputs.cost.toString());
-        formData.append("BuildingID", renovationInputs.buildingID);
+        formData.append("Description", RenovationInputs.description);
+        formData.append("Cost", RenovationInputs.cost.toString());
+        formData.append("buildingID", RenovationInputs.buildingID);
 
         const currentLocation = window.location.pathname; 
-
+          
         const response = await createRenovation(formData);
 
         if ('error' in response) {
@@ -101,11 +99,11 @@ function RenovationForm({ data }: RenovationFormProps) {
                             onSubmit={handleSubmit}
                         >
                             <FormGroup>
-                                <Label>Name</Label>
+                                <Label>Description</Label>
                                 <Input
                                     type="text"
                                     name="description"
-                                    value={renovationInputs.description}
+                                    value={RenovationInputs.description}
                                     onChange={handleRenovationInput}
                                 />
                             </FormGroup>
@@ -115,7 +113,7 @@ function RenovationForm({ data }: RenovationFormProps) {
                                 <Input
                                     type="number"
                                     name="cost"
-                                    value={renovationInputs.cost}
+                                    value={RenovationInputs.cost}
                                     onChange={handleRenovationInput}
                                 />
                             </FormGroup>
@@ -123,7 +121,7 @@ function RenovationForm({ data }: RenovationFormProps) {
                             <FormGroup>
                                 <Select
                                     name="buildingID"
-                                    value={renovationInputs.buildingID}
+                                    value={RenovationInputs.buildingID}
                                     onChange={handleRenovationInput}
                                     disabled={buildingsLoading}
                                 >
@@ -153,4 +151,4 @@ function RenovationForm({ data }: RenovationFormProps) {
     );
 }
 
-export default withAuthorization(RenovationForm, [SD_Roles.ADMINISTRATOR]);
+export default RenovationForm;

@@ -1,14 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer ,SubmitButton, Title } from "../../app/common/styledComponents/upsert";
-import { SD_Roles } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-import withAuthorization from "../../app/hoc/withAuthorization";
 import Building from '../../app/models/Building';
 import { useCreateBuildingMutation } from '../../app/APIs/buildingApi';
 
@@ -21,14 +19,15 @@ const buildingData: Building = {
     id: "",
     createdAt: new Date(),
     updatedAt: new Date(),
-    location: "",
+    location : "",
 };
 
-function BuildingForm( { data }: BuildingFormProps) {
+function BuildingForm({ data }: BuildingFormProps) {
 
     const [buildingInputs, setBuildingInputs] = useState<Building>(data || buildingData);
+
     const [createBuilding] = useCreateBuildingMutation();
-    
+
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState<string[]>([]); 
@@ -54,25 +53,21 @@ function BuildingForm( { data }: BuildingFormProps) {
 
         const currentLocation = window.location.pathname;
 
-       
-       const response = await createBuilding(formData);
+        
 
-       if ('error' in response) {
-           useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
-       } else {
-           toastNotify("Building has been created", "success");
-           navigate('/buildings');
-       }                        
+        const response = await createBuilding(formData);
 
+            if ('error' in response) {
+                useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
+            } else {
+                toastNotify("Building has been created ", "success");
+                navigate('/buildings');
+            }
+        
         setLoading(false);
     };
 
-    //const toggleIsDeleted = () => {
-    //    setBuildingInputs((prevInputs) => ({
-    //        ...prevInputs,
-    //        isActive: !prevInputs.isActive,
-    //    }));
-    //};
+    
 
     let content;
 
@@ -85,7 +80,7 @@ function BuildingForm( { data }: BuildingFormProps) {
                         <FormContainer >
                             {loading && <MainLoader />}
                             <Title>
-                                Add Building
+                               Add Planet
                             </Title>
 
                             {/* Display error messages */}
@@ -113,7 +108,7 @@ function BuildingForm( { data }: BuildingFormProps) {
                                         onChange={handleBuildingInput}
                                     />
                                 </FormGroup>
-
+                                
                                 <FormGroup>
                                     <Label>Location</Label>
                                     <Input
@@ -124,6 +119,7 @@ function BuildingForm( { data }: BuildingFormProps) {
                                     />
                                 </FormGroup>
 
+                               
                                 <ButtonsContainer>
                                     <SubmitButton type="submit">
                                         Submit
@@ -141,4 +137,4 @@ function BuildingForm( { data }: BuildingFormProps) {
         return content;
     }
 
-export default withAuthorization(BuildingForm,[SD_Roles.ADMINISTRATOR]);
+export default BuildingForm;

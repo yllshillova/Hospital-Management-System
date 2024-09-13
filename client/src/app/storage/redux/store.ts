@@ -14,16 +14,18 @@ import employeeApi from "../../APIs/employeeApi";
 import searchSlice from "./searchSlice";
 import planetApi from "../../APIs/planetApi";
 import satelliteApi from "../../APIs/satelliteApi";
-import orderApi from "../../APIs/orderApi";
-import productApi from "../../APIs/productApi";
-import renovationApi from "../../APIs/renovationApi";
-import buildingApi from "../../APIs/buildingApi";
 import chatReducer from "./chatSlice"; // Import the chat reducer
+import buildingApi from "../../APIs/buildingApi";
+import renovationApi from "../../APIs/renovationApi";
+import memberApi from "../../APIs/memberApi";
+import groupApi from "../../APIs/groupApi";
+import sculptorApi from "../../APIs/sculptorApi";
+import sculptureApi from "../../APIs/sculptureApi";
 
 const store = configureStore({
     reducer: {
         auth: authReducer,
-        search: searchSlice,
+        search: searchSlice ,
         chat: chatReducer,
 
         [accountApi.reducerPath]: accountApi.reducer,
@@ -39,10 +41,13 @@ const store = configureStore({
         [employeeApi.reducerPath]: employeeApi.reducer,
         [planetApi.reducerPath]: planetApi.reducer,
         [satelliteApi.reducerPath]: satelliteApi.reducer,
-        [orderApi.reducerPath]: orderApi.reducer,
-        [productApi.reducerPath]: productApi.reducer,
+        [sculptorApi.reducerPath]: sculptorApi.reducer,
+        [sculptureApi.reducerPath]: sculptureApi.reducer,
         [buildingApi.reducerPath]: buildingApi.reducer,
         [renovationApi.reducerPath]: renovationApi.reducer,
+        [groupApi.reducerPath]: groupApi.reducer,
+        [memberApi.reducerPath]: memberApi.reducer,
+
 
     },
 
@@ -61,10 +66,11 @@ const store = configureStore({
             .concat(contractApi.middleware)
             .concat(planetApi.middleware)
             .concat(satelliteApi.middleware)
-            .concat(orderApi.middleware)
-            .concat(productApi.middleware)
             .concat(buildingApi.middleware)
             .concat(renovationApi.middleware)
+            .concat(sculptureApi.middleware)
+            .concat(sculptorApi.middleware)
+
 
 
 });

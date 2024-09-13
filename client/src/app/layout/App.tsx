@@ -10,8 +10,8 @@ import DoctorDetails from '../../features/doctors/DoctorDetails';
 import DoctorInsert from '../../features/doctors/DoctorInsert';
 import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 import RoomDetails from '../../features/rooms/RoomDetails';
-import Login from '../../features/account/Login';
-import Register from '../../features/account/Register';
+//import Login from '../../features/account/Login';
+//import Register from '../../features/account/Register';
 import AppointmentList from '../../features/appointment/AppointmentList';
 import AppointmentDetails from '../../features/appointment/AppointmentDetails';
 import DepartmentUpdate from '../../features/department/DepartmentUpdate';
@@ -34,10 +34,10 @@ import News_Chat from '../../features/news_chat/News_Chat';
 import RoomInsert from '../../features/rooms/RoomInsert';
 import RoomUpdate from '../../features/rooms/RoomUpdate';
 import { useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { useDispatch } from 'react-redux';
-import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
-import User from '../models/User';
+//import { jwtDecode } from 'jwt-decode';
+//import { useDispatch } from 'react-redux';
+//import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
+//import User from '../models/User';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
 import EmployeeList from '../../features/employees/EmployeeList';
 import EmployeeInsert from '../../features/employees/EmployeeInsert';
@@ -59,32 +59,43 @@ import AuthorInsert from '../../features/authors/AuthorInsert';
 import BookList from '../../features/books/BookList';
 import BookInsert from '../../features/books/BookInsert';
 import BookUpdate from '../../features/books/BookUpdate';
-import BuildingList from '../../features/buildings/BuildingList';
-import BuildingInsert from '../../features/buildings/BuildingInsert';
-import RenovationList from '../../features/renovations/RenovationList';
-import RenovationInsert from '../../features/renovations/RenovationInsert';
+
 //import { RootState } from '../storage/redux/store';
 import { startNotificationsConnection } from '../utility/notificationService';
-import TokenRefreshManager from '../utility/useTokenRefresh';
+import RenovationList from '../../features/renovations/RenovationList';
+import RenovationInsert from '../../features/renovations/RenovationInsert';
+import BuildingList from '../../features/buildings/BuildingList';
+import BuildingInsert from '../../features/buildings/BuildingInsert';
+import SculptureList from '../../features/sculptures/SculptureList';
+import SculptorInsert from '../../features/sculptors/SculptorInsert';
+import SculptorList from '../../features/sculptors/SculptorList';
+import SculptorUpdate from '../../features/sculptors/SculptorUpdate';
+import SculptureInsert from '../../features/sculptures/SculptureInsert';
+import GroupList from '../../features/groups/GroupList';
+import GroupInsert from '../../features/groups/GroupInsert';
+import MemberInsert from '../../features/members/MemberInsert';
+import MemberList from '../../features/members/MemberList';
+import GroupUpdate from '../../features/groups/GroupUpdate';
+//import TokenRefreshManager from '../utility/useTokenRefresh';
 
 
 
 function App() {
 
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
     //const userId = useSelector((state: RootState) => state.auth.id); 
 
-    useEffect(() => {
-        const localToken = localStorage.getItem("accessToken");
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (localToken && refreshToken) {
-            //const { id, name, lastName, email, role, jwtToken }: User = jwtDecode(localToken);
-            const { id, name, lastName, email, role, accessToken }: User = jwtDecode(localToken);
-            dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));
-            dispatch(setToken({ accessToken, refreshToken }));
+    //useEffect(() => {
+    //    const localToken = localStorage.getItem("accessToken");
+    //    const refreshToken = localStorage.getItem("refreshToken");
+    //    if (localToken && refreshToken) {
+    //        //const { id, name, lastName, email, role, jwtToken }: User = jwtDecode(localToken);
+    //        const { id, name, lastName, email, role, accessToken }: User = jwtDecode(localToken);
+    //        dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));
+    //        dispatch(setToken({ accessToken, refreshToken }));
 
-        }
-    }, []);
+    //    }
+    //}, []);
 
 
     useEffect(() => {
@@ -102,9 +113,9 @@ function App() {
     return (
 
         <div>
-        <TokenRefreshManager/>
+        {/*<TokenRefreshManager/>*/}
                 <Routes>
-                    <Route path="/dashboard" element={<Dashboard />}></Route>
+                    <Route path="/" element={<Dashboard />}></Route>
 
                     <Route path="/patients" element={<PatientList />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>
@@ -145,8 +156,8 @@ function App() {
                     <Route path="/patient/:patientId/emergencyContact/insert" element={<EmergencyContactInsert />} />
                     
                     <Route path="/emergencyContact/update/:id" element={<EmergencyContactUpdate />}></Route>
-                    <Route path="/" element={<Login/>}></Route>
-                    <Route path="/register" element={<Register />}></Route>
+                    {/*<Route path="/" element={<Login/>}></Route>*/}
+                    {/*<Route path="/register" element={<Register />}></Route>*/}
                     
                     <Route path="/news_chat" element={<News_Chat />}></Route>
 
@@ -181,15 +192,28 @@ function App() {
                     <Route path="/book/insert" element={<BookInsert />}></Route>
                     <Route path="/book/update/:id" element={<BookUpdate />}></Route>
 
+                    <Route path="/renovations" element={<RenovationList />}></Route>
+                    <Route path="/renovation/insert" element={<RenovationInsert />}></Route>
 
                     <Route path="/buildings" element={<BuildingList />}></Route>
                     <Route path="/building/insert" element={<BuildingInsert />}></Route>
 
-                    <Route path="/renovations" element={<RenovationList />}></Route>
-                    <Route path="/renovation/insert" element={<RenovationInsert />}></Route>
+                    <Route path="/sculptures" element={<SculptureList />}></Route>
+                    <Route path="/sculptor/insert" element={<SculptorInsert />}></Route>
+
+                    <Route path="/sculptors" element={<SculptorList />}></Route>
+                    <Route path="/sculpture/insert" element={<SculptureInsert />}></Route>
+                    <Route path="/sculptor/update/:id" element={<SculptorUpdate />}></Route>
+
+                    <Route path="/groups" element={<GroupList />}></Route>
+                    <Route path="/group/insert" element={<GroupInsert />}></Route>
+                    <Route path="/group/update/:id" element={<GroupUpdate />}></Route>
 
 
-                </Routes>
+                    <Route path="/members" element={<MemberList />}></Route>
+                    <Route path="/member/insert" element={<MemberInsert />}></Route>
+
+            </Routes>
             </div>
     );
 }

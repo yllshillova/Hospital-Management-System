@@ -9,6 +9,5 @@ namespace Domain.Entities
         public DateTime UpdatedAt { get; set; }
         public string Name { get; set; }
         public string Location { get; set; }
-
     }
 }

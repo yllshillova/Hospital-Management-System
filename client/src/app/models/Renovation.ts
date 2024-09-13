@@ -5,7 +5,7 @@ export default interface Renovation {
     createdAt: Date;
     updatedAt: Date;
     description: string;
-    cost: number;
+    cost : number;
     buildingID: string;
     building: Building;
 }

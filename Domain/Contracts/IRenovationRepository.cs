@@ -5,5 +5,6 @@ namespace Domain.Contracts
 {
     public interface IRenovationRepository : IEntityBaseRepository<Renovation>
     {
+        Task<IEnumerable<Renovation>> GetByLocationAsync(string location);
     }
 }

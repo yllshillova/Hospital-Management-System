@@ -16,7 +16,8 @@ namespace Application.Renovations
                 if (Renovation is null) return Result<Unit>.Failure(ErrorType.NotFound, "No records could be found!");
 
                 var result = await _RenovationRepository.DeleteAsync(Renovation);
-                if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the emergency contact! Try again.");
+
+                if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to delete the Renovation! Try again.");
                 return Result<Unit>.Success(Unit.Value);
 
             }

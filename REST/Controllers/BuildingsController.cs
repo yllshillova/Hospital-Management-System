@@ -8,7 +8,7 @@ namespace API.Controllers
     public class BuildingsController : BaseApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetBuidlings()
+        public async Task<IActionResult> GetBuildings()
         {
             return HandleResult(await Mediator.Send(new GetBuildingsQuery()));
         }
@@ -16,10 +16,12 @@ namespace API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateBuidling([FromForm] BuildingDto Buidling)
+        public async Task<IActionResult> CreateBuilding([FromForm] BuildingDto Building)
         {
-            return HandleResult(await Mediator.Send(new CreateBuildingCommand(Buidling)));
+            return HandleResult(await Mediator.Send(new CreateBuildingCommand(Building)));
         }
+
+
 
 
     }

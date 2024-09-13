@@ -7,14 +7,12 @@ import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import {  useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { faExclamationCircle, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import withAuthorization from "../../app/hoc/withAuthorization";
-import { SD_Roles } from "../../app/utility/SD";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
 import { connectionError } from "../../app/utility/connectionError";
 import { useEffect, useState } from "react";
-import {  SearchContainer,  UserNotFoundMessage } from "../../app/common/styledComponents/chat";
-//import { setSearchTerm } from "../../app/storage/redux/searchSlice";
+import {  CancelButton, SearchContainer,  SearchInput,  UserNotFoundMessage } from "../../app/common/styledComponents/chat";
+import { setSearchTerm } from "../../app/storage/redux/searchSlice";
 import { useDeleteSatelliteMutation, useGetSatellitesQuery } from "../../app/APIs/satelliteApi";
 import { useGetPlanetsQuery } from "../../app/APIs/planetApi";
 import Satellite from "../../app/models/Satellite";
@@ -28,64 +26,65 @@ function SatelliteList() {
     const [deleteSatellite] = useDeleteSatelliteMutation();
 
     const navigate = useNavigate();
-   // const dispatch = useDispatch();
-    const userData = useSelector((state: RootState) => state.auth);
-    //const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
+    const dispatch = useDispatch();
+    //const userData = useSelector((state: RootState) => state.auth);
+    const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
 
     const [displayedSatellites, setDisplayedSatellites] = useState<Satellite[]>([]);
     const [satelliteNotFound, setSatelliteNotFound] = useState(false);
-    const [isDeleted, setIsDeleted] = useState<boolean>(false);
-    const [isActive, setIsActive] = useState<boolean>(false);
+    //const [isDeleted, setIsDeleted] = useState<boolean>(false);
+    //const [isActive, setIsActive] = useState<boolean>(false);
 
     const findPlanetById = (planetId: string) => {
         return planetsData?.find((planet: Planet) => planet.id === planetId);
     };
-    //useEffect(() => {
-
-    //    if (data) {
-
-    //        let filteredSatellites = data;
-    //        if (searchTerm !== '') {
-    //            filteredSatellites = filteredSatellites.filter(
-    //                (satellite: Satellite) => {
-    //                    const planet = findPlanetById(satellite.planetId);
-    //                    return planet?.name.toLowerCase().includes(searchTerm.toLowerCase());
-    //                }
-    //            );
-    //        }
-    //        setDisplayedSatellites(filteredSatellites);
-    //        setSatelliteNotFound(filteredSatellites.length === 0);
-    //    }
-    //}, [searchTerm, data]);
-
     useEffect(() => {
+
         if (data) {
+
             let filteredSatellites = data;
-
-            if (isDeleted && !isActive) {
+            if (searchTerm !== '') {
                 filteredSatellites = filteredSatellites.filter(
-                    (satellite: Satellite) => satellite.isDeleted
+                    (satellite: Satellite) => {
+                        const planet = findPlanetById(satellite.planetId);
+                        return planet?.name.toLowerCase().includes(searchTerm.toLowerCase())
+                        && satellite.isDeleted === false;
+                    }
                 );
-            } else if (!isDeleted && isActive) {
-                filteredSatellites = filteredSatellites.filter(
-                    (satellite: Satellite) => !satellite.isDeleted
-                );
-            } else if (isDeleted && isActive) {
-                filteredSatellites = data; 
-            } else {
-                filteredSatellites = data; 
             }
-
             setDisplayedSatellites(filteredSatellites);
             setSatelliteNotFound(filteredSatellites.length === 0);
         }
-    }, [isDeleted, isActive, data]);
+    }, [searchTerm, data]);
+
+    //useEffect(() => {
+    //    if (data) {
+    //        let filteredSatellites = data;
+
+    //        if (isDeleted && !isActive) {
+    //            filteredSatellites = filteredSatellites.filter(
+    //                (satellite: Satellite) => satellite.isDeleted
+    //            );
+    //        } else if (!isDeleted && isActive) {
+    //            filteredSatellites = filteredSatellites.filter(
+    //                (satellite: Satellite) => !satellite.isDeleted
+    //            );
+    //        } else if (isDeleted && isActive) {
+    //            filteredSatellites = data; 
+    //        } else {
+    //            filteredSatellites = data; 
+    //        }
+
+    //        setDisplayedSatellites(filteredSatellites);
+    //        setSatelliteNotFound(filteredSatellites.length === 0);
+    //    }
+    //}, [isDeleted, isActive, data]);
 
 
-    {/*const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {*/}
-    {/*    const searchTerm = e.target.value;*/}
-    {/*    dispatch(setSearchTerm(searchTerm));*/}
-    {/*};*/}
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const searchTerm = e.target.value;
+        dispatch(setSearchTerm(searchTerm))
+    }
 
     const handleSatelliteDelete = async (id: string) => {
         const result = await deleteSatellite(id);
@@ -103,14 +102,14 @@ function SatelliteList() {
         }
 
     };
-    const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>, filterType: string) => {
-        const { checked } = e.target;
-        if (filterType === 'deleted') {
-            setIsDeleted(checked);
-        } else if (filterType === 'active') {
-            setIsActive(checked);
-        }
-    };
+    //const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>, filterType: string) => {
+    //    const { checked } = e.target;
+    //    if (filterType === 'deleted') {
+    //        setIsDeleted(checked);
+    //    } else if (filterType === 'active') {
+    //        setIsActive(checked);
+    //    }
+    //};
 
     let content;
 
@@ -137,7 +136,7 @@ function SatelliteList() {
                         <ErrorIcon icon={faExclamationCircle} />
                         <ErrorDescription>{errorMessage || connectionError("satellites")}</ErrorDescription>
                     </ErrorTitleRow>
-                    {errorMessage && userData.role === SD_Roles.ADMINISTRATOR ? (
+                    {errorMessage  ? (
                         <BackButton style={{ backgroundColor: "#002147" }}
                                 onClick={() => navigate("/satellite/insert")}>Insert a satellite </BackButton>
 
@@ -160,12 +159,11 @@ function SatelliteList() {
                                 <TableCell>{satellite.isDeleted ? "Yes" : "No"}</TableCell>
                                 <TableCell>{planet.name}</TableCell>
 
-                                {userData.role === SD_Roles.ADMINISTRATOR &&
+                                
                                         
                                     <ActionButton style={{ backgroundColor: "red" }} onClick={() => handleSatelliteDelete(satellite.id) }>
                                        <FontAwesomeIcon icon={faTrashAlt} />
                                     </ActionButton>
-                                }
                             </TableRow>
                         </tbody>
                     );
@@ -182,43 +180,43 @@ function SatelliteList() {
                             <TableNav>
                                 <TableHeader>Satellite List</TableHeader>
                                 <SearchContainer>
-                                    {/*<SearchInput*/}
-                                    {/*    type="text"*/}
-                                    {/*    value={searchTerm}*/}
-                                    {/*    onChange={handleSearchChange}*/}
-                                    {/*    placeholder="Search satellites by planet"*/}
-                                {/*/>*/}
+                                    <SearchInput
+                                        type="text"
+                                        value={searchTerm}
+                                        onChange={handleSearchChange}
+                                        placeholder="Search satellites by planet"
+                                    />
 
 
-                                    {/*{searchTerm && (*/}
-                                    {/*    <CancelButton onClick={() => dispatch(setSearchTerm(''))}>*/}
-                                    {/*        Cancel*/}
-                                    {/*    </CancelButton>*/}
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={isDeleted}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        handleFilterChange(e, 'deleted')}
-                                />
-                                Show Deleted
-                            </label>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={isActive}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        handleFilterChange(e, 'active')}
-                                />
-                                Show Active
-                            </label>
+                                    {searchTerm && (
+                                        <CancelButton onClick={() => dispatch(setSearchTerm(''))}>
+                                            Cancel
+                                </CancelButton>)}
+
+
+                            {/*<label>*/}
+                            {/*    <input*/}
+                            {/*        type="checkbox"*/}
+                            {/*        checked={isDeleted}*/}
+                            {/*        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>*/}
+                            {/*            handleFilterChange(e, 'deleted')}*/}
+                            {/*    />*/}
+                            {/*    Show Deleted*/}
+                            {/*</label>*/}
+                            {/*<label>*/}
+                            {/*    <input*/}
+                            {/*        type="checkbox"*/}
+                            {/*        checked={isActive}*/}
+                            {/*        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>*/}
+                            {/*            handleFilterChange(e, 'active')}*/}
+                            {/*    />*/}
+                            {/*    Show Active*/}
+                            {/*</label>*/}
                             
                                 </SearchContainer>
-                                    {userData.role == SD_Roles.ADMINISTRATOR &&
                                         <AddButton onClick={() => navigate("/satellite/insert")}>
                                             <FontAwesomeIcon icon={faAdd} />
                                         </AddButton>
-                                    }
                             </TableNav>
                             <Table>
                                 <thead>
@@ -238,4 +236,4 @@ function SatelliteList() {
     }
     return content;
 }
-export default withAuthorization(SatelliteList, [SD_Roles.ADMINISTRATOR]);
+export default SatelliteList;

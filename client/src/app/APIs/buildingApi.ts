@@ -14,22 +14,26 @@ const buildingApi = createApi({
             return headers;
         },
     }),
-    tagTypes: ["Buildings"],
+    tagTypes: ["Building"],
     endpoints: (builder) => ({
         getBuildings: builder.query({
             query: () => ({
                 url: "Buildings"
             }),
-            providesTags: ["Buildings"],
+            providesTags: ["Building"],
         }),
+        
+        
         createBuilding: builder.mutation({
             query: (data) => ({
                 url: "Buildings",
                 method: "POST",
                 body: data
             }),
-            invalidatesTags: ["Buildings"],
+            invalidatesTags: ["Building"],
         }),
+        
+        
     }),
 });
 

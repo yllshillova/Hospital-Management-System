@@ -9,12 +9,12 @@ namespace Application.Buildings
     {
         public record GetBuildingsQuery : IRequest<Result<IEnumerable<BuildingDto>>>;
 
-        public class GetBuildingsQueryHandler(IBuildingRepository _BuildingRepository, IMapper _mapper) : IRequestHandler<GetBuildingsQuery, Result<IEnumerable<BuildingDto>>>
+        public class GetBuildingQueryHandler(IBuildingRepository _BuildingRepository, IMapper _mapper) : IRequestHandler<GetBuildingsQuery, Result<IEnumerable<BuildingDto>>>
         {
             public async Task<Result<IEnumerable<BuildingDto>>> Handle(GetBuildingsQuery request, CancellationToken cancellationToken)
             {
                 var Buildings = await _BuildingRepository.GetAllAsync();
-                if (Buildings is null || !Buildings.Any()) return Result<IEnumerable<BuildingDto>>.Failure(ErrorType.NotFound, "No employee records found");
+                if (Buildings is null || !Buildings.Any()) return Result<IEnumerable<BuildingDto>>.Failure(ErrorType.NotFound, "No Building records found");
 
                 var BuildingDtos = _mapper.Map<IEnumerable<BuildingDto>>(Buildings);
                 if (BuildingDtos is null) return Result<IEnumerable<BuildingDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto!");

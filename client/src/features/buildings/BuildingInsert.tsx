@@ -1,5 +1,3 @@
-import withAuthorization from "../../app/hoc/withAuthorization";
-import { SD_Roles } from "../../app/utility/SD";
 import BuildingForm from "./BuildingForm";
 
 function BuildingInsert() {
@@ -8,4 +6,4 @@ function BuildingInsert() {
     );
 }
 
-export default withAuthorization(BuildingInsert, [SD_Roles.ADMINISTRATOR]);
+export default BuildingInsert;

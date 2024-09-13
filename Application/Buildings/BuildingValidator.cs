@@ -7,8 +7,8 @@ namespace Application.Buildings
     {
         public BuildingValidator()
         {
-            RuleFor(d => d.Name).SetValidator(new NotNullValidator<BuildingDto, string>()).SetValidator(new ValidLengthValidator<BuildingDto, string>(4, 500));
-            RuleFor(d => d.Location).SetValidator(new NotNullValidator<BuildingDto, string>()).SetValidator(new ValidLengthValidator<BuildingDto, string>(4, 500));
+            RuleFor(d => d.Name).SetValidator(new NotNullValidator<BuildingDto, string>()).SetValidator(new ValidLengthValidator<BuildingDto, string>(4, 100));
+            RuleFor(d => d.Location).SetValidator(new NotNullValidator<BuildingDto, string>()).SetValidator(new ValidLengthValidator<BuildingDto, string>(4, 100));
 
         }
     }

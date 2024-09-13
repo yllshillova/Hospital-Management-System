@@ -8,7 +8,6 @@ import { faAdd } from "@fortawesome/free-solid-svg-icons/faAdd";
 import {  useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import withAuthorization from "../../app/hoc/withAuthorization";
 import { SD_Roles } from "../../app/utility/SD";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/storage/redux/store";
@@ -192,4 +191,4 @@ function ContractList() {
     }
     return content;
 }
-export default withAuthorization(ContractList, [SD_Roles.ADMINISTRATOR]);
+export default ContractList;
