@@ -1,12 +1,11 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import MainLoader from "../../app/common/MainLoader";
 import { Header, SidePanel } from "../../app/layout";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
+import { TableCell, TableRow,  OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
 import { faAdd, faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
 import { connectionError } from "../../app/utility/connectionError";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
-import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { useGetBuildingsQuery } from "../../app/APIs/buildingApi";
 import Building from "../../app/models/Building";
 

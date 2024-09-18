@@ -1,5 +1,3 @@
-import withAuthorization from '../../app/hoc/withAuthorization';
-import { SD_Roles } from '../../app/utility/SD';
 import ContractForm from './ContractForm';
 
 function ContractInsert() {
@@ -8,4 +6,4 @@ function ContractInsert() {
     );
 }
 
-export default withAuthorization(ContractInsert, [SD_Roles.ADMINISTRATOR]);
+export default ContractInsert;

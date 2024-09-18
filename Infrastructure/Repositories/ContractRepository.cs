@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<Contract>> GetByStartDate(DateTime startDate)
         {
-            var contracts = await _context.Contracts.Where(c => c.StartDate == startDate).AsNoTracking().ToListAsync();
+            var contracts = await _context.Contracts.Where(c => c.StartDate.Date == startDate.Date).AsNoTracking().ToListAsync();
             return contracts;
         }
 

@@ -5,11 +5,12 @@ using MediatR;
 
 namespace Application.Contracts
 {
-    public class GetSatellitesByPlanet
+    public class GetContractsByEmployee
     {
         public record GetContractsByEmployeeQuery(Guid EmployeeId) : IRequest<Result<IEnumerable<ContractDto>>>;
 
-        public class GetScheduledAppointmentsQueryHandler(IContractRepository _contractRepository, IMapper _mapper) : IRequestHandler<GetContractsByEmployeeQuery, Result<IEnumerable<ContractDto>>>
+        public class GetScheduledAppointmentsQueryHandler(IContractRepository _contractRepository, IMapper _mapper, IEmployeeRepository _employeeRepository) :
+            IRequestHandler<GetContractsByEmployeeQuery, Result<IEnumerable<ContractDto>>>
         {
             public async Task<Result<IEnumerable<ContractDto>>> Handle(GetContractsByEmployeeQuery request, CancellationToken cancellationToken)
             {
@@ -17,7 +18,11 @@ namespace Application.Contracts
                 {
 
                     var contracts = await _contractRepository.GetByEmployee(request.EmployeeId);
-                    if (contracts == null || !contracts.Any()) return Result<IEnumerable<ContractDto>>.Failure(ErrorType.NotFound, "No contract records found for the employee");
+                    if (contracts == null || !contracts.Any())
+                    {
+                        var employee = await _employeeRepository.GetByIdAsync(request.EmployeeId);
+                        return Result<IEnumerable<ContractDto>>.Failure(ErrorType.NotFound, $"No contracts records found for employee  '{employee.FullName}'.");
+                    }
 
                     var contractDtos = _mapper.Map<IEnumerable<ContractDto>>(contracts);
                     if (contractDtos is null) return Result<IEnumerable<ContractDto>>.Failure(ErrorType.NotFound, "Problem while mapping between entity/dto");

@@ -40,16 +40,10 @@ function SidePanel() {
        // { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
        // { icon: faBookMedical, label: 'Visits', onClick: handleNavigation('/visits') },
        // { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
-       // //{ icon: faSignOutAlt, label: 'Planets', onClick: handleNavigation('/planets') },
-       // //{ icon: faSignOutAlt, label: 'Satellites', onClick: handleNavigation('/satellites') },
-       // //{ icon: faSignOutAlt, label: 'Planets', onClick: handleNavigation('/planets') },
-       // //{ icon: faSignOutAlt, label: 'Satellites', onClick: handleNavigation('/satellites') },
-       //// { icon: faSignOutAlt, label: 'Products', onClick: handleNavigation('/products') },
-       // //{ icon: faSignOutAlt, label: 'Orders', onClick: handleNavigation('/orders') },
 
         // { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
-        { icon: faFolderTree, label: 'Sculptors', onClick: handleNavigation('/sculptors') },
-        { icon: faFolderTree, label: 'Sculptures', onClick: handleNavigation('/sculptures') },
+        { icon: faFolderTree, label: 'Movies', onClick: handleNavigation('/movies') },
+        { icon: faFolderTree, label: 'Reviews', onClick: handleNavigation('/reviews') },
 
 
     ];

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using static Application.Contracts.Create;
 using static Application.Contracts.Details;
 using static Application.Contracts.Edit;
+using static Application.Contracts.GetContractsByEmployee;
 using static Application.Contracts.GetContractsByStartDate;
-using static Application.Contracts.GetSatellitesByPlanet;
 using static Application.Contracts.List;
 
 namespace API.Controllers
@@ -19,7 +19,7 @@ namespace API.Controllers
 
 
 
-        [HttpGet("GetByStartDate")]
+        [HttpGet("StartDate")]
         public async Task<IActionResult> GetContractsByStartDate([FromQuery] DateTime startDate)
         {
             return HandleResult(await Mediator.Send(new GetContractsByStartDateQuery(startDate)));

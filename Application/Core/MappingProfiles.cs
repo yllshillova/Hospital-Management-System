@@ -1,14 +1,12 @@
 ﻿using Application.Accounts.Users;
 using Application.Appointments;
-using Application.Authors;
 using Application.Buildings;
 using Application.Contracts;
 using Application.Departments;
 using Application.Doctors;
 using Application.EmergencyContacts;
 using Application.Employees;
-using Application.Groups;
-using Application.Members;
+using Application.Movies;
 using Application.Nurses;
 using Application.Patients;
 using Application.Planets;
@@ -43,16 +41,12 @@ namespace Application.Core
             CreateMap<Employee, EmployeeDto>().ReverseMap();
             CreateMap<Planet, PlanetDto>().ReverseMap();
             CreateMap<Satellite, SatelliteDto>().ReverseMap();
-            CreateMap<Product, ProductDto>().ReverseMap();
-            CreateMap<Order, OrderDto>().ReverseMap();
-            CreateMap<Author, AuthorDto>().ReverseMap();
-            CreateMap<Book, BookDto>().ReverseMap();
             CreateMap<Building, BuildingDto>().ReverseMap();
             CreateMap<Renovation, RenovationDto>().ReverseMap();
             CreateMap<Sculpture, SculptureDto>().ReverseMap();
             CreateMap<Sculptor, SculptorDto>().ReverseMap();
-            CreateMap<Member, MemberDto>().ReverseMap();
-            CreateMap<Group, GroupDto>().ReverseMap();
+            CreateMap<Movie, MovieDto>().ReverseMap();
+            CreateMap<Review, ReviewDto>().ReverseMap();
 
 
         }

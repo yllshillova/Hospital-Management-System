@@ -9,18 +9,12 @@ import visitApi from "../../APIs/visitApi";
 import accountApi from "../../APIs/accountApi";
 import { authReducer } from "./authSlice";
 import emergencyContactApi from "../../APIs/emergencyContactApi";
-import contractApi from "../../APIs/contractApi";
-import employeeApi from "../../APIs/employeeApi";
 import searchSlice from "./searchSlice";
-import planetApi from "../../APIs/planetApi";
-import satelliteApi from "../../APIs/satelliteApi";
 import chatReducer from "./chatSlice"; // Import the chat reducer
-import buildingApi from "../../APIs/buildingApi";
+import reviewApi from "../../APIs/reviewApi";
+import movieApi from "../../APIs/movieApi";
 import renovationApi from "../../APIs/renovationApi";
-import memberApi from "../../APIs/memberApi";
-import groupApi from "../../APIs/groupApi";
-import sculptorApi from "../../APIs/sculptorApi";
-import sculptureApi from "../../APIs/sculptureApi";
+import buildingApi from "../../APIs/buildingApi";
 
 const store = configureStore({
     reducer: {
@@ -37,16 +31,10 @@ const store = configureStore({
         [nurseApi.reducerPath]: nurseApi.reducer,
         [visitApi.reducerPath]: visitApi.reducer,
         [emergencyContactApi.reducerPath]: emergencyContactApi.reducer,
-        [contractApi.reducerPath]: contractApi.reducer,
-        [employeeApi.reducerPath]: employeeApi.reducer,
-        [planetApi.reducerPath]: planetApi.reducer,
-        [satelliteApi.reducerPath]: satelliteApi.reducer,
-        [sculptorApi.reducerPath]: sculptorApi.reducer,
-        [sculptureApi.reducerPath]: sculptureApi.reducer,
-        [buildingApi.reducerPath]: buildingApi.reducer,
+        [reviewApi.reducerPath]: reviewApi.reducer,
+        [movieApi.reducerPath]: movieApi.reducer,
         [renovationApi.reducerPath]: renovationApi.reducer,
-        [groupApi.reducerPath]: groupApi.reducer,
-        [memberApi.reducerPath]: memberApi.reducer,
+        [buildingApi.reducerPath]: buildingApi.reducer,
 
 
     },
@@ -62,14 +50,11 @@ const store = configureStore({
             .concat(visitApi.middleware)
             .concat(accountApi.middleware)
             .concat(emergencyContactApi.middleware)
-            .concat(employeeApi.middleware)
-            .concat(contractApi.middleware)
-            .concat(planetApi.middleware)
-            .concat(satelliteApi.middleware)
-            .concat(buildingApi.middleware)
+            .concat(reviewApi.middleware)
+            .concat(movieApi.middleware)
             .concat(renovationApi.middleware)
-            .concat(sculptureApi.middleware)
-            .concat(sculptorApi.middleware)
+            .concat(buildingApi.middleware)
+
 
 
 

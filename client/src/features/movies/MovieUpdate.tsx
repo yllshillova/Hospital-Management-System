@@ -1,15 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useNavigate, useParams } from 'react-router-dom';
 import MainLoader from '../../app/common/MainLoader';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-import { useGetContractByIdQuery } from '../../app/APIs/contractApi';
-import ContractForm from './ContractForm';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import MovieForm from './MovieForm';
+import { useGetMovieByIdQuery } from '../../app/APIs/movieApi';
 
-function ContractUpdate() {
+function MovieUpdate() {
     const { id } = useParams<{ id: string }>();
-    const { data, error, isLoading, isError } = useGetContractByIdQuery(id);
-    console.log(data);
+    const { data, error, isLoading, isError  } = useGetMovieByIdQuery(id);
     const navigate = useNavigate();
     const fbError = error as FetchBaseQueryError;
 
@@ -20,10 +19,10 @@ function ContractUpdate() {
     if (isLoading) return <MainLoader />;
 
     if (data) {
-        return <ContractForm id={id} data={data} />;
+        return <MovieForm id={id} data={data} />;
     }
 
-    return <div>No contract data available.</div>;
+    return <div>No Movie data available.</div>;
 }
 
-export default ContractUpdate;
+export default MovieUpdate;

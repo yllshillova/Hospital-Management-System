@@ -5,11 +5,9 @@ import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
-import {SD_Roles } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { validBirthdayDate } from '../../app/utility/validBirthdayDate';
-import withAuthorization from '../../app/hoc/withAuthorization';
 import Contract from '../../app/models/Contract';
 import { useCreateContractMutation, useUpdateContractMutation } from '../../app/APIs/contractApi';
 import Employee from '../../app/models/Employee';
@@ -168,4 +166,4 @@ function ContractForm({ id, data }: ContractFormProps) {
     );
 }
 
-export default withAuthorization(ContractForm, [SD_Roles.ADMINISTRATOR]);
+export default ContractForm;

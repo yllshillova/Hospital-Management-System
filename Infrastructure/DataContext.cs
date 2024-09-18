@@ -24,20 +24,15 @@ namespace Infrastructure
         public DbSet<Planet> Planets { get; set; }
         public DbSet<Satellite> Satellites { get; set; }
 
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Order> Orders { get; set; }
-
-        public DbSet<Author> Authors { get; set; }
-        public DbSet<Book> Books { get; set; }
-
         public DbSet<Building> Buildings { get; set; }
         public DbSet<Renovation> Renovations { get; set; }
         public DbSet<Sculptor> Sculptors { get; set; }
         public DbSet<Sculpture> Sculptures { get; set; }
 
-        public DbSet<Group> Groups { get; set; }
+        public DbSet<Movie> Movies { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
-        public DbSet<Member> Members { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -54,7 +49,6 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new ContractConfiguration());
             modelBuilder.ApplyConfiguration(new SatelliteConfiguration());
             modelBuilder.ApplyConfiguration(new PlanetConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderConfiguration());
         }
     }
 }

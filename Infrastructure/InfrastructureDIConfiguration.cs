@@ -43,16 +43,12 @@ namespace Infrastructure
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IPlanetRepository, PlanetRepository>();
             services.AddScoped<ISatelliteRepository, SatelliteRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IRenovationRepository, RenovationRepository>();
             services.AddScoped<IBuildingRepository, BuildingRepository>();
             services.AddScoped<ISculptorRepository, SculptorRepository>();
             services.AddScoped<ISculptureRepository, SculptureRepository>();
-            services.AddScoped<IMemberRepository, MemberRepository>();
-            services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
 
 
             await MigrateDatabaseAndSeedData(services.BuildServiceProvider());

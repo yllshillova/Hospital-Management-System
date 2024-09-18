@@ -22,6 +22,22 @@ const contractApi = createApi({
             }),
             providesTags: ["Contracts"],
         }),
+        getContractsByEmployee: builder.query({
+            query: (employeeId) => ({
+                url: `contracts/Employee/${employeeId}`,
+            }),
+            providesTags: ["Contracts"],
+
+        }),
+
+        getContractsByStartDate: builder.query({
+            query: (startDate) => ({
+                url: `contracts/StartDate`,
+                params: { startDate: startDate ? startDate.toISOString() : null },
+            }),
+        }),
+
+
         getContractById: builder.query({
             query: (id) => ({
                 url: `contracts/${id}`,
@@ -52,6 +68,8 @@ const contractApi = createApi({
 export const {
     useGetContractsQuery,
     useGetContractByIdQuery,
+    useGetContractsByEmployeeQuery,
+    useGetContractsByStartDateQuery,
     useCreateContractMutation,
     useUpdateContractMutation,
 } = contractApi;

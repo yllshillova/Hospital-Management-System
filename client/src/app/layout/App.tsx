@@ -49,16 +49,7 @@ import PlanetInsert from '../../features/planets/PlanetInsert';
 import PlanetUpdate from '../../features/planets/PlanetUpdate';
 import SatelliteInsert from '../../features/satellites/SatelliteInsert';
 import SatelliteList from '../../features/satellites/SatelliteList';
-import ProductList from '../../features/products/ProductList';
-import ProductInsert from '../../features/products/ProductInsert';
-import OrderList from '../../features/orders/OrderList';
-import OrderInsert from '../../features/orders/OrderInsert';
-import OrderUpdate from '../../features/orders/OrderUpdate';
-import AuthorList from '../../features/authors/AuthorList';
-import AuthorInsert from '../../features/authors/AuthorInsert';
-import BookList from '../../features/books/BookList';
-import BookInsert from '../../features/books/BookInsert';
-import BookUpdate from '../../features/books/BookUpdate';
+
 
 //import { RootState } from '../storage/redux/store';
 import { startNotificationsConnection } from '../utility/notificationService';
@@ -71,11 +62,11 @@ import SculptorInsert from '../../features/sculptors/SculptorInsert';
 import SculptorList from '../../features/sculptors/SculptorList';
 import SculptorUpdate from '../../features/sculptors/SculptorUpdate';
 import SculptureInsert from '../../features/sculptures/SculptureInsert';
-import GroupList from '../../features/groups/GroupList';
-import GroupInsert from '../../features/groups/GroupInsert';
-import MemberInsert from '../../features/members/MemberInsert';
-import MemberList from '../../features/members/MemberList';
-import GroupUpdate from '../../features/groups/GroupUpdate';
+import MovieInsert from '../../features/movies/MovieInsert';
+import MovieUpdate from '../../features/movies/MovieUpdate';
+import MovieList from '../../features/movies/MovieList';
+import ReviewList from '../../features/reviews/ReviewList';
+import ReviewInsert from '../../features/reviews/ReviewInsert';
 //import TokenRefreshManager from '../utility/useTokenRefresh';
 
 
@@ -115,7 +106,14 @@ function App() {
         <div>
         {/*<TokenRefreshManager/>*/}
                 <Routes>
-                    <Route path="/" element={<Dashboard />}></Route>
+                <Route path="/" element={<Dashboard />}></Route>
+
+                <Route path="/movies" element={<MovieList />}></Route>
+                <Route path="/movie/insert" element={<MovieInsert />}></Route>
+                <Route path="/movie/update/:id" element={<MovieUpdate />}></Route>
+
+                <Route path="/reviews" element={<ReviewList />}></Route>
+                <Route path="/review/insert" element={<ReviewInsert />}></Route>
 
                     <Route path="/patients" element={<PatientList />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>
@@ -178,20 +176,6 @@ function App() {
                     <Route path="/satellites" element={<SatelliteList />}></Route>
                     <Route path="/satellite/insert" element={<SatelliteInsert />}></Route>
 
-                    <Route path="/products" element={<ProductList />}></Route>
-                    <Route path="/product/insert" element={<ProductInsert />}></Route>
-
-                    <Route path="/orders" element={<OrderList />}></Route>
-                    <Route path="/order/insert" element={<OrderInsert />}></Route>
-                    <Route path="/order/update/:id" element={<OrderUpdate />}></Route>
-
-                    <Route path="/authors" element={<AuthorList />}></Route>
-                    <Route path="/author/insert" element={<AuthorInsert />}></Route>
-
-                    <Route path="/books" element={<BookList />}></Route>
-                    <Route path="/book/insert" element={<BookInsert />}></Route>
-                    <Route path="/book/update/:id" element={<BookUpdate />}></Route>
-
                     <Route path="/renovations" element={<RenovationList />}></Route>
                     <Route path="/renovation/insert" element={<RenovationInsert />}></Route>
 
@@ -205,13 +189,7 @@ function App() {
                     <Route path="/sculpture/insert" element={<SculptureInsert />}></Route>
                     <Route path="/sculptor/update/:id" element={<SculptorUpdate />}></Route>
 
-                    <Route path="/groups" element={<GroupList />}></Route>
-                    <Route path="/group/insert" element={<GroupInsert />}></Route>
-                    <Route path="/group/update/:id" element={<GroupUpdate />}></Route>
 
-
-                    <Route path="/members" element={<MemberList />}></Route>
-                    <Route path="/member/insert" element={<MemberInsert />}></Route>
 
             </Routes>
             </div>
