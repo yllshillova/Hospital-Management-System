@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ChatBoxContainer, ChatHeader, ChatInput, ChatInputContainer, ChatMessages, CloseButton, MessageNotFound, SendButton } from '../../../app/common/styledComponents/chat';
-import { loadMessages, onLoadMessages, onReceiveMessage, sendMessage, startConnection } from '../../../app/utility/signalrService';
+import  connection, { loadMessages,  onReceiveMessage,  sendMessage, startConnection } from '../../../app/utility/signalrService';
 import ChatMessage from '../../../app/models/ChatMessage';
 import { RootState } from '../../../app/storage/redux/store';
 import User from '../../../app/models/User';
+import { addMessage , loadMessages as loadMessagesAction} from '../../../app/storage/redux/chatSlice';
+import * as signalR from '@microsoft/signalr';
 
 interface ChatBoxProps {
     selectedUser: User | null;
@@ -15,86 +17,97 @@ interface ChatBoxProps {
 }
 
 function ChatBox({ selectedUser, setSelectedUser }: ChatBoxProps) {
-    const [messages, setMessages] = useState<{ [key: string]: ChatMessage[] }>({});
     const [message, setMessage] = useState<string>('');
     const senderId: string = useSelector((state: RootState) => state.auth.id);
+    const messages = useSelector((state: RootState) => state.chat.messages);
+    const dispatch = useDispatch();
 
-    useEffect(() => {
-        startConnection();
-        onReceiveMessage((messageId, senderId, receiverId, content) => {
-            setMessages(prevMessages => {
-                const userMessages = prevMessages[receiverId] || [];
-                return {
-                    ...prevMessages,
-                    [receiverId]: [...userMessages, { id: messageId, senderId, receiverId, content, alignment: senderId === senderId ? 'right' : 'left' }]
-                };
-            });
-        });
+    // Reference to the latest message element
+    const latestMessageRef = useRef<HTMLDivElement | null>(null);
 
-        onLoadMessages((loadedMessages: ChatMessage[]) => {
-            if (selectedUser) {
-                setMessages(prevMessages => {
-                    const updatedMessages: ChatMessage[] = loadedMessages.map((msg: ChatMessage) => ({
-                        ...msg,
-                        alignment: msg.senderId === senderId ? 'right' : 'left'
-                    }));
-                    return {
-                        ...prevMessages,
-                        [selectedUser.id]: updatedMessages
-                    };
-                });
-            }
-        });
-    }, [selectedUser, senderId]);
 
-    useEffect(() => {
-        const fetchMessages = async () => {
+     //Fetch and load messages
+    const fetchMessages = useCallback(async () => {
+        if (selectedUser) {
             try {
-                if (selectedUser) {
-                    const loadedMessages = await loadMessages(senderId, selectedUser.id);
-                    if (loadedMessages) {
-                        setMessages(prevMessages => ({
-                            ...prevMessages,
-                            [selectedUser.id]: loadedMessages.map((message: ChatMessage) => ({
-                                id: message.id,
-                                senderId: message.senderId,
-                                receiverId: message.receiverId,
-                                content: message.content,
-                                alignment: message.senderId === senderId ? 'right' : 'left'
-                            }))
-                        }));
-                    }
+                const loadedMessages = await loadMessages(senderId, selectedUser.id);
+                dispatch(loadMessagesAction({ chatId: selectedUser.id, messages: loadedMessages }));
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+    }, [dispatch, selectedUser, senderId]);
+
+    useEffect(() => {
+        const initializeChat = async () => {
+            try {
+                await startConnection(senderId);
+                fetchMessages(); // Fetch messages after connection
+
+                if (connection.state === signalR.HubConnectionState.Connected) {
+                    onReceiveMessage((chatMessage: ChatMessage) => {
+                        console.log('Received message:', chatMessage);
+                        const { senderId: msgSenderId, receiverId: msgReceiverId } = chatMessage;
+                        const chatId = msgSenderId === senderId ? msgReceiverId : msgSenderId;
+
+                        dispatch(addMessage({ chatId, message: chatMessage }));
+
+                        
+                    });
+                } else {
+                    console.error('SignalR connection not established.');
                 }
-            } catch (err) {
-                console.error("Error fetching messages: ", err);
+
+            } catch (error) {
+                console.error('Error initializing chat:', error);
             }
         };
 
-        fetchMessages();
-    }, [selectedUser, senderId]);
+        initializeChat();
 
+        // Clean up on unmount
+        return () => {
+            connection.off("ReceiveMessage");
+        };
+    }, [fetchMessages, dispatch, senderId, selectedUser]);
+
+    
     const handleSendMessage = () => {
         if (message.trim() && selectedUser) {
-            setMessages(prevMessages => {
-                const userMessages = prevMessages[selectedUser.id] || [];
-                return {
-                    ...prevMessages,
-                    [selectedUser.id]: [...userMessages, { id: "", senderId, receiverId: selectedUser.id, content: message, alignment: 'right' }]
-                };
-            });
+            const newMessage: ChatMessage = {
+                id: "", // You can set this to a unique ID if needed
+                senderId,
+                receiverId: selectedUser.id,
+                content: message,
+                alignment: 'right',
+            };
+
+            dispatch(addMessage({ chatId: selectedUser.id, message: newMessage })); // Dispatch action to add message
+            console.log(`Connection state before sending: ${connection.state}`);
+            console.log('Sending message:', newMessage); // Debugging log
 
             sendMessage(senderId, selectedUser.id, message);
             setMessage('');
         }
     };
 
+    // Effect to scroll to the latest message
+    useEffect(() => {
+        if (latestMessageRef.current) {
+            latestMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages, selectedUser]); // Run whenever messages or selectedUser change
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
     };
 
-    if (!selectedUser) {
-        return null;
-    }
+    if (!selectedUser) return null;
+
+
+    
+
+    
 
     return (
         <ChatBoxContainer>
@@ -113,11 +126,17 @@ function ChatBox({ selectedUser, setSelectedUser }: ChatBoxProps) {
                     </MessageNotFound>
                 ) : (
                     messages[selectedUser.id]?.map((msg: ChatMessage, index: number) => (
-                        <Message key={index} alignment={msg.alignment}>
+                        <Message
+                            key={index}
+                            alignment={msg.alignment}
+                            ref={index === messages[selectedUser.id].length - 1 ? latestMessageRef : null} // Reference the last message
+
+                        >
                             {msg.content}
                         </Message>
                     ))
                 )}
+
             </ChatMessages>
             <ChatInputContainer>
                 <ChatInput

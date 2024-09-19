@@ -8,7 +8,8 @@ namespace Domain.Contracts
         Task<AccessToken> CreateAccessTokenAsync(AppUser user);
         string GenerateRefreshToken();
         Task<RefreshToken> SaveRefreshTokenAsync(Guid userId, string refreshToken);
-        Task<RefreshToken> GetRefreshTokenAsync(string refreshToken);
+        Task<RefreshToken> GetRefreshTokenAsync(Guid userId);
+        Task DeleteExpiredRefreshTokenAsync(Guid userId);
     }
 
 }

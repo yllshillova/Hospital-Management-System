@@ -28,7 +28,7 @@ function Header() {
         <StickyHeader>
             <HeaderContainer>
                 <LogoContainer>
-                    <Logo onClick={() => navigate('/dashboard')} >Dashboard</Logo>
+                    <Logo onClick={() => navigate('/')} >Dashboard</Logo>
                     <MenuIcon icon={faHospital} />
                 </LogoContainer>
                 <MessageContainer>

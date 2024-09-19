@@ -10,8 +10,8 @@ import DoctorDetails from '../../features/doctors/DoctorDetails';
 import DoctorInsert from '../../features/doctors/DoctorInsert';
 import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 import RoomDetails from '../../features/rooms/RoomDetails';
-import Login from '../../features/account/Login';
-import Register from '../../features/account/Register';
+//import Login from '../../features/account/Login';
+//import Register from '../../features/account/Register';
 import AppointmentList from '../../features/appointment/AppointmentList';
 import AppointmentDetails from '../../features/appointment/AppointmentDetails';
 import DepartmentUpdate from '../../features/department/DepartmentUpdate';
@@ -34,34 +34,86 @@ import News_Chat from '../../features/news_chat/News_Chat';
 import RoomInsert from '../../features/rooms/RoomInsert';
 import RoomUpdate from '../../features/rooms/RoomUpdate';
 import { useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { useDispatch } from 'react-redux';
-import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
-import User from '../models/User';
+//import { jwtDecode } from 'jwt-decode';
+//import { useDispatch } from 'react-redux';
+//import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
+//import User from '../models/User';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
+import EmployeeList from '../../features/employees/EmployeeList';
+import EmployeeInsert from '../../features/employees/EmployeeInsert';
+import ContractList from '../../features/contracts/ContractList';
+import ContractInsert from '../../features/contracts/ContractInsert';
+import ContractUpdate from '../../features/contracts/ContractUpdate';
+import PlanetList from '../../features/planets/PlanetList';
+import PlanetInsert from '../../features/planets/PlanetInsert';
+import PlanetUpdate from '../../features/planets/PlanetUpdate';
+import SatelliteInsert from '../../features/satellites/SatelliteInsert';
+import SatelliteList from '../../features/satellites/SatelliteList';
+
+
+//import { RootState } from '../storage/redux/store';
+import { startNotificationsConnection } from '../utility/notificationService';
+import RenovationList from '../../features/renovations/RenovationList';
+import RenovationInsert from '../../features/renovations/RenovationInsert';
+import BuildingList from '../../features/buildings/BuildingList';
+import BuildingInsert from '../../features/buildings/BuildingInsert';
+import SculptureList from '../../features/sculptures/SculptureList';
+import SculptorInsert from '../../features/sculptors/SculptorInsert';
+import SculptorList from '../../features/sculptors/SculptorList';
+import SculptorUpdate from '../../features/sculptors/SculptorUpdate';
+import SculptureInsert from '../../features/sculptures/SculptureInsert';
+import MovieInsert from '../../features/movies/MovieInsert';
+import MovieUpdate from '../../features/movies/MovieUpdate';
+import MovieList from '../../features/movies/MovieList';
+import ReviewList from '../../features/reviews/ReviewList';
+import ReviewInsert from '../../features/reviews/ReviewInsert';
+//import TokenRefreshManager from '../utility/useTokenRefresh';
+
 
 
 function App() {
 
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
+    //const userId = useSelector((state: RootState) => state.auth.id); 
+
+    //useEffect(() => {
+    //    const localToken = localStorage.getItem("accessToken");
+    //    const refreshToken = localStorage.getItem("refreshToken");
+    //    if (localToken && refreshToken) {
+    //        //const { id, name, lastName, email, role, jwtToken }: User = jwtDecode(localToken);
+    //        const { id, name, lastName, email, role, accessToken }: User = jwtDecode(localToken);
+    //        dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));
+    //        dispatch(setToken({ accessToken, refreshToken }));
+
+    //    }
+    //}, []);
+
 
     useEffect(() => {
-        const localToken = localStorage.getItem("accessToken");
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (localToken && refreshToken) {
-            //const { id, name, lastName, email, role, jwtToken }: User = jwtDecode(localToken);
-            const { id, name, lastName, email, role , accessToken }: User = jwtDecode(localToken);
-            dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));
-            dispatch(setToken({ accessToken, refreshToken }));        }
-    }, [])
+        const initializeNotificationsHub = async () => {
+            try {
+                await startNotificationsConnection(); // Ensure connection is established}
+                console.log('notifications connection Established');
+            } catch (error) {
+                console.error('Error initializing chat:', error);
+            }
+        };
 
-
-
+        initializeNotificationsHub();
+    }, []);
     return (
+
         <div>
-            <div>
+        {/*<TokenRefreshManager/>*/}
                 <Routes>
-                    <Route path="/dashboard" element={<Dashboard />}></Route>
+                <Route path="/" element={<Dashboard />}></Route>
+
+                <Route path="/movies" element={<MovieList />}></Route>
+                <Route path="/movie/insert" element={<MovieInsert />}></Route>
+                <Route path="/movie/update/:id" element={<MovieUpdate />}></Route>
+
+                <Route path="/reviews" element={<ReviewList />}></Route>
+                <Route path="/review/insert" element={<ReviewInsert />}></Route>
 
                     <Route path="/patients" element={<PatientList />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>
@@ -102,16 +154,45 @@ function App() {
                     <Route path="/patient/:patientId/emergencyContact/insert" element={<EmergencyContactInsert />} />
                     
                     <Route path="/emergencyContact/update/:id" element={<EmergencyContactUpdate />}></Route>
-                    <Route path="/" element={<Login/>}></Route>
-                    <Route path="/register" element={<Register />}></Route>
+                    {/*<Route path="/" element={<Login/>}></Route>*/}
+                    {/*<Route path="/register" element={<Register />}></Route>*/}
                     
                     <Route path="/news_chat" element={<News_Chat />}></Route>
 
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
-                </Routes>
+
+                    <Route path="/employees" element={<EmployeeList />}></Route>
+                    <Route path="/employee/insert" element={<EmployeeInsert />}></Route>
+
+                    <Route path="/contracts" element={<ContractList />}></Route>
+                    <Route path="/contract/insert" element={<ContractInsert />}></Route>
+                    <Route path="/contract/update/:id" element={<ContractUpdate />}></Route>
+
+                    <Route path="/planets" element={<PlanetList />}></Route>
+                    <Route path="/planet/insert" element={<PlanetInsert />}></Route>
+                    <Route path="/planet/update/:id" element={<PlanetUpdate />}></Route>
+
+                    <Route path="/satellites" element={<SatelliteList />}></Route>
+                    <Route path="/satellite/insert" element={<SatelliteInsert />}></Route>
+
+                    <Route path="/renovations" element={<RenovationList />}></Route>
+                    <Route path="/renovation/insert" element={<RenovationInsert />}></Route>
+
+                    <Route path="/buildings" element={<BuildingList />}></Route>
+                    <Route path="/building/insert" element={<BuildingInsert />}></Route>
+
+                    <Route path="/sculptures" element={<SculptureList />}></Route>
+                    <Route path="/sculptor/insert" element={<SculptorInsert />}></Route>
+
+                    <Route path="/sculptors" element={<SculptorList />}></Route>
+                    <Route path="/sculpture/insert" element={<SculptureInsert />}></Route>
+                    <Route path="/sculptor/update/:id" element={<SculptorUpdate />}></Route>
+
+
+
+            </Routes>
             </div>
-        </div>
     );
 }
 

@@ -1,5 +1,4 @@
 ﻿using Application.Core;
-using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
 using MediatR;
@@ -10,7 +9,7 @@ namespace Application.Departments
     {
         public record GetDepartmentByIdQuery(Guid Id) : IRequest<Result<DepartmentDto>>;
         public class GetDepartmentByIdQueryHandler(IDepartmentRepository _departmentRepository, IDoctorRepository _doctorRepository,
-            INurseRepository _nurseRepository, IMapper _mapper) : IRequestHandler<GetDepartmentByIdQuery, Result<DepartmentDto>>
+            INurseRepository _nurseRepository) : IRequestHandler<GetDepartmentByIdQuery, Result<DepartmentDto>>
         {
             public async Task<Result<DepartmentDto>> Handle(GetDepartmentByIdQuery request, CancellationToken cancellationToken)
             {
@@ -24,7 +23,7 @@ namespace Application.Departments
 
                     if ((doctors == null || !doctors.Any()) && (nurses == null || !nurses.Any()))
                     {
-                        return Result<DepartmentDto>.Failure(ErrorType.NotFound, "No doctors or nurses found.");
+                        return Result<DepartmentDto>.Failure(ErrorType.NotFound, "No doctors or nurses found on this department");
                     }
 
                     var staff = new List<AppUser>();

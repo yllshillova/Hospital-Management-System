@@ -4,6 +4,7 @@ using Domain.Contracts;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Application.Visits
 {
@@ -19,7 +20,8 @@ namespace Application.Visits
             }
         }
 
-        public class CreateVisitCommandHandler(IVisitRepository _visitRepository, IAppointmentRepository _appointmentRepository, IMapper _mapper) : IRequestHandler<CreateVisitCommand, Result<Unit>>
+        public class CreateVisitCommandHandler(IDoctorRepository _doctorRepository, IPatientRepository _patientRepository,
+            IHubContext<NotificationHub> _notificationHub, IVisitRepository _visitRepository, IAppointmentRepository _appointmentRepository, IMapper _mapper) : IRequestHandler<CreateVisitCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(CreateVisitCommand request, CancellationToken cancellationToken)
             {
@@ -35,8 +37,27 @@ namespace Application.Visits
                 if (intersectingAppointment == null) return Result<Unit>.Failure(ErrorType.NotFound, "Appointment associated with the visit not found!");
 
                 intersectingAppointment.Status = "Completed";
-                var appointmentUpdateResult = await _appointmentRepository.UpdateAsync(intersectingAppointment);
 
+                var patient = await _patientRepository.GetByIdAsync(intersectingAppointment.PatientId);
+                var doctor = await _doctorRepository.GetByIdAsync(intersectingAppointment.DoctorId);
+
+                string patientFullName = $"{patient.Name} {patient.LastName}";
+                string doctorFullName = $"Dr. {doctor.Name} {doctor.LastName}";
+
+                string message = $"Appointment is completed for {patientFullName} at {doctorFullName} ";
+
+                try
+                {
+                    // Send notification
+                    await _notificationHub.Clients.All.SendAsync("ReceiveNotification", message, "info");
+                }
+                catch (Exception ex)
+                {
+                    // Log exception and handle notification send failure
+                    return Result<Unit>.Failure(ErrorType.NotFound, $"Failed to send notification: {ex.Message}");
+                }
+
+                var appointmentUpdateResult = await _appointmentRepository.UpdateAsync(intersectingAppointment);
                 if (!appointmentUpdateResult) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to update appointment status! Try again.");
 
                 var result = await _visitRepository.CreateAsync(visit);

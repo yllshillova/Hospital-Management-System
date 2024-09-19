@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import MainLoader from '../../app/common/MainLoader';
 import DepartmentForm from './DepartmentForm';
@@ -10,13 +10,17 @@ import { SD_Roles } from '../../app/utility/SD';
 
 function DepartmentUpdate() {
     const { id } = useParams<{ id: string }>();
-    const { data, error, isLoading, isError  } = useGetDepartmentByIdQuery(id);
-    const navigate = useNavigate();
-    const fbError = error as FetchBaseQueryError;
+    const { data, error, isLoading, isError } = useGetDepartmentByIdQuery(id);
+    console.log(data);
 
-    if (isError) {
-        useErrorHandler(fbError, navigate, location.pathname);
-    }
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isError) {
+            const fbError = error as FetchBaseQueryError;
+            useErrorHandler(fbError, navigate, location.pathname);
+        }
+    }, [isError, error, navigate]);
 
     if (isLoading) return <MainLoader />;
 

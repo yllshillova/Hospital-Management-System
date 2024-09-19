@@ -40,7 +40,6 @@ function DoctorList() {
     const [deleteDoctor] = useDeleteDoctorMutation();
     const navigate = useNavigate();
     const location = useLocation();
-    let content;
 
     const userData: User = useSelector(
         (state: RootState) => state.auth
@@ -61,8 +60,7 @@ function DoctorList() {
         }
     };
 
-
-
+    let content;
     if (isLoading) {
 
         content = (
@@ -79,6 +77,7 @@ function DoctorList() {
 
         const fetchError = error as FetchBaseQueryError;
         const errorMessage = fetchError?.data as string;
+        console.log(errorMessage);
 
         content = (
             <>
@@ -144,10 +143,14 @@ function DoctorList() {
                     <SidePanel />
                     <OrdersTable>
                         <TableNav>
-                            <TableHeader>Doctors List</TableHeader>
-                            <AddButton  onClick={() => navigate("/doctor/insert")}  >
-                                <FontAwesomeIcon icon={faAdd} />
-                            </AddButton>
+                        <TableHeader>Doctors List</TableHeader>
+                        {userData.role == SD_Roles.ADMINISTRATOR &&
+                            <>
+                                <AddButton  onClick={() => navigate("/doctor/insert")}  >
+                                    <FontAwesomeIcon icon={faAdd} />
+                                </AddButton>
+                            </>
+                        }
                         </TableNav>
                         <Table>
                             <thead>

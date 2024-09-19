@@ -27,6 +27,7 @@ function SidePanel() {
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('loginDateTime');
 
         dispatch(setLoggedInUser({ ...emptyUserState }));
         navigate('/');
@@ -34,12 +35,17 @@ function SidePanel() {
     };
 
     let sideBarComponents = [
-        { icon: faUserInjured, label: 'Patients', onClick: handleNavigation('/patients') },
-        { icon: faFolderTree, label: 'Departments', onClick: handleNavigation('/departments') },
-        { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
-        { icon: faBookMedical, label: 'Visits', onClick: handleNavigation('/visits') },
-        { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
-        { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
+       // { icon: faUserInjured, label: 'Patients', onClick: handleNavigation('/patients') },
+       // { icon: faFolderTree, label: 'Departments', onClick: handleNavigation('/departments') },
+       // { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
+       // { icon: faBookMedical, label: 'Visits', onClick: handleNavigation('/visits') },
+       // { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
+
+        // { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
+        { icon: faFolderTree, label: 'Movies', onClick: handleNavigation('/movies') },
+        { icon: faFolderTree, label: 'Reviews', onClick: handleNavigation('/reviews') },
+
+
     ];
 
     if (userData.role === SD_Roles.ADMINISTRATOR) {
