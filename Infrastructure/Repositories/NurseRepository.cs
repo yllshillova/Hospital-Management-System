@@ -22,6 +22,11 @@ namespace Infrastructure.Repositories
 
             return nurses;
         }
+        public Nurse GetNurseById(Guid id)
+        {
+            var nurse = _context.Nurses.Find(id);
+            return nurse;
+        }
 
     }
 }

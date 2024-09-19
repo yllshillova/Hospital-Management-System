@@ -24,7 +24,11 @@ namespace Infrastructure.Repositories
             return await _userManager.Users
                 .FirstOrDefaultAsync(user => user.Email == email);
         }
-
+        public AppUser GetUserById(Guid id)
+        {
+            var user = _context.Users.Find(id);
+            return user;
+        }
         public bool IsEmailTaken(string email)
         {
             return _context.Users.Any(user => user.Email == email);

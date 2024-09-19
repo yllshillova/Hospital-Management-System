@@ -13,11 +13,13 @@ namespace Application.Doctors
         public class UpdateDoctorCommandValidator : AbstractValidator<UpdateDoctorCommand>
         {
             private readonly IUserRepository _userRepository;
-            public UpdateDoctorCommandValidator(IUserRepository userRepository)
+            private readonly IDoctorRepository _doctorRepository;
+            public UpdateDoctorCommandValidator(IUserRepository userRepository, IDoctorRepository doctorRepository)
             {
                 _userRepository = userRepository;
-
-                RuleFor(x => x.Doctor).SetValidator(new DoctorValidator(_userRepository));
+                _doctorRepository = doctorRepository;
+                RuleFor(x => x.Doctor)
+                    .SetValidator(new DoctorValidator(_userRepository, _doctorRepository));
             }
         }
 

@@ -6,6 +6,7 @@ namespace Domain.Contracts
     {
         Task<AppUser> GetUserByEmailAsync(string email);
         bool IsEmailTaken(string email);
+        AppUser GetUserById(Guid id);
         Task<bool> CreateUserAsync(AppUser user, string password);
         Task<bool> CreateUserWithRoleAsync<T>(T user, string password, string role) where T : AppUser;
         Task<bool> ValidatePasswordAsync(AppUser user, string password);

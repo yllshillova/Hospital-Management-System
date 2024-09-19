@@ -22,5 +22,11 @@ namespace Infrastructure.Repositories
 
             return doctors;
         }
+        // Synchronous method to get doctor by ID
+        public Doctor GetDoctorById(Guid id)
+        {
+            var doctor = _context.Doctors.Find(id);
+            return doctor;
+        }
     }
 }
