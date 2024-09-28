@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useCallback  } from "react";
+import { useEffect, useCallback, useState  } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../storage/redux/store";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +36,9 @@ function TokenRefreshManager  ()  {
     const [refreshTokenMutation] = useRefreshTokenMutation();
     const accessToken = useSelector((state: RootState) => state.auth.accessToken);
     const refreshToken = useSelector((state: RootState) => state.auth.refreshToken);
+
     const userId = useSelector((state: RootState) => state.auth.id);
+    const [isRefreshing, setIsRefreshing] = useState(false); // To track ongoing refresh requests
 
     const logoutUser = () => {
         localStorage.removeItem('accessToken');
@@ -49,8 +51,12 @@ function TokenRefreshManager  ()  {
 
 
     const checkAndRefreshToken = useCallback(async () => {
+        if (isRefreshing) return; // Prevent multiple refresh calls
+
 
         if (isTokenExpired(accessToken) && refreshToken) {
+            setIsRefreshing(true);
+
             try {
                 console.log("Token expired, attempting to refresh...");
 
@@ -78,16 +84,20 @@ function TokenRefreshManager  ()  {
                     }
                 } else if ('error' in response) {
                     console.error("Token refresh error:", response);
+
                     logoutUser();
                 }
             } catch (error) {
                 console.error("Error refreshing token:", error);
             }
+            finally {
+                setIsRefreshing(false); // Reset the refreshing state
+            }
 
         } else {
             console.log("Access token is valid or no refresh needed.");
         }
-    }, [accessToken, refreshToken, userId, dispatch, navigate, refreshTokenMutation]);
+    }, [accessToken, refreshToken, userId, refreshTokenMutation, isRefreshing]);
 
 
 
@@ -98,47 +108,21 @@ function TokenRefreshManager  ()  {
         }
 
         console.log("Setting up token refresh interval.");
-
-        // Set initial login time if not already set
-        let loginDateTime = localStorage.getItem("loginDateTime");
-        if (!loginDateTime) {
-            loginDateTime = formatDateTimeComplete(new Date()) as string;
-            localStorage.setItem("loginDateTime", loginDateTime);
-            console.log("Initial login time set to:", loginDateTime);
-        } else {
-            console.log("Login time already set in localStorage:", loginDateTime);
-        }
-
-        // Set up the token refresh interval
         const intervalId = setInterval(() => {
             console.log("Token refresh interval triggered.");
             checkAndRefreshToken();
-        }, 300000); // Every 5 minutes
+        }, 300000); // Every 2 minutes
 
-        // Start an initial timeout to delay the first token refresh
-        const timeoutId = setTimeout(() => {
-            console.log("Initial timeout completed, starting token refresh.");
-            checkAndRefreshToken(); // Initial check
-        }, 300000); // Wait for 5 minutes before the first refresh
 
-        // Cleanup function to clear the interval and timeout
+        // Cleanup function to clear the interval
         return () => {
-            console.log("Cleaning up timeout and interval.");
-            clearTimeout(timeoutId); // Clear the initial timeout
+            console.log("Cleaning up interval.");
             clearInterval(intervalId); // Clear the refresh interval
-            console.log("Timeout and interval cleared.");
         };
+    }, [checkAndRefreshToken, accessToken, refreshToken]);
 
-    }, [accessToken, refreshToken, checkAndRefreshToken]);
 
-    // Effect to update loginDateTime whenever tokens are updated
-    useEffect(() => {
-        if (accessToken && refreshToken) {
-            const formattedLoginDateTime = formatDateTimeComplete(new Date()) as string; // Format the current time
-            localStorage.setItem("loginDateTime", formattedLoginDateTime);
-            console.log("Tokens updated, new loginDateTime set to:", formattedLoginDateTime);
-        }
-    }, [accessToken, refreshToken]);
+    
 
     return null;
 
