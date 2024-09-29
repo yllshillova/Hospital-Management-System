@@ -35,6 +35,8 @@ namespace Application.Accounts.Login
 
                 string accessToken;
                 string refreshToken;
+                DateTime refreshTokenExpiry;
+
 
                 // Check for a valid refresh token
                 var existingRefreshToken = await _tokenRepository.GetRefreshTokenAsync(user.Id);
@@ -46,12 +48,15 @@ namespace Application.Accounts.Login
 
                     // Create a new refresh token
                     refreshToken = _tokenRepository.GenerateRefreshToken();
-                    await _tokenRepository.SaveRefreshTokenAsync(user.Id, refreshToken);
+                    var newRefreshToken = await _tokenRepository.SaveRefreshTokenAsync(user.Id, refreshToken);
+                    refreshTokenExpiry = newRefreshToken.ExpiryDate;
                 }
                 else
                 {
                     // Reuse the existing valid refresh token
                     refreshToken = existingRefreshToken.Token;
+                    refreshTokenExpiry = existingRefreshToken.ExpiryDate; // Get expiry date from existing token
+
                 }
 
                 var accessTokenResult = await _tokenRepository.CreateAccessTokenAsync(user);
@@ -60,6 +65,8 @@ namespace Application.Accounts.Login
                 var userDto = _mapper.Map<UserDto>(user);
                 userDto.AccessToken = accessToken;
                 userDto.RefreshToken = refreshToken;
+                userDto.RefreshTokenExpiry = refreshTokenExpiry; // Set the expiry date in UserDto
+
 
                 return Result<UserDto>.Success(userDto);
             }

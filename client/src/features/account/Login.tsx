@@ -62,12 +62,13 @@ function Login() {
 
         if ('data' in response) {
 
-            const { accessToken, refreshToken } = response.data;
+            const { accessToken, refreshToken, refreshTokenExpiry } = response.data;
 
             const { id, name, lastName, email, role }: User = jwtDecode(accessToken);
 
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
+            localStorage.setItem("refreshTokenExpiry", refreshTokenExpiry); // Store expiry date
 
             // Set loginDateTime only after successful login
             const loginDateTime = formatDateTimeComplete(new Date()) as string;
