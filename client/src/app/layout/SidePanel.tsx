@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays, faUserInjured, faNewspaper, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 import {
+    clearToken,
     emptyUserState,
     setLoggedInUser,
 } from "../storage/redux/authSlice";
@@ -28,8 +29,10 @@ function SidePanel() {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('loginDateTime');
-
+        localStorage.removeItem('refreshTokenExpiry');
         dispatch(setLoggedInUser({ ...emptyUserState }));
+        dispatch(clearToken());
+
         navigate('/');
         toastNotify('You have been logged out', 'success');
     };
@@ -42,8 +45,7 @@ function SidePanel() {
         { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
 
          { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout },
-        { icon: faFolderTree, label: 'Movies', onClick: handleNavigation('/movies') },
-        { icon: faFolderTree, label: 'Reviews', onClick: handleNavigation('/reviews') },
+        
 
 
     ];

@@ -4,6 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241003011840_InnovationsInv")]
+    partial class InnovationsInv
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,29 +160,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("Appointments");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Botuesi", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PublisherName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Botuesit");
                 });
 
             modelBuilder.Entity("Domain.Entities.Building", b =>
@@ -329,6 +309,57 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Innovation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("InventorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InventorId");
+
+                    b.ToTable("Innovations");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Inventor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Inventors");
                 });
 
             modelBuilder.Entity("Domain.Entities.Patient", b =>
@@ -490,37 +521,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("BuildingID");
 
                     b.ToTable("Renovations");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Revista", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BotuesiId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IssueNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MagazineName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PublisherId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BotuesiId");
-
-                    b.ToTable("Revistat");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>
@@ -912,6 +912,17 @@ namespace Infrastructure.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Innovation", b =>
+                {
+                    b.HasOne("Domain.Entities.Inventor", "Inventor")
+                        .WithMany()
+                        .HasForeignKey("InventorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Inventor");
+                });
+
             modelBuilder.Entity("Domain.Entities.Patient", b =>
                 {
                     b.HasOne("Domain.Entities.Room", "Room")
@@ -942,15 +953,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Building");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Revista", b =>
-                {
-                    b.HasOne("Domain.Entities.Botuesi", "Botuesi")
-                        .WithMany()
-                        .HasForeignKey("BotuesiId");
-
-                    b.Navigation("Botuesi");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>

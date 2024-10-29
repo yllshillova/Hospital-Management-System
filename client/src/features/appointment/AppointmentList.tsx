@@ -415,8 +415,8 @@ const getFullNameAndNumber = (
     doctorData: Doctor[],
     patientData: Patient[]
 ): { doctorName: string, patientName: string, patientPersonalNumber: string } => {
-    const doctor = doctorData.find((doc: Doctor) => doc.id === appointment.doctorId);
-    const patient = patientData.find((pat: Patient) => pat.id === appointment.patientId);
+    const doctor = doctorData?.find((doc: Doctor) => doc.id === appointment.doctorId);
+    const patient = patientData?.find((pat: Patient) => pat.id === appointment.patientId);
 
     const doctorName = doctor ? `${doctor.name} ${doctor.lastName}` : 'Unknown Doctor';
     const patientName = patient ? `${patient.name} ${patient.lastName}` : 'Unknown Patient';

@@ -10,11 +10,9 @@ import accountApi from "../../APIs/accountApi";
 import { authReducer } from "./authSlice";
 import emergencyContactApi from "../../APIs/emergencyContactApi";
 import searchSlice from "./searchSlice";
-import chatReducer from "./chatSlice"; // Import the chat reducer
-import reviewApi from "../../APIs/reviewApi";
-import movieApi from "../../APIs/movieApi";
-import renovationApi from "../../APIs/renovationApi";
-import buildingApi from "../../APIs/buildingApi";
+import chatReducer from "./chatSlice"; 
+import BotuesiApi from "../../APIs/botuesiApi";
+import RevistaApi from "../../APIs/revistaApi";
 
 const store = configureStore({
     reducer: {
@@ -31,10 +29,8 @@ const store = configureStore({
         [nurseApi.reducerPath]: nurseApi.reducer,
         [visitApi.reducerPath]: visitApi.reducer,
         [emergencyContactApi.reducerPath]: emergencyContactApi.reducer,
-        [reviewApi.reducerPath]: reviewApi.reducer,
-        [movieApi.reducerPath]: movieApi.reducer,
-        [renovationApi.reducerPath]: renovationApi.reducer,
-        [buildingApi.reducerPath]: buildingApi.reducer,
+        [BotuesiApi.reducerPath]: BotuesiApi.reducer,
+        [RevistaApi.reducerPath]: RevistaApi.reducer,
 
 
     },
@@ -50,10 +46,8 @@ const store = configureStore({
             .concat(visitApi.middleware)
             .concat(accountApi.middleware)
             .concat(emergencyContactApi.middleware)
-            .concat(reviewApi.middleware)
-            .concat(movieApi.middleware)
-            .concat(renovationApi.middleware)
-            .concat(buildingApi.middleware)
+            .concat(BotuesiApi.middleware)
+            .concat(RevistaApi.middleware)
 
 
 

@@ -10,7 +10,6 @@ import DoctorDetails from '../../features/doctors/DoctorDetails';
 import DoctorInsert from '../../features/doctors/DoctorInsert';
 import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 import RoomDetails from '../../features/rooms/RoomDetails';
-
 import AppointmentList from '../../features/appointment/AppointmentList';
 import AppointmentDetails from '../../features/appointment/AppointmentDetails';
 import DepartmentUpdate from '../../features/department/DepartmentUpdate';
@@ -48,8 +47,6 @@ import PlanetInsert from '../../features/planets/PlanetInsert';
 import PlanetUpdate from '../../features/planets/PlanetUpdate';
 import SatelliteInsert from '../../features/satellites/SatelliteInsert';
 import SatelliteList from '../../features/satellites/SatelliteList';
-
-
 import { startNotificationsConnection } from '../utility/notificationService';
 import RenovationList from '../../features/renovations/RenovationList';
 import RenovationInsert from '../../features/renovations/RenovationInsert';
@@ -60,15 +57,17 @@ import SculptorInsert from '../../features/sculptors/SculptorInsert';
 import SculptorList from '../../features/sculptors/SculptorList';
 import SculptorUpdate from '../../features/sculptors/SculptorUpdate';
 import SculptureInsert from '../../features/sculptures/SculptureInsert';
-import MovieInsert from '../../features/movies/MovieInsert';
-import MovieUpdate from '../../features/movies/MovieUpdate';
-import MovieList from '../../features/movies/MovieList';
-import ReviewList from '../../features/reviews/ReviewList';
-import ReviewInsert from '../../features/reviews/ReviewInsert';
+import BotuesiList from '../../features/botuesit/BotuesiList';
+import BotuesiInsert from '../../features/botuesit/BotuesiInsert';
+import BotuesiUpdate from '../../features/botuesit/BotuesiUpdate';
+import RevistaList from '../../features/revistat/RevistaList';
+import RevistaInsert from '../../features/revistat/RevistaInsert';
+
+
 import Login from '../../features/account/Login';
 import Register from '../../features/account/Register';
-import TokenRefreshManager from '../utility/useTokenRefresh';
 import { RootState } from '../storage/redux/store';
+import TokenRefreshManager from '../utility/useTokenRefresh';
 
 
 
@@ -91,6 +90,8 @@ function App() {
         }
     }, []);
 
+    
+
 
     useEffect(() => {
         const initializeNotificationsHub = async () => {
@@ -104,19 +105,23 @@ function App() {
 
         initializeNotificationsHub();
     }, []);
+    
     return (
 
         <div>
             {accessToken && refreshToken && <TokenRefreshManager />}
-                <Routes>
+
+            <Routes>
                 <Route path="/dashboard" element={<Dashboard />}></Route>
 
-                <Route path="/movies" element={<MovieList />}></Route>
-                <Route path="/movie/insert" element={<MovieInsert />}></Route>
-                <Route path="/movie/update/:id" element={<MovieUpdate />}></Route>
 
-                <Route path="/reviews" element={<ReviewList />}></Route>
-                <Route path="/review/insert" element={<ReviewInsert />}></Route>
+                <Route path="/botuesit" element={<BotuesiList />}></Route>
+                <Route path="/botuesi/insert" element={<BotuesiInsert />}></Route>
+                <Route path="/botuesi/update/:id" element={<BotuesiUpdate />}></Route>
+
+                <Route path="/revistat" element={<RevistaList />}></Route>
+                <Route path="/revista/insert" element={<RevistaInsert />}></Route>
+
 
                     <Route path="/patients" element={<PatientList />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>

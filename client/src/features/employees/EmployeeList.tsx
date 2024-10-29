@@ -2,22 +2,17 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useGetEmployeesQuery } from "../../app/APIs/employeeApi";
 import MainLoader from "../../app/common/MainLoader";
 import { Header, SidePanel } from "../../app/layout";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
-import { faAdd, faExclamationCircle, faInfo } from "@fortawesome/free-solid-svg-icons";
+import { TableCell, TableRow, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
+import { faAdd, faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
 import { connectionError } from "../../app/utility/connectionError";
-import { SD_Roles } from "../../app/utility/SD";
-import { RootState } from "../../app/storage/redux/store";
-import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
-import withAuthorization from "../../app/hoc/withAuthorization";
 import Employee from "../../app/models/Employee";
 
 function EmployeeList() {
 
     const { data, isLoading, error } = useGetEmployeesQuery(null);
 
-    const userData = useSelector((state: RootState) => state.auth);
     const navigate = useNavigate();
 
     let content;
@@ -49,9 +44,9 @@ function EmployeeList() {
                         <ErrorIcon icon={faExclamationCircle} />
                         <ErrorDescription>{errorMessage || connectionError("employees")} </ErrorDescription>
                     </ErrorTitleRow>
-                    {errorMessage && userData.role === SD_Roles.ADMINISTRATOR ? (
+                    {errorMessage ? (
                         <BackButton style={{ backgroundColor: "#002147" }}
-                            onClick={() => navigate("/department/insert")}>Insert an employee </BackButton>
+                            onClick={() => navigate("/employee/insert")}>Insert an employee </BackButton>
                     ) : (
                         <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                     )}

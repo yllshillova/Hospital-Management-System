@@ -29,11 +29,9 @@ namespace Infrastructure
         public DbSet<Sculptor> Sculptors { get; set; }
         public DbSet<Sculpture> Sculptures { get; set; }
 
-        public DbSet<Movie> Movies { get; set; }
-        public DbSet<Review> Reviews { get; set; }
 
-
-
+        public DbSet<Botuesi> Botuesit { get; set; }
+        public DbSet<Revista> Revistat { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

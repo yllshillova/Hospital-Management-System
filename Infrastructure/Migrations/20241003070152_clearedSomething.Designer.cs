@@ -4,6 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241003070152_clearedSomething")]
+    partial class clearedSomething
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,29 +160,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("Appointments");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Botuesi", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PublisherName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Botuesit");
                 });
 
             modelBuilder.Entity("Domain.Entities.Building", b =>
@@ -490,37 +470,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("BuildingID");
 
                     b.ToTable("Renovations");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Revista", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BotuesiId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IssueNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MagazineName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PublisherId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BotuesiId");
-
-                    b.ToTable("Revistat");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>
@@ -942,15 +891,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Building");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Revista", b =>
-                {
-                    b.HasOne("Domain.Entities.Botuesi", "Botuesi")
-                        .WithMany()
-                        .HasForeignKey("BotuesiId");
-
-                    b.Navigation("Botuesi");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room", b =>

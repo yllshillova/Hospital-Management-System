@@ -7,41 +7,41 @@ import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer, Select, SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-import Review from '../../app/models/Review';
-import { useCreateReviewMutation } from '../../app/APIs/reviewApi';
-import Movie from '../../app/models/Movie';
-import { useGetMoviesQuery } from '../../app/APIs/movieApi';
+import Revista from '../../app/models/Revista';
+import { useCreateRevistaMutation } from '../../app/APIs/revistaApi';
+import Botuesi from '../../app/models/Botuesi';
+import { useGetBotuesitQuery } from '../../app/APIs/botuesiApi';
 
-interface ReviewFormProps {
-    data?: Review;
+interface RevistaFormProps {
+    data?: Revista;
 }
 
-const reviewData: Review = {
+const RevistaData: Revista = {
     id: "",
     createdAt: new Date(),
     updatedAt: new Date(),
-    userName: "",
-    rating:0,
-    movieId: "",
-    movie: {} as Movie
+    magazineName: "",
+    issueNumber : 0,
+    publisherId: "",
+    botuesi: {} as Botuesi
 };
 
 
 
-function ReviewForm({ data }: ReviewFormProps) { 
-    const [reviewInputs, setreviewInputs] = useState<Review>(data || reviewData);
-    const [createReview] = useCreateReviewMutation();
+function RevistaForm({ data }: RevistaFormProps) { 
+    const [RevistaInputs, setRevistaInputs] = useState<Revista>(data || RevistaData);
+    const [createRevista] = useCreateRevistaMutation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
    
-    const { data : moviesData, isLoading : moviesLoading, error : moviesError } = useGetMoviesQuery(null);
+    const { data : botuesitData, isLoading : botuesitLoading, error : botuesitError } = useGetBotuesitQuery(null);
 
 
 
-    const handleReviewInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-        const tempData = inputHelper(e, reviewInputs);
-        setreviewInputs(tempData);
+    const handleRevistaInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+        const tempData = inputHelper(e, RevistaInputs);
+        setRevistaInputs(tempData);
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -51,22 +51,20 @@ function ReviewForm({ data }: ReviewFormProps) {
 
         const formData = new FormData();
 
-        formData.append("UserName", reviewInputs.userName);
-        formData.append("Rating", reviewInputs.rating.toString());
-
-        formData.append("MovieId", reviewInputs.movieId);
+        formData.append("MagazineName", RevistaInputs.magazineName);
+        formData.append("IssueNumber", RevistaInputs.issueNumber.toString());
+        formData.append("PublisherId", RevistaInputs.publisherId);
 
         const currentLocation = window.location.pathname; 
-
-        
-        const response = await createReview(formData);
+          
+        const response = await createRevista(formData);
 
         if ('error' in response) {
             useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
         } else {
-            toastNotify("Review has been created", "success");
-            navigate('/reviews');
-        }            
+            toastNotify("Revista has been created", "success");
+            navigate('/revistat');
+        }
 
         setLoading(false);
     };
@@ -82,7 +80,7 @@ function ReviewForm({ data }: ReviewFormProps) {
                     <FormContainer >
                         {loading && <MainLoader />}
                         <Title>
-                            Add Review
+                            Add Revista
                         </Title>
 
                         {errorMessages.length > 0 && (
@@ -101,49 +99,48 @@ function ReviewForm({ data }: ReviewFormProps) {
                             onSubmit={handleSubmit}
                         >
                             <FormGroup>
-                                <Label>User Name</Label>
+                                <Label>Magazine Name</Label>
                                 <Input
                                     type="text"
-                                    name="userName"
-                                    value={reviewInputs.userName}
-                                    onChange={handleReviewInput}
+                                    name="magazineName"
+                                    value={RevistaInputs.magazineName}
+                                    onChange={handleRevistaInput}
                                 />
                             </FormGroup>
 
                             <FormGroup>
-                                <Label>Rating</Label>
+                                <Label>Issue Number</Label>
                                 <Input
                                     type="number"
-                                    name="rating"
-                                    value={reviewInputs.rating}
-                                    onChange={handleReviewInput}
+                                    name="issueNumber"
+                                    value={RevistaInputs.issueNumber}
+                                    onChange={handleRevistaInput}
                                 />
                             </FormGroup>
-
 
                             <FormGroup>
                                 <Select
-                                    name="movieId"
-                                    value={reviewInputs.movieId}
-                                    onChange={handleReviewInput}
-                                    disabled={moviesLoading}
+                                    name="publisherId"
+                                    value={RevistaInputs.publisherId}
+                                    onChange={handleRevistaInput}
+                                    disabled={botuesitLoading}
                                 >
-                                    <option value="">Select Movie</option>
-                                    {moviesData && moviesData.map((movie: Movie) => (
-                                        <option key={movie.id} value={movie.id}>
-                                            {movie.title}
+                                    <option value="">Select Botuesi</option>
+                                    {botuesitData && botuesitData.map((botuesi: Botuesi) => (
+                                        <option key={botuesi.id} value={botuesi.id}>
+                                            {botuesi.publisherName}
                                         </option>
                                     ))}
                                 </Select>
-                                {moviesError && <div style={{ color: 'red' }}>Error loading Movies</div>}
+                                {botuesitError && <div style={{ color: 'red' }}>Error loading botuesit</div>}
                             </FormGroup>
 
                             <ButtonsContainer>
                                 <SubmitButton type="submit">
                                     Submit
                                 </SubmitButton>
-                                <BackToProductsButton onClick={() => navigate("/reviews")}>
-                                    Back to Reviews
+                                <BackToProductsButton onClick={() => navigate("/revistat")}>
+                                    Back to Revistas
                                 </BackToProductsButton>
                             </ButtonsContainer>
                         </Form>
@@ -154,4 +151,4 @@ function ReviewForm({ data }: ReviewFormProps) {
     );
 }
 
-export default ReviewForm;
+export default RevistaForm;

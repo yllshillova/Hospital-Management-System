@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Domain.Contracts
 {
-    public interface IReviewRepository : IEntityBaseRepository<Review>
+    public interface IBotuesiRepository : IEntityBaseRepository<Botuesi>
     {
     }
 }
