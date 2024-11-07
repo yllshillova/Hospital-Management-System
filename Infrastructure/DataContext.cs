@@ -19,19 +19,6 @@ namespace Infrastructure
         public DbSet<EmergencyContact> EmergencyContacts { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Contract> Contracts { get; set; }
-        public DbSet<Planet> Planets { get; set; }
-        public DbSet<Satellite> Satellites { get; set; }
-
-        public DbSet<Building> Buildings { get; set; }
-        public DbSet<Renovation> Renovations { get; set; }
-        public DbSet<Sculptor> Sculptors { get; set; }
-        public DbSet<Sculpture> Sculptures { get; set; }
-
-
-        public DbSet<Botuesi> Botuesit { get; set; }
-        public DbSet<Revista> Revistat { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,9 +31,6 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new NurseConfiguration());
             modelBuilder.ApplyConfiguration(new PatientConfiguration());
             modelBuilder.ApplyConfiguration(new VisitConfiguration());
-            modelBuilder.ApplyConfiguration(new ContractConfiguration());
-            modelBuilder.ApplyConfiguration(new SatelliteConfiguration());
-            modelBuilder.ApplyConfiguration(new PlanetConfiguration());
         }
     }
 }

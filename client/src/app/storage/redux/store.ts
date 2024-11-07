@@ -11,8 +11,6 @@ import { authReducer } from "./authSlice";
 import emergencyContactApi from "../../APIs/emergencyContactApi";
 import searchSlice from "./searchSlice";
 import chatReducer from "./chatSlice"; 
-import BotuesiApi from "../../APIs/botuesiApi";
-import RevistaApi from "../../APIs/revistaApi";
 
 const store = configureStore({
     reducer: {
@@ -29,8 +27,6 @@ const store = configureStore({
         [nurseApi.reducerPath]: nurseApi.reducer,
         [visitApi.reducerPath]: visitApi.reducer,
         [emergencyContactApi.reducerPath]: emergencyContactApi.reducer,
-        [BotuesiApi.reducerPath]: BotuesiApi.reducer,
-        [RevistaApi.reducerPath]: RevistaApi.reducer,
 
 
     },
@@ -46,8 +42,6 @@ const store = configureStore({
             .concat(visitApi.middleware)
             .concat(accountApi.middleware)
             .concat(emergencyContactApi.middleware)
-            .concat(BotuesiApi.middleware)
-            .concat(RevistaApi.middleware)
 
 
 
