@@ -33,16 +33,43 @@ namespace Application.Accounts.Login
                 if (!result)
                     return Result<UserDto>.Failure(ErrorType.Unauthorized, "Wrong credentials, try again!");
 
-                var (accessToken, refreshToken) = await _tokenRepository.CreateTokens(user);
+                string accessToken;
+                string refreshToken;
+                DateTime refreshTokenExpiry;
+
+
+                // Check for a valid refresh token
+                var existingRefreshToken = await _tokenRepository.GetRefreshTokenAsync(user.Id);
+
+                if (existingRefreshToken == null)
+                {
+                    // If no valid refresh token exists, check and delete any expired refresh tokens
+                    await _tokenRepository.DeleteExpiredRefreshTokenAsync(user.Id);
+
+                    // Create a new refresh token
+                    refreshToken = _tokenRepository.GenerateRefreshToken();
+                    var newRefreshToken = await _tokenRepository.SaveRefreshTokenAsync(user.Id, refreshToken);
+                    refreshTokenExpiry = newRefreshToken.ExpiryDate;
+                }
+                else
+                {
+                    // Reuse the existing valid refresh token
+                    refreshToken = existingRefreshToken.Token;
+                    refreshTokenExpiry = existingRefreshToken.ExpiryDate; // Get expiry date from existing token
+
+                }
+
+                var accessTokenResult = await _tokenRepository.CreateAccessTokenAsync(user);
+                accessToken = accessTokenResult.Token;
 
                 var userDto = _mapper.Map<UserDto>(user);
                 userDto.AccessToken = accessToken;
                 userDto.RefreshToken = refreshToken;
+                userDto.RefreshTokenExpiry = refreshTokenExpiry; // Set the expiry date in UserDto
+
 
                 return Result<UserDto>.Success(userDto);
             }
         }
-
-
     }
 }

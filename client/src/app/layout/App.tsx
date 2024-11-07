@@ -10,8 +10,6 @@ import DoctorDetails from '../../features/doctors/DoctorDetails';
 import DoctorInsert from '../../features/doctors/DoctorInsert';
 import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 import RoomDetails from '../../features/rooms/RoomDetails';
-import Login from '../../features/account/Login';
-import Register from '../../features/account/Register';
 import AppointmentList from '../../features/appointment/AppointmentList';
 import AppointmentDetails from '../../features/appointment/AppointmentDetails';
 import DepartmentUpdate from '../../features/department/DepartmentUpdate';
@@ -35,33 +33,62 @@ import RoomInsert from '../../features/rooms/RoomInsert';
 import RoomUpdate from '../../features/rooms/RoomUpdate';
 import { useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
 import User from '../models/User';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
+import { startNotificationsConnection } from '../utility/notificationService';
+import Login from '../../features/account/Login';
+import Register from '../../features/account/Register';
+import { RootState } from '../storage/redux/store';
+import TokenRefreshManager from '../utility/useTokenRefresh';
+
 
 
 function App() {
 
     const dispatch = useDispatch();
 
+    const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+    const refreshToken = useSelector((state: RootState) => state.auth.refreshToken);
+
     useEffect(() => {
-        const localToken = localStorage.getItem("accessToken");
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (localToken && refreshToken) {
+        const localAccessToken = localStorage.getItem("accessToken");
+        const localRefreshToken = localStorage.getItem("refreshToken");
+        if (localAccessToken && localRefreshToken) {
             //const { id, name, lastName, email, role, jwtToken }: User = jwtDecode(localToken);
-            const { id, name, lastName, email, role , accessToken }: User = jwtDecode(localToken);
+            const { id, name, lastName, email, role, accessToken }: User = jwtDecode(localAccessToken);
             dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));
-            dispatch(setToken({ accessToken, refreshToken }));        }
-    }, [])
+            dispatch(setToken({ accessToken: localAccessToken, refreshToken: localRefreshToken }));
+
+        }
+    }, []);
+
+    
 
 
+    useEffect(() => {
+        const initializeNotificationsHub = async () => {
+            try {
+                await startNotificationsConnection(); // Ensure connection is established}
+                console.log('notifications connection Established');
+            } catch (error) {
+                console.error('Error initializing chat:', error);
+            }
+        };
 
+        initializeNotificationsHub();
+    }, []);
+    
     return (
+
         <div>
-            <div>
-                <Routes>
-                    <Route path="/dashboard" element={<Dashboard />}></Route>
+            {accessToken && refreshToken && <TokenRefreshManager />}
+
+            <Routes>
+                <Route path="/dashboard" element={<Dashboard />}></Route>
+
+
 
                     <Route path="/patients" element={<PatientList />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>
@@ -109,9 +136,11 @@ function App() {
 
                     <Route path="/not-found" element={<NotFound />}></Route>
                     <Route path="*" element={<Navigate replace to="/not-found" />} />
-                </Routes>
+
+
+
+            </Routes>
             </div>
-        </div>
     );
 }
 

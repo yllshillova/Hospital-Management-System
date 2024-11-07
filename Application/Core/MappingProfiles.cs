@@ -28,6 +28,8 @@ namespace Application.Core
             CreateMap<AppUser, UserDto>().ReverseMap();
             CreateMap<AppUser, DoctorDto>().ReverseMap();
             CreateMap<AppUser, NurseDto>().ReverseMap();
+
+
         }
     }
 }

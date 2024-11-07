@@ -4,6 +4,7 @@ using Domain.Contracts;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Application.Appointments
 
@@ -20,7 +21,7 @@ namespace Application.Appointments
             }
         }
 
-        public class CreateAppointmentHandler(IAppointmentRepository _appointmentRepository, IMapper _mapper) : IRequestHandler<CreateAppointmentCommand, Result<Unit>>
+        public class CreateAppointmentHandler(IDoctorRepository _doctorRepository, IPatientRepository _patientRepository, IHubContext<NotificationHub> _notificationHub, IAppointmentRepository _appointmentRepository, IMapper _mapper) : IRequestHandler<CreateAppointmentCommand, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
             {
@@ -36,6 +37,26 @@ namespace Application.Appointments
                 appointment.CreatedAt = DateTime.Now;
                 appointment.UpdatedAt = appointment.CreatedAt;
 
+                var patient = await _patientRepository.GetByIdAsync(request.Appointment.PatientId);
+                var doctor = await _doctorRepository.GetByIdAsync(request.Appointment.DoctorId);
+
+
+                string patientFullName = $"{patient.Name} {patient.LastName}";
+                string doctorFullName = $"Dr. {doctor.Name} {doctor.LastName}";
+
+                string message = $"New appointment created for {patientFullName} at {doctorFullName}";
+
+
+                try
+                {
+                    // Send notification
+                    await _notificationHub.Clients.All.SendAsync("ReceiveNotification", message, "info");
+                }
+                catch (Exception ex)
+                {
+                    // Log exception and handle notification send failure
+                    return Result<Unit>.Failure(ErrorType.NotFound, $"Failed to send notification: {ex.Message}");
+                }
                 var result = await _appointmentRepository.CreateAsync(appointment);
                 if (!result) return Result<Unit>.Failure(ErrorType.BadRequest, "Failed to create the appointment. Try again!");
 

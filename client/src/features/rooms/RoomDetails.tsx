@@ -36,8 +36,9 @@ function RoomDetails() {
             const response = await removePatient(patientId);
             if ('error' in response) {
                 toastNotify("Failed to remove patient from room", "error");
-            } else {
-                toastNotify("Patient has been removed from room", "success");
+                //} else {
+                //    toastNotify("Patient has been removed from room", "success");
+                //}
             }
         } catch (error) {
             toastNotify("An error occurred while removing patient from room", "error");

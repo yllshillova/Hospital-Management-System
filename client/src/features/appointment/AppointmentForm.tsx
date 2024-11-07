@@ -92,7 +92,6 @@ function AppointmentForm({ id, data }: AppointmentFormProps) {
 
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Appointment has been created ", "success");
                 navigate('/appointments');
             }
 

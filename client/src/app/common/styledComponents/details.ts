@@ -66,9 +66,12 @@ export const ErrorMessage = styled.span`
     background-color: white;
     padding: 10px 20px; 
     color: #696969; 
-    margin: 50px 20px 0 220px;
+    margin: 50px auto; /* Center the message */
+    margin-left: 220px; /* Offset for the sidebar */
+    display: block;
+    width: calc(100% - 220px); /* Adjust width to prevent overlap with sidebar */
+    padding-top: 80px; /* Offset for header */
 `;
-
 export  const BackButton = styled.button`
     position: absolute;
     bottom: 60px;

@@ -6,5 +6,6 @@ namespace Domain.Contracts
     public interface IDoctorRepository : IEntityBaseRepository<Doctor>
     {
         Task<IEnumerable<Doctor>> GetDoctorsByDepartmentIdAsync(Guid departmentId);
+        Doctor GetDoctorById(Guid id);
     }
 }

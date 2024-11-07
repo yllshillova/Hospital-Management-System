@@ -14,11 +14,14 @@ namespace Application.Doctors
         public class CommandValidator : AbstractValidator<CreateDoctorCommand>
         {
             private readonly IUserRepository _userRepository;
-            public CommandValidator(IUserRepository userRepository)
+            private readonly IDoctorRepository _doctorRepository;
+
+            public CommandValidator(IUserRepository userRepository, IDoctorRepository doctorRepository)
             {
                 _userRepository = userRepository;
+                _doctorRepository = doctorRepository;
                 RuleFor(x => x.Doctor)
-                    .SetValidator(new DoctorValidator(_userRepository));
+                    .SetValidator(new DoctorValidator(_userRepository,_doctorRepository));
             }
         }
 

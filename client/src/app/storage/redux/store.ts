@@ -8,13 +8,16 @@ import nurseApi from "../../APIs/nurseApi";
 import visitApi from "../../APIs/visitApi";
 import accountApi from "../../APIs/accountApi";
 import { authReducer } from "./authSlice";
-import searchReducer from './searchSlice';
 import emergencyContactApi from "../../APIs/emergencyContactApi";
+import searchSlice from "./searchSlice";
+import chatReducer from "./chatSlice"; 
 
 const store = configureStore({
     reducer: {
         auth: authReducer,
-        search: searchReducer, 
+        search: searchSlice ,
+        chat: chatReducer,
+
         [accountApi.reducerPath]: accountApi.reducer,
         [patientApi.reducerPath]: patientApi.reducer,
         [departmentApi.reducerPath]: departmentApi.reducer,
@@ -24,6 +27,8 @@ const store = configureStore({
         [nurseApi.reducerPath]: nurseApi.reducer,
         [visitApi.reducerPath]: visitApi.reducer,
         [emergencyContactApi.reducerPath]: emergencyContactApi.reducer,
+
+
     },
 
     middleware: (getDefaultMiddleware) =>
@@ -37,6 +42,10 @@ const store = configureStore({
             .concat(visitApi.middleware)
             .concat(accountApi.middleware)
             .concat(emergencyContactApi.middleware)
+
+
+
+
 });
 
 //exporting the root state

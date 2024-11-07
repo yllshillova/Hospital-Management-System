@@ -97,7 +97,7 @@ function DoctorForm({ id, data }: DoctorFormProps) {
 
         if (id) {
             formData.append("Id", id);
-
+            console.log("data to update",formData);
             const response = await updateDoctor({ data: formData, id });
 
             if ('error' in response) {

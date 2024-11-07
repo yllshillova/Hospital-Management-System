@@ -67,7 +67,7 @@ export const ActionButton = styled.button`
 `;
 
 export const AddButton = styled.button`
-  background: #002147;;
+  background: #002147;
   color: white;
   border: none;
   padding: 8px 16px;

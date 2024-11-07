@@ -4,8 +4,8 @@ using static Application.EmergencyContacts.Create;
 using static Application.EmergencyContacts.Delete;
 using static Application.EmergencyContacts.Details;
 using static Application.EmergencyContacts.Edit;
-using static Application.EmergencyContacts.List;
 using static Application.EmergencyContacts.GetByPatientId;
+using static Application.EmergencyContacts.List;
 
 namespace API.Controllers
 {

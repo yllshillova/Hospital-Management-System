@@ -55,7 +55,6 @@
 
 using Domain.Contracts;
 using Domain.Entities;
-using Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -65,31 +64,34 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-public class TokenRepository : ITokenRepository
+namespace Infrastructure.Repositories
 {
-    private readonly IConfiguration _config;
-    private readonly UserManager<AppUser> _userManager;
-    private readonly DataContext _context;
 
-    public TokenRepository(IConfiguration config, UserManager<AppUser> userManager, DataContext context)
+    internal sealed class TokenRepository : ITokenRepository
     {
-        _config = config;
-        _userManager = userManager;
-        _context = context;
-    }
+        private readonly IConfiguration _config;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly DataContext _context;
 
-    public async Task<(string accessToken, string refreshToken)> CreateTokens(AppUser user)
-    {
-        var accessToken = await CreateAccessTokenAsync(user);
-        var refreshToken = GenerateRefreshToken();
-        var savedRefreshToken = await SaveRefreshTokenAsync(user.Id, refreshToken);
+        public TokenRepository(IConfiguration config, UserManager<AppUser> userManager, DataContext context)
+        {
+            _config = config;
+            _userManager = userManager;
+            _context = context;
+        }
 
-        return (accessToken.Token, refreshToken);
-    }
+        public async Task<(string accessToken, string refreshToken)> CreateTokens(AppUser user)
+        {
+            var accessToken = await CreateAccessTokenAsync(user);
+            var refreshToken = GenerateRefreshToken();
+            await SaveRefreshTokenAsync(user.Id, refreshToken);
 
-    public async Task<AccessToken> CreateAccessTokenAsync(AppUser user)
-    {
-        var claims = new List<Claim>
+            return (accessToken.Token, refreshToken);
+        }
+
+        public async Task<AccessToken> CreateAccessTokenAsync(AppUser user)
+        {
+            var claims = new List<Claim>
         {
             new Claim("name", user.Name),
             new Claim("lastName", user.LastName),
@@ -97,58 +99,76 @@ public class TokenRepository : ITokenRepository
             new Claim("id", user.Id.ToString())
         };
 
-        var roles = await _userManager.GetRolesAsync(user);
-        foreach (var role in roles)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, role));
+            var roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddMinutes(30),
+                SigningCredentials = creds
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return new AccessToken
+            {
+                Token = tokenString,
+                ExpiryDate = tokenDescriptor.Expires.Value
+            };
         }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-        var tokenDescriptor = new SecurityTokenDescriptor
+        public string GenerateRefreshToken()
         {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(30),
-            SigningCredentials = creds
-        };
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-
-        return new AccessToken
-        {
-            Token = tokenHandler.WriteToken(token),
-            ExpiryDate = tokenDescriptor.Expires.Value
-        };
-    }
-
-    public string GenerateRefreshToken()
-    {
-        var randomNumber = new byte[32];
-        using (var rng = RandomNumberGenerator.Create())
-        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
+            return Convert.ToBase64String(randomNumber); // Return the refresh token as a Base64 string
         }
-    }
 
-    public async Task<RefreshToken> SaveRefreshTokenAsync(Guid userId, string refreshToken)
-    {
-        var token = new RefreshToken
+        public async Task<RefreshToken> SaveRefreshTokenAsync(Guid userId, string refreshToken)
         {
-            Token = refreshToken,
-            ExpiryDate = DateTime.UtcNow.AddDays(7),
-            UserId = userId
-        };
+            var token = new RefreshToken
+            {
+                Id = Guid.NewGuid(),
+                Token = refreshToken,
+                ExpiryDate = DateTime.Now.AddDays(7),
+                UserId = userId
+            };
 
-        _context.RefreshTokens.Add(token);
-        await _context.SaveChangesAsync();
+            _context.RefreshTokens.Add(token);
+            await _context.SaveChangesAsync();
 
-        return token;
-    }
+            return token;
+        }
 
-    public async Task<RefreshToken> GetRefreshTokenAsync(string refreshToken)
-    {
-        return await _context.RefreshTokens.SingleOrDefaultAsync(rt => rt.Token == refreshToken);
+        public async Task<RefreshToken> GetRefreshTokenAsync(Guid userId)
+        {
+
+            var token = await _context.RefreshTokens
+                .SingleOrDefaultAsync(rt => rt.UserId == userId && rt.ExpiryDate > DateTime.Now);
+            return token;
+        }
+
+        public async Task DeleteExpiredRefreshTokenAsync(Guid userId)
+        {
+            var expiredToken = await _context.RefreshTokens
+                .Where(rt => rt.UserId == userId && rt.ExpiryDate <= DateTime.Now)
+                .FirstOrDefaultAsync();
+
+            if (expiredToken != null)
+            {
+                _context.RefreshTokens.Remove(expiredToken);
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using Application.Accounts.Register;
 using Microsoft.AspNetCore.Mvc;
 using static Application.Accounts.Login.Login;
 using static Application.Accounts.Register.Register;
+using static Application.Accounts.Tokens.RefreshToken;
 using static Application.Accounts.Users.GetCurrentUser;
 using static Application.Accounts.Users.GetStaff;
 
@@ -33,6 +34,12 @@ namespace API.Controllers
         public async Task<IActionResult> GetStaff()
         {
             return HandleResult(await Mediator.Send(new GetStaffQuery()));
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromQuery] Guid userId)
+        {
+            return HandleResult(await Mediator.Send(new RefreshTokenCommand(userId)));
         }
 
     }

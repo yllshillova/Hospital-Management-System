@@ -139,10 +139,14 @@ function NurseList() {
                     <SidePanel />
                     <OrdersTable>
                         <TableNav>
-                            <TableHeader>Nurses List</TableHeader>
-                            <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/nurse/insert")}  >
-                                <FontAwesomeIcon icon={faAdd} />
-                            </AddButton>
+                        <TableHeader>Nurses List</TableHeader>
+                        {userData.role == SD_Roles.ADMINISTRATOR &&
+                            <>
+                                <AddButton style={{ backgroundColor: "#1a252e" }} onClick={() => navigate("/nurse/insert")}  >
+                                    <FontAwesomeIcon icon={faAdd} />
+                                </AddButton>
+                            </>
+                        }
                         </TableNav>
                         <Table>
                             <thead>

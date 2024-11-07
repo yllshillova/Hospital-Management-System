@@ -7,10 +7,12 @@ namespace Application.Nurses
     public class NurseValidator : AbstractValidator<NurseDto>
     {
         private readonly IUserRepository _userRepository;
-        public NurseValidator(IUserRepository userRepository)
+        private readonly INurseRepository _nurseRepository;
+
+        public NurseValidator(IUserRepository userRepository, INurseRepository nurseRepository)
         {
             _userRepository = userRepository;
-
+            _nurseRepository = nurseRepository;
             RuleFor(d => d.Name).SetValidator(new NotNullValidator<NurseDto, string>())
                                 .SetValidator(new ValidLengthValidator<NurseDto, string>(4, 100));
             RuleFor(d => d.LastName).SetValidator(new NotNullValidator<NurseDto, string>())
@@ -24,13 +26,13 @@ namespace Application.Nurses
             .SetValidator(new NotNullValidator<NurseDto, string>())
             .Matches(IsPasswordComplex());
             RuleFor(d => d.UserName)
-                                .SetValidator(new NotNullValidator<NurseDto, string>())
-                                .SetValidator(new ValidLengthValidator<NurseDto, string>(4, 100))
-                                .Must(BeUniqueUsername).WithMessage("Username is taken. Try another one!");
+                                  .SetValidator(new NotNullValidator<NurseDto, string>())
+                                  .SetValidator(new ValidLengthValidator<NurseDto, string>(4, 100))
+                                  .Must((nurse,username) =>BeUniqueUsername(nurse.Id,username)).WithMessage("Username is taken. Try another one!");
             RuleFor(d => d.Email)
                 .SetValidator(new NotNullValidator<NurseDto, string>())
                 .SetValidator(new EmailValidator<NurseDto, string>())
-                .Must(BeUniqueEmail).WithMessage("Email is taken. Try another one!");
+                .Must((nurse,email) => BeUniqueEmail(nurse.Id,email)).WithMessage("Email is taken. Try another one!");
         }
 
         private bool BeAValidDate(DateTime? date)
@@ -42,15 +44,32 @@ namespace Application.Nurses
             string regex = @"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
             return regex;
         }
-        private bool BeUniqueEmail(string email)
+        private bool BeUniqueEmail(Guid NurseId, string email)
         {
-            // Use the synchronous method from the user repository
+            // Check if email is being updated
+            var existingNurse = _nurseRepository.GetNurseById(NurseId);
+            if (existingNurse != null && existingNurse.Email.Equals(email, StringComparison.OrdinalIgnoreCase))
+            {
+                // If the email is the same as the existing one, skip uniqueness check
+                return true;
+            }
+
+            // Otherwise, check for uniqueness
             return !_userRepository.IsEmailTaken(email);
         }
-        private bool BeUniqueUsername(string username)
+
+        private bool BeUniqueUsername(Guid NurseId, string username)
         {
-            // Use the synchronous method from the user repository
-            return !_userRepository.IsUsernameTaken(username);
+            // Check if username is being updated
+            var existingNurse = _nurseRepository.GetNurseById(NurseId);
+            if (existingNurse != null && existingNurse.UserName.Equals(username, StringComparison.OrdinalIgnoreCase))
+            {
+                // If the username is the same as the existing one, skip uniqueness check
+                return true;
+            }
+
+            // Otherwise, check for uniqueness
+            return ! _userRepository.IsUsernameTaken(username);
         }
     }
 }
