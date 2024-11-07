@@ -24,7 +24,6 @@ function RenovationList() {
     const [selectedBuilding, setSelectedBuilding] = useState<string>("");
     const { data, isLoading, error } = useGetRenovationsQuery(selectedBuilding);
     const { data: buildingsData, isLoading: buildingsLoading, error: buildingsError } = useGetBuildingsQuery(null);
-
     const navigate = useNavigate();
 
     const [RenovationNotFound, setRenovationNotFound] = useState(false);
@@ -34,8 +33,33 @@ function RenovationList() {
     useEffect(() => {
         if (data) {
             setRenovationNotFound(data.length === 0);
+
         }
     }, [data]);
+
+    //Metoda pa back end
+    //const [displayedRenovations, setDisplayedRenovations] = useState<Renovation[]>([]);
+
+    //const findBuildingById = (buildingId: string) => {
+    //    return buildingsData?.find((building: Building) => building.id === buildingId);
+    //};
+    //useEffect(() => {
+
+    //    if (data) {
+
+    //        let filteredRenovations = data;
+    //        if (selectedBuilding !== '') {
+    //            filteredRenovations = filteredRenovations.filter(
+    //                (renovation: Renovation) => {
+    //                    const building = findBuildingById(renovation.buildingID);
+    //                     return building?.location === selectedBuilding  ;
+    //                }
+    //            );
+    //        }
+    //        setDisplayedRenovations(filteredRenovations);
+    //        setRenovationNotFound(filteredRenovations.length === 0);
+    //    }
+    //}, [selectedBuilding, data]);
 
 
     const handleBuildingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

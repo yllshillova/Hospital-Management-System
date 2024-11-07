@@ -83,7 +83,6 @@ namespace Application.Hubs
 
             await base.OnDisconnectedAsync(exception);
         }
-        // Optionally, you can add a method to handle user registration explicitly
         public void RegisterUser(string userId)
         {
             if (!string.IsNullOrEmpty(userId))

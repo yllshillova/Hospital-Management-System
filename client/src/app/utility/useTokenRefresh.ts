@@ -1,11 +1,11 @@
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useCallback  } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../storage/redux/store";
 import { useNavigate } from "react-router-dom";
 import { useRefreshTokenMutation } from "../APIs/accountApi";
 import toastNotify from "../helpers/toastNotify";
-import { emptyUserState, setLoggedInUser, setToken } from "../storage/redux/authSlice";
+import { clearToken, emptyUserState, setLoggedInUser, setToken } from "../storage/redux/authSlice";
 import User from "../models/User";
 import { formatDateTimeComplete } from "./formatDate";
 
@@ -36,21 +36,43 @@ function TokenRefreshManager  ()  {
     const [refreshTokenMutation] = useRefreshTokenMutation();
     const accessToken = useSelector((state: RootState) => state.auth.accessToken);
     const refreshToken = useSelector((state: RootState) => state.auth.refreshToken);
+
     const userId = useSelector((state: RootState) => state.auth.id);
+
+
+    const [logoutTimeoutId, setLogoutTimeoutId] = useState<number | null>(null);
+    const intervalRef = useRef<number | null>(null);
 
     const logoutUser = () => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('loginDateTime');
+        localStorage.removeItem('refreshTokenExpiry');
+
         dispatch(setLoggedInUser({ ...emptyUserState }));
+        dispatch(clearToken());
+
+        console.log("Access token after logout:", localStorage.getItem('accessToken'));
+        console.log("Refresh token after logout:", localStorage.getItem('refreshToken'));
         navigate("/");
         toastNotify("Your session has expired, please log in again!", "error");
     };
 
 
     const checkAndRefreshToken = useCallback(async () => {
+        console.log("Current accessToken:", accessToken);
+        console.log("Current refreshToken:", refreshToken);
 
-        if (isTokenExpired(accessToken) && refreshToken) {
+        //// If either token is missing, do not attempt refresh
+        //if (!userId || !accessToken || !refreshToken) {
+        //    console.log("User is logged out. Skipping token check.");
+        //    return; // Skip token check if user is not logged in
+        //}
+
+
+        if (isTokenExpired(accessToken)) {
+
+
             try {
                 console.log("Token expired, attempting to refresh...");
 
@@ -78,67 +100,91 @@ function TokenRefreshManager  ()  {
                     }
                 } else if ('error' in response) {
                     console.error("Token refresh error:", response);
+
                     logoutUser();
                 }
             } catch (error) {
                 console.error("Error refreshing token:", error);
             }
+            
 
         } else {
             console.log("Access token is valid or no refresh needed.");
         }
-    }, [accessToken, refreshToken, userId, dispatch, navigate, refreshTokenMutation]);
+    }, [refreshToken, accessToken, userId]);
 
 
+
+    const setLogoutTimeout = (expiryDateTime: string) => {
+        const expiryDate = new Date(expiryDateTime);
+        const currentDate = new Date();
+        const timeUntilLogout = expiryDate.getTime() - currentDate.getTime();
+
+        // Clear any existing timeout using functional update
+        setLogoutTimeoutId(prevId => {
+            if (prevId !== null) {
+                clearTimeout(prevId); // Clear the previous timeout
+            }
+
+            if (timeUntilLogout <= 0) {
+                console.log("Refresh token has expired, logging out...");
+                logoutUser();
+                return null; // No new timeout to set
+            } else {
+                console.log(`Setting logout timeout for ${timeUntilLogout} milliseconds.`);
+                const id = window.setTimeout(() => {
+                    console.log("Logging out due to refresh token expiry...");
+                    logoutUser();
+                }, timeUntilLogout);
+                return id; // Return new timeout ID
+            }
+        });
+    };
 
     useEffect(() => {
-        if (!accessToken || !refreshToken) {
-            console.log("Access token or refresh token is missing. Skipping interval setup.");
-            return; // Do not set up interval if tokens are not available
+        if (!accessToken) {
+            console.log("User is logged out. Skipping token refresh setup.");
+            return; // Skip setting up the interval and timeout if the user is logged out
         }
 
-        console.log("Setting up token refresh interval.");
 
-        // Set initial login time if not already set
-        let loginDateTime = localStorage.getItem("loginDateTime");
-        if (!loginDateTime) {
-            loginDateTime = formatDateTimeComplete(new Date()) as string;
-            localStorage.setItem("loginDateTime", loginDateTime);
-            console.log("Initial login time set to:", loginDateTime);
-        } else {
-            console.log("Login time already set in localStorage:", loginDateTime);
+        // Retrieve the refresh token expiry date from local storage
+        const refreshTokenExpiry = localStorage.getItem("refreshTokenExpiry");
+        if (refreshTokenExpiry) {
+            setLogoutTimeout(refreshTokenExpiry); // Set logout timeout based on expiry
         }
 
-        // Set up the token refresh interval
-        const intervalId = setInterval(() => {
-            console.log("Token refresh interval triggered.");
+        console.log("Setting up token refresh check.");
+        intervalRef.current = window.setInterval(() => {
+            console.log("Checking access token status.");
             checkAndRefreshToken();
-        }, 300000); // Every 5 minutes
+        }, 1800000); // Check every 5 minutes
 
-        // Start an initial timeout to delay the first token refresh
-        const timeoutId = setTimeout(() => {
-            console.log("Initial timeout completed, starting token refresh.");
-            checkAndRefreshToken(); // Initial check
-        }, 300000); // Wait for 5 minutes before the first refresh
-
-        // Cleanup function to clear the interval and timeout
         return () => {
-            console.log("Cleaning up timeout and interval.");
-            clearTimeout(timeoutId); // Clear the initial timeout
-            clearInterval(intervalId); // Clear the refresh interval
-            console.log("Timeout and interval cleared.");
+            console.log("Cleaning up interval and timeout.");
+            console.log(`Current intervalId before clearing: ${intervalRef.current}`);
+            console.log(`Current logoutTimeoutId before clearing: ${logoutTimeoutId}`);
+
+            if (intervalRef.current !== null) {
+                clearInterval(intervalRef.current); // Clear the refresh interval
+                console.log("Refresh interval cleared.");
+                intervalRef.current = null; // Set to null after clearing
+            }
+
+            if (logoutTimeoutId !== null) {
+                clearTimeout(logoutTimeoutId);
+                console.log("Logout timeout cleared.");
+                setLogoutTimeoutId(null); // Set to null after clearing
+            } else {
+                console.log("No logout timeout to clear.");
+            }
+
+            console.log(`Current intervalId after clearing: ${intervalRef.current}`);
+            console.log(`Current logoutTimeoutId after clearing: ${logoutTimeoutId}`);
         };
+    }, [checkAndRefreshToken, accessToken]); 
 
-    }, [accessToken, refreshToken, checkAndRefreshToken]);
 
-    // Effect to update loginDateTime whenever tokens are updated
-    useEffect(() => {
-        if (accessToken && refreshToken) {
-            const formattedLoginDateTime = formatDateTimeComplete(new Date()) as string; // Format the current time
-            localStorage.setItem("loginDateTime", formattedLoginDateTime);
-            console.log("Tokens updated, new loginDateTime set to:", formattedLoginDateTime);
-        }
-    }, [accessToken, refreshToken]);
 
     return null;
 

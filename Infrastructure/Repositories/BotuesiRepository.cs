@@ -4,15 +4,12 @@ using Infrastructure.Base;
 
 namespace Infrastructure.Repositories
 {
-    internal sealed class ReviewRepository : EntityBaseRepository<Review>, IReviewRepository
+    internal sealed class BotuesiRepository : EntityBaseRepository<Botuesi>, IBotuesiRepository
     {
         private readonly DataContext _context;
-        public ReviewRepository(DataContext context) : base(context)
+        public BotuesiRepository(DataContext context) : base(context)
         {
             _context = context;
         }
-
-
-
     }
 }

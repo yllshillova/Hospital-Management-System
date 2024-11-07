@@ -22,6 +22,7 @@ const authSlice = createSlice({
             state.lastName = action.payload.lastName;
             state.email = action.payload.email;
             state.role = action.payload.role;
+
         },
         setToken(state, action: PayloadAction<{ accessToken: string; refreshToken: string }>) {
             state.accessToken = action.payload.accessToken;

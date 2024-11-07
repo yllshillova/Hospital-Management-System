@@ -10,8 +10,6 @@ import DoctorDetails from '../../features/doctors/DoctorDetails';
 import DoctorInsert from '../../features/doctors/DoctorInsert';
 import DoctorUpdate from '../../features/doctors/DoctorUpdate';
 import RoomDetails from '../../features/rooms/RoomDetails';
-//import Login from '../../features/account/Login';
-//import Register from '../../features/account/Register';
 import AppointmentList from '../../features/appointment/AppointmentList';
 import AppointmentDetails from '../../features/appointment/AppointmentDetails';
 import DepartmentUpdate from '../../features/department/DepartmentUpdate';
@@ -34,10 +32,10 @@ import News_Chat from '../../features/news_chat/News_Chat';
 import RoomInsert from '../../features/rooms/RoomInsert';
 import RoomUpdate from '../../features/rooms/RoomUpdate';
 import { useEffect } from 'react';
-//import { jwtDecode } from 'jwt-decode';
-//import { useDispatch } from 'react-redux';
-//import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
-//import User from '../models/User';
+import { jwtDecode } from 'jwt-decode';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLoggedInUser, setToken } from '../storage/redux/authSlice';
+import User from '../models/User';
 import DepartmentDetails from '../../features/department/DepartmentDetails';
 import EmployeeList from '../../features/employees/EmployeeList';
 import EmployeeInsert from '../../features/employees/EmployeeInsert';
@@ -49,9 +47,6 @@ import PlanetInsert from '../../features/planets/PlanetInsert';
 import PlanetUpdate from '../../features/planets/PlanetUpdate';
 import SatelliteInsert from '../../features/satellites/SatelliteInsert';
 import SatelliteList from '../../features/satellites/SatelliteList';
-
-
-//import { RootState } from '../storage/redux/store';
 import { startNotificationsConnection } from '../utility/notificationService';
 import RenovationList from '../../features/renovations/RenovationList';
 import RenovationInsert from '../../features/renovations/RenovationInsert';
@@ -62,31 +57,40 @@ import SculptorInsert from '../../features/sculptors/SculptorInsert';
 import SculptorList from '../../features/sculptors/SculptorList';
 import SculptorUpdate from '../../features/sculptors/SculptorUpdate';
 import SculptureInsert from '../../features/sculptures/SculptureInsert';
-import MovieInsert from '../../features/movies/MovieInsert';
-import MovieUpdate from '../../features/movies/MovieUpdate';
-import MovieList from '../../features/movies/MovieList';
-import ReviewList from '../../features/reviews/ReviewList';
-import ReviewInsert from '../../features/reviews/ReviewInsert';
-//import TokenRefreshManager from '../utility/useTokenRefresh';
+import BotuesiList from '../../features/botuesit/BotuesiList';
+import BotuesiInsert from '../../features/botuesit/BotuesiInsert';
+import BotuesiUpdate from '../../features/botuesit/BotuesiUpdate';
+import RevistaList from '../../features/revistat/RevistaList';
+import RevistaInsert from '../../features/revistat/RevistaInsert';
+
+
+import Login from '../../features/account/Login';
+import Register from '../../features/account/Register';
+import { RootState } from '../storage/redux/store';
+import TokenRefreshManager from '../utility/useTokenRefresh';
 
 
 
 function App() {
 
-    //const dispatch = useDispatch();
-    //const userId = useSelector((state: RootState) => state.auth.id); 
+    const dispatch = useDispatch();
 
-    //useEffect(() => {
-    //    const localToken = localStorage.getItem("accessToken");
-    //    const refreshToken = localStorage.getItem("refreshToken");
-    //    if (localToken && refreshToken) {
-    //        //const { id, name, lastName, email, role, jwtToken }: User = jwtDecode(localToken);
-    //        const { id, name, lastName, email, role, accessToken }: User = jwtDecode(localToken);
-    //        dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));
-    //        dispatch(setToken({ accessToken, refreshToken }));
+    const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+    const refreshToken = useSelector((state: RootState) => state.auth.refreshToken);
 
-    //    }
-    //}, []);
+    useEffect(() => {
+        const localAccessToken = localStorage.getItem("accessToken");
+        const localRefreshToken = localStorage.getItem("refreshToken");
+        if (localAccessToken && localRefreshToken) {
+            //const { id, name, lastName, email, role, jwtToken }: User = jwtDecode(localToken);
+            const { id, name, lastName, email, role, accessToken }: User = jwtDecode(localAccessToken);
+            dispatch(setLoggedInUser({ id, name, lastName, email, role, accessToken }));
+            dispatch(setToken({ accessToken: localAccessToken, refreshToken: localRefreshToken }));
+
+        }
+    }, []);
+
+    
 
 
     useEffect(() => {
@@ -101,19 +105,23 @@ function App() {
 
         initializeNotificationsHub();
     }, []);
+    
     return (
 
         <div>
-        {/*<TokenRefreshManager/>*/}
-                <Routes>
-                <Route path="/" element={<Dashboard />}></Route>
+            {accessToken && refreshToken && <TokenRefreshManager />}
 
-                <Route path="/movies" element={<MovieList />}></Route>
-                <Route path="/movie/insert" element={<MovieInsert />}></Route>
-                <Route path="/movie/update/:id" element={<MovieUpdate />}></Route>
+            <Routes>
+                <Route path="/dashboard" element={<Dashboard />}></Route>
 
-                <Route path="/reviews" element={<ReviewList />}></Route>
-                <Route path="/review/insert" element={<ReviewInsert />}></Route>
+
+                <Route path="/botuesit" element={<BotuesiList />}></Route>
+                <Route path="/botuesi/insert" element={<BotuesiInsert />}></Route>
+                <Route path="/botuesi/update/:id" element={<BotuesiUpdate />}></Route>
+
+                <Route path="/revistat" element={<RevistaList />}></Route>
+                <Route path="/revista/insert" element={<RevistaInsert />}></Route>
+
 
                     <Route path="/patients" element={<PatientList />}></Route>
                     <Route path="/patient/:id" element={<PatientDetails />}></Route>
@@ -154,8 +162,8 @@ function App() {
                     <Route path="/patient/:patientId/emergencyContact/insert" element={<EmergencyContactInsert />} />
                     
                     <Route path="/emergencyContact/update/:id" element={<EmergencyContactUpdate />}></Route>
-                    {/*<Route path="/" element={<Login/>}></Route>*/}
-                    {/*<Route path="/register" element={<Register />}></Route>*/}
+                    <Route path="/" element={<Login/>}></Route>
+                    <Route path="/register" element={<Register />}></Route>
                     
                     <Route path="/news_chat" element={<News_Chat />}></Route>
 

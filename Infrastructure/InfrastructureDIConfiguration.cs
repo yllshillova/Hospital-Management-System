@@ -47,8 +47,9 @@ namespace Infrastructure
             services.AddScoped<IBuildingRepository, BuildingRepository>();
             services.AddScoped<ISculptorRepository, SculptorRepository>();
             services.AddScoped<ISculptureRepository, SculptureRepository>();
-            services.AddScoped<IMovieRepository, MovieRepository>();
-            services.AddScoped<IReviewRepository, ReviewRepository>();
+
+            services.AddScoped<IBotuesiRepository, BotuesiRepository>();
+            services.AddScoped<IRevistaRepository, RevistaRepository>();
 
 
             await MigrateDatabaseAndSeedData(services.BuildServiceProvider());

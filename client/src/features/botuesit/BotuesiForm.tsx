@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from 'react';
+import React, {  useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
@@ -7,27 +7,27 @@ import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer ,SubmitButton, Title } from "../../app/common/styledComponents/upsert";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-import Movie from '../../app/models/Movie';
-import { useCreateMovieMutation, useUpdateMovieMutation } from '../../app/APIs/movieApi';
+import Botuesi from '../../app/models/Botuesi';
+import { useCreateBotuesiMutation, useUpdateBotuesiMutation } from '../../app/APIs/botuesiApi';
 
-interface MovieFormProps {
+interface BotuesiFormProps {
     id?: string;
-    data?: Movie;
+    data?: Botuesi;
 }
 
-const movieData: Movie = {
+const BotuesiData: Botuesi = {
+    location: "",
+    publisherName: "",
     id: "",
     createdAt: new Date(),
     updatedAt: new Date(),
-    title: "",
-    genre: "",
 };
 
-function MovieForm({ id, data }:  MovieFormProps) {
+function BotuesiForm({ id, data }:  BotuesiFormProps) {
 
-    const [movieInputs, setmovieInputs] = useState<Movie>(data || movieData);
-    const [createMovie] = useCreateMovieMutation();
-    const [updateMovie] = useUpdateMovieMutation();
+    const [BotuesiInputs, setBotuesiInputs] = useState<Botuesi>(data || BotuesiData);
+    const [createBotuesi] = useCreateBotuesiMutation();
+    const [updateBotuesi] = useUpdateBotuesiMutation();
 
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -37,9 +37,9 @@ function MovieForm({ id, data }:  MovieFormProps) {
     
 
 
-    const handleMovieInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const tempData = inputHelper(e, movieInputs);
-        setmovieInputs(tempData);
+    const handleBotuesiInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const tempData = inputHelper(e, BotuesiInputs);
+        setBotuesiInputs(tempData);
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
@@ -49,8 +49,8 @@ function MovieForm({ id, data }:  MovieFormProps) {
 
         const formData = new FormData();
 
-        formData.append("Title", movieInputs.title);
-        formData.append("Genre", movieInputs.genre);
+        formData.append("PublisherName", BotuesiInputs.publisherName);
+        formData.append("Location", BotuesiInputs.location);
 
               
 
@@ -59,22 +59,22 @@ function MovieForm({ id, data }:  MovieFormProps) {
         if (id) {
             formData.append("Id", id);
 
-            const response = await updateMovie({ data: formData, id });
+            const response = await updateBotuesi({ data: formData, id });
 
             if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Movie has been updated ", "success");
-                navigate('/movies');
+                toastNotify("Botuesi has been updated ", "success");
+                navigate('/botuesit');
             }
         } else {
-            const response = await createMovie(formData);
+            const response = await createBotuesi(formData);
 
             if ('error' in response) {
                 useErrorHandler(response.error, navigate, currentLocation, setErrorMessages);
             } else {
-                toastNotify("Movie has been created", "success");
-                navigate('/movies');
+                toastNotify("Botuesi has been created", "success");
+                navigate('/botuesit');
             }
         }                       
 
@@ -94,7 +94,7 @@ function MovieForm({ id, data }:  MovieFormProps) {
                         <FormContainer >
                             {loading && <MainLoader />}
                             <Title>
-                                {id ? "Edit Movie" : "Add Movie"}
+                                {id ? "Edit Botuesi" : "Add Botuesi"}
                             </Title>
 
                             {/* Display error messages */}
@@ -114,32 +114,33 @@ function MovieForm({ id, data }:  MovieFormProps) {
                                 onSubmit={handleSubmit}
                             >
                                 <FormGroup>
-                                    <Label>Title</Label>
+                                    <Label>Publisher Name</Label>
                                     <Input
                                         type="text"
-                                        name="title"
-                                        value={movieInputs.title}
-                                        onChange={handleMovieInput}
+                                        name="publisherName"
+                                        value={BotuesiInputs.publisherName}
+                                        onChange={handleBotuesiInput}
                                     />
                                 </FormGroup>
                                 
                                 <FormGroup>
-                                    <Label>Genre</Label>
+                                    <Label>Location</Label>
                                     <Input
                                         type="text"
-                                        name="genre"
-                                        value={movieInputs.genre}
-                                        onChange={handleMovieInput}
+                                        name="location"
+                                        value={BotuesiInputs.location}
+                                        onChange={handleBotuesiInput}
                                     />
                                 </FormGroup>
 
-                               
+
+                                
                                 <ButtonsContainer>
                                     <SubmitButton type="submit">
                                         Submit
                                     </SubmitButton>
-                                    <BackToProductsButton onClick={() => navigate("/movies")}>
-                                        Back to Movies
+                                    <BackToProductsButton onClick={() => navigate("/botuesit")}>
+                                        Back to Botuesit
                                     </BackToProductsButton>
                                 </ButtonsContainer>
                             </Form>
@@ -151,4 +152,4 @@ function MovieForm({ id, data }:  MovieFormProps) {
         return content;
     }
 
-export default MovieForm;
+export default BotuesiForm;

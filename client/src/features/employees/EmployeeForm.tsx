@@ -5,10 +5,8 @@ import inputHelper from "../../app/helpers/inputHelper";
 import toastNotify from "../../app/helpers/toastNotify";
 import MainLoader from "../../app/common/MainLoader";
 import { BackToProductsButton, ButtonsContainer, Container, Form, FormContainer, FormGroup, Input, Label, OuterContainer ,SubmitButton, Title } from "../../app/common/styledComponents/upsert";
-import { SD_Roles } from "../../app/utility/SD";
 import { Header, SidePanel } from '../../app/layout';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
-import withAuthorization from "../../app/hoc/withAuthorization";
 import Employee from '../../app/models/Employee';
 import { useCreateEmployeeMutation } from '../../app/APIs/employeeApi';
 
@@ -154,4 +152,4 @@ function EmployeeForm( { data }: EmployeeFormProps) {
         return content;
     }
 
-export default withAuthorization(EmployeeForm,[SD_Roles.ADMINISTRATOR]);
+export default EmployeeForm;

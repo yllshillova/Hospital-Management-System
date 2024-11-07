@@ -111,7 +111,7 @@ namespace Infrastructure.Repositories
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(5),
+                Expires = DateTime.Now.AddMinutes(30),
                 SigningCredentials = creds
             };
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -139,7 +139,7 @@ namespace Infrastructure.Repositories
             {
                 Id = Guid.NewGuid(),
                 Token = refreshToken,
-                ExpiryDate = DateTime.Now.AddMinutes(20),
+                ExpiryDate = DateTime.Now.AddDays(7),
                 UserId = userId
             };
 

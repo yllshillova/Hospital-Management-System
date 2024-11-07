@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faUserDoctor, faBookMedical, faBedPulse, faFolderTree, faCalendarDays, faUserInjured, faNewspaper, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 import {
+    clearToken,
     emptyUserState,
     setLoggedInUser,
 } from "../storage/redux/authSlice";
@@ -28,22 +29,23 @@ function SidePanel() {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('loginDateTime');
-
+        localStorage.removeItem('refreshTokenExpiry');
         dispatch(setLoggedInUser({ ...emptyUserState }));
+        dispatch(clearToken());
+
         navigate('/');
         toastNotify('You have been logged out', 'success');
     };
 
     let sideBarComponents = [
-       // { icon: faUserInjured, label: 'Patients', onClick: handleNavigation('/patients') },
-       // { icon: faFolderTree, label: 'Departments', onClick: handleNavigation('/departments') },
-       // { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
-       // { icon: faBookMedical, label: 'Visits', onClick: handleNavigation('/visits') },
-       // { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
+        { icon: faUserInjured, label: 'Patients', onClick: handleNavigation('/patients') },
+        { icon: faFolderTree, label: 'Departments', onClick: handleNavigation('/departments') },
+        { icon: faCalendarDays, label: 'Appointments', onClick: handleNavigation('/appointments') },
+        { icon: faBookMedical, label: 'Visits', onClick: handleNavigation('/visits') },
+        { icon: faBedPulse, label: 'Rooms', onClick: handleNavigation('/rooms') },
 
-        // { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout }
-        { icon: faFolderTree, label: 'Movies', onClick: handleNavigation('/movies') },
-        { icon: faFolderTree, label: 'Reviews', onClick: handleNavigation('/reviews') },
+         { icon: faSignOutAlt, label: 'Logout', onClick: handleLogout },
+        
 
 
     ];

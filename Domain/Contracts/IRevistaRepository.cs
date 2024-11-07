@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Domain.Contracts
 {
-    public interface IMovieRepository : IEntityBaseRepository<Movie>
+    public interface IRevistaRepository : IEntityBaseRepository<Revista>
     {
     }
 }

@@ -3,8 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MainLoader from '../../app/common/MainLoader';
 import useErrorHandler from '../../app/helpers/useErrorHandler';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import withAuthorization from '../../app/hoc/withAuthorization';
-import { SD_Roles } from '../../app/utility/SD';
 import PlanetForm from './PlanetForm';
 import { useGetPlanetByIdQuery } from '../../app/APIs/planetApi';
 
@@ -27,4 +25,4 @@ function PlanetUpdate() {
     return <div>No planet data available.</div>;
 }
 
-export default withAuthorization(PlanetUpdate, [SD_Roles.ADMINISTRATOR]);
+export default PlanetUpdate;

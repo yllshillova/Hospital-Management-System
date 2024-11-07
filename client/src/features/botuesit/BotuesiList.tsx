@@ -1,18 +1,17 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { useGetBotuesitQuery } from "../../app/APIs/botuesiApi";
 import MainLoader from "../../app/common/MainLoader";
 import { Header, SidePanel } from "../../app/layout";
-import { TableCell, TableRow, ActionButton, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription } from "../../app/common/styledComponents/table";
-import { faAdd, faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
+import { TableCell, TableRow, OrdersTable, TableNav, TableHeader, AddButton, Table, TableHeaderCell, TableHead, ErrorTitleRow, ErrorIcon, BackButton, ErrorMessage, ErrorDescription, ActionButton } from "../../app/common/styledComponents/table";
+import { faAdd, faEdit, faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
 import { connectionError } from "../../app/utility/connectionError";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
-import { useGetPlanetsQuery } from "../../app/APIs/planetApi";
-import Planet from "../../app/models/Planet";
-import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
+import Botuesi from "../../app/models/Botuesi";
 
-function PlanetList() {
+function BotuesiList() {
 
-    const { data, isLoading, error } = useGetPlanetsQuery(null);
+    const { data, isLoading, error } = useGetBotuesitQuery(null);
 
     const navigate = useNavigate();
 
@@ -43,11 +42,11 @@ function PlanetList() {
                 <ErrorMessage>
                     <ErrorTitleRow>
                         <ErrorIcon icon={faExclamationCircle} />
-                        <ErrorDescription>{errorMessage || connectionError("planets")} </ErrorDescription>
+                        <ErrorDescription>{errorMessage || connectionError("botuesit")} </ErrorDescription>
                     </ErrorTitleRow>
                     {errorMessage ? (
                         <BackButton style={{ backgroundColor: "#002147" }}
-                            onClick={() => navigate("/planet/insert")}>Insert a planet </BackButton>
+                            onClick={() => navigate("/botuesi/insert")}>Insert a Botues </BackButton>
                     ) : (
                         <BackButton onClick={() => navigate(-1)}>Back</BackButton>
                     )}
@@ -57,16 +56,16 @@ function PlanetList() {
     }
 
     else {
-        content = data.map((planet: Planet) => {
+        content = data.map((Botuesi: Botuesi) => {
             return (
-                <tbody key={planet.id}>
+                <tbody key={Botuesi.id}>
                     <TableRow>
-                        <TableCell>{planet.name}</TableCell>
-                        <TableCell>{planet.type}</TableCell>
-                        <TableCell>{planet.isDeleted ? "Yes" : "No"}</TableCell>
-                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/planet/update/" + planet.id)} >
+                        <TableCell>{Botuesi.publisherName}</TableCell>
+                        <TableCell>{Botuesi.location}</TableCell>
+                        <ActionButton style={{ backgroundColor: "orange" }} onClick={() => navigate("/botuesi/update/" + Botuesi.id)} >
                             <FontAwesomeIcon icon={faEdit} />
                         </ActionButton>
+
                     </TableRow>
                 </tbody>
             );
@@ -78,17 +77,16 @@ function PlanetList() {
                 <SidePanel />
                 <OrdersTable>
                     <TableNav>
-                        <TableHeader>Employee List</TableHeader>
-                        <AddButton onClick={() => navigate("/planet/insert")}  >
+                        <TableHeader>Botuesi List</TableHeader>
+                        <AddButton onClick={() => navigate("/botuesi/insert")}  >
                             <FontAwesomeIcon icon={faAdd} />
                         </AddButton>
                     </TableNav>
                     <Table>
                         <thead>
                             <TableHead>
-                                <TableHeaderCell> Name</TableHeaderCell>
-                                <TableHeaderCell> Type</TableHeaderCell>
-                                <TableHeaderCell>Is Deleted </TableHeaderCell>
+                                <TableHeaderCell>Publisher Name</TableHeaderCell>
+                                <TableHeaderCell>Location </TableHeaderCell>
                             </TableHead>
                         </thead>
                         {content}
@@ -99,4 +97,4 @@ function PlanetList() {
     }
     return content;
 }
-export default PlanetList;
+export default BotuesiList;
